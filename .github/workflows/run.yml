@@ -1,14 +1,11 @@
 name: EGX Alerts
 
 on:
-  # تشغيل يدوي
   workflow_dispatch:
 
-  # تشغيل تلقائي صباحًا بعد إغلاق الشمعة
   schedule:
-    # 7:00 صباحًا بتوقيت مصر (UTC+2)
-    # = 5:00 UTC
-    - cron: '0 5 * * 0-4'
+    - cron: '0 5 * * *'  # 7 صباحًا بتوقيت مصر
+    - cron: '0 6 * * *'  # 8 صباحًا بتوقيت مصر
 
 jobs:
   run:
@@ -36,15 +33,11 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python egx_alerts.py
 
-      # =====================
-      # حفظ حالة الإشارات (منع التكرار)
-      # =====================
       - name: Commit last signals
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
           git add last_signals.json
-
           git diff --cached --quiet || git commit -m "Update last signals [auto]"
           git push
