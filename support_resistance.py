@@ -1,4 +1,4 @@
-print("EGX ALERTS - Auto Support/Resistance + RSI14 Sell + StopLoss Strategy")
+print("EGX ALERTS - Safe Support/Resistance + RSI14 Sell + StopLoss Strategy")
 
 import yfinance as yf
 import requests
@@ -97,8 +97,19 @@ for name, ticker in symbols.items():
     last_candle_date = df.index[-1].date()
     last = df.iloc[-1]
 
-    # حساب RSI14
-    df["RSI14"] = rsi(df["Close"], 14)
+    # ===== حساب RSI14 =====
+    try:
+        df["RSI14"] = rsi(df["Close"], 14)
+    except Exception as e:
+        data_failures.append(name)
+        continue
+
+    # تأكد أن العمود موجود
+    if "RSI14" not in df.columns or df["RSI14"].isna().all():
+        data_failures.append(name)
+        continue
+
+    rsi14_last = df["RSI14"].iloc[-1]
 
     # ===== حساب الدعم والمقاومة تلقائي =====
     support = df["Low"].tail(N).min()
@@ -108,7 +119,7 @@ for name, ticker in symbols.items():
     buy_signal = last["Low"] <= support and last["Close"] > support
     sell_signal = (
         last["High"] >= resistance or
-        last["RSI14"] >= 85 or
+        rsi14_last >= 85 or
         last["Close"] < support  # كسر الدعم → SELL
     )
 
@@ -153,6 +164,6 @@ with open(SIGNALS_FILE, "w") as f:
 # Telegram output
 # =====================
 if alerts:
-    send_telegram("📊 Egy supp&res:\n\n" + "\n".join(alerts))
+    send_telegram("🚦🚦 EGX Alerts 2:\n\n" + "\n".join(alerts))
 else:
     send_telegram(f"ℹ️ No new signals\nLast candle: {last_candle_date}")
