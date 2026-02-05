@@ -166,4 +166,4 @@ with open(SIGNALS_FILE, "w") as f:
 if alerts:
     send_telegram("🚦🚦 EGX Alerts 2:\n\n" + "\n".join(alerts))
 else:
-    send_telegram(f"ℹ️ No new signals\nLast candle: {last_candle_date}")
+    send_telegram(f"egx alerts 2 ℹ️ No new signals\nLast candle: {last_candle_date}")
