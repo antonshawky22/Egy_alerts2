@@ -1,4 +1,4 @@
-print("EGX ALERTS - Safe Support/Resistance + RSI14 Sell + StopLoss Strategy + Updated Trends")
+print("EGX ALERTS - Safe RSI/EMA Strategy + StopLoss + Updated Trends")
 
 import yfinance as yf
 import requests
@@ -151,72 +151,53 @@ for name, ticker in symbols.items():
         return buy_signal, sell_signal
 
     # =====================
-    # Sideways
+    # Sideways (New Strategy)
     # =====================
-    SIDE_PERIOD = 50
-    TOLERANCE = 0.01
-    STOPLOSS_PCT = 0.02
-
     def sideways_signals(df):
-        last_N = df.tail(SIDE_PERIOD)
-        price = last_N["Close"].iloc[-1]
+        last_N = df.tail(50)
+        last_row = last_N.iloc[-1]
+        price = last_row["Close"]
+        rsi14 = last_row["RSI14"]
+        ema3 = last_row["EMA3"]
+        ema9 = last_row["EMA9"]
 
-        support = last_N["Low"].min()
-        resistance = last_N["High"].max()
-        rsi14 = last_N["RSI14"].iloc[-1]
+        # ---- Buy ----
+        buy_signal = (rsi14 < 40) and (price <= ema3 or price <= ema9)
 
-        buy_signal = (
-            abs(price - support) / support <= TOLERANCE and
-            rsi14 < 60
-        )
+        # ---- Sell ----
+        sell_signal = (rsi14 > 60) or (price >= ema3 or price >= ema9) or (ema3 < ema9 and df["EMA3"].iloc[-2] >= df["EMA9"].iloc[-2])
 
-        sell_signal = (
-            abs(price - resistance) / resistance <= TOLERANCE or
-            rsi14 >= 75 or
-            price < support * (1 - STOPLOSS_PCT)
-        )
-
-        return buy_signal, sell_signal, support, resistance
+        return buy_signal, sell_signal
 
     # =====================
     # Decision
     # =====================
     if is_downtrend(last):
         buy_signal = sell_signal = False
-        support = resistance = None
         direction_text = "⚪ اتجاه هابط"
     elif is_uptrend(last):
         buy_signal, sell_signal = uptrend_signals(last)
-        support = resistance = None
         direction_text = "🟢 ترند صاعد"
     else:
-        buy_signal, sell_signal, support, resistance = sideways_signals(df)
+        buy_signal, sell_signal = sideways_signals(df)
         direction_text = "🟡 اتجاه عرضي"
 
     prev_state = last_signals.get(name, {}).get("last_signal")
 
     if buy_signal and prev_state != "BUY":
-        reason = f"Touched support ({support:.2f})" if support else "EMA4/EMA9 cross"
-        alerts.append(f"🟢 BUY | {name} | {last['Close']:.2f} | {last_candle_date} | {reason}")
+        alerts.append(f"🟢 BUY | {name} | {last['Close']:.2f} | {last_candle_date}")
         new_signals[name] = {"last_signal": "BUY"}
 
     elif sell_signal and prev_state != "SELL":
-        if support and last["Close"] < support * (1 - STOPLOSS_PCT):
-            reason = f"Stop Loss - broke support ({support:.2f})"
-        elif resistance:
-            reason = f"Near resistance ({resistance:.2f})"
-        elif last["RSI14"] >= 85:
-            reason = "RSI14 >= 85"
-        else:
-            reason = "Trend sell"
-
-        alerts.append(f"🔴 SELL | {name} | {last['Close']:.2f} | {last_candle_date} | {reason}")
+        alerts.append(f"🔴 SELL | {name} | {last['Close']:.2f} | {last_candle_date}")
         new_signals[name] = {"last_signal": "SELL"}
+
 # =====================
-# Data failures alert (رجوع للأمان)
+# Data failures alert
 # =====================
 if data_failures:
     alerts.append("⚠️ Failed to fetch data: " + ", ".join(data_failures))
+
 # =====================
 # Save & Notify
 # =====================
