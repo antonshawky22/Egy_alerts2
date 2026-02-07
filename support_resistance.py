@@ -84,79 +84,7 @@ def fetch_data(ticker):
         return None
 
 # =====================
-# Trend determination
-# =====================
-def is_downtrend(last):
-    # EMA 25,35,45,55
-    ema25 = last["EMA25"]
-    ema35 = last["EMA35"]
-    ema45 = last["EMA45"]
-    ema55 = last["EMA55"]
-    price = last["Close"]
-
-    if ema55 > ema45 > ema35 and price < ema25 and price < ema35:
-        return True
-    return False
-
-def is_uptrend(last):
-    ema25 = last["EMA25"]
-    ema35 = last["EMA35"]
-    price = last["Close"]
-    prev_price = last["Close_prev"]
-
-    if ema25 > ema35 and price > ema35 and prev_price > ema35:
-        return True
-    return False
-
-# -------------------------------
-# Uptrend signals
-# -------------------------------
-def uptrend_signals(last):
-    price = last["Close"]
-    ema4 = last["EMA4"]
-    ema9 = last["EMA9"]
-    ema3 = last["EMA3"]
-    ema5 = last["EMA5"]
-    ema25 = last["EMA25"]
-    rsi14 = last["RSI14"]
-
-    # شراء: EMA4 يساوي EMA9 أو يتقاطع لأعلى
-    prev_ema4 = last["EMA4_prev"]
-    prev_ema9 = last["EMA9_prev"]
-    buy_signal = (ema4 >= ema9) or (prev_ema4 < prev_ema9 and ema4 > ema9)
-
-    # بيع
-    sell_signal = ema3 < ema5 or price < ema25 or rsi14 >= 85
-
-    return buy_signal, sell_signal
-
-# -------------------------------
-# Sideways signals
-# -------------------------------
-TOLERANCE = 0.01  # 1%
-STOP_LOSS = 0.02  # 2% كسر الدعم لوقف الخسارة
-MIN_CANDLES_RESISTANCE = 4
-
-def sideways_signals(df):
-    last_30_close = df["Close"].tail(30)
-    last_30_high = df["High"].tail(30)
-    last_30_low = df["Low"].tail(30)
-    current_price = last_30_close.iloc[-1]
-
-    SUPPORT = last_30_low.min()
-    RESISTANCE = last_30_high.max()
-
-    buy_signal = current_price <= SUPPORT * (1 + TOLERANCE)
-    sell_signal = current_price >= RESISTANCE * (1 - TOLERANCE) or current_price >= RESISTANCE * (1 - 0.02)
-
-    stop_loss_signal = current_price < SUPPORT * (1 - STOP_LOSS)
-    if stop_loss_signal:
-        sell_signal = True
-
-    return buy_signal, sell_signal, SUPPORT, RESISTANCE
-
-# =====================
-# Main loop
+# Main Logic
 # =====================
 N = 60  # last N days for support/resistance
 
@@ -168,99 +96,158 @@ for name, ticker in symbols.items():
 
     last_candle_date = df.index[-1].date()
 
-    # حفظ الشمعة السابقة
-    df["Close_prev"] = df["Close"].shift(1)
-    df["EMA4_prev"] = df["Close"].ewm(span=4, adjust=False).mean().shift(1)
-    df["EMA9_prev"] = df["Close"].ewm(span=9, adjust=False).mean().shift(1)
-
-    # EMA calculation
+    # =====================
+    # حساب كل الموفنجات المطلوبة
+    # =====================
+    df["EMA3"] = df["Close"].ewm(span=3, adjust=False).mean()
     df["EMA4"] = df["Close"].ewm(span=4, adjust=False).mean()
+    df["EMA5"] = df["Close"].ewm(span=5, adjust=False).mean()
     df["EMA9"] = df["Close"].ewm(span=9, adjust=False).mean()
     df["EMA25"] = df["Close"].ewm(span=25, adjust=False).mean()
     df["EMA35"] = df["Close"].ewm(span=35, adjust=False).mean()
     df["EMA45"] = df["Close"].ewm(span=45, adjust=False).mean()
     df["EMA55"] = df["Close"].ewm(span=55, adjust=False).mean()
 
-    # RSI14
+    # =====================
+    # حساب RSI14
+    # =====================
     df["RSI14"] = rsi(df["Close"], 14)
 
     last = df.iloc[-1]
 
     # =====================
-    # Determine trend & signals
+    # اتجاه هابط
+    # =====================
+    def is_downtrend(last):
+        ema25 = last["EMA25"]
+        ema35 = last["EMA35"]
+        ema45 = last["EMA45"]
+        ema55 = last["EMA55"]
+        price = last["Close"]
+
+        if ema55 > ema45 > ema35 and price < ema25 and price < ema35:
+            return True
+        return False
+
+    # =====================
+    # اتجاه صاعد
+    # =====================
+    def is_uptrend(last):
+        ema25 = last["EMA25"]
+        ema35 = last["EMA35"]
+        price = last["Close"]
+        prev1_price = df["Close"].iloc[-2]
+
+        if ema25 > ema35 and price > ema35 and prev1_price > ema35:
+            return True
+        return False
+
+    def uptrend_signals(last):
+        price = last["Close"]
+        ema4 = last["EMA4"]
+        ema9 = last["EMA9"]
+        ema3 = last["EMA3"]
+        ema5 = last["EMA5"]
+        ema25 = last["EMA25"]
+        rsi14 = last["RSI14"]
+
+        # ---- شراء ----
+        buy_signal = (ema4 >= ema9) and price > ema25  # تعديل: لمسة EMA4 مع EMA9
+
+        # ---- بيع ----
+        sell_signal = ema3 < ema5 or price < ema25 or rsi14 >= 85
+
+        return buy_signal, sell_signal
+
+    # =====================
+    # اتجاه عرضي
+    # =====================
+    SIDE_PERIOD = 50  # آخر 50 شمعة
+    TOLERANCE = 0.01  # 1% حول الدعم/المقاومة
+    STOPLOSS_PCT = 0.02  # كسر الدعم → وقف خسارة 2%
+
+    def sideways_signals(df):
+        last_N = df.tail(SIDE_PERIOD)
+        current_price = last_N["Close"].iloc[-1]
+
+        SUPPORT = last_N["Low"].min()
+        RESISTANCE = last_N["High"].max()
+
+        # ---- شراء ----
+        buy_signal = abs(current_price - SUPPORT)/SUPPORT <= TOLERANCE
+
+        # ---- بيع ----
+        sell_signal = (
+            abs(current_price - RESISTANCE)/RESISTANCE <= TOLERANCE or
+            current_price < SUPPORT * (1 - STOPLOSS_PCT)
+        )
+
+        return buy_signal, sell_signal, SUPPORT, RESISTANCE
+
+    # =====================
+    # الحصول على الإشارات
     # =====================
     if is_downtrend(last):
-        trend_type = "⚪ اتجاه هابط – تجاهل السهم"
-        buy_signal = False
-        sell_signal = False
-        support = None
-        resistance = None
-
+        direction_text = "⚪ اتجاه هابط – تجاهل السهم"
+        buy_signal, sell_signal, support, resistance = False, False, None, None
     elif is_uptrend(last):
-        trend_type = "🟢 ترند صاعد"
+        direction_text = "🟢 ترند صاعد"
         buy_signal, sell_signal = uptrend_signals(last)
-        support = None
-        resistance = None
-
+        support, resistance = None, None
     else:
-        trend_type = "🟡 اتجاه عرضي"
+        direction_text = "🟡 اتجاه عرضي"
         buy_signal, sell_signal, support, resistance = sideways_signals(df)
 
     # =====================
-    # Prepare alert
+    # حفظ الإشارات الجديدة
     # =====================
     prev_state = last_signals.get(name, {}).get("last_signal")
 
     if buy_signal and prev_state != "BUY":
-        reason = ""
-        if trend_type == "🟢 ترند صاعد":
-            reason = f"EMA4 >= EMA9 touched/cross"
-        else:
-            reason = f"Near support ({support:.2f})"
+        reason = f"Touched support ({support:.2f})" if support else "EMA4/EMA9 cross"
         alerts.append(f"🟢 BUY | {name} | {last['Close']:.2f} | {last_candle_date} | Reason: {reason}")
         new_signals[name] = {
-            "support": round(support, 2) if support else None,
-            "resistance": round(resistance, 2) if resistance else None,
+            "support": round(support,2) if support else None,
+            "resistance": round(resistance,2) if resistance else None,
             "last_signal": "BUY"
         }
 
     elif sell_signal and prev_state != "SELL":
-        if trend_type == "🟢 ترند صاعد":
+        if direction_text == "🟢 ترند صاعد":
             if last["Close"] < last["EMA25"]:
                 reason = f"Price < EMA25"
             elif last["RSI14"] >= 85:
-                reason = f"RSI14 >= 85"
+                reason = "RSI14 >= 85"
             else:
                 reason = "EMA3 < EMA5"
         else:
-            if last["Close"] < support * (1 - STOP_LOSS):
-                reason = f"Stop Loss - broke support ({support:.2f})"
+            if current_price < SUPPORT * (1 - STOPLOSS_PCT):
+                reason = f"Stop Loss - broke support ({SUPPORT:.2f})"
             else:
-                reason = f"Near resistance ({resistance:.2f})"
-
+                reason = f"Near resistance ({RESISTANCE:.2f})"
         alerts.append(f"🔴 SELL | {name} | {last['Close']:.2f} | {last_candle_date} | Reason: {reason}")
         new_signals[name] = {
-            "support": round(support, 2) if support else None,
-            "resistance": round(resistance, 2) if resistance else None,
+            "support": round(support,2) if support else None,
+            "resistance": round(resistance,2) if resistance else None,
             "last_signal": "SELL"
         }
 
 # =====================
-# Data failure alert
+# إخطار فشل البيانات
 # =====================
 if data_failures:
     alerts.append("⚠️ Failed to fetch data: " + ", ".join(data_failures))
 
 # =====================
-# Save signals
+# حفظ الإشارات
 # =====================
 with open(SIGNALS_FILE, "w") as f:
     json.dump(new_signals, f, indent=2)
 
 # =====================
-# Telegram output
+# إخطار Telegram
 # =====================
 if alerts:
-    send_telegram("🚦 EGX Alerts 2:\n\n" + "\n".join(alerts))
+    send_telegram("🚦🚦 EGX Alerts 2:\n\n" + "\n".join(alerts))
 else:
     send_telegram(f"egx alerts 2 ℹ️ No new signals\nLast candle: {last_candle_date}")
