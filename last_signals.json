@@ -1,1 +1,50 @@
-{}
+{
+  "OFH": {
+    "last_signal": "SELL"
+  },
+  "EMFD": {
+    "last_signal": "SELL"
+  },
+  "EAST": {
+    "last_signal": "SELL"
+  },
+  "ABUK": {
+    "last_signal": "SELL"
+  },
+  "HRHO": {
+    "last_signal": "SELL"
+  },
+  "ORWE": {
+    "last_signal": "SELL"
+  },
+  "DSCW": {
+    "last_signal": "SELL"
+  },
+  "SUGR": {
+    "last_signal": "SELL"
+  },
+  "RMDA": {
+    "last_signal": "SELL"
+  },
+  "EEII": {
+    "last_signal": "SELL"
+  },
+  "MPCO": {
+    "last_signal": "SELL"
+  },
+  "ORHD": {
+    "last_signal": "SELL"
+  },
+  "AMOC": {
+    "last_signal": "SELL"
+  },
+  "EGTS": {
+    "last_signal": "SELL"
+  },
+  "MCQE": {
+    "last_signal": "SELL"
+  },
+  "EGAL": {
+    "last_signal": "SELL"
+  }
+}
