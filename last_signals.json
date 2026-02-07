@@ -45,9 +45,7 @@
     "last_signal": "BUY"
   },
   "SUGR": {
-    "support": null,
-    "resistance": null,
-    "last_signal": "BUY"
+    "last_signal": "SELL"
   },
   "RAYA": {
     "support": null,
@@ -109,6 +107,24 @@
     "last_signal": "SELL"
   },
   "RMDA": {
+    "last_signal": "SELL"
+  },
+  "EMFD": {
+    "last_signal": "SELL"
+  },
+  "DSCW": {
+    "last_signal": "SELL"
+  },
+  "EEII": {
+    "last_signal": "SELL"
+  },
+  "MPCO": {
+    "last_signal": "SELL"
+  },
+  "ORHD": {
+    "last_signal": "SELL"
+  },
+  "EGTS": {
     "last_signal": "SELL"
   }
 }
