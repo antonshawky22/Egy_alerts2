@@ -1,4 +1,4 @@
-print("EGX ALERTS - Safe RSI/EMA Strategy + StopLoss + Updated Trends")
+print("EGX ALERTS - Safe RSI/EMA Strategy + Precise Reason + Trends")
 
 import yfinance as yf
 import requests
@@ -68,13 +68,7 @@ def rsi(series, period=14):
 
 def fetch_data(ticker):
     try:
-        df = yf.download(
-            ticker,
-            period="6mo",
-            interval="1d",
-            auto_adjust=True,
-            progress=False
-        )
+        df = yf.download(ticker, period="6mo", interval="1d", auto_adjust=True, progress=False)
         if df is None or df.empty:
             return None
         if isinstance(df.columns, pd.MultiIndex):
@@ -86,128 +80,105 @@ def fetch_data(ticker):
 # =====================
 # Main Logic
 # =====================
-N = 60
-
 for name, ticker in symbols.items():
     df = fetch_data(ticker)
-    if df is None or len(df) < N:
+    if df is None or len(df) < 60:
         data_failures.append(name)
         continue
 
     last_candle_date = df.index[-1].date()
 
-    # =====================
     # EMAs
-    # =====================
-    df["EMA3"]  = df["Close"].ewm(span=3, adjust=False).mean()
-    df["EMA4"]  = df["Close"].ewm(span=4, adjust=False).mean()
-    df["EMA5"]  = df["Close"].ewm(span=5, adjust=False).mean()
-    df["EMA9"]  = df["Close"].ewm(span=9, adjust=False).mean()
-    df["EMA25"] = df["Close"].ewm(span=25, adjust=False).mean()
-    df["EMA35"] = df["Close"].ewm(span=35, adjust=False).mean()
-    df["EMA45"] = df["Close"].ewm(span=45, adjust=False).mean()
-    df["EMA55"] = df["Close"].ewm(span=55, adjust=False).mean()
+    for p in [3,4,5,9,25,35,45,55]:
+        df[f"EMA{p}"] = df["Close"].ewm(span=p, adjust=False).mean()
 
-    # =====================
-    # RSI14
-    # =====================
     df["RSI14"] = rsi(df["Close"], 14)
+
     last = df.iloc[-1]
+    prev = df.iloc[-2]
 
     # =====================
-    # Downtrend
+    # Trend detection
     # =====================
-    def is_downtrend(last):
-        return (
-            last["EMA55"] > last["EMA45"] > last["EMA35"] and
-            last["Close"] < last["EMA25"] and
-            last["Close"] < last["EMA35"]
-        )
-
-    # =====================
-    # Uptrend
-    # =====================
-    def is_uptrend(last):
-        return (
-            last["EMA25"] > last["EMA35"] > last["EMA45"] and
-            last["Close"] > last["EMA35"] and
-            df["Close"].iloc[-2] > last["EMA35"]
-        )
-
-    def uptrend_signals(last):
-        ema_cross = (
-            last["EMA4"] > last["EMA9"] and
-            df["EMA4"].iloc[-2] <= df["EMA9"].iloc[-2]
-        )
-        buy_signal = ema_cross and last["RSI14"] < 70
-        sell_signal = (
-            (last["EMA3"] < last["EMA5"] and last["Close"] < last["EMA9"]) or
-            last["Close"] < last["EMA25"] or
-            last["RSI14"] >= 85
-        )
-        return buy_signal, sell_signal
-
-    # =====================
-    # Sideways (New Strategy with Reason)
-    # =====================
-    def sideways_signals(df):
-        last_N = df.tail(50)
-        last_row = last_N.iloc[-1]
-        price = last_row["Close"]
-        rsi14 = last_row["RSI14"]
-        ema3 = last_row["EMA3"]
-        ema9 = last_row["EMA9"]
-
-        buy_signal = (rsi14 < 40) and (price <= ema3 or price <= ema9)
-        sell_signal = (rsi14 > 60) or (price >= ema3 or price >= ema9) or (ema3 < ema9 and df["EMA3"].iloc[-2] >= df["EMA9"].iloc[-2])
-
-        reason = ""
-        if buy_signal:
-            reason = f"RSI < 40 & Price <= EMA3 or EMA9"
-        elif sell_signal:
-            reason_parts = []
-            if rsi14 > 60:
-                reason_parts.append("RSI > 60")
-            if price >= ema3 or price >= ema9:
-                reason_parts.append("Price >= EMA3 or EMA9")
-            if ema3 < ema9 and df["EMA3"].iloc[-2] >= df["EMA9"].iloc[-2]:
-                reason_parts.append("EMA3 cross EMA9 down")
-            reason = " or ".join(reason_parts)
-        return buy_signal, sell_signal, reason
-
-    # =====================
-    # Decision
-    # =====================
-    if is_downtrend(last):
+    if (
+        last["EMA55"] > last["EMA45"] > last["EMA35"]
+        and last["Close"] < last["EMA25"]
+    ):
+        trend = "⚪ اتجاه هابط"
         buy_signal = sell_signal = False
-        direction_text = "⚪ اتجاه هابط"
         reason = ""
-    elif is_uptrend(last):
-        buy_signal, sell_signal = uptrend_signals(last)
-        direction_text = "🟢 ترند صاعد"
+
+    elif (
+        last["EMA25"] > last["EMA35"] > last["EMA45"]
+        and last["Close"] > last["EMA35"]
+    ):
+        trend = "🟢 ترند صاعد"
+
+        buy_signal = False
+        sell_signal = False
         reason = ""
+
+        if last["RSI14"] >= 85:
+            sell_signal = True
+            reason = "RSI14 >= 85"
+
+        elif last["EMA3"] < last["EMA5"] and last["Close"] < last["EMA9"]:
+            sell_signal = True
+            reason = "EMA3 < EMA5 & Price < EMA9"
+
+        elif last["Close"] < last["EMA25"]:
+            sell_signal = True
+            reason = "Broke EMA25"
+
+        elif last["EMA4"] > last["EMA9"] and prev["EMA4"] <= prev["EMA9"] and last["RSI14"] < 70:
+            buy_signal = True
+            reason = "EMA4 cross EMA9"
+
     else:
-        buy_signal, sell_signal, reason = sideways_signals(df)
-        direction_text = "🟡 اتجاه عرضي"
+        trend = "🟡 اتجاه عرضي"
+
+        buy_signal = False
+        sell_signal = False
+        reason = ""
+
+        if last["RSI14"] < 40 and last["Close"] <= last["EMA3"]:
+            buy_signal = True
+            reason = "RSI < 40 & Price <= EMA3"
+
+        elif last["EMA3"] < last["EMA9"] and prev["EMA3"] >= prev["EMA9"]:
+            sell_signal = True
+            reason = "EMA3 cross EMA9 down"
+
+        elif last["RSI14"] > 60:
+            sell_signal = True
+            reason = "RSI > 60"
+
+        elif last["Close"] >= last["EMA9"]:
+            sell_signal = True
+            reason = "Price >= EMA9"
 
     prev_state = last_signals.get(name, {}).get("last_signal")
 
     if buy_signal and prev_state != "BUY":
-        alerts.append(f"🟢 BUY | {name} | {last['Close']:.2f} | {last_candle_date} | Reason: {reason} | Trend: {direction_text}")
+        alerts.append(
+            f"🟢 BUY | {name} | {last['Close']:.2f} | {last_candle_date} | Reason: {reason} | Trend: {trend}"
+        )
         new_signals[name] = {"last_signal": "BUY"}
 
     elif sell_signal and prev_state != "SELL":
-        alerts.append(f"🔴 SELL | {name} | {last['Close']:.2f} | {last_candle_date} | Reason: {reason} | Trend: {direction_text}")
+        alerts.append(
+            f"🔴 SELL | {name} | {last['Close']:.2f} | {last_candle_date} | Reason: {reason} | Trend: {trend}"
+        )
         new_signals[name] = {"last_signal": "SELL"}
-
 # =====================
 # Data failures alert
 # =====================
 if data_failures:
-    alerts.append("⚠️ Failed to fetch data: " + ", ".join(data_failures))
-
+    alerts.append(
+        "⚠️ Failed to fetch data:\n- " + "\n- ".join(data_failures)
+    )
 # =====================
-# Save & Notify
+# Notify
 # =====================
 with open(SIGNALS_FILE, "w") as f:
     json.dump(new_signals, f, indent=2)
