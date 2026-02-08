@@ -1,4 +1,4 @@
-name: support and resistance
+name: multi_trend
 
 on:
   workflow_dispatch:
