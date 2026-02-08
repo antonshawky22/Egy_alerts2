@@ -112,7 +112,7 @@ for name, ticker in symbols.items():
         last["EMA25"] > last["EMA35"] > last["EMA45"]
         and last["Close"] > last["EMA35"]
     ):
-        trend = "🟢 ترند صاعد"
+        trend = " ترند صاعد"
 
         buy_signal = False
         sell_signal = False
@@ -135,7 +135,7 @@ for name, ticker in symbols.items():
             reason = "EMA4 cross EMA9"
 
     else:
-        trend = "🟡 اتجاه عرضي"
+        trend = " اتجاه عرضي"
 
         buy_signal = False
         sell_signal = False
