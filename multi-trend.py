@@ -1,4 +1,4 @@
-print("EGX ALERTS - Phase 2: EMA60 Trend Classification")
+print("EGX ALERTS - Phase 3: EMA60 Trend + Buy/Sell Rules")
 
 import yfinance as yf
 import requests
@@ -68,13 +68,25 @@ def fetch_data(ticker):
     except:
         return None
 
+def rsi(series, period=14):
+    delta = series.diff()
+    gain = delta.where(delta > 0, 0)
+    loss = -delta.where(delta < 0, 0)
+    avg_gain = gain.rolling(period).mean()
+    avg_loss = loss.rolling(period).mean()
+    rs = avg_gain / avg_loss
+    return 100 - (100 / (1 + rs))
+
 # =====================
-# Main Logic
+# Parameters
 # =====================
 EMA_PERIOD = 60
 LOOKBACK = 50
-THRESHOLD = 0.8  # 80%
+THRESHOLD = 0.8  # 80% من الشموع
 
+# =====================
+# Main Logic
+# =====================
 for name, ticker in symbols.items():
     df = fetch_data(ticker)
     if df is None or len(df) < LOOKBACK:
@@ -84,8 +96,8 @@ for name, ticker in symbols.items():
     last_candle_date = df.index[-1].date()
 
     df["EMA60"] = df["Close"].ewm(span=EMA_PERIOD, adjust=False).mean()
+    df["RSI14"] = rsi(df["Close"], 14)
 
-    # آخر 50 شمعة
     recent_closes = df["Close"].iloc[-LOOKBACK:]
     recent_ema = df["EMA60"].iloc[-LOOKBACK:]
 
@@ -96,13 +108,51 @@ for name, ticker in symbols.items():
     # Trend classification
     # =====================
     if bullish_ratio >= THRESHOLD:
-        trend = "ترند صاعد"
-    elif bearish_ratio >= THRESHOLD:
-        trend = "⚪ اتجاه هابط"
-    else:
-        trend = "اتجاه عرضي"
+        trend = "↗️ صاعد"
+        # ======= شراء وبيع الصاعد =======
+        last_close = df["Close"].iloc[-1]
+        last_rsi = df["RSI14"].iloc[-1]
+        df["EMA4"] = df["Close"].ewm(span=4, adjust=False).mean()
+        df["EMA9"] = df["Close"].ewm(span=9, adjust=False).mean()
+        last_ema4 = df["EMA4"].iloc[-1]
+        last_ema9 = df["EMA9"].iloc[-1]
+        prev_ema4 = df["EMA4"].iloc[-2]
+        prev_ema9 = df["EMA9"].iloc[-2]
 
-    alerts.append(f"{name} | {df['Close'].iloc[-1]:.2f} | {last_candle_date} | Trend: {trend}")
+        buy_signal = last_ema4 > last_ema9 and prev_ema4 <= prev_ema9 and last_rsi < 60
+        sell_signal = (last_ema4 < last_ema9 and prev_ema4 >= prev_ema9) or last_rsi > 83
+
+    elif bearish_ratio >= THRESHOLD:
+        trend = "❌ هابط"
+        buy_signal = sell_signal = False
+
+    else:
+        trend = "🔛 عرضي"
+        # ======= شراء وبيع العرضي =======
+        last_close = df["Close"].iloc[-1]
+        last_rsi = df["RSI14"].iloc[-1]
+        df["EMA4"] = df["Close"].ewm(span=4, adjust=False).mean()
+        df["EMA9"] = df["Close"].ewm(span=9, adjust=False).mean()
+        last_ema4 = df["EMA4"].iloc[-1]
+        last_ema9 = df["EMA9"].iloc[-1]
+
+        buy_signal = last_rsi < 40 and last_close < last_ema4
+        sell_signal = last_rsi > 55 and last_close < last_ema9
+
+    # =====================
+    # Prepare alerts
+    # =====================
+    prev_state = last_signals.get(name, {}).get("last_signal")
+    last_price = df["Close"].iloc[-1]
+
+    if buy_signal and prev_state != "BUY":
+        alerts.append(f"🟢 BUY | {name} | {last_price:.2f} | {last_candle_date} | Trend: {trend}")
+        new_signals[name] = {"last_signal": "BUY"}
+    elif sell_signal and prev_state != "SELL":
+        alerts.append(f"🔴 SELL | {name} | {last_price:.2f} | {last_candle_date} | Trend: {trend}")
+        new_signals[name] = {"last_signal": "SELL"}
+    else:
+        alerts.append(f"{name} | {last_price:.2f} | {last_candle_date} | Trend: {trend}")
 
 # =====================
 # Data failures alert
@@ -111,12 +161,12 @@ if data_failures:
     alerts.append("⚠️ Failed to fetch data:\n- " + "\n- ".join(data_failures))
 
 # =====================
-# Notify
+# Save & Notify
 # =====================
 with open(SIGNALS_FILE, "w") as f:
     json.dump(new_signals, f, indent=2)
 
 if alerts:
-    send_telegram("🚦 EGX Data Status:\n\n" + "\n".join(alerts))
+    send_telegram("🚦 EGX Alerts:\n\n" + "\n".join(alerts))
 else:
     send_telegram(f"ℹ️ No new signals\nLast candle: {last_candle_date}")
