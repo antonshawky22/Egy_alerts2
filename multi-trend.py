@@ -80,7 +80,7 @@ def rsi(series, period=14):
 # =====================
 EMA_PERIOD = 60
 LOOKBACK = 50
-THRESHOLD = 0.85  # 85%
+THRESHOLD = 0.55  # 85%
 
 # =====================
 # Containers
