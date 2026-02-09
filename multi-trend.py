@@ -146,13 +146,13 @@ for name, ticker in symbols.items():
     last_price = df["Close"].iloc[-1]
 
     if buy_signal and prev_state != "BUY":
-        alerts.append(f"🟢 BUY | {name} | {last_price:.2f} | {last_candle_date} | Trend: {trend}")
+        alerts.append(f"🟢 BUY | {name} | {last_price:.2f} | {last_candle_date} |{trend}")
         new_signals[name] = {"last_signal": "BUY"}
     elif sell_signal and prev_state != "SELL":
-        alerts.append(f"🔴 SELL | {name} | {last_price:.2f} | {last_candle_date} | Trend: {trend}")
+        alerts.append(f"🔴 SELL | {name} | {last_price:.2f} | {last_candle_date} |{trend}")
         new_signals[name] = {"last_signal": "SELL"}
     else:
-        alerts.append(f"{name} | {last_price:.2f} | {last_candle_date} | Trend: {trend}")
+        alerts.append(f"{name} | {last_price:.2f} | {last_candle_date} |{trend}")
 
 # =====================
 # Data failures alert
