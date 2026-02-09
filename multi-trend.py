@@ -50,7 +50,7 @@ except:
     last_signals = {}
 
 new_signals = last_signals.copy()
-alerts_by_trend = {"↗️ صاعد": [], "🔛 عرضي": [], "❌ هابط": []}
+alerts = []
 data_failures = []
 last_candle_date = None
 
@@ -82,7 +82,7 @@ def rsi(series, period=14):
 # =====================
 EMA_PERIOD = 60
 LOOKBACK = 50
-THRESHOLD = 0.85  # 85% of candles
+THRESHOLD = 0.85  # 85% من الشموع
 
 # =====================
 # Main Logic
@@ -94,6 +94,8 @@ for name, ticker in symbols.items():
         continue
 
     last_candle_date = df.index[-1].date()
+    last_close = df["Close"].iloc[-1]
+    last_rsi = rsi(df["Close"], 14).iloc[-1]
 
     df["EMA60"] = df["Close"].ewm(span=EMA_PERIOD, adjust=False).mean()
     df["RSI14"] = rsi(df["Close"], 14)
@@ -104,11 +106,12 @@ for name, ticker in symbols.items():
     bullish_ratio = (recent_closes > recent_ema).sum() / LOOKBACK
     bearish_ratio = (recent_closes < recent_ema).sum() / LOOKBACK
 
+    # =====================
     # Trend classification
+    # =====================
     if bullish_ratio >= THRESHOLD:
         trend = "↗️ صاعد"
-        last_close = df["Close"].iloc[-1]
-        last_rsi = df["RSI14"].iloc[-1]
+        # شراء وبيع الصاعد
         df["EMA4"] = df["Close"].ewm(span=4, adjust=False).mean()
         df["EMA9"] = df["Close"].ewm(span=9, adjust=False).mean()
         last_ema4 = df["EMA4"].iloc[-1]
@@ -125,8 +128,7 @@ for name, ticker in symbols.items():
 
     else:
         trend = "🔛 عرضي"
-        last_close = df["Close"].iloc[-1]
-        last_rsi = df["RSI14"].iloc[-1]
+        # شراء وبيع العرضي
         df["EMA4"] = df["Close"].ewm(span=4, adjust=False).mean()
         df["EMA9"] = df["Close"].ewm(span=9, adjust=False).mean()
         last_ema4 = df["EMA4"].iloc[-1]
@@ -135,39 +137,34 @@ for name, ticker in symbols.items():
         buy_signal = last_rsi < 40 and last_close < last_ema4
         sell_signal = last_rsi > 55 and last_close < last_ema9
 
-    # Check if trend changed
+    # =====================
+    # Detect direction change
+    # =====================
     prev_trend = last_signals.get(name, {}).get("trend")
     changed_mark = "📊 " if prev_trend and prev_trend != trend else ""
 
-    # Check previous buy/sell
-    prev_signal = last_signals.get(name, {}).get("last_signal")
-    if buy_signal and prev_signal != "BUY":
+    # =====================
+    # Prepare alerts
+    # =====================
+    prev_state = last_signals.get(name, {}).get("last_signal")
+
+    if buy_signal and prev_state != "BUY":
         signal_text = f"{changed_mark}{name} | {last_close:.2f} | {last_candle_date} | {trend} | 🟢 BUY"
         new_signals[name] = {"last_signal": "BUY", "trend": trend}
-    elif sell_signal and prev_signal != "SELL":
+    elif sell_signal and prev_state != "SELL":
         signal_text = f"{changed_mark}{name} | {last_close:.2f} | {last_candle_date} | {trend} | 🔴 SELL"
         new_signals[name] = {"last_signal": "SELL", "trend": trend}
     else:
         signal_text = f"{changed_mark}{name} | {last_close:.2f} | {last_candle_date} | {trend}"
-        new_signals[name] = {"last_signal": prev_signal, "trend": trend}
+        new_signals[name] = {"last_signal": prev_state, "trend": trend}
 
-    alerts_by_trend[trend].append(signal_text)
+    alerts.append(signal_text)
 
 # =====================
 # Data failures alert
 # =====================
 if data_failures:
-    alerts_by_trend.setdefault("⚠️ Failed", []).extend(data_failures)
-
-# =====================
-# Prepare message
-# =====================
-message_lines = ["🚦 EGX Alerts:\n"]
-for t in ["↗️ صاعد", "🔛 عرضي", "❌ هابط"]:
-    if alerts_by_trend[t]:
-        message_lines.append(f"{t}:")
-        message_lines.extend([f"- {line}" for line in alerts_by_trend[t]])
-        message_lines.append("")  # empty line for readability
+    alerts.append("⚠️ Failed to fetch data:\n- " + "\n- ".join(data_failures))
 
 # =====================
 # Save & Notify
@@ -175,4 +172,7 @@ for t in ["↗️ صاعد", "🔛 عرضي", "❌ هابط"]:
 with open(SIGNALS_FILE, "w") as f:
     json.dump(new_signals, f, indent=2)
 
-send_telegram("\n".join(message_lines))
+if alerts:
+    send_telegram("🚦 EGX Alerts:\n\n" + "\n".join(alerts))
+else:
+    send_telegram(f"ℹ️ No new signals\nLast candle: {last_candle_date}")
