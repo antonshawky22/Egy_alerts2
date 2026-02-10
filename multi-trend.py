@@ -162,8 +162,7 @@ for name, ticker in symbols.items():
     # =====================
     # Forced sell check
     # =====================
-    in_position = prev_signal == "BUY"
-    if in_position and last_close < last_ema25:
+    if last_close < last_ema25:
         sell_signal = True
         buy_signal = False
         changed_mark = "🚨⚠️ "  # forced sell alert
