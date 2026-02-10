@@ -1,7 +1,7 @@
 {
   "ELEC": {
     "last_signal": "BUY",
-    "trend": "🔛 عرضي"
+    "trend": "🔛عرضي"
   },
   "OFH": {
     "last_signal": null,
@@ -9,39 +9,39 @@
   },
   "OLFI": {
     "last_signal": null,
-    "trend": "↗️ صاعد"
+    "trend": "🔛عرضي"
   },
   "EMFD": {
     "last_signal": null,
-    "trend": "🔛 عرضي"
+    "trend": "🔛عرضي"
   },
   "ETEL": {
     "last_signal": null,
-    "trend": "↗️ صاعد"
+    "trend": "↗️صاعد"
   },
   "EAST": {
     "last_signal": null,
-    "trend": "❌ هابط"
+    "trend": "🔛عرضي"
   },
   "EFIH": {
     "last_signal": null,
-    "trend": "↗️ صاعد"
+    "trend": "↗️صاعد"
   },
   "ABUK": {
     "last_signal": "SELL",
-    "trend": "↗️ صاعد"
+    "trend": "🔛عرضي"
   },
   "OIH": {
     "last_signal": null,
-    "trend": "↗️ صاعد"
+    "trend": "🔛عرضي"
   },
   "SWDY": {
     "last_signal": "SELL",
-    "trend": "↗️ صاعد"
+    "trend": "🔛عرضي"
   },
   "ISPH": {
     "last_signal": null,
-    "trend": "↗️ صاعد"
+    "trend": "🔛عرضي"
   },
   "ATQA": {
     "last_signal": null,
@@ -49,19 +49,19 @@
   },
   "MTIE": {
     "last_signal": null,
-    "trend": "🔛 عرضي"
+    "trend": "🔛عرضي"
   },
   "HRHO": {
     "last_signal": null,
-    "trend": "❌ هابط"
+    "trend": "🔛عرضي"
   },
   "ORWE": {
     "last_signal": null,
-    "trend": "❌ هابط"
+    "trend": "🔛عرضي"
   },
   "JUFO": {
     "last_signal": null,
-    "trend": "🔛 عرضي"
+    "trend": "🔛عرضي"
   },
   "DSCW": {
     "last_signal": null,
@@ -69,11 +69,11 @@
   },
   "SUGR": {
     "last_signal": null,
-    "trend": "❌ هابط"
+    "trend": "🔛عرضي"
   },
   "ELSH": {
     "last_signal": null,
-    "trend": "🔛 عرضي"
+    "trend": "🔛عرضي"
   },
   "RMDA": {
     "last_signal": null,
@@ -81,11 +81,11 @@
   },
   "RAYA": {
     "last_signal": null,
-    "trend": "↗️ صاعد"
+    "trend": "🔛عرضي"
   },
   "EEII": {
     "last_signal": null,
-    "trend": "↗️ صاعد"
+    "trend": "🔛عرضي"
   },
   "MPCO": {
     "last_signal": null,
@@ -93,35 +93,35 @@
   },
   "GBCO": {
     "last_signal": null,
-    "trend": "↗️ صاعد"
+    "trend": "↗️صاعد"
   },
   "TMGH": {
     "last_signal": null,
-    "trend": "↗️ صاعد"
+    "trend": "↗️صاعد"
   },
   "ORHD": {
     "last_signal": null,
-    "trend": "↗️ صاعد"
+    "trend": "🔛عرضي"
   },
   "AMOC": {
     "last_signal": null,
-    "trend": "↗️ صاعد"
+    "trend": "🔛عرضي"
   },
   "FWRY": {
     "last_signal": null,
-    "trend": "↗️ صاعد"
+    "trend": "↗️صاعد"
   },
   "COMI": {
     "last_signal": null,
-    "trend": "↗️ صاعد"
+    "trend": "🔛عرضي"
   },
   "ADIB": {
     "last_signal": null,
-    "trend": "↗️ صاعد"
+    "trend": "↗️صاعد"
   },
   "PHDC": {
     "last_signal": null,
-    "trend": "↗️ صاعد"
+    "trend": "↗️صاعد"
   },
   "EGTS": {
     "last_signal": null,
@@ -129,14 +129,14 @@
   },
   "MCQE": {
     "last_signal": null,
-    "trend": "↗️ صاعد"
+    "trend": "↗️صاعد"
   },
   "SKPC": {
     "last_signal": null,
-    "trend": "❌ هابط"
+    "trend": "🔛عرضي"
   },
   "EGAL": {
     "last_signal": null,
-    "trend": "↗️ صاعد"
+    "trend": "↗️صاعد"
   }
 }
