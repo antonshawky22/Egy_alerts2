@@ -5,7 +5,7 @@
     "last_forced_sell": ""
   },
   "OLFI": {
-    "last_signal": "SELL",
+    "last_signal": "BUY",
     "trend": "🔛عرضي",
     "last_forced_sell": "FORCED_SELL"
   },
@@ -51,7 +51,7 @@
   },
   "ATQA": {
     "last_signal": null,
-    "trend": "❌ هابط",
+    "trend": "🔻هابط",
     "last_forced_sell": ""
   },
   "MTIE": {
@@ -81,7 +81,7 @@
   },
   "DSCW": {
     "last_signal": null,
-    "trend": "❌ هابط",
+    "trend": "🔻هابط",
     "last_forced_sell": ""
   },
   "SUGR": {
@@ -96,7 +96,7 @@
   },
   "RMDA": {
     "last_signal": null,
-    "trend": "❌ هابط",
+    "trend": "🔻هابط",
     "last_forced_sell": ""
   },
   "RAYA": {
@@ -111,7 +111,7 @@
   },
   "MPCO": {
     "last_signal": null,
-    "trend": "❌ هابط",
+    "trend": "🔻هابط",
     "last_forced_sell": ""
   },
   "GBCO": {
@@ -156,7 +156,7 @@
   },
   "EGTS": {
     "last_signal": null,
-    "trend": "❌ هابط",
+    "trend": "🔻هابط",
     "last_forced_sell": ""
   },
   "MCQE": {
@@ -170,7 +170,7 @@
     "last_forced_sell": "FORCED_SELL"
   },
   "EGAL": {
-    "last_signal": null,
+    "last_signal": "BUY",
     "trend": "↗️صاعد",
     "last_forced_sell": ""
   }
