@@ -1,4 +1,4 @@
-٤print("EGX ALERTS - Phase 3: Final Version with Forced Sell")
+print("EGX ALERTS - Phase 3: Final Version with Forced Sell")
 
 import yfinance as yf
 import requests
