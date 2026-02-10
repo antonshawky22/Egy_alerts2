@@ -1,4 +1,4 @@
-print("EGX ALERTS - Phase 3: Final Version with Forced Sell")
+٤print("EGX ALERTS - Phase 3: Final Version with Forced Sell")
 
 import yfinance as yf
 import requests
@@ -129,7 +129,7 @@ for name, ticker in symbols.items():
     # =====================
     if bullish_ratio >= THRESHOLD:
         trend = "↗️صاعد"
-        if last_ema4 > last_ema9 and prev_ema4 <= prev_ema9 and last_rsi < 60:
+        if last_rsi < 60:
             buy_signal = True
         if (last_ema4 < last_ema9 and prev_ema4 >= prev_ema9) or last_rsi > 88:
             sell_signal = True
@@ -138,7 +138,7 @@ for name, ticker in symbols.items():
         buy_signal = sell_signal = False
     else:
         trend = "🔛عرضي"
-        if last_rsi < 40 and last_close < last_ema4:
+        if last_rsi < 32 and last_close < last_ema4:
             buy_signal = True
         if last_rsi > 55 and last_close < last_ema9:
             sell_signal = True
