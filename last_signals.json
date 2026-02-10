@@ -8,7 +8,7 @@
     "trend": "❌ هابط"
   },
   "OLFI": {
-    "last_signal": null,
+    "last_signal": "SELL",
     "trend": "🔛عرضي"
   },
   "EMFD": {
@@ -44,7 +44,7 @@
     "trend": "🔛عرضي"
   },
   "ATQA": {
-    "last_signal": null,
+    "last_signal": "SELL",
     "trend": "❌ هابط"
   },
   "MTIE": {
@@ -72,7 +72,7 @@
     "trend": "🔛عرضي"
   },
   "ELSH": {
-    "last_signal": null,
+    "last_signal": "SELL",
     "trend": "🔛عرضي"
   },
   "RMDA": {
@@ -84,7 +84,7 @@
     "trend": "🔛عرضي"
   },
   "EEII": {
-    "last_signal": null,
+    "last_signal": "SELL",
     "trend": "🔛عرضي"
   },
   "MPCO": {
