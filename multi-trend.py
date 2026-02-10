@@ -80,7 +80,7 @@ def rsi(series, period=14):
 # =====================
 EMA_PERIOD = 60
 LOOKBACK = 50
-THRESHOLD = 0.55  # 85%
+THRESHOLD = 0.85  # 85%
 
 # =====================
 # Containers
@@ -124,7 +124,7 @@ for name, ticker in symbols.items():
     # Trend classification + Buy/Sell rules
     # =====================
     if bullish_ratio >= THRESHOLD:
-        trend = "↗️ صاعد"
+        trend = "↗️صاعد"
         if last_ema4 > last_ema9 and prev_ema4 <= prev_ema9 and last_rsi < 60:
             buy_signal = True
         if (last_ema4 < last_ema9 and prev_ema4 >= prev_ema9) or last_rsi > 88:
@@ -133,7 +133,7 @@ for name, ticker in symbols.items():
         trend = "❌ هابط"
         buy_signal = sell_signal = False
     else:
-        trend = "🔛 عرضي"
+        trend = "🔛عرضي"
         if last_rsi < 40 and last_close < last_ema4:
             buy_signal = True
         if last_rsi > 55 and last_close < last_ema9:
@@ -145,7 +145,7 @@ for name, ticker in symbols.items():
     prev_data = last_signals.get(name, {})
     prev_trend = prev_data.get("trend")
     prev_signal = prev_data.get("last_signal")
-    changed_mark = "📊 " if prev_trend and prev_trend != trend else ""
+    changed_mark = "🚧 📢" if prev_trend and prev_trend != trend else ""
 
     # =====================
     # Prevent repeated BUY/SELL if unchanged
@@ -159,19 +159,19 @@ for name, ticker in symbols.items():
     # Prepare signal text
     # =====================
     signal_text = f"{changed_mark}{name} | {last_close:.2f} | {last_candle_date}"
-    if trend == "↗️ صاعد":
+    if trend == "↗️صاعد":
         if buy_signal:
-            signal_text += f" | {trend} | 🟢 BUY"
+            signal_text += f" | {trend} | 🟢BUY"
         elif sell_signal:
-            signal_text += f" | {trend} | 🔴 SELL"
+            signal_text += f" | {trend} | 🔴SELL"
         else:
             signal_text += f" | {trend}"
         section_up.append(signal_text)
-    elif trend == "🔛 عرضي":
+    elif trend == "🔛عرضي":
         if buy_signal:
-            signal_text += f" | {trend} | 🟢 BUY"
+            signal_text += f" | {trend} | 🟢BUY"
         elif sell_signal:
-            signal_text += f" | {trend} | 🔴 SELL"
+            signal_text += f" | {trend} | 🔴SELL"
         else:
             signal_text += f" | {trend}"
         section_side.append(signal_text)
@@ -194,10 +194,10 @@ alerts = []
 alerts.append("🚦 EGX Alerts:\n")
 
 if section_up:
-    alerts.append("↗️ صاعد:")
+    alerts.append("↗️صاعد:")
     alerts.extend(["- " + s for s in section_up])
 if section_side:
-    alerts.append("\n🔛 عرضي:")
+    alerts.append("\n🔛عرضي:")
     alerts.extend(["- " + s for s in section_side])
 if section_down:
     alerts.append("\n❌ هابط:")
