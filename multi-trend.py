@@ -134,7 +134,7 @@ for name, ticker in symbols.items():
         if (last_ema4 < last_ema9 and prev_ema4 >= prev_ema9) or last_rsi > 88:
             sell_signal = True
     elif bearish_ratio >= THRESHOLD:
-        trend = "❌ هابط"
+        trend = "🔻هابط"
         buy_signal = sell_signal = False
     else:
         trend = "🔛عرضي"
@@ -151,7 +151,7 @@ for name, ticker in symbols.items():
     prev_signal = prev_data.get("last_signal")
     prev_forced = prev_data.get("last_forced_sell", "")
 
-    changed_mark = "🚧📢" if prev_trend and prev_trend != trend else ""
+    changed_mark = "📢" if prev_trend and prev_trend != trend else ""
 
     # =====================
     # Forced Sell Rule (cross EMA25)
@@ -159,7 +159,7 @@ for name, ticker in symbols.items():
     if last_close < last_ema25 and prev_forced != "FORCED_SELL":
         sell_signal = True
         buy_signal = False
-        changed_mark = "🚨⚠️ "  # forced sell alert
+        changed_mark = "🚨 "  # forced sell alert
         last_forced = "FORCED_SELL"
     else:
         last_forced = prev_forced  # حافظ على القيمة السابقة
