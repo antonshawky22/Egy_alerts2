@@ -1,4 +1,4 @@
-print("EGX ALERTS - Phase 3: Organized Alerts with Buy/Sell & Direction Change (Fixed)")
+print("EGX ALERTS - Phase 3: Final Version with Forced Sell")
 
 import yfinance as yf
 import requests
@@ -81,7 +81,7 @@ def rsi(series, period=14):
 EMA_PERIOD = 60
 LOOKBACK = 50
 THRESHOLD = 0.85  # 85%
-EMA_FORCED = 25  # EMA25 for forced sell
+EMA_FORCED_SELL = 25  # متوسط 25 للشروط القسرية
 
 # =====================
 # Containers
@@ -105,7 +105,7 @@ for name, ticker in symbols.items():
     df["RSI14"] = rsi(df["Close"], 14)
     df["EMA4"] = df["Close"].ewm(span=4, adjust=False).mean()
     df["EMA9"] = df["Close"].ewm(span=9, adjust=False).mean()
-    df["EMA25"] = df["Close"].ewm(span=EMA_FORCED, adjust=False).mean()  # forced sell
+    df["EMA25"] = df["Close"].ewm(span=EMA_FORCED_SELL, adjust=False).mean()
 
     recent_closes = df["Close"].iloc[-LOOKBACK:]
     recent_ema = df["EMA60"].iloc[-LOOKBACK:]
@@ -149,23 +149,28 @@ for name, ticker in symbols.items():
     prev_data = last_signals.get(name, {})
     prev_trend = prev_data.get("trend")
     prev_signal = prev_data.get("last_signal")
-    changed_mark = "🚧 📢" if prev_trend and prev_trend != trend else ""
+    prev_forced = prev_data.get("last_forced_sell", "")
+
+    changed_mark = "🚧📢" if prev_trend and prev_trend != trend else ""
 
     # =====================
-    # Prevent repeated BUY/SELL if unchanged
+    # Forced Sell Rule (cross EMA25)
+    # =====================
+    if last_close < last_ema25 and prev_forced != "FORCED_SELL":
+        sell_signal = True
+        buy_signal = False
+        changed_mark = "🚨⚠️ "  # forced sell alert
+        last_forced = "FORCED_SELL"
+    else:
+        last_forced = prev_forced  # حافظ على القيمة السابقة
+
+    # =====================
+    # Prevent repeated normal BUY/SELL
     # =====================
     if buy_signal and prev_signal == "BUY":
         buy_signal = False
     if sell_signal and prev_signal == "SELL":
         sell_signal = False
-
-    # =====================
-    # Forced sell check
-    # =====================
-    if last_close < last_ema25:
-        sell_signal = True
-        buy_signal = False
-        changed_mark = "🚨⚠️ "  # forced sell alert
 
     # =====================
     # Prepare signal text
@@ -188,7 +193,10 @@ for name, ticker in symbols.items():
             signal_text += f" | {trend}"
         section_side.append(signal_text)
     else:
-        signal_text += f" | {trend}"
+        if sell_signal:
+            signal_text += f" | {trend} | 🔴SELL"
+        else:
+            signal_text += f" | {trend}"
         section_down.append(signal_text)
 
     # =====================
@@ -196,7 +204,8 @@ for name, ticker in symbols.items():
     # =====================
     new_signals[name] = {
         "last_signal": "BUY" if buy_signal else "SELL" if sell_signal else prev_signal,
-        "trend": trend
+        "trend": trend,
+        "last_forced_sell": last_forced
     }
 
 # =====================
