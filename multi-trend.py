@@ -81,6 +81,7 @@ def rsi(series, period=14):
 EMA_PERIOD = 60
 LOOKBACK = 50
 THRESHOLD = 0.85  # 85%
+EMA_FORCED = 25  # EMA25 for forced sell
 
 # =====================
 # Containers
@@ -104,6 +105,7 @@ for name, ticker in symbols.items():
     df["RSI14"] = rsi(df["Close"], 14)
     df["EMA4"] = df["Close"].ewm(span=4, adjust=False).mean()
     df["EMA9"] = df["Close"].ewm(span=9, adjust=False).mean()
+    df["EMA25"] = df["Close"].ewm(span=EMA_FORCED, adjust=False).mean()  # forced sell
 
     recent_closes = df["Close"].iloc[-LOOKBACK:]
     recent_ema = df["EMA60"].iloc[-LOOKBACK:]
@@ -115,8 +117,10 @@ for name, ticker in symbols.items():
     last_rsi = df["RSI14"].iloc[-1]
     last_ema4 = df["EMA4"].iloc[-1]
     last_ema9 = df["EMA9"].iloc[-1]
+    last_ema25 = df["EMA25"].iloc[-1]
     prev_ema4 = df["EMA4"].iloc[-2]
     prev_ema9 = df["EMA9"].iloc[-2]
+    prev_close = df["Close"].iloc[-2]
 
     buy_signal = sell_signal = False
 
@@ -154,6 +158,15 @@ for name, ticker in symbols.items():
         buy_signal = False
     if sell_signal and prev_signal == "SELL":
         sell_signal = False
+
+    # =====================
+    # Forced sell check
+    # =====================
+    in_position = prev_signal == "BUY"
+    if in_position and last_close < last_ema25:
+        sell_signal = True
+        buy_signal = False
+        changed_mark = "🚨⚠️ "  # forced sell alert
 
     # =====================
     # Prepare signal text
