@@ -192,9 +192,9 @@ if buy_signal:
 elif sell_signal:
     signal_text += "|🔴SELL"
 
-if trend == "↗️صاعد":
+if trend.startswith("↗️"):
     section_up.append(signal_text)
-elif trend == "🔛عرضي":
+elif trend.startswith("🔛"):
     section_side.append(signal_text)
 else:
     section_down.append(signal_text)
