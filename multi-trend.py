@@ -199,14 +199,14 @@ elif trend == "🔛عرضي":
 else:
     section_down.append(signal_text)
 
-    # =====================
-    # Update last signals
-    # =====================
-    new_signals[name] = {
-        "last_signal": "BUY" if buy_signal else "SELL" if sell_signal else prev_signal,
-        "trend": trend,
-        "last_forced_sell": last_forced
-    }
+# =====================
+# Update last signals
+# =====================
+new_signals[name] = {
+    "last_signal": "BUY" if buy_signal else "SELL" if sell_signal else prev_signal,
+    "trend": trend,
+    "last_forced_sell": last_forced
+}
 
 # =====================
 # Compile final message
