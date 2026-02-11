@@ -208,13 +208,13 @@ alerts = []
 alerts.append("🚦 EGX Alerts:\n")
 
 if section_up:
-    alerts.append("↗️:")
+    alerts.append("↗️ صاعد:")
     alerts.extend(["- " + s for s in section_up])
 if section_side:
-    alerts.append("\n🔛:")
+    alerts.append("\n🔛 عرضي:")
     alerts.extend(["- " + s for s in section_side])
 if section_down:
-    alerts.append("\n🔻:")
+    alerts.append("\n🔻 هابط:")
     alerts.extend(["- " + s for s in section_down])
 
 if data_failures:
