@@ -155,24 +155,29 @@ for name, ticker in symbols.items():
         else:
             changed_mark = ""
             target_section = section_side
-     # Buy condition
-# شراء في العرضي القوي
-if last_close > last_ema9 and last_rsi > df["RSI14"].iloc[-2]:
-    buy_signal = True
-    sell_signal = False
 
-# بيع في العرضي القوي
-if last_close < last_ema9 or last_rsi < df["RSI14"].iloc[-2]:
-    sell_signal = True
-    buy_signal = False
-    # تجهيز نص الاشارة وإضافة للـ Section
-    signal_text = f"{changed_mark} {trend} {name} | {last_close:.2f} | {last_candle_date}"
-    if buy_signal:
-        signal_text += "|🟢BUY"
-    elif sell_signal:
-        signal_text += "|🔴SELL"
+        # =====================
+        # Buy/Sell conditions for sideways
+        # =====================
+        # شراء في العرضي القوي
+        if last_close > last_ema9 and last_rsi > df["RSI14"].iloc[-2]:
+            buy_signal = True
+            sell_signal = False
 
-    target_section.append(signal_text)
+        # بيع في العرضي القوي
+        if last_close < last_ema9 or last_rsi < df["RSI14"].iloc[-2]:
+            sell_signal = True
+            buy_signal = False
+
+        # تجهيز نص الاشارة وإضافة للـ Section
+        signal_text = f"{changed_mark} {trend} {name} | {last_close:.2f} | {last_candle_date}"
+        if buy_signal:
+            signal_text += "|🟢BUY"
+        elif sell_signal:
+            signal_text += "|🔴SELL"
+
+        target_section.append(signal_text)
+
     # =====================
     # Check direction change
     # =====================
@@ -203,20 +208,19 @@ if last_close < last_ema9 or last_rsi < df["RSI14"].iloc[-2]:
         sell_signal = False
 
     # =====================
-    # Prepare signal text
+    # Prepare signal text for non-sideways trends
     # =====================
-    signal_text = f"{changed_mark} {trend} {name} | {last_close:.2f} | {last_candle_date}"
-    if buy_signal:
-        signal_text += "|🟢BUY"
-    elif sell_signal:
-        signal_text += "|🔴SELL"
+    if trend != "🔛":
+        signal_text = f"{changed_mark} {trend} {name} | {last_close:.2f} | {last_candle_date}"
+        if buy_signal:
+            signal_text += "|🟢BUY"
+        elif sell_signal:
+            signal_text += "|🔴SELL"
 
-    if trend == "↗️":
-        section_up.append(signal_text)
-    elif trend == "🔛":
-        target_section.append(signal_text)
-    else:
-        section_down.append(signal_text)
+        if trend == "↗️":
+            section_up.append(signal_text)
+        else:
+            section_down.append(signal_text)
 
     # =====================
     # Update last signals
