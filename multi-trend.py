@@ -1,4 +1,4 @@
-print("EGX ALERTS - Phase 3: Final Version with Forced Sell and Updated Sideways")
+print("EGX ALERTS - Phase 3: Final Version with Forced Sell, Updated Sideways, No Repeat Signals")
 
 import yfinance as yf
 import requests
@@ -92,7 +92,7 @@ EMA_FORCED_SELL = 25  # متوسط 25 للشروط القسرية
 # =====================
 section_up = []
 section_side = []
-section_side_weak = []  # جديد: الأسهم العرضية الضعيفة
+section_side_weak = []
 section_down = []
 
 # =====================
@@ -157,17 +157,22 @@ for name, ticker in symbols.items():
             target_section = section_side
 
         # =====================
-        # Buy/Sell conditions for sideways
+        # Buy/Sell in Sideways (prevent repeat)
         # =====================
-        # شراء في العرضي القوي
         if last_close > last_ema9 and last_rsi > df["RSI14"].iloc[-2]:
             buy_signal = True
             sell_signal = False
-
-        # بيع في العرضي القوي
         if last_close < last_ema9 or last_rsi < df["RSI14"].iloc[-2]:
             sell_signal = True
             buy_signal = False
+
+        # تحقق من الإشارة السابقة لتجنب التكرار
+        prev_data = last_signals.get(name, {})
+        prev_signal = prev_data.get("last_signal")
+        if buy_signal and prev_signal == "BUY":
+            buy_signal = False
+        if sell_signal and prev_signal == "SELL":
+            sell_signal = False
 
         # تجهيز نص الاشارة وإضافة للـ Section
         signal_text = f"{changed_mark} {trend} {name} | {last_close:.2f} | {last_candle_date}"
@@ -176,51 +181,33 @@ for name, ticker in symbols.items():
         elif sell_signal:
             signal_text += "|🔴SELL"
 
-        target_section.append(signal_text)
-
-    # =====================
-    # Check direction change
-    # =====================
-    prev_data = last_signals.get(name, {})
-    prev_signal = prev_data.get("last_signal")
-    prev_forced = prev_data.get("last_forced_sell", "")
-
-    if trend != "🔛":
-        changed_mark = "🚧" if prev_data.get("trend") and prev_data.get("trend") != trend else ""
+        if buy_signal or sell_signal:
+            target_section.append(signal_text)
 
     # =====================
     # Forced Sell Rule (cross EMA25)
     # =====================
-    if last_close < last_ema25 and prev_forced != "FORCED_SELL":
+    if last_close < last_ema25 and prev_data.get("last_forced_sell") != "FORCED_SELL":
         sell_signal = True
         buy_signal = False
         changed_mark = "🚨"
         last_forced = "FORCED_SELL"
     else:
-        last_forced = prev_forced
+        last_forced = prev_data.get("last_forced_sell", "")
 
     # =====================
-    # Prevent repeated normal BUY/SELL
-    # =====================
-    if buy_signal and prev_signal == "BUY":
-        buy_signal = False
-    if sell_signal and prev_signal == "SELL":
-        sell_signal = False
-
-    # =====================
-    # Prepare signal text for non-sideways trends
+    # Prepare signal text for Up/Down trends (prevent repeat)
     # =====================
     if trend != "🔛":
         signal_text = f"{changed_mark} {trend} {name} | {last_close:.2f} | {last_candle_date}"
         if buy_signal:
-            signal_text += "|🟢BUY"
+            if prev_signal != "BUY":
+                signal_text += "|🟢BUY"
+                section_up.append(signal_text)
         elif sell_signal:
-            signal_text += "|🔴SELL"
-
-        if trend == "↗️":
-            section_up.append(signal_text)
-        else:
-            section_down.append(signal_text)
+            if prev_signal != "SELL":
+                signal_text += "|🔴SELL"
+                section_down.append(signal_text)
 
     # =====================
     # Update last signals
