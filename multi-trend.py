@@ -155,17 +155,16 @@ for name, ticker in symbols.items():
         else:
             changed_mark = ""
             target_section = section_side
-        # Buy condition
-        # شراء في العرضي القوي
-        if last_close > last_ema9 and last_rsi > df["RSI14"].iloc[-2]:
-        buy_signal = True
-        sell_signal = False
+     # Buy condition
+# شراء في العرضي القوي
+if last_close > last_ema9 and last_rsi > df["RSI14"].iloc[-2]:
+    buy_signal = True
+    sell_signal = False
 
-        # بيع في العرضي القوي
-        if last_close < last_ema9 or last_rsi < df["RSI14"].iloc[-2]:
-        sell_signal = True
-        buy_signal = False
-
+# بيع في العرضي القوي
+if last_close < last_ema9 or last_rsi < df["RSI14"].iloc[-2]:
+    sell_signal = True
+    buy_signal = False
     # =====================
     # Check direction change
     # =====================
