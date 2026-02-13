@@ -15,7 +15,7 @@
     "last_forced_sell": ""
   },
   "ETEL": {
-    "last_signal": "",
+    "last_signal": "SELL",
     "trend": "↗️",
     "last_forced_sell": ""
   },
@@ -30,7 +30,7 @@
     "last_forced_sell": ""
   },
   "ABUK": {
-    "last_signal": "",
+    "last_signal": "SELL",
     "trend": "↗️",
     "last_forced_sell": ""
   },
@@ -115,12 +115,12 @@
     "last_forced_sell": ""
   },
   "GBCO": {
-    "last_signal": "BUY",
+    "last_signal": "SELL",
     "trend": "↗️",
     "last_forced_sell": ""
   },
   "TMGH": {
-    "last_signal": "",
+    "last_signal": "BUY",
     "trend": "↗️",
     "last_forced_sell": ""
   },
@@ -160,7 +160,7 @@
     "last_forced_sell": "FORCED_SELL"
   },
   "MCQE": {
-    "last_signal": "",
+    "last_signal": "BUY",
     "trend": "↗️",
     "last_forced_sell": ""
   },
