@@ -129,24 +129,23 @@ for name, ticker in symbols.items():
 
     buy_signal = sell_signal = False
     changed_mark = ""
+    target_section = None
 
     # =====================
-# Trend classification
-# =====================
-if bullish_ratio >= THRESHOLD:
-    trend = "↗️"
-    
-    # ===== شراء وبيع مرن للصاعد =====
-    # شراء: السعر فوق EMA25 و RSI أقل من 65 و RSI أعلى من الشمعة السابقة
-    if last_close > last_ema25 and last_rsi < 65 and last_rsi > df["RSI14"].iloc[-2]:
-        buy_signal = True
+    # Trend classification
+    # =====================
+    if bullish_ratio >= THRESHOLD:
+        trend = "↗️"
+        # ===== شراء وبيع مرن للصاعد =====
+        if last_close > last_ema25 and last_rsi < 65 and last_rsi > df["RSI14"].iloc[-2]:
+            buy_signal = True
+        elif last_rsi > 75 or last_close < last_ema25 or (prev_ema4 >= prev_ema9 and last_ema4 < last_ema9):
+            sell_signal = True
 
-    # بيع: RSI عالي أو السعر يكسر EMA25 أو EMA4 يقطع تحت EMA9
-    elif last_rsi > 75 or last_close < last_ema25 or (prev_ema4 >= prev_ema9 and last_ema4 < last_ema9):
-        sell_signal = True
     elif bearish_ratio >= THRESHOLD:
         trend = "🔻"
         buy_signal = sell_signal = False
+
     else:
         trend = "🔛"
         bullish_50 = (recent_closes > recent_ema).sum() / LOOKBACK
