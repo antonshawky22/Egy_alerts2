@@ -11,7 +11,7 @@
   },
   "EMFD": {
     "last_signal": "SELL",
-    "trend": "🔛",
+    "trend": "🔻",
     "last_forced_sell": ""
   },
   "ETEL": {
@@ -41,42 +41,42 @@
   },
   "SWDY": {
     "last_signal": "SELL",
-    "trend": "🔛",
+    "trend": "↗️",
     "last_forced_sell": "FORCED_SELL"
   },
   "ISPH": {
     "last_signal": "BUY",
-    "trend": "🔛",
+    "trend": "↗️",
     "last_forced_sell": ""
   },
   "ATQA": {
     "last_signal": "SELL",
-    "trend": "🔛",
+    "trend": "🔻",
     "last_forced_sell": "FORCED_SELL"
   },
   "MTIE": {
     "last_signal": "SELL",
-    "trend": "🔛",
+    "trend": "↗️",
     "last_forced_sell": ""
   },
   "ELEC": {
     "last_signal": "BUY",
-    "trend": "🔛",
+    "trend": "🔻",
     "last_forced_sell": "FORCED_SELL"
   },
   "HRHO": {
     "last_signal": "SELL",
-    "trend": "🔛",
+    "trend": "↗️",
     "last_forced_sell": ""
   },
   "ORWE": {
     "last_signal": "SELL",
-    "trend": "🔛",
+    "trend": "🔻",
     "last_forced_sell": ""
   },
   "JUFO": {
-    "last_signal": "SELL",
-    "trend": "🔛",
+    "last_signal": "BUY",
+    "trend": "↗️",
     "last_forced_sell": ""
   },
   "DSCW": {
@@ -91,7 +91,7 @@
   },
   "ELSH": {
     "last_signal": "SELL",
-    "trend": "🔛",
+    "trend": "🔻",
     "last_forced_sell": "FORCED_SELL"
   },
   "RMDA": {
@@ -106,7 +106,7 @@
   },
   "EEII": {
     "last_signal": "SELL",
-    "trend": "🔛",
+    "trend": "🔻",
     "last_forced_sell": "FORCED_SELL"
   },
   "MPCO": {
@@ -126,12 +126,12 @@
   },
   "ORHD": {
     "last_signal": "SELL",
-    "trend": "🔛",
+    "trend": "🔻",
     "last_forced_sell": ""
   },
   "AMOC": {
     "last_signal": "SELL",
-    "trend": "🔛",
+    "trend": "↗️",
     "last_forced_sell": ""
   },
   "FWRY": {
@@ -141,7 +141,7 @@
   },
   "COMI": {
     "last_signal": "SELL",
-    "trend": "🔛",
+    "trend": "↗️",
     "last_forced_sell": ""
   },
   "ADIB": {
@@ -156,7 +156,7 @@
   },
   "EGTS": {
     "last_signal": "SELL",
-    "trend": "🔛",
+    "trend": "🔻",
     "last_forced_sell": "FORCED_SELL"
   },
   "MCQE": {
@@ -166,7 +166,7 @@
   },
   "SKPC": {
     "last_signal": "SELL",
-    "trend": "🔛",
+    "trend": "🔻",
     "last_forced_sell": "FORCED_SELL"
   },
   "EGAL": {
