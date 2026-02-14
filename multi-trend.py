@@ -38,9 +38,6 @@ symbols = {
     "EGAL": "EGAL.CA"
 }
 
-# =====================
-# Load last signals
-# =====================
 SIGNALS_FILE = "last_signals.json"
 try:
     with open(SIGNALS_FILE, "r") as f:
@@ -76,44 +73,39 @@ def rsi(series, period=14):
     avg_gain = gain.ewm(alpha=1/period, adjust=False).mean()
     avg_loss = loss.ewm(alpha=1/period, adjust=False).mean()
     rs = avg_gain / avg_loss
-    rsi = 100 - (100 / (1 + rs))
-    return rsi
+    return 100 - (100 / (1 + rs))
 
 # =====================
 # Parameters
 # =====================
 EMA_PERIOD = 60
 LOOKBACK = 20
-THRESHOLD = 0.60  # 60%
-EMA_FORCED_SELL = 25  # متوسط 25 للشروط القسرية
+THRESHOLD = 0.60
+NEAR_PERCENT = 5
 
 # =====================
 # Containers
 # =====================
 section_up = []
 section_side = []
-section_side_weak = []  
+section_side_weak = []
 section_down = []
-section_peaks = []   # الأسهم قرب القمم
-section_valleys = [] # الأسهم قرب القيعان
+section_peaks = []
+section_valleys = []
 
 # =====================
 # Main Logic
 # =====================
 for name, ticker in symbols.items():
     df = fetch_data(ticker)
-    if df is None or len(df) < LOOKBACK:
+    if df is None or len(df) < EMA_PERIOD:
         data_failures.append(name)
         continue
 
     last_candle_date = df.index[-1].date()
 
-    # =====================
-    # Indicators
-    # =====================
     df["EMA60"] = df["Close"].ewm(span=EMA_PERIOD, adjust=False).mean()
     df["RSI14"] = rsi(df["Close"], 14)
-    df["EMA25"] = df["Close"].ewm(span=EMA_FORCED_SELL, adjust=False).mean()
 
     recent_closes = df["Close"].iloc[-LOOKBACK:]
     recent_ema = df["EMA60"].iloc[-LOOKBACK:]
@@ -123,14 +115,6 @@ for name, ticker in symbols.items():
 
     last_close = df["Close"].iloc[-1]
     prev_close = df["Close"].iloc[-2]
-    last_rsi = df["RSI14"].iloc[-1]
-    prev_rsi = df["RSI14"].iloc[-2]
-    last_volume = df["Volume"].iloc[-1]
-    prev_volume = df["Volume"].iloc[-2]
-
-    buy_signal = sell_signal = False
-    changed_mark = ""
-    target_section = None
 
     # =====================
     # Trend classification
@@ -141,87 +125,47 @@ for name, ticker in symbols.items():
         trend = "🔻"
     else:
         trend = "🔛"
-        bullish_50 = (recent_closes > recent_ema).sum() / LOOKBACK
-        if bullish_50 < 0.5:
-            changed_mark = "⚠️"
-            target_section = section_side_weak
-        else:
-            target_section = section_side
 
     # =====================
-    # New BUY/SELL Strategy (RSI + Price + Volume)
+    # 🔥 NEW PEAK / VALLEY LOGIC
     # =====================
-    # القمم والقيعان
-    high_lookback = df["Close"].iloc[-EMA_PERIOD:]
-    low_lookback = df["Close"].iloc[-EMA_PERIOD:]
-    high_threshold = high_lookback.max() * 0.95  # آخر 60 شمعة، أعلى 5%
-    low_threshold = low_lookback.min() * 1.05   # آخر 60 شمعة، أقل 5%
-    near_peak = last_close >= high_threshold
-    near_valley = last_close <= low_threshold
+    recent_high = df["Close"].iloc[-EMA_PERIOD:].max()
+    recent_low = df["Close"].iloc[-EMA_PERIOD:].min()
 
-    if near_peak:
-        section_peaks.append(f"{name} | {last_close:.2f} | {last_candle_date}")
-    elif near_valley:
-        section_valleys.append(f"{name} | {last_close:.2f} | {last_candle_date}")
+    distance_from_high = ((recent_high - last_close) / recent_high) * 100
+    distance_from_low = ((last_close - recent_low) / recent_low) * 100
 
-    # BUY
-    if not near_peak:
-        rsi_buy = (last_rsi >= 45 and prev_rsi < 45) or (last_rsi >= 55 and prev_rsi < 55)
-        price_up = (last_close / prev_close - 1) >= 0.02
-        volume_up = last_volume > prev_volume
-        if rsi_buy and price_up and volume_up:
-            buy_signal = True
+    distance_from_high = round(distance_from_high, 2)
+    distance_from_low = round(distance_from_low, 2)
 
-    # SELL
-    rsi_sell = last_rsi < 50
-    price_down = (last_close / prev_close - 1) <= -0.02
-    if rsi_sell or price_down:
-        sell_signal = True
+    peak_signal = valley_signal = False
+
+    if distance_from_high <= NEAR_PERCENT:
+        peak_signal = True
+        section_peaks.append(
+            f"{name} | {last_close:.2f} | {last_candle_date} | 🔴SELL {distance_from_high}%"
+        )
+
+    elif distance_from_low <= NEAR_PERCENT:
+        valley_signal = True
+        section_valleys.append(
+            f"{name} | {last_close:.2f} | {last_candle_date} | 🟢BUY {distance_from_low}%"
+        )
 
     # =====================
-    # Forced Sell
+    # Trend Sections
     # =====================
-    if last_close < df["EMA25"].iloc[-1] and new_signals.get(name, {}).get("last_forced_sell") != "FORCED_SELL":
-        sell_signal = True
-        buy_signal = False
-        changed_mark = "🚨"
-        last_forced = "FORCED_SELL"
-    else:
-        last_forced = new_signals.get(name, {}).get("last_forced_sell", "")
-
-    # =====================
-    # Prevent repeated BUY/SELL
-    # =====================
-    prev_data = last_signals.get(name, {})
-    prev_signal = prev_data.get("last_signal", "")
-    if buy_signal and prev_signal == "BUY":
-        buy_signal = False
-    if sell_signal and prev_signal == "SELL":
-        sell_signal = False
-
-    # =====================
-    # Prepare signal text
-    # =====================
-    signal_text = f"{changed_mark} {trend} {name} | {last_close:.2f} | {last_candle_date}"
-    if buy_signal:
-        signal_text += "|🟢BUY"
-    elif sell_signal:
-        signal_text += "|🔴SELL"
+    base_text = f"{trend} {name} | {last_close:.2f} | {last_candle_date}"
 
     if trend == "↗️":
-        section_up.append(signal_text)
+        section_up.append(base_text)
     elif trend == "🔛":
-        target_section.append(signal_text)
+        section_side.append(base_text)
     else:
-        section_down.append(signal_text)
+        section_down.append(base_text)
 
-    # =====================
-    # Update last signals
-    # =====================
     new_signals[name] = {
-        "last_signal": "BUY" if buy_signal else "SELL" if sell_signal else prev_signal,
-        "trend": trend,
-        "last_forced_sell": last_forced
+        "trend": trend
     }
 
 # =====================
@@ -232,22 +176,19 @@ alerts = ["🚦 EGX Alerts:\n"]
 if section_up:
     alerts.append("↗️ صاعد:")
     alerts.extend(["- " + s for s in section_up])
+
 if section_side:
     alerts.append("\n🔛 عرضي:")
     alerts.extend(["- " + s for s in section_side])
-if section_side_weak:
-    alerts.append("\n🔛 عرضي ضعيف:")
-    alerts.extend(["- " + s for s in section_side_weak])
+
 if section_down:
     alerts.append("\n🔻 هابط:")
     alerts.extend(["- " + s for s in section_down])
 
-# =====================
-# Peaks & Valleys info
-# =====================
 if section_peaks:
     alerts.append("\n⛰️ قرب القمم:")
     alerts.extend(["- " + s for s in section_peaks])
+
 if section_valleys:
     alerts.append("\n🏔️ قرب القيعان:")
     alerts.extend(["- " + s for s in section_valleys])
@@ -255,13 +196,7 @@ if section_valleys:
 if data_failures:
     alerts.append("\n⚠️ Failed to fetch data:\n- " + "\n- ".join(data_failures))
 
-# =====================
-# Save & Notify
-# =====================
 with open(SIGNALS_FILE, "w") as f:
     json.dump(new_signals, f, indent=2, ensure_ascii=False)
 
-if alerts:
-    send_telegram("\n".join(alerts))
-else:
-    send_telegram(f"ℹ️ No new signals\nLast candle: {last_candle_date}")
+send_telegram("\n".join(alerts))
