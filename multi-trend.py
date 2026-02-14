@@ -93,11 +93,6 @@ section_side_weak = []
 section_down = []
 
 # =====================
-# Track sideways duplicates
-# =====================
-side_stock_added = set()
-
-# =====================
 # Main Logic
 # =====================
 for name, ticker in symbols.items():
@@ -131,12 +126,12 @@ for name, ticker in symbols.items():
     prev_ema9 = df["EMA9"].iloc[-2]
 
     buy_signal = sell_signal = False
-    changed_mark = ""
     target_section = None
 
     prev_data = last_signals.get(name, {})
     prev_signal = prev_data.get("last_signal", "")
     prev_trend = prev_data.get("trend", "")
+    prev_side_signal = prev_data.get("last_side_signal", "")  # 🟢 or 🔴
 
     # =====================
     # Determine Trend
@@ -177,14 +172,20 @@ for name, ticker in symbols.items():
         near_peak = last_close >= high_threshold
         near_valley = last_close <= low_threshold
 
-        if near_peak and name not in side_stock_added:
+        side_signal = ""
+        if near_peak:
+            side_signal = "🔴"
             percent_from_peak = (high_lookback.max() - last_close) / high_lookback.max() * 100
-            section_side.append(f"{trend_changed_mark}🔴 {name} | {last_close:.2f} | {last_candle_date} | {percent_from_peak:.2f}%")
-            side_stock_added.add(name)
-        elif near_valley and name not in side_stock_added:
+        elif near_valley:
+            side_signal = "🟢"
             percent_from_valley = (last_close - low_lookback.min()) / low_lookback.min() * 100
-            section_side.append(f"{trend_changed_mark}🟢 {name} | {last_close:.2f} | {last_candle_date} | {percent_from_valley:.2f}%")
-            side_stock_added.add(name)
+
+        # ✅ Add to sideways only if signal changed
+        if side_signal and side_signal != prev_side_signal:
+            if side_signal == "🔴":
+                section_side.append(f"{trend_changed_mark}{side_signal} {name} | {last_close:.2f} | {last_candle_date} | {percent_from_peak:.2f}%")
+            else:
+                section_side.append(f"{trend_changed_mark}{side_signal} {name} | {last_close:.2f} | {last_candle_date} | {percent_from_valley:.2f}%")
 
     elif trend == "🔻":
         section_down.append(f"{trend_changed_mark}{name} | {last_close:.2f} | {last_candle_date}")
@@ -209,7 +210,7 @@ for name, ticker in symbols.items():
         sell_signal = False
 
     # =====================
-    # Prepare signals for Uptrend only (compact)
+    # Prepare signals for Uptrend only
     # =====================
     if trend == "↗️" and (buy_signal or sell_signal):
         mark = "🟢" if buy_signal else "🔴"
@@ -221,7 +222,8 @@ for name, ticker in symbols.items():
     new_signals[name] = {
         "last_signal": "BUY" if buy_signal else "SELL" if sell_signal else prev_signal,
         "trend": trend,
-        "last_forced_sell": last_forced
+        "last_forced_sell": last_forced,
+        "last_side_signal": side_signal if trend=="🔛" else ""
     }
 
 # =====================
