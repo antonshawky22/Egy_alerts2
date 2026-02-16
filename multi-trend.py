@@ -1,4 +1,4 @@
-print("EGX ALERTS - Phase 4: Complete Version with Full Symbols & Signals (Updated Sideways Logic)")
+print("EGX ALERTS - Phase 4: Full Symbols & Signals (Maximized Sideways)")
 
 import yfinance as yf
 import requests
@@ -81,15 +81,13 @@ def rsi(series, period=14):
 # =====================
 EMA_PERIOD = 60
 LOOKBACK = 15
-THRESHOLD = 0.75  # تم تعديلها لزيادة حساسية الصعود/الهبوط
-EMA_FORCED_SELL = 25
+EMA_FORCED_SELL = 25  # لحماية السهم من الهبوط المفاجئ
 
 # =====================
 # Containers
 # =====================
 section_up = []
 section_side = []
-section_side_weak = []  
 section_down = []
 
 # =====================
@@ -126,26 +124,20 @@ for name, ticker in symbols.items():
     prev_ema9 = df["EMA9"].iloc[-2]
 
     buy_signal = sell_signal = False
-    target_section = None
 
     prev_data = last_signals.get(name, {})
     prev_signal = prev_data.get("last_signal", "")
     prev_trend = prev_data.get("trend", "")
-    prev_side_signal = prev_data.get("last_side_signal", "")  # 🟢 or 🔴
 
     # =====================
-    # Determine Trend (Updated Sideways Logic)
+    # Determine Trend (Maximized Sideways)
     # =====================
-    if bullish_ratio >= THRESHOLD:
+    if bullish_ratio > 0.6:
         trend = "↗️"
-    elif bearish_ratio >= THRESHOLD:
+    elif bearish_ratio > 0.6:
         trend = "🔻"
-    elif 0.35 <= bullish_ratio < THRESHOLD:  # حساسية أكبر للعرضي
-        trend = "🔛"
-        target_section = section_side
     else:
-        trend = "🔛"
-        target_section = section_side_weak
+        trend = "🔛"  # أي سهم لا يصنف صاعد أو هابط يصبح عرضي مباشرة
 
     # =====================
     # Check trend change
@@ -163,39 +155,18 @@ for name, ticker in symbols.items():
         elif prev_ema4 >= prev_ema9 and last_ema4 < last_ema9:
             sell_signal = True
 
-    elif trend == "🔛":
-        high_lookback = df["Close"].iloc[-EMA_PERIOD:]
-        low_lookback = df["Close"].iloc[-EMA_PERIOD:]
-        high_threshold = high_lookback.max() * 0.95
-        low_threshold = low_lookback.min() * 1.05
-        near_peak = last_close >= high_threshold
-        near_valley = last_close <= low_threshold
-
-        side_signal = ""
-        if near_peak:
-            side_signal = "🔴"
-            percent_from_peak = (high_lookback.max() - last_close) / high_lookback.max() * 100
-        elif near_valley:
-            side_signal = "🟢"
-            percent_from_valley = (last_close - low_lookback.min()) / low_lookback.min() * 100
-
-        # ✅ Add to sideways only if signal changed
-        if side_signal and side_signal != prev_side_signal:
-            if side_signal == "🔴":
-                section_side.append(f"{trend_changed_mark}{side_signal} {name} | {last_close:.2f} | {last_candle_date} | {percent_from_peak:.2f}%")
-            else:
-                section_side.append(f"{trend_changed_mark}{side_signal} {name} | {last_close:.2f} | {last_candle_date} | {percent_from_valley:.2f}%")
-
     elif trend == "🔻":
         section_down.append(f"{trend_changed_mark}{name} | {last_close:.2f} | {last_candle_date}")
 
+    elif trend == "🔛":
+        section_side.append(f"{trend_changed_mark}🔛 {name} | {last_close:.2f} | {last_candle_date}")
+
     # =====================
-    # Forced Sell
+    # Forced Sell Protection
     # =====================
     if last_close < df["EMA25"].iloc[-1] and new_signals.get(name, {}).get("last_forced_sell") != "FORCED_SELL":
         sell_signal = True
         buy_signal = False
-        changed_mark = "🚨"
         last_forced = "FORCED_SELL"
     else:
         last_forced = new_signals.get(name, {}).get("last_forced_sell", "")
@@ -221,8 +192,7 @@ for name, ticker in symbols.items():
     new_signals[name] = {
         "last_signal": "BUY" if buy_signal else "SELL" if sell_signal else prev_signal,
         "trend": trend,
-        "last_forced_sell": last_forced,
-        "last_side_signal": side_signal if trend=="🔛" else ""
+        "last_forced_sell": last_forced
     }
 
 # =====================
