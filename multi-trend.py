@@ -34,7 +34,7 @@ symbols = {
     "RAYA": "RAYA.CA","EEII": "EEII.CA","MPCO": "MPCO.CA","GBCO": "GBCO.CA",
     "TMGH": "TMGH.CA","ORHD": "ORHD.CA","AMOC": "AMOC.CA","FWRY": "FWRY.CA",
     "COMI": "COMI.CA","ADIB": "ADIB.CA","PHDC": "PHDC.CA",
-    "EGTS": "EGTS.CA","MCQE": "MCQE.CA","SKPC": "SKPC.CA",
+    "MCQE": "MCQE.CA","SKPC": "SKPC.CA",
     "EGAL": "EGAL.CA"
 }
 
@@ -81,7 +81,7 @@ def rsi(series, period=14):
 # =====================
 EMA_PERIOD = 60
 LOOKBACK = 20
-THRESHOLD = 0.60
+THRESHOLD = 0.65
 EMA_FORCED_SELL = 25
 
 # =====================
