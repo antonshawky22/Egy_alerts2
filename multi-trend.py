@@ -1,4 +1,4 @@
-print("EGX ALERTS - Phase 4: Complete Version with Full Symbols & Signals (Stable)")
+print("EGX ALERTS - Phase 4: Complete Version with Full Symbols & Signals")
 
 import yfinance as yf
 import requests
@@ -80,9 +80,8 @@ def rsi(series, period=14):
 # Parameters
 # =====================
 EMA_PERIOD = 60
-LOOKBACK = 30  # عدد الشموع السابقة أكبر لتوسيع العرضي
-BULLISH_THRESHOLD = 0.65
-BEARISH_THRESHOLD = 0.65
+LOOKBACK = 30   # زيادة الشموع السابقة لتوسيع العرضي
+THRESHOLD = 0.65
 EMA_FORCED_SELL = 25
 
 # =====================
@@ -91,6 +90,7 @@ EMA_FORCED_SELL = 25
 section_up = []
 section_side = []
 section_down = []
+added_down = set()  # لمنع تكرار الأسهم الهابطة
 
 # =====================
 # Main Logic
@@ -127,7 +127,8 @@ for name, ticker in symbols.items():
 
     buy_signal = sell_signal = False
     side_signal = ""
-    percent_side = 0
+    forced_mark = ""
+    trend_changed_mark = ""
 
     prev_data = last_signals.get(name, {})
     prev_signal = prev_data.get("last_signal", "")
@@ -137,31 +138,30 @@ for name, ticker in symbols.items():
     # =====================
     # Determine Trend
     # =====================
-    if bullish_ratio >= BULLISH_THRESHOLD:
+    if bullish_ratio >= THRESHOLD:
         trend = "↗️"
-    elif bearish_ratio >= BEARISH_THRESHOLD:
+    elif bearish_ratio >= THRESHOLD:
         trend = "🔻"
     else:
-        # عرضي موسع
+        # عرضي أوسع
         if 0.45 <= bullish_ratio <= 0.55:
             trend = "🔛"
-            high_lookback = df["Close"].iloc[-EMA_PERIOD:]
-            low_lookback = df["Close"].iloc[-EMA_PERIOD:]
-            high_threshold = high_lookback.max() * 0.95
-            low_threshold = low_lookback.min() * 1.05
-            if last_close >= high_threshold:
-                side_signal = "🔴"
-                percent_side = (high_lookback.max() - last_close) / high_lookback.max() * 100
-            elif last_close <= low_threshold:
-                side_signal = "🟢"
-                percent_side = (last_close - low_lookback.min()) / low_lookback.min() * 100
         else:
             trend = "↗️" if last_close > df["EMA60"].iloc[-1] else "🔻"
 
     # =====================
     # Check trend change
     # =====================
-    trend_changed_mark = "🚧 " if prev_trend and prev_trend != trend else ""
+    if prev_trend and prev_trend != trend:
+        trend_changed_mark = "🚧 "
+
+    # =====================
+    # Forced Sell
+    # =====================
+    if last_close < df["EMA25"].iloc[-1] and prev_signal != "SELL":
+        sell_signal = True
+        buy_signal = False
+        forced_mark = "🚨"
 
     # =====================
     # Strategy by Trend
@@ -172,78 +172,15 @@ for name, ticker in symbols.items():
         elif prev_ema4 >= prev_ema9 and last_ema4 < last_ema9:
             sell_signal = True
 
-    elif trend == "🔛" and side_signal:
-        # إضافة للعرضي فقط إذا تغيرت الإشارة أو لم تُضاف من قبل
-        if side_signal != prev_side_signal and name not in [s.split()[1] for s in section_side]:
-            section_side.append(f"{trend_changed_mark}{side_signal} {name} | {last_close:.2f} | {last_candle_date} | {percent_side:.2f}%")
+    elif trend == "🔛":
+        high_lookback = df["Close"].iloc[-EMA_PERIOD:]
+        low_lookback = df["Close"].iloc[-EMA_PERIOD:]
+        high_threshold = high_lookback.max() * 0.95
+        low_threshold = low_lookback.min() * 1.05
 
-    elif trend == "🔻":
-        # إضافة للهابط فقط إذا لم يتم تكراره
-        if prev_signal != "SELL" and name not in [s.split()[1] for s in section_down]:
-            section_down.append(f"{trend_changed_mark}{name} | {last_close:.2f} | {last_candle_date}")
-
-    # =====================
-    # Forced Sell
-    # =====================
-    if last_close < df["EMA25"].iloc[-1] and new_signals.get(name, {}).get("last_forced_sell") != "FORCED_SELL":
-        sell_signal = True
-        buy_signal = False
-        last_forced = "FORCED_SELL"
-        forced_mark = "🚨"
-    else:
-        last_forced = new_signals.get(name, {}).get("last_forced_sell", "")
-        forced_mark = ""
-
-    # =====================
-    # Prevent repeated BUY/SELL
-    # =====================
-    if buy_signal and prev_signal == "BUY":
-        buy_signal = False
-    if sell_signal and prev_signal == "SELL":
-        sell_signal = False
-
-    # =====================
-    # Prepare signals for Uptrend only
-    # =====================
-    if trend == "↗️" and (buy_signal or sell_signal):
-        mark = "🟢" if buy_signal else "🔴"
-        section_up.append(f"{forced_mark}{trend_changed_mark}{mark} {name} | {last_close:.2f} | {last_candle_date}")
-
-    # =====================
-    # Update last signals
-    # =====================
-    new_signals[name] = {
-        "last_signal": "BUY" if buy_signal else "SELL" if sell_signal else prev_signal,
-        "trend": trend,
-        "last_forced_sell": last_forced,
-        "last_side_signal": side_signal if trend=="🔛" else ""
-    }
-
-# =====================
-# Compile Message
-# =====================
-alerts = ["🚦 EGX Alerts (Compact):\n"]
-
-if section_up:
-    alerts.append("↗️ صاعد (شراء/بيع):")
-    alerts.extend(["- " + s for s in section_up])
-if section_side:
-    alerts.append("\n🔛 عرضي (قمم/قيعان):")
-    alerts.extend(["- " + s for s in section_side])
-if section_down:
-    alerts.append("\n🔻 هابط:")
-    alerts.extend(["- " + s for s in section_down])
-
-if data_failures:
-    alerts.append("\n⚠️ Failed to fetch data:\n- " + "\n- ".join(data_failures))
-
-# =====================
-# Save & Notify
-# =====================
-with open(SIGNALS_FILE, "w") as f:
-    json.dump(new_signals, f, indent=2, ensure_ascii=False)
-
-if alerts:
-    send_telegram("\n".join(alerts))
-else:
-    send_telegram(f"ℹ️ No new signals\nLast candle: {last_candle_date}")
+        if last_close >= high_threshold:
+            side_signal = "🔴"
+            percent_side = (high_lookback.max() - last_close) / high_lookback.max() * 100
+        elif last_close <= low_threshold:
+            side_signal = "🟢"
+            percent_side = (last_close - low_lookback.min()) /
