@@ -34,7 +34,7 @@ symbols = {
     "RAYA": "RAYA.CA","EEII": "EEII.CA","MPCO": "MPCO.CA","GBCO": "GBCO.CA",
     "TMGH": "TMGH.CA","ORHD": "ORHD.CA","AMOC": "AMOC.CA","FWRY": "FWRY.CA",
     "COMI": "COMI.CA","ADIB": "ADIB.CA","PHDC": "PHDC.CA",
-    "MCQE": "MCQE.CA","SKPC": "SKPC.CA",
+    "EGTS": "EGTS.CA","MCQE": "MCQE.CA","SKPC": "SKPC.CA",
     "EGAL": "EGAL.CA"
 }
 
@@ -77,11 +77,11 @@ def rsi(series, period=14):
     return rsi
 
 # =====================
-# Parameters
+# Parameters 🔹 تعديل
 # =====================
-EMA_PERIOD = 60
-LOOKBACK = 20
-THRESHOLD = 0.65
+EMA_PERIOD = 60          # متوسط 60 شمعة
+LOOKBACK = 20            # آخر 20 شمعة
+THRESHOLD = 0.65         # نسبة 65% لتحديد الاتجاه الصاعد/الهابط
 EMA_FORCED_SELL = 25
 
 # =====================
@@ -89,7 +89,7 @@ EMA_FORCED_SELL = 25
 # =====================
 section_up = []
 section_side = []
-section_side_weak = []  
+section_side_weak = []
 section_down = []
 
 # =====================
@@ -131,10 +131,10 @@ for name, ticker in symbols.items():
     prev_data = last_signals.get(name, {})
     prev_signal = prev_data.get("last_signal", "")
     prev_trend = prev_data.get("trend", "")
-    prev_side_signal = prev_data.get("last_side_signal", "")  # 🟢 or 🔴
+    prev_side_signal = prev_data.get("last_side_signal", "")
 
     # =====================
-    # Determine Trend
+    # Determine Trend 🔹 تحسين تصنيف
     # =====================
     if bullish_ratio >= THRESHOLD:
         trend = "↗️"
@@ -143,10 +143,7 @@ for name, ticker in symbols.items():
     else:
         trend = "🔛"
         bullish_50 = (recent_closes > recent_ema60).sum() / LOOKBACK
-        if bullish_50 < 0.5:
-            target_section = section_side_weak
-        else:
-            target_section = section_side
+        target_section = section_side if bullish_50 >= 0.5 else section_side_weak
 
     # =====================
     # Check trend change
@@ -182,10 +179,9 @@ for name, ticker in symbols.items():
 
         # ✅ Add to sideways only if signal changed
         if side_signal and side_signal != prev_side_signal:
-            if side_signal == "🔴":
-                section_side.append(f"{trend_changed_mark}{side_signal} {name} | {last_close:.2f} | {last_candle_date} | {percent_from_peak:.2f}%")
-            else:
-                section_side.append(f"{trend_changed_mark}{side_signal} {name} | {last_close:.2f} | {last_candle_date} | {percent_from_valley:.2f}%")
+            value_str = f"{trend_changed_mark}{side_signal} {name} | {last_close:.2f} | {last_candle_date} | "
+            value_str += f"{percent_from_peak:.2f}%" if side_signal=="🔴" else f"{percent_from_valley:.2f}%"
+            section_side.append(value_str)
 
     elif trend == "🔻":
         section_down.append(f"{trend_changed_mark}{name} | {last_close:.2f} | {last_candle_date}")
@@ -196,7 +192,6 @@ for name, ticker in symbols.items():
     if last_close < df["EMA25"].iloc[-1] and new_signals.get(name, {}).get("last_forced_sell") != "FORCED_SELL":
         sell_signal = True
         buy_signal = False
-        changed_mark = "🚨"
         last_forced = "FORCED_SELL"
     else:
         last_forced = new_signals.get(name, {}).get("last_forced_sell", "")
