@@ -1,13 +1,13 @@
 {
   "OFH": {
     "last_signal": "SELL",
-    "trend": "↗️",
+    "trend": "🔻",
     "last_forced_sell": false,
     "last_side_signal_actual": "🔴"
   },
   "OLFI": {
     "last_signal": "SELL",
-    "trend": "🔻",
+    "trend": "↗️",
     "last_forced_sell": true,
     "last_side_signal_actual": "🟢"
   },
@@ -25,7 +25,7 @@
   },
   "EAST": {
     "last_signal": "",
-    "trend": "↗️",
+    "trend": "🔛",
     "last_forced_sell": false,
     "last_side_signal_actual": ""
   },
@@ -43,13 +43,13 @@
   },
   "OIH": {
     "last_signal": "",
-    "trend": "↗️",
+    "trend": "🔛",
     "last_forced_sell": false,
     "last_side_signal_actual": ""
   },
   "SWDY": {
     "last_signal": "",
-    "trend": "↗️",
+    "trend": "🔛",
     "last_forced_sell": false,
     "last_side_signal_actual": ""
   },
@@ -67,33 +67,33 @@
   },
   "MTIE": {
     "last_signal": "",
-    "trend": "↗️",
+    "trend": "🔛",
     "last_forced_sell": false,
-    "last_side_signal_actual": ""
+    "last_side_signal_actual": "🔴"
   },
   "ELEC": {
     "last_signal": "SELL",
-    "trend": "🔻",
+    "trend": "🔛",
     "last_forced_sell": true,
-    "last_side_signal_actual": ""
+    "last_side_signal_actual": "🟢"
   },
   "HRHO": {
     "last_signal": "",
-    "trend": "↗️",
+    "trend": "🔛",
     "last_forced_sell": false,
     "last_side_signal_actual": "🔴"
   },
   "ORWE": {
     "last_signal": "",
-    "trend": "↗️",
+    "trend": "🔛",
     "last_forced_sell": false,
-    "last_side_signal_actual": ""
+    "last_side_signal_actual": "🔴"
   },
   "JUFO": {
     "last_signal": "",
-    "trend": "↗️",
+    "trend": "🔛",
     "last_forced_sell": false,
-    "last_side_signal_actual": ""
+    "last_side_signal_actual": "🔴"
   },
   "DSCW": {
     "last_signal": "",
@@ -103,31 +103,31 @@
   },
   "SUGR": {
     "last_signal": "SELL",
-    "trend": "🔛",
+    "trend": "🔻",
     "last_forced_sell": true,
     "last_side_signal_actual": ""
   },
   "ELSH": {
     "last_signal": "",
-    "trend": "🔻",
+    "trend": "↗️",
     "last_forced_sell": false,
     "last_side_signal_actual": ""
   },
   "RMDA": {
     "last_signal": "",
-    "trend": "↗️",
+    "trend": "🔻",
     "last_forced_sell": false,
     "last_side_signal_actual": ""
   },
   "RAYA": {
     "last_signal": "",
-    "trend": "↗️",
+    "trend": "🔛",
     "last_forced_sell": false,
-    "last_side_signal_actual": ""
+    "last_side_signal_actual": "🔴"
   },
   "EEII": {
     "last_signal": "SELL",
-    "trend": "🔻",
+    "trend": "🔛",
     "last_forced_sell": true,
     "last_side_signal_actual": ""
   },
