@@ -13,7 +13,7 @@
   },
   "EMFD": {
     "last_signal": "",
-    "trend": "🔻",
+    "trend": "🔛",
     "last_forced_sell": "",
     "last_side_signal": ""
   },
@@ -151,9 +151,9 @@
   },
   "ORHD": {
     "last_signal": "",
-    "trend": "🔻",
+    "trend": "🔛",
     "last_forced_sell": "",
-    "last_side_signal": ""
+    "last_side_signal": "🔴"
   },
   "AMOC": {
     "last_signal": "",
