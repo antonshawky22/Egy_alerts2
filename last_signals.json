@@ -1,1 +1,177 @@
-{}
+{
+  "OFH": {
+    "last_signal": "",
+    "trend": "↗️",
+    "last_forced_sell": ""
+  },
+  "OLFI": {
+    "last_signal": "SELL",
+    "trend": "🔻",
+    "last_forced_sell": "FORCED_SELL"
+  },
+  "EMFD": {
+    "last_signal": "",
+    "trend": "🔛",
+    "last_forced_sell": ""
+  },
+  "ETEL": {
+    "last_signal": "",
+    "trend": "↗️",
+    "last_forced_sell": ""
+  },
+  "EAST": {
+    "last_signal": "",
+    "trend": "🔛",
+    "last_forced_sell": ""
+  },
+  "EFIH": {
+    "last_signal": "",
+    "trend": "↗️",
+    "last_forced_sell": ""
+  },
+  "ABUK": {
+    "last_signal": "",
+    "trend": "↗️",
+    "last_forced_sell": ""
+  },
+  "OIH": {
+    "last_signal": "SELL",
+    "trend": "↗️",
+    "last_forced_sell": ""
+  },
+  "SWDY": {
+    "last_signal": "SELL",
+    "trend": "↗️",
+    "last_forced_sell": "FORCED_SELL"
+  },
+  "ISPH": {
+    "last_signal": "",
+    "trend": "↗️",
+    "last_forced_sell": ""
+  },
+  "ATQA": {
+    "last_signal": "SELL",
+    "trend": "🔻",
+    "last_forced_sell": "FORCED_SELL"
+  },
+  "MTIE": {
+    "last_signal": "",
+    "trend": "↗️",
+    "last_forced_sell": ""
+  },
+  "ELEC": {
+    "last_signal": "SELL",
+    "trend": "🔻",
+    "last_forced_sell": "FORCED_SELL"
+  },
+  "HRHO": {
+    "last_signal": "",
+    "trend": "↗️",
+    "last_forced_sell": ""
+  },
+  "ORWE": {
+    "last_signal": "",
+    "trend": "🔛",
+    "last_forced_sell": ""
+  },
+  "JUFO": {
+    "last_signal": "",
+    "trend": "↗️",
+    "last_forced_sell": ""
+  },
+  "DSCW": {
+    "last_signal": "",
+    "trend": "🔻",
+    "last_forced_sell": ""
+  },
+  "SUGR": {
+    "last_signal": "SELL",
+    "trend": "🔛",
+    "last_forced_sell": "FORCED_SELL"
+  },
+  "ELSH": {
+    "last_signal": "SELL",
+    "trend": "🔻",
+    "last_forced_sell": "FORCED_SELL"
+  },
+  "RMDA": {
+    "last_signal": "",
+    "trend": "🔛",
+    "last_forced_sell": ""
+  },
+  "RAYA": {
+    "last_signal": "",
+    "trend": "↗️",
+    "last_forced_sell": ""
+  },
+  "EEII": {
+    "last_signal": "SELL",
+    "trend": "🔻",
+    "last_forced_sell": "FORCED_SELL"
+  },
+  "MPCO": {
+    "last_signal": "",
+    "trend": "🔻",
+    "last_forced_sell": ""
+  },
+  "GBCO": {
+    "last_signal": "SELL",
+    "trend": "↗️",
+    "last_forced_sell": ""
+  },
+  "TMGH": {
+    "last_signal": "",
+    "trend": "↗️",
+    "last_forced_sell": ""
+  },
+  "ORHD": {
+    "last_signal": "",
+    "trend": "🔛",
+    "last_forced_sell": ""
+  },
+  "AMOC": {
+    "last_signal": "",
+    "trend": "↗️",
+    "last_forced_sell": ""
+  },
+  "FWRY": {
+    "last_signal": "",
+    "trend": "↗️",
+    "last_forced_sell": ""
+  },
+  "COMI": {
+    "last_signal": "",
+    "trend": "↗️",
+    "last_forced_sell": ""
+  },
+  "ADIB": {
+    "last_signal": "",
+    "trend": "↗️",
+    "last_forced_sell": ""
+  },
+  "PHDC": {
+    "last_signal": "",
+    "trend": "↗️",
+    "last_forced_sell": ""
+  },
+  "EGTS": {
+    "last_signal": "",
+    "trend": "🔻",
+    "last_forced_sell": ""
+  },
+  "MCQE": {
+    "last_signal": "",
+    "trend": "↗️",
+    "last_forced_sell": ""
+  },
+  "SKPC": {
+    "last_signal": "SELL",
+    "trend": "🔻",
+    "last_forced_sell": "FORCED_SELL"
+  },
+  "EGAL": {
+    "last_signal": "",
+    "trend": "↗️",
+    "last_forced_sell": ""
+  }
+}
