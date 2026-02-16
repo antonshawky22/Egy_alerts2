@@ -1,4 +1,4 @@
-print("EGX ALERTS - Phase 4: Stable Final Version")
+print("EGX ALERTS - Phase 4: Stable Version with Forced Sell")
 
 import yfinance as yf
 import requests
@@ -129,7 +129,7 @@ for name, ticker in symbols.items():
     prev_side_signal = prev_data.get("last_side_signal", "")
 
     # =====================
-    # Determine Trend (Fixed)
+    # Determine Trend
     # =====================
     if bullish_ratio >= THRESHOLD:
         trend = "↗️"
@@ -184,14 +184,14 @@ for name, ticker in symbols.items():
     # =====================
     # Forced Sell
     # =====================
-    if last_close < df["EMA25"].iloc[-1] and \
-       new_signals.get(name, {}).get("last_forced_sell") != "FORCED_SELL":
+    if last_close < df["EMA25"].iloc[-1]:
         sell_signal = True
         buy_signal = False
         last_forced = "FORCED_SELL"
     else:
         last_forced = new_signals.get(name, {}).get("last_forced_sell", "")
 
+    # Prevent repeated BUY/SELL
     if buy_signal and prev_signal == "BUY":
         buy_signal = False
     if sell_signal and prev_signal == "SELL":
