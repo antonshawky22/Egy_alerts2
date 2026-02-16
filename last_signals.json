@@ -61,7 +61,7 @@
   },
   "ATQA": {
     "last_signal": "SELL",
-    "trend": "🔛",
+    "trend": "🔻",
     "last_forced_sell": "FORCED_SELL",
     "last_side_signal": ""
   },
@@ -85,9 +85,9 @@
   },
   "ORWE": {
     "last_signal": "",
-    "trend": "🔛",
+    "trend": "🔻",
     "last_forced_sell": "",
-    "last_side_signal": "🔴"
+    "last_side_signal": ""
   },
   "JUFO": {
     "last_signal": "",
@@ -115,7 +115,7 @@
   },
   "RMDA": {
     "last_signal": "",
-    "trend": "🔛",
+    "trend": "🔻",
     "last_forced_sell": "",
     "last_side_signal": ""
   },
@@ -133,7 +133,7 @@
   },
   "MPCO": {
     "last_signal": "",
-    "trend": "🔛",
+    "trend": "🔻",
     "last_forced_sell": "",
     "last_side_signal": ""
   },
