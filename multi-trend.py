@@ -80,7 +80,7 @@ def rsi(series, period=14):
 # Parameters
 # =====================
 EMA_PERIOD = 60
-LOOKBACK = 20
+LOOKBACK = 40
 THRESHOLD = 0.65
 EMA_FORCED_SELL = 25
 
