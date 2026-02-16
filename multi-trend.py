@@ -124,20 +124,15 @@ for name, ticker in symbols.items():
     last_ema9 = df["EMA9"].iloc[-1]
     prev_ema9 = df["EMA9"].iloc[-2]
 
-    # =====================
-    # Previous state
-    # =====================
+    buy_signal = sell_signal = False
+    side_signal = ""
+    percent_side = None
+
     prev_data = last_signals.get(name, {})
     prev_signal = prev_data.get("last_signal", "")
     prev_trend = prev_data.get("trend", "")
     prev_forced = prev_data.get("last_forced_sell", False)
     prev_side = prev_data.get("last_side_signal", "")
-
-    buy_signal = sell_signal = False
-    side_signal = ""
-    percent_side = None
-    trend_changed_mark = ""
-    forced_sell_mark = ""
 
     # =====================
     # Determine Trend
@@ -160,14 +155,16 @@ for name, ticker in symbols.items():
             percent_side = (last_close - low_lookback.min()) / low_lookback.min() * 100
 
     # =====================
-    # Check trend change 🚧
+    # Check trend change mark
     # =====================
+    trend_changed_mark = ""
     if prev_trend and prev_trend != trend:
         trend_changed_mark = "🚧 "
 
     # =====================
     # Forced Sell 🚨
     # =====================
+    forced_sell_mark = ""
     if last_close < df["EMA25"].iloc[-1] and not prev_forced:
         sell_signal = True
         buy_signal = False
@@ -186,7 +183,7 @@ for name, ticker in symbols.items():
             sell_signal = True
 
     # =====================
-    # Prevent repetition
+    # Prevent repeated signals
     # =====================
     if trend == prev_trend and buy_signal and prev_signal == "BUY":
         buy_signal = False
@@ -203,7 +200,7 @@ for name, ticker in symbols.items():
         section_up.append(f"{trend_changed_mark}{forced_sell_mark}{mark} {name} | {last_close:.2f} | {last_candle_date}")
     elif trend == "🔛" and side_signal:
         section_side.append(f"{trend_changed_mark}{forced_sell_mark}{side_signal} {name} | {last_close:.2f} | {last_candle_date} | {percent_side:.2f}%")
-    elif trend == "🔻" and trend != prev_trend:  # يظهر مرة واحدة فقط عند التغيير
+    elif trend == "🔻" and trend != prev_trend:  # يظهر مرة واحدة فقط
         section_down.append(f"{trend_changed_mark}{forced_sell_mark}{name} | {last_close:.2f} | {last_candle_date}")
 
     # =====================
@@ -217,7 +214,7 @@ for name, ticker in symbols.items():
     }
 
 # =====================
-# Compile message
+# Compile Message
 # =====================
 alerts = ["🚦 EGX Alerts (Compact):\n"]
 
@@ -235,13 +232,13 @@ if data_failures:
     alerts.append("\n⚠️ Failed to fetch data:\n- " + "\n- ".join(data_failures))
 
 # =====================
-# Save & Notify
+# Send message
+# =====================
+message_text = "\n".join(alerts) if (section_up or section_side or section_down) else "ℹ️ No new signals"
+send_telegram(message_text)
+
+# =====================
+# Save last signals
 # =====================
 with open(SIGNALS_FILE, "w") as f:
     json.dump(new_signals, f, indent=2, ensure_ascii=False)
-
-# ارسال رسالة حتى لو مفيش جديد
-if section_up or section_side or section_down:
-    send_telegram("\n".join(alerts))
-else:
-    send_telegram("ℹ️ No new signals")
