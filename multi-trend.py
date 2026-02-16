@@ -1,4 +1,4 @@
-print("EGX ALERTS - Final Stable Version with Multi-Trend Logic & Non-Repeating Side Signals")
+print("EGX ALERTS - Final Stable Version with Multi-Trend Logic")
 
 import yfinance as yf
 import requests
@@ -79,7 +79,7 @@ def rsi(series, period=14):
 # Parameters
 # =====================
 EMA_PERIOD = 60
-LOOKBACK = 30
+LOOKBACK = 30  # عدد الشموع السابقة لتوسيع العرضي
 BULLISH_THRESHOLD = 0.65
 BEARISH_THRESHOLD = 0.65
 EMA_FORCED_SELL = 25
@@ -155,7 +155,7 @@ for name, ticker in symbols.items():
             percent_side = (last_close - low_lookback.min()) / low_lookback.min() * 100
 
     # =====================
-    # Trend Change Mark
+    # Check trend change mark
     # =====================
     trend_changed_mark = ""
     if prev_trend and prev_trend != trend:
@@ -189,12 +189,12 @@ for name, ticker in symbols.items():
         buy_signal = False
     if trend == prev_trend and sell_signal and prev_signal == "SELL":
         sell_signal = False
-    # **Prevent repeated side signals**
-    if trend == "🔛" and side_signal:
-        if prev_side == side_signal:
-            side_signal = ""  # لا تكرر نفس العرضي
-    if trend != "🔛":
-        side_signal = ""  # إزالة أي side signal إذا تغير الاتجاه
+    # ======= منع تكرار الاتجاه العرضي نهائيًا =======
+    if trend == "🔛":
+        if prev_trend == "🔛" and prev_side == side_signal:
+            side_signal = ""
+    else:
+        side_signal = ""  # أي تغيير اتجاه يشيل side_signal
 
     # =====================
     # Prepare messages
@@ -235,13 +235,15 @@ if section_down:
 if data_failures:
     alerts.append("\n⚠️ Failed to fetch data:\n- " + "\n- ".join(data_failures))
 
+# لو مفيش إشارات جديدة
+if not section_up and not section_side and not section_down:
+    alerts = [f"ℹ️ No new signals\nLast candle: {last_candle_date}"]
+
 # =====================
 # Save & Notify
 # =====================
 with open(SIGNALS_FILE, "w") as f:
     json.dump(new_signals, f, indent=2, ensure_ascii=False)
 
-if len(section_up + section_side + section_down) == 0:
-    send_telegram(f"ℹ️ No new signals\nLast candle: {last_candle_date}")
-else:
+if alerts:
     send_telegram("\n".join(alerts))
