@@ -1,4 +1,4 @@
-print("EGX ALERTS - Phase 4: Full Symbols & Signals (Maximized Sideways)")
+print("EGX ALERTS - Phase 4: Complete Version with Full Symbols & Signals (Sideways Fixed)")
 
 import yfinance as yf
 import requests
@@ -81,7 +81,8 @@ def rsi(series, period=14):
 # =====================
 EMA_PERIOD = 60
 LOOKBACK = 15
-EMA_FORCED_SELL = 25  # لحماية السهم من الهبوط المفاجئ
+THRESHOLD = 0.75  # زيادة حساسية الصعود/الهبوط
+EMA_FORCED_SELL = 25
 
 # =====================
 # Containers
@@ -124,20 +125,22 @@ for name, ticker in symbols.items():
     prev_ema9 = df["EMA9"].iloc[-2]
 
     buy_signal = sell_signal = False
+    side_signal = ""
 
     prev_data = last_signals.get(name, {})
     prev_signal = prev_data.get("last_signal", "")
     prev_trend = prev_data.get("trend", "")
 
     # =====================
-    # Determine Trend (Maximized Sideways)
+    # Determine Trend (Sideways Fixed)
     # =====================
-    if bullish_ratio > 0.6:
+    if bullish_ratio >= THRESHOLD:
         trend = "↗️"
-    elif bearish_ratio > 0.6:
+    elif bearish_ratio >= THRESHOLD:
         trend = "🔻"
     else:
-        trend = "🔛"  # أي سهم لا يصنف صاعد أو هابط يصبح عرضي مباشرة
+        trend = "🔛"
+        target_section = section_side  # كل العرضي هنا
 
     # =====================
     # Check trend change
@@ -155,21 +158,32 @@ for name, ticker in symbols.items():
         elif prev_ema4 >= prev_ema9 and last_ema4 < last_ema9:
             sell_signal = True
 
+    elif trend == "🔛":
+        # Sideways signal: قرب القمة أو القاع
+        high_lookback = df["Close"].iloc[-EMA_PERIOD:]
+        low_lookback = df["Close"].iloc[-EMA_PERIOD:]
+        high_threshold = high_lookback.max() * 0.95
+        low_threshold = low_lookback.min() * 1.05
+        if last_close >= high_threshold:
+            side_signal = "🔴"
+        elif last_close <= low_threshold:
+            side_signal = "🟢"
+
+        if side_signal:
+            section_side.append(f"{trend_changed_mark}{side_signal} {name} | {last_close:.2f} | {last_candle_date}")
+
     elif trend == "🔻":
         section_down.append(f"{trend_changed_mark}{name} | {last_close:.2f} | {last_candle_date}")
 
-    elif trend == "🔛":
-        section_side.append(f"{trend_changed_mark}🔛 {name} | {last_close:.2f} | {last_candle_date}")
-
     # =====================
-    # Forced Sell Protection
+    # Forced Sell
     # =====================
-    if last_close < df["EMA25"].iloc[-1] and new_signals.get(name, {}).get("last_forced_sell") != "FORCED_SELL":
+    if last_close < df["EMA25"].iloc[-1] and prev_data.get("last_forced_sell") != "FORCED_SELL":
         sell_signal = True
         buy_signal = False
         last_forced = "FORCED_SELL"
     else:
-        last_forced = new_signals.get(name, {}).get("last_forced_sell", "")
+        last_forced = prev_data.get("last_forced_sell", "")
 
     # =====================
     # Prevent repeated BUY/SELL
@@ -192,7 +206,8 @@ for name, ticker in symbols.items():
     new_signals[name] = {
         "last_signal": "BUY" if buy_signal else "SELL" if sell_signal else prev_signal,
         "trend": trend,
-        "last_forced_sell": last_forced
+        "last_forced_sell": last_forced,
+        "last_side_signal": side_signal if trend=="🔛" else ""
     }
 
 # =====================
