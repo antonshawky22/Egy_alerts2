@@ -1,4 +1,4 @@
-print("EGX ALERTS - Final Stable Version with Multi-Trend Logic")
+print("EGX ALERTS - Final Stable Version (No Repetition)")
 
 import yfinance as yf
 import requests
@@ -38,14 +38,22 @@ symbols = {
 }
 
 # =====================
-# Load last signals
+# Files
 # =====================
 SIGNALS_FILE = "last_signals.json"
+LAST_MESSAGE_FILE = "last_message.txt"
+
 try:
     with open(SIGNALS_FILE, "r") as f:
         last_signals = json.load(f)
 except:
     last_signals = {}
+
+try:
+    with open(LAST_MESSAGE_FILE, "r", encoding="utf-8") as f:
+        last_sent_message = f.read().strip()
+except:
+    last_sent_message = ""
 
 new_signals = last_signals.copy()
 data_failures = []
@@ -65,15 +73,6 @@ def fetch_data(ticker):
     except:
         return None
 
-def rsi(series, period=14):
-    delta = series.diff()
-    gain = delta.clip(lower=0)
-    loss = -delta.clip(upper=0)
-    avg_gain = gain.ewm(alpha=1/period, adjust=False).mean()
-    avg_loss = loss.ewm(alpha=1/period, adjust=False).mean()
-    rs = avg_gain / avg_loss
-    return 100 - (100 / (1 + rs))
-
 # =====================
 # Parameters
 # =====================
@@ -89,10 +88,9 @@ EMA_FORCED_SELL = 25
 section_up = []
 section_side = []
 section_down = []
-anything_new = False
 
 # =====================
-# Main Logic
+# Main Loop
 # =====================
 for name, ticker in symbols.items():
 
@@ -115,11 +113,10 @@ for name, ticker in symbols.items():
     bearish_ratio = (recent_closes < recent_ema60).sum() / LOOKBACK
 
     last_close = df["Close"].iloc[-1]
-    prev_close = df["Close"].iloc[-2]
-    last_ema4 = df["EMA4"].iloc[-1]
     prev_ema4 = df["EMA4"].iloc[-2]
-    last_ema9 = df["EMA9"].iloc[-1]
+    last_ema4 = df["EMA4"].iloc[-1]
     prev_ema9 = df["EMA9"].iloc[-2]
+    last_ema9 = df["EMA9"].iloc[-1]
 
     prev_data = last_signals.get(name, {})
     prev_signal = prev_data.get("last_signal", "")
@@ -143,38 +140,27 @@ for name, ticker in symbols.items():
     else:
         trend = "🔛"
 
-    # =====================
-    # Trend Change Mark (مرة واحدة)
-    # =====================
     if prev_trend and prev_trend != trend:
         trend_changed_mark = "🚧 "
-        anything_new = True
 
     # =====================
-    # Forced Sell (مرة واحدة فقط)
+    # Forced Sell
     # =====================
     last_forced = False
     if last_close < df["EMA25"].iloc[-1]:
         if not prev_forced:
             forced_sell_mark = "🚨"
             sell_signal = True
-            anything_new = True
             last_forced = True
-    else:
-        last_forced = False
 
     # =====================
     # Strategy
     # =====================
     if trend == "↗️":
-        if prev_ema4 <= prev_ema9 and last_ema4 > last_ema9:
-            if prev_signal != "BUY":
-                buy_signal = True
-                anything_new = True
-        elif prev_ema4 >= prev_ema9 and last_ema4 < last_ema9:
-            if prev_signal != "SELL":
-                sell_signal = True
-                anything_new = True
+        if prev_ema4 <= prev_ema9 and last_ema4 > last_ema9 and prev_signal != "BUY":
+            buy_signal = True
+        elif prev_ema4 >= prev_ema9 and last_ema4 < last_ema9 and prev_signal != "SELL":
+            sell_signal = True
 
     elif trend == "🔛":
         high_lookback = df["Close"].iloc[-EMA_PERIOD:]
@@ -182,19 +168,15 @@ for name, ticker in symbols.items():
         high_threshold = high_lookback.max() * 0.95
         low_threshold = low_lookback.min() * 1.05
 
-        if last_close >= high_threshold:
-            if prev_side != "🔴":
-                side_signal = "🔴"
-                percent_side = (high_lookback.max() - last_close) / high_lookback.max() * 100
-                anything_new = True
-        elif last_close <= low_threshold:
-            if prev_side != "🟢":
-                side_signal = "🟢"
-                percent_side = (last_close - low_lookback.min()) / low_lookback.min() * 100
-                anything_new = True
+        if last_close >= high_threshold and prev_side != "🔴":
+            side_signal = "🔴"
+            percent_side = (high_lookback.max() - last_close) / high_lookback.max() * 100
+        elif last_close <= low_threshold and prev_side != "🟢":
+            side_signal = "🟢"
+            percent_side = (last_close - low_lookback.min()) / low_lookback.min() * 100
 
     # =====================
-    # Prepare messages
+    # Collect Messages
     # =====================
     if trend == "↗️" and (buy_signal or sell_signal):
         mark = "🟢" if buy_signal else "🔴"
@@ -205,10 +187,9 @@ for name, ticker in symbols.items():
 
     if trend == "🔻" and prev_trend != "🔻":
         section_down.append(f"{trend_changed_mark}{forced_sell_mark}{name} | {last_close:.2f} | {last_candle_date}")
-        anything_new = True
 
     # =====================
-    # Save state
+    # Save State
     # =====================
     new_signals[name] = {
         "last_signal": "BUY" if buy_signal else "SELL" if sell_signal else prev_signal,
@@ -218,29 +199,42 @@ for name, ticker in symbols.items():
     }
 
 # =====================
-# Save File
+# Save signals state
 # =====================
 with open(SIGNALS_FILE, "w") as f:
     json.dump(new_signals, f, indent=2, ensure_ascii=False)
 
 # =====================
-# Send only if new
+# Build Final Message
 # =====================
-if anything_new:
-    alerts = ["🚦 EGX Alerts (Compact):\n"]
+alerts = []
+
+if section_up or section_side or section_down or data_failures:
+    alerts.append("🚦 EGX Alerts (Compact):\n")
 
     if section_up:
         alerts.append("↗️ صاعد (شراء/بيع):")
         alerts.extend(["- " + s for s in section_up])
+
     if section_side:
         alerts.append("\n🔛 عرضي (قمم/قيعان):")
         alerts.extend(["- " + s for s in section_side])
+
     if section_down:
         alerts.append("\n🔻 هابط:")
         alerts.extend(["- " + s for s in section_down])
+
     if data_failures:
         alerts.append("\n⚠️ Failed to fetch data:\n- " + "\n- ".join(data_failures))
 
-    send_telegram("\n".join(alerts))
+final_message = "\n".join(alerts).strip()
+
+# =====================
+# Send Logic
+# =====================
+if final_message and final_message != last_sent_message:
+    send_telegram(final_message)
+    with open(LAST_MESSAGE_FILE, "w", encoding="utf-8") as f:
+        f.write(final_message)
 else:
-    print("No new signals")
+    send_telegram("ℹ️ No new signals")
