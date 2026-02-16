@@ -1,4 +1,4 @@
-print("EGX ALERTS - Final Stable Version with Multi-Trend Logic")
+print("EGX ALERTS - Final Stable Version with Multi-Trend Logic & Non-Repeating Side Signals")
 
 import yfinance as yf
 import requests
@@ -79,7 +79,7 @@ def rsi(series, period=14):
 # Parameters
 # =====================
 EMA_PERIOD = 60
-LOOKBACK = 30  # عدد الشموع السابقة لتوسيع العرضي
+LOOKBACK = 30
 BULLISH_THRESHOLD = 0.65
 BEARISH_THRESHOLD = 0.65
 EMA_FORCED_SELL = 25
@@ -155,7 +155,7 @@ for name, ticker in symbols.items():
             percent_side = (last_close - low_lookback.min()) / low_lookback.min() * 100
 
     # =====================
-    # Check trend change mark
+    # Trend Change Mark
     # =====================
     trend_changed_mark = ""
     if prev_trend and prev_trend != trend:
@@ -189,8 +189,12 @@ for name, ticker in symbols.items():
         buy_signal = False
     if trend == prev_trend and sell_signal and prev_signal == "SELL":
         sell_signal = False
-    if trend == "🔛" and side_signal == prev_side:
-        side_signal = ""
+    # **Prevent repeated side signals**
+    if trend == "🔛" and side_signal:
+        if prev_side == side_signal:
+            side_signal = ""  # لا تكرر نفس العرضي
+    if trend != "🔛":
+        side_signal = ""  # إزالة أي side signal إذا تغير الاتجاه
 
     # =====================
     # Prepare messages
@@ -232,13 +236,12 @@ if data_failures:
     alerts.append("\n⚠️ Failed to fetch data:\n- " + "\n- ".join(data_failures))
 
 # =====================
-# Send message
-# =====================
-message_text = "\n".join(alerts) if (section_up or section_side or section_down) else "ℹ️ No new signals"
-send_telegram(message_text)
-
-# =====================
-# Save last signals
+# Save & Notify
 # =====================
 with open(SIGNALS_FILE, "w") as f:
     json.dump(new_signals, f, indent=2, ensure_ascii=False)
+
+if len(section_up + section_side + section_down) == 0:
+    send_telegram(f"ℹ️ No new signals\nLast candle: {last_candle_date}")
+else:
+    send_telegram("\n".join(alerts))
