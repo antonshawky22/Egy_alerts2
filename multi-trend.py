@@ -79,9 +79,9 @@ def rsi(series, period=14):
 # Parameters
 # =====================
 EMA_PERIOD = 60
-LOOKBACK = 60
-BULLISH_THRESHOLD = 0.95
-BEARISH_THRESHOLD = 0.95
+LOOKBACK = 15
+BULLISH_THRESHOLD = 0.85
+BEARISH_THRESHOLD = 0.85
 EMA_FORCED_SELL = 25
 
 # =====================
