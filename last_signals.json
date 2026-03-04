@@ -20,7 +20,7 @@
   "ETEL": {
     "last_signal": "SELL",
     "trend": "↗️",
-    "last_forced_sell": false,
+    "last_forced_sell": true,
     "last_side_signal_actual": ""
   },
   "EAST": {
@@ -36,7 +36,7 @@
     "last_side_signal_actual": ""
   },
   "ABUK": {
-    "last_signal": "SELL",
+    "last_signal": "BUY",
     "trend": "↗️",
     "last_forced_sell": false,
     "last_side_signal_actual": ""
@@ -153,10 +153,10 @@
     "last_signal": "SELL",
     "trend": "🔛",
     "last_forced_sell": true,
-    "last_side_signal_actual": ""
+    "last_side_signal_actual": "🟢"
   },
   "AMOC": {
-    "last_signal": "SELL",
+    "last_signal": "BUY",
     "trend": "↗️",
     "last_forced_sell": true,
     "last_side_signal_actual": ""
@@ -176,7 +176,7 @@
   "ADIB": {
     "last_signal": "SELL",
     "trend": "↗️",
-    "last_forced_sell": false,
+    "last_forced_sell": true,
     "last_side_signal_actual": ""
   },
   "PHDC": {
