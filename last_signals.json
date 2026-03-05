@@ -139,9 +139,9 @@
   },
   "GBCO": {
     "last_signal": "SELL",
-    "trend": "↗️",
+    "trend": "🔛",
     "last_forced_sell": true,
-    "last_side_signal_actual": ""
+    "last_side_signal_actual": "🟢"
   },
   "TMGH": {
     "last_signal": "SELL",
@@ -201,6 +201,6 @@
     "last_signal": "SELL",
     "trend": "🔛",
     "last_forced_sell": true,
-    "last_side_signal_actual": ""
+    "last_side_signal_actual": "🔴"
   }
 }
