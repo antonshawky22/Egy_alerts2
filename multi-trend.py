@@ -78,7 +78,7 @@ def rsi(series, period=14):
 # =====================
 # Parameters
 # =====================
-EMA_PERIOD = 25
+EMA_PERIOD = 60
 LOOKBACK = 30
 BULLISH_THRESHOLD = 0.85
 BEARISH_THRESHOLD = 0.98
@@ -165,7 +165,7 @@ for name, ticker in symbols.items():
     # Forced Sell 🚨
     # =====================
     forced_sell_mark = ""
-    if last_close < df["EMA25"].iloc[-1] and not prev_forced:
+    if last_close < df["EMA30"].iloc[-1] and not prev_forced:
         sell_signal = True
         buy_signal = False
         forced_sell_mark = "🚨"
