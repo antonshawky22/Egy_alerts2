@@ -1,4 +1,4 @@
-print("EGX ALERTS - Stable Version with Side Signals, RSI Sell, and Support Break")
+print("EGX ALERTS - Stable Version with Side Trend Signals & RSI82 Sell")
 
 import yfinance as yf
 import requests
@@ -85,7 +85,7 @@ BEARISH_THRESHOLD = 0.88
 EMA_FORCED_SELL = 60
 
 SIDE_CLOSE_PERCENT = 0.05  # 5٪ قرب القاع/القمة للعرضي
-RSI_SELL_THRESHOLD = 82
+RSI_SELL = 82
 
 # =====================
 # Containers
@@ -136,7 +136,7 @@ for name, ticker in symbols.items():
     prev_trend = prev_data.get("trend", "")
     prev_forced = prev_data.get("last_forced_sell", False)
     prev_side_actual = prev_data.get("last_side_signal_actual", "")
-    prev_side_buy_price = prev_data.get("side_buy_price", None)  # لتخزين سعر شراء العرضي
+    prev_side_buy_price = prev_data.get("prev_side_buy_price", None)
 
     # =====================
     # Determine Trend
@@ -151,19 +151,22 @@ for name, ticker in symbols.items():
         low_lookback = df["Close"].iloc[-EMA_PERIOD:]
         high_threshold = high_lookback.max() * (1 - SIDE_CLOSE_PERCENT)
         low_threshold = low_lookback.min() * (1 + SIDE_CLOSE_PERCENT)
-        # ============= إشارات العرضي (شراء/بيع) =============
+
+        # ============= إشارات العرضي (شراء/بيع) مع تخزين كإشارات فعلية =============
         if last_close >= high_threshold:
+            sell_signal = True
             side_signal = "🔴"
             percent_side = (high_lookback.max() - last_close) / high_lookback.max() * 100
         elif last_close <= low_threshold:
+            buy_signal = True
             side_signal = "🟢"
             percent_side = (last_close - low_lookback.min()) / low_lookback.min() * 100
-            prev_side_buy_price = last_close  # تخزين سعر الشراء للعرضي
+            prev_side_buy_price = last_close
 
         # ============= بيع العرضي عند كسر الدعم =============
         if prev_side_buy_price and last_close < prev_side_buy_price:
             sell_signal = True
-            side_signal = "🔴💥"  # علامة مميزة لكسر الدعم
+            side_signal = "🔴💥"
 
     # =====================
     # Trend Change Mark
@@ -185,16 +188,14 @@ for name, ticker in symbols.items():
         last_forced = prev_forced
 
     # =====================
-    # Strategy by Trend
+    # Strategy by Trend (صاعد)
     # =====================
     if trend == "↗️":
         if prev_ema4 <= prev_ema9 and last_ema4 > last_ema9:
             buy_signal = True
         elif prev_ema4 >= prev_ema9 and last_ema4 < last_ema9:
-            sell_signal = True
-        # ============= إضافة شرط RSI > 82 للبيع في الصاعد =============
-        if df["RSI14"].iloc[-1] > RSI_SELL_THRESHOLD:
-            sell_signal = True
+            if df["RSI14"].iloc[-1] > RSI_SELL:
+                sell_signal = True
 
     # =====================
     # Prevent repeated signals
@@ -228,7 +229,7 @@ for name, ticker in symbols.items():
         "trend": trend,
         "last_forced_sell": last_forced,
         "last_side_signal_actual": prev_side_actual,
-        "side_buy_price": prev_side_buy_price  # تخزين سعر شراء العرضي
+        "prev_side_buy_price": prev_side_buy_price
     }
 
 # =====================
