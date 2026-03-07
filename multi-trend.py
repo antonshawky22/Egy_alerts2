@@ -1,4 +1,4 @@
-print("EGX ALERTS - Stable Version with Non-Repeating Side Trend")
+print("EGX ALERTS - Stable Version with Side Signals, RSI Sell, and Support Break")
 
 import yfinance as yf
 import requests
@@ -84,7 +84,8 @@ BULLISH_THRESHOLD = 0.85
 BEARISH_THRESHOLD = 0.88
 EMA_FORCED_SELL = 60
 
-SIDE_CLOSE_PERCENT = 0.05
+SIDE_CLOSE_PERCENT = 0.05  # 5٪ قرب القاع/القمة للعرضي
+RSI_SELL_THRESHOLD = 82
 
 # =====================
 # Containers
@@ -97,9 +98,7 @@ section_down = []
 # Main Logic
 # =====================
 for name, ticker in symbols.items():
-
     df = fetch_data(ticker)
-
     if df is None or len(df) < LOOKBACK:
         data_failures.append(name)
         continue
@@ -123,14 +122,10 @@ for name, ticker in symbols.items():
 
     last_close = df["Close"].iloc[-1]
     prev_close = df["Close"].iloc[-2]
-
     last_ema4 = df["EMA4"].iloc[-1]
     prev_ema4 = df["EMA4"].iloc[-2]
-
     last_ema9 = df["EMA9"].iloc[-1]
     prev_ema9 = df["EMA9"].iloc[-2]
-
-    last_rsi = df["RSI14"].iloc[-1]
 
     buy_signal = sell_signal = False
     side_signal = ""
@@ -141,68 +136,51 @@ for name, ticker in symbols.items():
     prev_trend = prev_data.get("trend", "")
     prev_forced = prev_data.get("last_forced_sell", False)
     prev_side_actual = prev_data.get("last_side_signal_actual", "")
+    prev_side_buy_price = prev_data.get("side_buy_price", None)  # لتخزين سعر شراء العرضي
 
     # =====================
     # Determine Trend
     # =====================
     if bullish_ratio >= BULLISH_THRESHOLD:
         trend = "↗️"
-
     elif bearish_ratio >= BEARISH_THRESHOLD:
         trend = "🔻"
-
     else:
-
         trend = "🔛"
-
         high_lookback = df["Close"].iloc[-EMA_PERIOD:]
         low_lookback = df["Close"].iloc[-EMA_PERIOD:]
-
         high_threshold = high_lookback.max() * (1 - SIDE_CLOSE_PERCENT)
         low_threshold = low_lookback.min() * (1 + SIDE_CLOSE_PERCENT)
-
-        # إشارات العرضي
+        # ============= إشارات العرضي (شراء/بيع) =============
         if last_close >= high_threshold:
-
             side_signal = "🔴"
-
             percent_side = (high_lookback.max() - last_close) / high_lookback.max() * 100
-
         elif last_close <= low_threshold:
-
             side_signal = "🟢"
-
             percent_side = (last_close - low_lookback.min()) / low_lookback.min() * 100
+            prev_side_buy_price = last_close  # تخزين سعر الشراء للعرضي
 
-        # =====================
-        # NEW: بيع بكسر الدعم في العرضي
-        # =====================
-        lowest_close_side = df["Close"].iloc[-EMA_PERIOD:].min()
-
-        if last_close < lowest_close_side:
+        # ============= بيع العرضي عند كسر الدعم =============
+        if prev_side_buy_price and last_close < prev_side_buy_price:
             sell_signal = True
+            side_signal = "🔴💥"  # علامة مميزة لكسر الدعم
 
     # =====================
     # Trend Change Mark
     # =====================
     trend_changed_mark = ""
-
     if prev_trend and prev_trend != trend:
         trend_changed_mark = "🚧 "
 
     # =====================
-    # Forced Sell
+    # Forced Sell 🚨
     # =====================
     forced_sell_mark = ""
-
     if last_close < df["EMA60_forced"].iloc[-1] and not prev_forced:
-
         sell_signal = True
         buy_signal = False
-
         forced_sell_mark = "🚨"
         last_forced = True
-
     else:
         last_forced = prev_forced
 
@@ -210,17 +188,12 @@ for name, ticker in symbols.items():
     # Strategy by Trend
     # =====================
     if trend == "↗️":
-
         if prev_ema4 <= prev_ema9 and last_ema4 > last_ema9:
             buy_signal = True
-
         elif prev_ema4 >= prev_ema9 and last_ema4 < last_ema9:
             sell_signal = True
-
-        # =====================
-        # NEW: بيع RSI تشبع
-        # =====================
-        elif last_rsi > 82:
+        # ============= إضافة شرط RSI > 82 للبيع في الصاعد =============
+        if df["RSI14"].iloc[-1] > RSI_SELL_THRESHOLD:
             sell_signal = True
 
     # =====================
@@ -228,12 +201,9 @@ for name, ticker in symbols.items():
     # =====================
     if trend == prev_trend and buy_signal and prev_signal == "BUY":
         buy_signal = False
-
     if trend == prev_trend and sell_signal and prev_signal == "SELL":
         sell_signal = False
-
     if trend == "🔛":
-
         if side_signal == prev_side_actual:
             side_signal = ""
         else:
@@ -243,24 +213,12 @@ for name, ticker in symbols.items():
     # Prepare messages
     # =====================
     if trend == "↗️" and (buy_signal or sell_signal):
-
         mark = "🟢" if buy_signal else "🔴"
-
-        section_up.append(
-            f"{trend_changed_mark}{forced_sell_mark}{mark} {name} | {last_close:.2f} | {last_candle_date}"
-        )
-
+        section_up.append(f"{trend_changed_mark}{forced_sell_mark}{mark} {name} | {last_close:.2f} | {last_candle_date}")
     elif trend == "🔛" and side_signal:
-
-        section_side.append(
-            f"{trend_changed_mark}{forced_sell_mark}{side_signal} {name} | {last_close:.2f} | {last_candle_date} | {percent_side:.2f}%"
-        )
-
+        section_side.append(f"{trend_changed_mark}{forced_sell_mark}{side_signal} {name} | {last_close:.2f} | {last_candle_date} | {percent_side:.2f}%")
     elif trend == "🔻" and trend != prev_trend:
-
-        section_down.append(
-            f"{trend_changed_mark}{forced_sell_mark}{name} | {last_close:.2f} | {last_candle_date}"
-        )
+        section_down.append(f"{trend_changed_mark}{forced_sell_mark}{name} | {last_close:.2f} | {last_candle_date}")
 
     # =====================
     # Update last signals
@@ -269,7 +227,8 @@ for name, ticker in symbols.items():
         "last_signal": "BUY" if buy_signal else "SELL" if sell_signal else prev_signal,
         "trend": trend,
         "last_forced_sell": last_forced,
-        "last_side_signal_actual": prev_side_actual
+        "last_side_signal_actual": prev_side_actual,
+        "side_buy_price": prev_side_buy_price  # تخزين سعر شراء العرضي
     }
 
 # =====================
@@ -280,11 +239,9 @@ alerts = ["🚦 EGX Alerts (Compact):\n"]
 if section_up:
     alerts.append("↗️ صاعد (شراء/بيع):")
     alerts.extend(["- " + s for s in section_up])
-
 if section_side:
     alerts.append("\n🔛 عرضي (قمم/قيعان):")
     alerts.extend(["- " + s for s in section_side])
-
 if section_down:
     alerts.append("\n🔻 هابط:")
     alerts.extend(["- " + s for s in section_down])
