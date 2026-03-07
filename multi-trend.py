@@ -1,4 +1,4 @@
-print("EGX ALERTS - Stable Version with Side Trend Signals & RSI82 Sell")
+print("EGX ALERTS - Market Structure Trend & Signals")
 
 import yfinance as yf
 import requests
@@ -72,20 +72,19 @@ def rsi(series, period=14):
     avg_gain = gain.ewm(alpha=1/period, adjust=False).mean()
     avg_loss = loss.ewm(alpha=1/period, adjust=False).mean()
     rs = avg_gain / avg_loss
-    rsi = 100 - (100 / (1 + rs))
-    return rsi
+    return 100 - (100 / (1 + rs))
 
 # =====================
 # Parameters
 # =====================
 EMA_PERIOD = 60
 LOOKBACK = 30
-BULLISH_THRESHOLD = 0.85
-BEARISH_THRESHOLD = 0.88
 EMA_FORCED_SELL = 60
 
-SIDE_CLOSE_PERCENT = 0.05  # 5٪ قرب القاع/القمة للعرضي
+SIDE_CLOSE_PERCENT = 0.05
 RSI_SELL = 82
+
+MARKET_STRUCTURE_LOOKBACK = 120  # لتحديد أعلى قمتين وأقل قاعين
 
 # =====================
 # Containers
@@ -99,7 +98,7 @@ section_down = []
 # =====================
 for name, ticker in symbols.items():
     df = fetch_data(ticker)
-    if df is None or len(df) < LOOKBACK:
+    if df is None or len(df) < MARKET_STRUCTURE_LOOKBACK:
         data_failures.append(name)
         continue
 
@@ -114,12 +113,6 @@ for name, ticker in symbols.items():
     df["EMA60_forced"] = df["Close"].ewm(span=EMA_FORCED_SELL, adjust=False).mean()
     df["RSI14"] = rsi(df["Close"], 14)
 
-    recent_closes = df["Close"].iloc[-LOOKBACK:]
-    recent_ema60 = df["EMA60"].iloc[-LOOKBACK:]
-
-    bullish_ratio = (recent_closes > recent_ema60).sum() / LOOKBACK
-    bearish_ratio = (recent_closes < recent_ema60).sum() / LOOKBACK
-
     last_close = df["Close"].iloc[-1]
     prev_close = df["Close"].iloc[-2]
     last_ema4 = df["EMA4"].iloc[-1]
@@ -127,10 +120,9 @@ for name, ticker in symbols.items():
     last_ema9 = df["EMA9"].iloc[-1]
     prev_ema9 = df["EMA9"].iloc[-2]
 
-    buy_signal = sell_signal = False
-    side_signal = ""
-    percent_side = None
-
+    # =====================
+    # Previous signals
+    # =====================
     prev_data = last_signals.get(name, {})
     prev_signal = prev_data.get("last_signal", "")
     prev_trend = prev_data.get("trend", "")
@@ -138,42 +130,74 @@ for name, ticker in symbols.items():
     prev_side_actual = prev_data.get("last_side_signal_actual", "")
     prev_side_buy_price = prev_data.get("prev_side_buy_price", None)
 
+    buy_signal = sell_signal = False
+    side_signal = ""
+    percent_side = None
+
     # =====================
-    # Determine Trend
+    # Market Structure Trend
     # =====================
-    if bullish_ratio >= BULLISH_THRESHOLD:
+    lookback_df = df.iloc[-MARKET_STRUCTURE_LOOKBACK:]
+    highest_two = lookback_df["Close"].nlargest(2)
+    lowest_two = lookback_df["Close"].nsmallest(2)
+
+    # آخر وأكبر قمتين
+    high_latest = highest_two.index[0]
+    high_prev = highest_two.index[1]
+    high_latest_val = highest_two.iloc[0]
+    high_prev_val = highest_two.iloc[1]
+
+    # آخر وأقل قاعين
+    low_latest = lowest_two.index[0]
+    low_prev = lowest_two.index[1]
+    low_latest_val = lowest_two.iloc[0]
+    low_prev_val = lowest_two.iloc[1]
+
+    # تحديد الاتجاه
+    if high_latest_val > high_prev_val and low_latest_val > low_prev_val:
         trend = "↗️"
-    elif bearish_ratio >= BEARISH_THRESHOLD:
+    elif high_latest_val < high_prev_val and low_latest_val < low_prev_val:
         trend = "🔻"
     else:
         trend = "🔛"
-        high_lookback = df["Close"].iloc[-EMA_PERIOD:]
-        low_lookback = df["Close"].iloc[-EMA_PERIOD:]
-        high_threshold = high_lookback.max() * (1 - SIDE_CLOSE_PERCENT)
-        low_threshold = low_lookback.min() * (1 + SIDE_CLOSE_PERCENT)
 
-        # ============= إشارات العرضي (شراء/بيع) مع تخزين كإشارات فعلية =============
-        if last_close >= high_threshold:
+    # =====================
+    # إشارات داخل الاتجاه
+    # =====================
+    # الصاعد ↗️
+    if trend == "↗️":
+        # شراء عند تقاطع EMA4 فوق EMA9
+        if prev_ema4 <= prev_ema9 and last_ema4 > last_ema9:
+            buy_signal = True
+        # بيع عند تقاطع EMA4 تحت EMA9 مع RSI > 82
+        elif prev_ema4 >= prev_ema9 and last_ema4 < last_ema9:
+            if df["RSI14"].iloc[-1] > RSI_SELL:
+                sell_signal = True
+
+    # الهابط 🔻
+    elif trend == "🔻":
+        # بيع عند تقاطع EMA4 تحت EMA9
+        if prev_ema4 >= prev_ema9 and last_ema4 < last_ema9:
             sell_signal = True
-            side_signal = "🔴"
-            percent_side = (high_lookback.max() - last_close) / high_lookback.max() * 100
-        elif last_close <= low_threshold:
+
+    # العرضي 🔛
+    else:
+        high_threshold = lookback_df["Close"].max() * (1 - SIDE_CLOSE_PERCENT)
+        low_threshold = lookback_df["Close"].min() * (1 + SIDE_CLOSE_PERCENT)
+        # شراء وبيع قرب القاع والقمة
+        if last_close <= low_threshold:
             buy_signal = True
             side_signal = "🟢"
-            percent_side = (last_close - low_lookback.min()) / low_lookback.min() * 100
+            percent_side = (last_close - lookback_df["Close"].min()) / lookback_df["Close"].min() * 100
             prev_side_buy_price = last_close
-
-        # ============= بيع العرضي عند كسر الدعم =============
+        elif last_close >= high_threshold:
+            sell_signal = True
+            side_signal = "🔴"
+            percent_side = (lookback_df["Close"].max() - last_close) / lookback_df["Close"].max() * 100
+        # بيع عند كسر الدعم للعرضي
         if prev_side_buy_price and last_close < prev_side_buy_price:
             sell_signal = True
             side_signal = "🔴💥"
-
-    # =====================
-    # Trend Change Mark
-    # =====================
-    trend_changed_mark = ""
-    if prev_trend and prev_trend != trend:
-        trend_changed_mark = "🚧 "
 
     # =====================
     # Forced Sell 🚨
@@ -186,16 +210,6 @@ for name, ticker in symbols.items():
         last_forced = True
     else:
         last_forced = prev_forced
-
-    # =====================
-    # Strategy by Trend (صاعد)
-    # =====================
-    if trend == "↗️":
-        if prev_ema4 <= prev_ema9 and last_ema4 > last_ema9:
-            buy_signal = True
-        elif prev_ema4 >= prev_ema9 and last_ema4 < last_ema9:
-            if df["RSI14"].iloc[-1] > RSI_SELL:
-                sell_signal = True
 
     # =====================
     # Prevent repeated signals
@@ -215,11 +229,11 @@ for name, ticker in symbols.items():
     # =====================
     if trend == "↗️" and (buy_signal or sell_signal):
         mark = "🟢" if buy_signal else "🔴"
-        section_up.append(f"{trend_changed_mark}{forced_sell_mark}{mark} {name} | {last_close:.2f} | {last_candle_date}")
+        section_up.append(f"{mark} {name} | {last_close:.2f} | {last_candle_date}")
     elif trend == "🔛" and side_signal:
-        section_side.append(f"{trend_changed_mark}{forced_sell_mark}{side_signal} {name} | {last_close:.2f} | {last_candle_date} | {percent_side:.2f}%")
-    elif trend == "🔻" and trend != prev_trend:
-        section_down.append(f"{trend_changed_mark}{forced_sell_mark}{name} | {last_close:.2f} | {last_candle_date}")
+        section_side.append(f"{side_signal} {name} | {last_close:.2f} | {last_candle_date} | {percent_side:.2f}%")
+    elif trend == "🔻" and sell_signal:
+        section_down.append(f"🔴 {name} | {last_close:.2f} | {last_candle_date}")
 
     # =====================
     # Update last signals
