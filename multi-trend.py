@@ -85,7 +85,7 @@ SIDE_CLOSE_PERCENT = 0.05
 RSI_SELL = 82
 
 MARKET_STRUCTURE_LOOKBACK = 120  # لتحديد أعلى قمتين وأقل قاعين
-SWING_PERIOD = 10  # أقل عدد شموع بين القمم/القاع لتقليل ضوضاء السوق
+SWING_PERIOD = 50  # أقل عدد شموع بين القمم/القاع لتقليل ضوضاء السوق
 
 # =====================
 # Containers
