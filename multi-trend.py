@@ -82,10 +82,10 @@ LOOKBACK = 30
 EMA_FORCED_SELL = 60
 
 SIDE_CLOSE_PERCENT = 0.05
-RSI_SELL = 82
+RSI_SELL = 83
 
-MARKET_STRUCTURE_LOOKBACK = 60  # لتحديد أعلى قمتين وأقل قاعين
-SWING_PERIOD = 5 # أقل عدد شموع بين القمم/القاع لتقليل ضوضاء السوق
+MARKET_STRUCTURE_LOOKBACK = 30  # لتحديد أعلى قمتين وأقل قاعين
+SWING_PERIOD = 3 # أقل عدد شموع بين القمم/القاع لتقليل ضوضاء السوق
 
 # =====================
 # Containers
