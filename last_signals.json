@@ -1,7 +1,7 @@
 {
   "OFH": {
     "last_signal": "SELL",
-    "trend": "🔛",
+    "trend": "🔻",
     "last_forced_sell": true,
     "last_side_signal_actual": "",
     "prev_side_buy_price": null
@@ -22,49 +22,49 @@
   },
   "ETEL": {
     "last_signal": "",
-    "trend": "↗️",
+    "trend": "🔛",
     "last_forced_sell": false,
     "last_side_signal_actual": "",
     "prev_side_buy_price": null
   },
   "EAST": {
-    "last_signal": "SELL",
+    "last_signal": "BUY",
     "trend": "🔛",
     "last_forced_sell": true,
-    "last_side_signal_actual": "",
-    "prev_side_buy_price": null
+    "last_side_signal_actual": "🟢",
+    "prev_side_buy_price": 37.88999938964844
   },
   "EFIH": {
     "last_signal": "SELL",
-    "trend": "🔛",
+    "trend": "↗️",
     "last_forced_sell": true,
     "last_side_signal_actual": "",
     "prev_side_buy_price": null
   },
   "ABUK": {
-    "last_signal": "",
-    "trend": "↗️",
+    "last_signal": "SELL",
+    "trend": "🔛",
     "last_forced_sell": false,
-    "last_side_signal_actual": "",
+    "last_side_signal_actual": "🔴",
     "prev_side_buy_price": null
   },
   "OIH": {
-    "last_signal": "",
+    "last_signal": "BUY",
     "trend": "🔛",
     "last_forced_sell": false,
-    "last_side_signal_actual": "",
-    "prev_side_buy_price": null
+    "last_side_signal_actual": "🟢",
+    "prev_side_buy_price": 1.190000057220459
   },
   "SWDY": {
-    "last_signal": "",
+    "last_signal": "BUY",
     "trend": "🔛",
     "last_forced_sell": false,
-    "last_side_signal_actual": "",
-    "prev_side_buy_price": null
+    "last_side_signal_actual": "🟢",
+    "prev_side_buy_price": 79.19999694824219
   },
   "ISPH": {
     "last_signal": "SELL",
-    "trend": "↗️",
+    "trend": "🔻",
     "last_forced_sell": true,
     "last_side_signal_actual": "",
     "prev_side_buy_price": null
@@ -78,24 +78,24 @@
   },
   "MTIE": {
     "last_signal": "SELL",
-    "trend": "🔛",
+    "trend": "🔻",
     "last_forced_sell": true,
     "last_side_signal_actual": "",
     "prev_side_buy_price": null
   },
   "ELEC": {
     "last_signal": "SELL",
-    "trend": "🔻",
+    "trend": "🔛",
     "last_forced_sell": true,
     "last_side_signal_actual": "",
     "prev_side_buy_price": null
   },
   "HRHO": {
-    "last_signal": "SELL",
+    "last_signal": "BUY",
     "trend": "🔛",
     "last_forced_sell": true,
-    "last_side_signal_actual": "",
-    "prev_side_buy_price": null
+    "last_side_signal_actual": "🟢",
+    "prev_side_buy_price": 26.010000228881836
   },
   "ORWE": {
     "last_signal": "SELL",
@@ -105,11 +105,11 @@
     "prev_side_buy_price": null
   },
   "JUFO": {
-    "last_signal": "SELL",
+    "last_signal": "BUY",
     "trend": "🔛",
     "last_forced_sell": true,
-    "last_side_signal_actual": "",
-    "prev_side_buy_price": null
+    "last_side_signal_actual": "🟢",
+    "prev_side_buy_price": 26.5
   },
   "DSCW": {
     "last_signal": "SELL",
@@ -134,7 +134,7 @@
   },
   "RMDA": {
     "last_signal": "",
-    "trend": "🔛",
+    "trend": "↗️",
     "last_forced_sell": false,
     "last_side_signal_actual": "",
     "prev_side_buy_price": null
@@ -155,7 +155,7 @@
   },
   "MPCO": {
     "last_signal": "SELL",
-    "trend": "🔻",
+    "trend": "🔛",
     "last_forced_sell": true,
     "last_side_signal_actual": "",
     "prev_side_buy_price": null
@@ -175,22 +175,22 @@
     "prev_side_buy_price": null
   },
   "ORHD": {
-    "last_signal": "SELL",
+    "last_signal": "BUY",
     "trend": "🔛",
     "last_forced_sell": true,
-    "last_side_signal_actual": "",
-    "prev_side_buy_price": null
+    "last_side_signal_actual": "🟢",
+    "prev_side_buy_price": 24.200000762939453
   },
   "AMOC": {
     "last_signal": "",
-    "trend": "↗️",
+    "trend": "🔻",
     "last_forced_sell": false,
     "last_side_signal_actual": "",
     "prev_side_buy_price": null
   },
   "FWRY": {
     "last_signal": "",
-    "trend": "↗️",
+    "trend": "🔛",
     "last_forced_sell": false,
     "last_side_signal_actual": "",
     "prev_side_buy_price": null
@@ -225,16 +225,16 @@
   },
   "SKPC": {
     "last_signal": "SELL",
-    "trend": "🔛",
+    "trend": "↗️",
     "last_forced_sell": false,
     "last_side_signal_actual": "🔴",
     "prev_side_buy_price": null
   },
   "EGAL": {
-    "last_signal": "",
-    "trend": "🔻",
+    "last_signal": "SELL",
+    "trend": "🔛",
     "last_forced_sell": false,
-    "last_side_signal_actual": "",
+    "last_side_signal_actual": "🔴",
     "prev_side_buy_price": null
   }
 }
