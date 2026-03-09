@@ -252,7 +252,7 @@ for name, ticker in symbols.items():
 # =====================
 # Compile Message
 # =====================
-alerts = ["🚦 EGX Alerts (Compact):\n"]
+alerts = ["🚦 EGX Alerts m structure:\n"]
 
 if section_up:
     alerts.append("↗️ صاعد (شراء/بيع):")
@@ -265,7 +265,7 @@ if section_down:
     alerts.extend(["- " + s for s in section_down])
 
 if not section_up and not section_side and not section_down:
-    alerts.append(f"ℹ️ No new signals\nlast candle: {last_candle_date}")
+    alerts.append(f"ℹ️ No new signals\n m structure:{last_candle_date}")
 
 if data_failures:
     alerts.append("\n⚠️ Failed to fetch data:\n- " + "\n- ".join(data_failures))
