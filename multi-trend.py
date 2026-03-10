@@ -79,12 +79,14 @@ def rsi(series, period=14):
 # Parameters
 # =====================
 EMA_PERIOD = 60
-LOOKBACK = 50
+TREND_LOOKBACK = 35
+SIDE_LOOKBACK = 60
+
 BULLISH_THRESHOLD = 0.75
 BEARISH_THRESHOLD = 0.75
 EMA_FORCED_SELL = 60
 
-SIDE_CLOSE_PERCENT = 0.03  # 3٪ قرب القاع/القمة للعرضي
+SIDE_CLOSE_PERCENT = 0.03
 RSI_SELL = 83
 
 # =====================
@@ -99,7 +101,7 @@ section_down = []
 # =====================
 for name, ticker in symbols.items():
     df = fetch_data(ticker)
-    if df is None or len(df) < LOOKBACK:
+    if df is None or len(df) < TREND_LOOKBACK:
         data_failures.append(name)
         continue
 
@@ -114,11 +116,11 @@ for name, ticker in symbols.items():
     df["EMA60_forced"] = df["Close"].ewm(span=EMA_FORCED_SELL, adjust=False).mean()
     df["RSI14"] = rsi(df["Close"], 14)
 
-    recent_closes = df["Close"].iloc[-LOOKBACK:]
-    recent_ema60 = df["EMA60"].iloc[-LOOKBACK:]
+    recent_closes = df["Close"].iloc[-TREND_LOOKBACK:]
+    recent_ema60 = df["EMA60"].iloc[-TREND_LOOKBACK:]
 
-    bullish_ratio = (recent_closes > recent_ema60).sum() / LOOKBACK
-    bearish_ratio = (recent_closes < recent_ema60).sum() / LOOKBACK
+    bullish_ratio = (recent_closes > recent_ema60).sum() / TREND_LOOKBACK
+    bearish_ratio = (recent_closes < recent_ema60).sum() / TREND_LOOKBACK
 
     last_close = df["Close"].iloc[-1]
     prev_close = df["Close"].iloc[-2]
@@ -147,23 +149,24 @@ for name, ticker in symbols.items():
         trend = "🔻"
     else:
         trend = "🔛"
-        high_lookback = df["Close"].iloc[-EMA_PERIOD:]
-        low_lookback = df["Close"].iloc[-EMA_PERIOD:]
+
+        high_lookback = df["High"].iloc[-SIDE_LOOKBACK:]
+        low_lookback = df["Low"].iloc[-SIDE_LOOKBACK:]
+
         high_threshold = high_lookback.max() * (1 - SIDE_CLOSE_PERCENT)
         low_threshold = low_lookback.min() * (1 + SIDE_CLOSE_PERCENT)
 
-        # ============= إشارات العرضي (شراء/بيع) مع تخزين كإشارات فعلية =============
         if last_close >= high_threshold:
             sell_signal = True
             side_signal = "🔴"
             percent_side = (high_lookback.max() - last_close) / high_lookback.max() * 100
+
         elif last_close <= low_threshold:
             buy_signal = True
             side_signal = "🟢"
             percent_side = (last_close - low_lookback.min()) / low_lookback.min() * 100
             prev_side_buy_price = last_close
 
-        # ============= بيع العرضي عند كسر الدعم =============
         if prev_side_buy_price and last_close < prev_side_buy_price:
             sell_signal = True
             side_signal = "🔴💥"
@@ -176,7 +179,7 @@ for name, ticker in symbols.items():
         trend_changed_mark = "🚧 "
 
     # =====================
-    # Forced Sell 🚨
+    # Forced Sell
     # =====================
     forced_sell_mark = ""
     if last_close < df["EMA60_forced"].iloc[-1] and not prev_forced:
@@ -188,7 +191,7 @@ for name, ticker in symbols.items():
         last_forced = prev_forced
 
     # =====================
-    # Strategy by Trend (صاعد)
+    # Strategy by Trend
     # =====================
     if trend == "↗️":
         if prev_ema4 <= prev_ema9 and last_ema4 > last_ema9:
@@ -216,8 +219,10 @@ for name, ticker in symbols.items():
     if trend == "↗️" and (buy_signal or sell_signal):
         mark = "🟢" if buy_signal else "🔴"
         section_up.append(f"{trend_changed_mark}{forced_sell_mark}{mark} {name} | {last_close:.2f} | {last_candle_date}")
+
     elif trend == "🔛" and side_signal:
         section_side.append(f"{trend_changed_mark}{forced_sell_mark}{side_signal} {name} | {last_close:.2f} | {last_candle_date} | {percent_side:.2f}%")
+
     elif trend == "🔻" and trend != prev_trend:
         section_down.append(f"{trend_changed_mark}{forced_sell_mark}{name} | {last_close:.2f} | {last_candle_date}")
 
@@ -240,9 +245,11 @@ alerts = ["🚦 EGX Alerts (m trend ema60):\n"]
 if section_up:
     alerts.append("↗️ صاعد (شراء/بيع):")
     alerts.extend(["- " + s for s in section_up])
+
 if section_side:
     alerts.append("\n🔛 عرضي (قمم/قيعان):")
     alerts.extend(["- " + s for s in section_side])
+
 if section_down:
     alerts.append("\n🔻 هابط:")
     alerts.extend(["- " + s for s in section_down])
