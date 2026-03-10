@@ -29,7 +29,7 @@
   },
   "EAST": {
     "last_signal": "BUY",
-    "trend": "🔛",
+    "trend": "↗️",
     "last_forced_sell": true,
     "last_side_signal_actual": "",
     "prev_side_buy_price": 37.59000015258789
@@ -64,7 +64,7 @@
   },
   "ISPH": {
     "last_signal": "BUY",
-    "trend": "🔛",
+    "trend": "↗️",
     "last_forced_sell": true,
     "last_side_signal_actual": "",
     "prev_side_buy_price": 10.300000190734863
@@ -134,7 +134,7 @@
   },
   "RMDA": {
     "last_signal": "",
-    "trend": "🔛",
+    "trend": "↗️",
     "last_forced_sell": false,
     "last_side_signal_actual": "",
     "prev_side_buy_price": null
@@ -176,7 +176,7 @@
   },
   "ORHD": {
     "last_signal": "BUY",
-    "trend": "🔛",
+    "trend": "↗️",
     "last_forced_sell": true,
     "last_side_signal_actual": "",
     "prev_side_buy_price": 24.200000762939453
