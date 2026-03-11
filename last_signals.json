@@ -1,7 +1,7 @@
 {
   "OFH": {
     "last_signal": "SELL",
-    "trend": "🔛",
+    "trend": "🔻",
     "last_forced_sell": true,
     "last_side_signal_actual": "",
     "prev_side_buy_price": null
@@ -162,9 +162,9 @@
   },
   "GBCO": {
     "last_signal": "BUY",
-    "trend": "↗️",
+    "trend": "🔛",
     "last_forced_sell": true,
-    "last_side_signal_actual": "🟢",
+    "last_side_signal_actual": "",
     "prev_side_buy_price": 24.639999389648438
   },
   "TMGH": {
