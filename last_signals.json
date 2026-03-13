@@ -27,13 +27,6 @@
     "last_side_signal_actual": "",
     "prev_side_buy_price": 82.12999725341797
   },
-  "EAST": {
-    "last_signal": "SELL",
-    "trend": "🔛",
-    "last_forced_sell": true,
-    "last_side_signal_actual": "🔴💥",
-    "prev_side_buy_price": 37.59000015258789
-  },
   "EFIH": {
     "last_signal": "BUY",
     "trend": "🔛",
@@ -53,14 +46,7 @@
     "trend": "↗️",
     "last_forced_sell": false,
     "last_side_signal_actual": "",
-    "prev_side_buy_price": 1.190000057220459
-  },
-  "SWDY": {
-    "last_signal": "SELL",
-    "trend": "↗️",
-    "last_forced_sell": false,
-    "last_side_signal_actual": "🔴💥",
-    "prev_side_buy_price": 79.22000122070312
+    "prev_side_buy_price": 1.19000005722
   },
   "ISPH": {
     "last_signal": "BUY",
