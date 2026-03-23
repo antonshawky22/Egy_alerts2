@@ -113,7 +113,7 @@ for name, ticker in symbols.items():
     df["EMA60"] = df["Close"].ewm(span=EMA_PERIOD, adjust=False).mean()
     df["EMA4"] = df["Close"].ewm(span=4, adjust=False).mean()
     df["EMA9"] = df["Close"].ewm(span=9, adjust=False).mean()
-    df["EMA60_forced"] = df["Close"].ewm(span=EMA_FORCED_SELL, adjust=False).mean()
+    df["EMA100_forced"] = df["Close"].ewm(span=EMA_FORCED_SELL, adjust=False).mean()
     df["RSI14"] = rsi(df["Close"], 14)
 
     recent_closes = df["Close"].iloc[-TREND_LOOKBACK:]
@@ -185,7 +185,7 @@ for name, ticker in symbols.items():
     # Forced Sell
     # =====================
     forced_sell_mark = ""
-    if last_close < df["EMA60_forced"].iloc[-1] and not prev_forced:
+    if last_close < df["EMA100_forced"].iloc[-1] and not prev_forced:
         sell_signal = True
         buy_signal = False
         forced_sell_mark = "🚨"
