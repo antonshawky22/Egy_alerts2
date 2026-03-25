@@ -31,15 +31,15 @@
     "last_signal": "BUY",
     "trend": "🔛",
     "last_forced_sell": true,
-    "last_side_signal_actual": "🟢",
+    "last_side_signal_actual": "",
     "prev_side_buy_price": 35.88999938964844
   },
   "EFIH": {
-    "last_signal": "SELL",
+    "last_signal": "BUY",
     "trend": "🔛",
     "last_forced_sell": true,
-    "last_side_signal_actual": "",
-    "prev_side_buy_price": null
+    "last_side_signal_actual": "🟢",
+    "prev_side_buy_price": 18.479999542236328
   },
   "ABUK": {
     "last_signal": "",
@@ -49,10 +49,10 @@
     "prev_side_buy_price": null
   },
   "OIH": {
-    "last_signal": "",
+    "last_signal": "SELL",
     "trend": "🔛",
     "last_forced_sell": false,
-    "last_side_signal_actual": "",
+    "last_side_signal_actual": "🔴",
     "prev_side_buy_price": null
   },
   "SWDY": {
@@ -67,7 +67,7 @@
     "trend": "🔛",
     "last_forced_sell": true,
     "last_side_signal_actual": "🟢",
-    "prev_side_buy_price": 10.399999618530273
+    "prev_side_buy_price": 10.329999923706055
   },
   "ATQA": {
     "last_signal": "SELL",
@@ -105,11 +105,11 @@
     "prev_side_buy_price": null
   },
   "JUFO": {
-    "last_signal": "SELL",
+    "last_signal": "BUY",
     "trend": "🔛",
     "last_forced_sell": true,
-    "last_side_signal_actual": "",
-    "prev_side_buy_price": null
+    "last_side_signal_actual": "🟢",
+    "prev_side_buy_price": 25.799999237060547
   },
   "DSCW": {
     "last_signal": "SELL",
@@ -161,11 +161,11 @@
     "prev_side_buy_price": null
   },
   "GBCO": {
-    "last_signal": "SELL",
+    "last_signal": "BUY",
     "trend": "🔛",
     "last_forced_sell": true,
-    "last_side_signal_actual": "",
-    "prev_side_buy_price": null
+    "last_side_signal_actual": "🟢",
+    "prev_side_buy_price": 24.809999465942383
   },
   "TMGH": {
     "last_signal": "SELL",
@@ -183,7 +183,7 @@
   },
   "AMOC": {
     "last_signal": "",
-    "trend": "🔛",
+    "trend": "↗️",
     "last_forced_sell": false,
     "last_side_signal_actual": "",
     "prev_side_buy_price": null
