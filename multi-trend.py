@@ -238,7 +238,7 @@ for name, ticker in symbols.items():
         "trend": trend,
         "last_forced_sell": last_forced,
         "last_side_signal_actual": prev_side_actual,
-        "prev_side_buy_price": prev_side_buy_price
+        "prev_side_buy_price": None if sell_signal else prev_side_buy_price
     }
 
 # =====================
