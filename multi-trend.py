@@ -1,4 +1,4 @@
-print("EGX ALERTS - Corrected Stable Version with Side Trend Signals & RSI82 Sell")
+print("EGX ALERTS - Corrected Stable Version with Side Trend Signals & RSI83 Sell")
 
 import yfinance as yf
 import requests
@@ -110,7 +110,7 @@ for name, ticker in symbols.items():
     # =====================
     # Indicators
     # =====================
-    df["EMA60"] = df["Close"].ewm(span=EMA_PERIOD, adjust=False).mean()
+    df["EMA40"] = df["Close"].ewm(span=EMA_PERIOD, adjust=False).mean()
     df["EMA4"] = df["Close"].ewm(span=4, adjust=False).mean()
     df["EMA9"] = df["Close"].ewm(span=9, adjust=False).mean()
     df["EMA100_forced"] = df["Close"].ewm(span=EMA_FORCED_SELL, adjust=False).mean()
@@ -244,7 +244,7 @@ for name, ticker in symbols.items():
 # =====================
 # Compile Message
 # =====================
-alerts = ["🚦 EGX Alerts (m trend ema60):\n"]
+alerts = ["🚦 EGX Alerts (m trend ema40):\n"]
 
 if section_up:
     alerts.append("↗️ صاعد (شراء/بيع):")
