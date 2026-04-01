@@ -24,7 +24,7 @@
     "last_signal": "SELL",
     "trend": "🔛",
     "last_forced_sell": false,
-    "last_side_signal_actual": "🔴💥",
+    "last_side_signal_actual": "",
     "prev_side_buy_price": 79.01000213623047
   },
   "EAST": {
@@ -38,7 +38,7 @@
     "last_signal": "SELL",
     "trend": "🔛",
     "last_forced_sell": true,
-    "last_side_signal_actual": "🔴💥",
+    "last_side_signal_actual": "",
     "prev_side_buy_price": 18.25
   },
   "ABUK": {
@@ -94,7 +94,7 @@
     "last_signal": "SELL",
     "trend": "🔛",
     "last_forced_sell": true,
-    "last_side_signal_actual": "🔴💥",
+    "last_side_signal_actual": "",
     "prev_side_buy_price": 25.200000762939453
   },
   "ORWE": {
