@@ -79,14 +79,14 @@ def rsi(series, period=14):
 # Parameters
 # =====================
 EMA_PERIOD = 40
-TREND_LOOKBACK = 35
+TREND_LOOKBACK = 30
 SIDE_LOOKBACK = 60
 
 BULLISH_THRESHOLD = 0.77
 BEARISH_THRESHOLD = 0.77
 EMA_FORCED_SELL = 100
 
-SIDE_CLOSE_PERCENT = 0.02  # ٪ قرب القاع/القمة
+SIDE_CLOSE_PERCENT = 0.04  # ٪ قرب القاع/القمة
 RSI_SELL = 83
 
 # =====================
