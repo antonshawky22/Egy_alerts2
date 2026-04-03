@@ -42,7 +42,7 @@
     "prev_side_buy_price": 18.25
   },
   "ABUK": {
-    "last_signal": "",
+    "last_signal": "BUY",
     "trend": "↗️",
     "last_forced_sell": false,
     "last_side_signal_actual": "",
@@ -133,14 +133,14 @@
     "prev_side_buy_price": null
   },
   "RMDA": {
-    "last_signal": "",
+    "last_signal": "BUY",
     "trend": "↗️",
     "last_forced_sell": false,
     "last_side_signal_actual": "",
     "prev_side_buy_price": null
   },
   "RAYA": {
-    "last_signal": "",
+    "last_signal": "BUY",
     "trend": "↗️",
     "last_forced_sell": false,
     "last_side_signal_actual": "",
@@ -182,7 +182,7 @@
     "prev_side_buy_price": null
   },
   "AMOC": {
-    "last_signal": "",
+    "last_signal": "BUY",
     "trend": "↗️",
     "last_forced_sell": false,
     "last_side_signal_actual": "",
@@ -203,7 +203,7 @@
     "prev_side_buy_price": null
   },
   "ADIB": {
-    "last_signal": "",
+    "last_signal": "BUY",
     "trend": "↗️",
     "last_forced_sell": false,
     "last_side_signal_actual": "",
@@ -224,7 +224,7 @@
     "prev_side_buy_price": null
   },
   "SKPC": {
-    "last_signal": "SELL",
+    "last_signal": "BUY",
     "trend": "↗️",
     "last_forced_sell": true,
     "last_side_signal_actual": "",
