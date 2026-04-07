@@ -81,10 +81,8 @@ EMA_PERIOD = 40
 TREND_LOOKBACK = 40
 SIDE_LOOKBACK = 60
 
-EMA_FAST = 20
-EMA_SLOW = 40
-EMA_TREND = 100
-
+BULLISH_THRESHOLD = 0.90
+BEARISH_THRESHOLD = 0.90
 EMA_FORCED_SELL = 100
 
 SIDE_CLOSE_PERCENT = 0.04
@@ -98,7 +96,7 @@ section_side = []
 section_down = []
 
 # =====================
-# Main Loop
+# Main Logic
 # =====================
 for name, ticker in symbols.items():
     df = fetch_data(ticker)
@@ -108,31 +106,23 @@ for name, ticker in symbols.items():
 
     last_candle_date = df.index[-1].date()
 
-    # =====================
     # Indicators
-    # =====================
+    df["EMA40"] = df["Close"].ewm(span=EMA_PERIOD, adjust=False).mean()
     df["EMA4"] = df["Close"].ewm(span=4, adjust=False).mean()
     df["EMA9"] = df["Close"].ewm(span=9, adjust=False).mean()
-    df["EMA20"] = df["Close"].ewm(span=EMA_FAST, adjust=False).mean()
-    df["EMA40"] = df["Close"].ewm(span=EMA_SLOW, adjust=False).mean()
-    df["EMA100"] = df["Close"].ewm(span=EMA_TREND, adjust=False).mean()
+    df["EMA20"] = df["Close"].ewm(span=20, adjust=False).mean()
+    df["EMA100"] = df["Close"].ewm(span=100, adjust=False).mean()
     df["EMA100_forced"] = df["Close"].ewm(span=EMA_FORCED_SELL, adjust=False).mean()
     df["RSI14"] = rsi(df["Close"], 14)
 
-    last = df.iloc[-1]
-    prev = df.iloc[-2]
+    last_close = df["Close"].iloc[-1]
+    prev_close = df["Close"].iloc[-2]
+    last_ema4 = df["EMA4"].iloc[-1]
+    prev_ema4 = df["EMA4"].iloc[-2]
+    last_ema9 = df["EMA9"].iloc[-1]
+    prev_ema9 = df["EMA9"].iloc[-2]
 
-    last_close = last["Close"]
-    prev_close = prev["Close"]
-
-    last_ema4 = last["EMA4"]
-    prev_ema4 = prev["EMA4"]
-
-    last_ema9 = last["EMA9"]
-    prev_ema9 = prev["EMA9"]
-
-    buy_signal = False
-    sell_signal = False
+    buy_signal = sell_signal = False
     side_signal = ""
     percent_side = None
 
@@ -144,21 +134,17 @@ for name, ticker in symbols.items():
     prev_side_buy_price = prev_data.get("prev_side_buy_price", None)
 
     # =====================
-    # 🔥 تحديد الاتجاه (محسن)
+    # Determine Trend
     # =====================
-    if last["EMA20"] > last["EMA40"] > last["EMA100"] and last_close > last["EMA20"]:
+    if df["EMA20"].iloc[-1] > df["EMA40"].iloc[-1] > df["EMA100"].iloc[-1] and last_close > df["EMA20"].iloc[-1]:
         trend = "↗️"
 
-    elif last["EMA20"] < last["EMA40"] < last["EMA100"] and last_close < last["EMA20"]:
+    elif df["EMA20"].iloc[-1] < df["EMA40"].iloc[-1] < df["EMA100"].iloc[-1] and last_close < df["EMA20"].iloc[-1]:
         trend = "🔻"
 
     else:
         trend = "🔛"
 
-    # =====================
-    # 📊 العرضي
-    # =====================
-    if trend == "🔛":
         high_lookback = df["High"].iloc[-SIDE_LOOKBACK:]
         low_lookback = df["Low"].iloc[-SIDE_LOOKBACK:]
 
@@ -179,14 +165,13 @@ for name, ticker in symbols.items():
             percent_side = percent_from_low
             prev_side_buy_price = last_close
 
-        # Stop loss عرضي
         if prev_side_buy_price and last_close < prev_side_buy_price * 0.96:
             sell_signal = True
             side_signal = "🔴💥"
             percent_side = None
 
     # =====================
-    # 🔴 Reset عند بداية الهبوط
+    # 🔴 التعديل 1: Reset عند بداية الهبوط
     # =====================
     if trend == "🔻" and prev_trend != "🔻":
         sell_signal = True
@@ -196,17 +181,24 @@ for name, ticker in symbols.items():
         prev_signal = ""
 
     # =====================
-    # 🧹 تنظيف العرضي
+    # 🧹 التعديل 2: تنظيف العرضي خارج حالته
     # =====================
     if trend != "🔛":
         prev_side_buy_price = None
         prev_side_actual = ""
 
     # =====================
+    # Trend Change Mark
+    # =====================
+    trend_changed_mark = ""
+    if prev_trend and prev_trend != trend:
+        trend_changed_mark = "🚧 "
+
+    # =====================
     # Forced Sell
     # =====================
     forced_sell_mark = ""
-    if last_close < last["EMA100_forced"] and not prev_forced:
+    if last_close < df["EMA100_forced"].iloc[-1] and not prev_forced:
         sell_signal = True
         buy_signal = False
         forced_sell_mark = "🚨"
@@ -215,22 +207,20 @@ for name, ticker in symbols.items():
         last_forced = prev_forced
 
     # =====================
-    # استراتيجية الصاعد
+    # Strategy by Trend
     # =====================
     if trend == "↗️":
-        if last["RSI14"] < 60 and last_close > last["EMA40"]:
+        if df["RSI14"].iloc[-1] < 60 and last_close > df["EMA40"].iloc[-1]:
             buy_signal = True
-
         elif prev_ema4 >= prev_ema9 and last_ema4 < last_ema9:
-            if last["RSI14"] > RSI_SELL:
+            if df["RSI14"].iloc[-1] > RSI_SELL:
                 sell_signal = True
 
     # =====================
-    # منع التكرار
+    # 🔁 التعديل 3: منع التكرار بدون تعطيل
     # =====================
     if buy_signal and prev_signal == "BUY":
         buy_signal = False
-
     if sell_signal and prev_signal == "SELL":
         sell_signal = False
 
@@ -241,28 +231,21 @@ for name, ticker in symbols.items():
             prev_side_actual = side_signal
 
     # =====================
-    # علامة تغيير الاتجاه
-    # =====================
-    trend_changed_mark = ""
-    if prev_trend and prev_trend != trend:
-        trend_changed_mark = "🚧 "
-
-    # =====================
-    # تجهيز الرسائل
+    # Prepare messages
     # =====================
     if trend == "↗️" and (buy_signal or sell_signal):
         mark = "🟢" if buy_signal else "🔴"
         section_up.append(f"{trend_changed_mark}{forced_sell_mark}{mark} {name} | {last_close:.2f} | {last_candle_date}")
 
     elif trend == "🔛" and side_signal:
-        percent_display = f"{percent_side:.2f}%" if percent_side else ""
+        percent_display = f"{percent_side:.2f}%" if percent_side is not None else ""
         section_side.append(f"{trend_changed_mark}{forced_sell_mark}{side_signal} {name} | {last_close:.2f} | {last_candle_date} | {percent_display}")
 
     elif trend == "🔻" and trend != prev_trend:
         section_down.append(f"{trend_changed_mark}{forced_sell_mark}{name} | {last_close:.2f} | {last_candle_date}")
 
     # =====================
-    # حفظ الحالة
+    # Update last signals
     # =====================
     new_signals[name] = {
         "last_signal": "BUY" if buy_signal else "SELL" if sell_signal else prev_signal,
@@ -273,29 +256,37 @@ for name, ticker in symbols.items():
     }
 
 # =====================
-# الرسالة
+# Compile Message
 # =====================
-alerts = ["🚦 EGX Alerts:\n"]
+alerts = ["🚦 EGX Alerts (m trend EMA 40):\n"]
 
 if section_up:
-    alerts.append("↗️ صاعد:")
+    alerts.append("↗️ صاعد (شراء/بيع):")
     alerts.extend(["- " + s for s in section_up])
 
 if section_side:
-    alerts.append("\n🔛 عرضي:")
+    alerts.append("\n🔛 عرضي (قمم/قيعان):")
     alerts.extend(["- " + s for s in section_side])
 
 if section_down:
     alerts.append("\n🔻 هابط:")
-    alerts.extend(["- " + s for s in section_down])
+    alerts.extend(["- " + s for s in section_down"])
+
+# ✅ تصحيح آخر جزء No new signals
+if not section_up and not section_side and not section_down:
+    if last_candle_date:
+        alerts.append(f"ℹ️ No new signals for today (last candle: {last_candle_date})")
+    else:
+        alerts.append("ℹ️ No new signals (no candle data available)")
 
 if data_failures:
-    alerts.append("\n⚠️ Failed:\n- " + "\n- ".join(data_failures))
+    alerts.append("\n⚠️ Failed to fetch data:\n- " + "\n- ".join(data_failures))
 
 # =====================
-# حفظ + إرسال
+# Save & Notify
 # =====================
 with open(SIGNALS_FILE, "w") as f:
     json.dump(new_signals, f, indent=2, ensure_ascii=False)
 
-send_telegram("\n".join(alerts))
+if alerts:
+    send_telegram("\n".join(alerts))
