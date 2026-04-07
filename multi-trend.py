@@ -270,7 +270,7 @@ if section_side:
 
 if section_down:
     alerts.append("\n🔻 هابط:")
-    alerts.extend(["- " + s for s in section_down"])
+    alerts.extend(["- " + s for s in section_down])
 
 # ✅ تصحيح آخر جزء No new signals
 if not section_up and not section_side and not section_down:
