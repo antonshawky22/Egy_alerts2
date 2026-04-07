@@ -1,4 +1,4 @@
-print("EGX ALERTS - Corrected Stable Version with Side Trend Signals & RSI83 Sell (Forced Down Sell)")
+print("EGX ALERTS - Corrected Stable Version with Side Trend Signals & RSI83 Sell")
 
 import yfinance as yf
 import requests
@@ -138,13 +138,11 @@ for name, ticker in symbols.items():
     # =====================
     if df["EMA20"].iloc[-1] > df["EMA40"].iloc[-1] > df["EMA100"].iloc[-1] and last_close > df["EMA20"].iloc[-1]:
         trend = "↗️"
-
     elif df["EMA20"].iloc[-1] < df["EMA40"].iloc[-1] < df["EMA100"].iloc[-1] and last_close < df["EMA20"].iloc[-1]:
         trend = "🔻"
-
     else:
         trend = "🔛"
-
+        # Check side signals
         high_lookback = df["High"].iloc[-SIDE_LOOKBACK:]
         low_lookback = df["Low"].iloc[-SIDE_LOOKBACK:]
 
@@ -171,31 +169,31 @@ for name, ticker in symbols.items():
             percent_side = None
 
     # =====================
-    # 🔴 Forced Down Sell for any H↓
+    # Habbat (🔻) triggers SELL once
     # =====================
-    if trend == "🔻":
+    if trend == "🔻" and prev_signal != "SELL":
         sell_signal = True
         buy_signal = False
         prev_side_buy_price = None
         prev_side_actual = ""
-        prev_signal = ""
+        prev_signal = "SELL"
 
     # =====================
-    # 🧹 Clean side signal if not sideways
+    # Clean side signals only if trend changes
     # =====================
     if trend != "🔛":
         prev_side_buy_price = None
         prev_side_actual = ""
 
     # =====================
-    # Trend Change Mark
+    # Trend change mark
     # =====================
     trend_changed_mark = ""
     if prev_trend and prev_trend != trend:
         trend_changed_mark = "🚧 "
 
     # =====================
-    # Forced Sell EMA100
+    # Forced Sell
     # =====================
     forced_sell_mark = ""
     if last_close < df["EMA100_forced"].iloc[-1] and not prev_forced:
@@ -217,7 +215,7 @@ for name, ticker in symbols.items():
                 sell_signal = True
 
     # =====================
-    # Prevent Repetition
+    # Prevent duplicate signals
     # =====================
     if buy_signal and prev_signal == "BUY":
         buy_signal = False
@@ -236,19 +234,17 @@ for name, ticker in symbols.items():
     if trend == "↗️" and (buy_signal or sell_signal):
         mark = "🟢" if buy_signal else "🔴"
         section_up.append(f"{trend_changed_mark}{forced_sell_mark}{mark} {name} | {last_close:.2f} | {last_candle_date}")
-
     elif trend == "🔛" and side_signal:
         percent_display = f"{percent_side:.2f}%" if percent_side is not None else ""
         section_side.append(f"{trend_changed_mark}{forced_sell_mark}{side_signal} {name} | {last_close:.2f} | {last_candle_date} | {percent_display}")
-
-    elif trend == "🔻":
+    elif trend == "🔻" and sell_signal:
         section_down.append(f"{trend_changed_mark}{forced_sell_mark}{name} | {last_close:.2f} | {last_candle_date}")
 
     # =====================
     # Update last signals
     # =====================
     new_signals[name] = {
-        "last_signal": "BUY" if buy_signal else "SELL",
+        "last_signal": "BUY" if buy_signal else "SELL" if sell_signal else prev_signal,
         "trend": trend,
         "last_forced_sell": last_forced,
         "last_side_signal_actual": prev_side_actual,
@@ -272,7 +268,7 @@ if section_down:
     alerts.append("\n🔻 هابط:")
     alerts.extend(["- " + s for s in section_down])
 
-# ✅ تصحيح آخر جزء No new signals
+# ✅ Correct No new signals
 if not section_up and not section_side and not section_down:
     if last_candle_date:
         alerts.append(f"ℹ️ No new signals for today (last candle: {last_candle_date})")
