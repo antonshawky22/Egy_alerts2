@@ -133,7 +133,7 @@
     "last_forced_sell": false,
     "last_side_signal_actual": "",
     "prev_side_buy_price": null,
-    "last_side_signal": "🔴"
+    "last_side_signal": ""
   },
   "SUGR": {
     "last_signal": "SELL",
@@ -173,7 +173,7 @@
     "last_forced_sell": false,
     "last_side_signal_actual": "",
     "prev_side_buy_price": null,
-    "last_side_signal": "🔴"
+    "last_side_signal": ""
   },
   "MPCO": {
     "last_signal": "SELL",
