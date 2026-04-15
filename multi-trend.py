@@ -104,12 +104,12 @@ for name, ticker in symbols.items():
     last_candle_date = df.index[-1].date()
 
     # Indicators
-    df["EMA40"] = df["Close"].ewm(span=EMA_PERIOD, adjust=False).mean()
+    df["EMA40"] = df["Close"].ewm(span=40, adjust=False).mean()
     df["EMA4"] = df["Close"].ewm(span=4, adjust=False).mean()
     df["EMA9"] = df["Close"].ewm(span=9, adjust=False).mean()
     df["EMA20"] = df["Close"].ewm(span=20, adjust=False).mean()
     df["EMA100"] = df["Close"].ewm(span=100, adjust=False).mean()
-    df["EMA100_forced"] = df["Close"].ewm(span=EMA_FORCED_SELL, adjust=False).mean()
+    df["EMA100_forced"] = df["Close"].ewm(span=100, adjust=False).mean()
     df["RSI14"] = rsi(df["Close"], 14)
 
     last_close = df["Close"].iloc[-1]
@@ -127,6 +127,7 @@ for name, ticker in symbols.items():
     prev_forced = prev_data.get("last_forced_sell", False)
     prev_side_actual = prev_data.get("last_side_signal_actual", "")
     prev_side_buy_price = prev_data.get("prev_side_buy_price", None)
+    prev_side_signal = prev_data.get("last_side_signal", "")  # 🔥 NEW
 
     # =====================
     # Trend
@@ -145,12 +146,12 @@ for name, ticker in symbols.items():
     trend_changed = (trend != prev_trend)
 
     # =====================
-    # RESET ON TREND CHANGE (FIX)
+    # RESET ON TREND CHANGE
     # =====================
     if trend_changed:
         prev_side_buy_price = None
         prev_side_actual = ""
-        prev_signal = ""   # 🔥 مهم: مسح الإشارات القديمة
+        prev_signal = ""
 
     # =====================
     # Side trend
@@ -180,6 +181,10 @@ for name, ticker in symbols.items():
             sell_signal = True
             side_signal = "🔴💥"
             percent_side = None
+
+        # 🔥 PREVENT SIDE REPEAT
+        if side_signal and side_signal == prev_side_signal:
+            side_signal = ""
 
     # =====================
     # Down reset
@@ -218,7 +223,7 @@ for name, ticker in symbols.items():
                 sell_signal = True
 
     # =====================
-    # Prevent repeat (FIXED)
+    # Prevent repeat
     # =====================
     if buy_signal and prev_signal == "BUY":
         buy_signal = False
@@ -226,9 +231,6 @@ for name, ticker in symbols.items():
     if sell_signal and prev_signal == "SELL":
         sell_signal = False
 
-    # =====================
-    # Update state (FIX)
-    # =====================
     if buy_signal:
         prev_signal = "BUY"
     elif sell_signal:
@@ -261,7 +263,8 @@ for name, ticker in symbols.items():
         "trend": trend,
         "last_forced_sell": last_forced,
         "last_side_signal_actual": prev_side_actual,
-        "prev_side_buy_price": None if sell_signal else prev_side_buy_price
+        "prev_side_buy_price": None if sell_signal else prev_side_buy_price,
+        "last_side_signal": side_signal   # 🔥 NEW
     }
 
 # =====================
