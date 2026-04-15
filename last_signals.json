@@ -1,1 +1,172 @@
-{}
+{
+  "OFH": {
+    "last_signal": "",
+    "trend": "🔛",
+    "side_state": "🔛_"
+  },
+  "OLFI": {
+    "last_signal": "",
+    "trend": "🔻",
+    "side_state": "🔻_"
+  },
+  "EMFD": {
+    "last_signal": "",
+    "trend": "🔻",
+    "side_state": "🔻_"
+  },
+  "ETEL": {
+    "last_signal": "",
+    "trend": "↗️",
+    "side_state": "↗️_"
+  },
+  "EAST": {
+    "last_signal": "",
+    "trend": "🔻",
+    "side_state": "🔻_"
+  },
+  "EFIH": {
+    "last_signal": "",
+    "trend": "🔛",
+    "side_state": "🔛_"
+  },
+  "ABUK": {
+    "last_signal": "BUY",
+    "trend": "↗️",
+    "side_state": "↗️_"
+  },
+  "OIH": {
+    "last_signal": "",
+    "trend": "↗️",
+    "side_state": "↗️_"
+  },
+  "SWDY": {
+    "last_signal": "",
+    "trend": "↗️",
+    "side_state": "↗️_"
+  },
+  "ISPH": {
+    "last_signal": "",
+    "trend": "🔻",
+    "side_state": "🔻_"
+  },
+  "ATQA": {
+    "last_signal": "",
+    "trend": "🔻",
+    "side_state": "🔻_"
+  },
+  "MTIE": {
+    "last_signal": "",
+    "trend": "🔛",
+    "side_state": "🔛_"
+  },
+  "ELEC": {
+    "last_signal": "",
+    "trend": "🔻",
+    "side_state": "🔻_"
+  },
+  "HRHO": {
+    "last_signal": "",
+    "trend": "🔻",
+    "side_state": "🔻_"
+  },
+  "ORWE": {
+    "last_signal": "",
+    "trend": "🔻",
+    "side_state": "🔻_"
+  },
+  "JUFO": {
+    "last_signal": "",
+    "trend": "🔻",
+    "side_state": "🔻_"
+  },
+  "DSCW": {
+    "last_signal": "",
+    "trend": "🔛",
+    "side_state": "🔛_🔴"
+  },
+  "SUGR": {
+    "last_signal": "",
+    "trend": "🔻",
+    "side_state": "🔻_"
+  },
+  "ELSH": {
+    "last_signal": "",
+    "trend": "🔻",
+    "side_state": "🔻_"
+  },
+  "RMDA": {
+    "last_signal": "BUY",
+    "trend": "↗️",
+    "side_state": "↗️_"
+  },
+  "RAYA": {
+    "last_signal": "BUY",
+    "trend": "↗️",
+    "side_state": "↗️_"
+  },
+  "EEII": {
+    "last_signal": "",
+    "trend": "🔛",
+    "side_state": "🔛_🔴"
+  },
+  "MPCO": {
+    "last_signal": "",
+    "trend": "🔻",
+    "side_state": "🔻_"
+  },
+  "GBCO": {
+    "last_signal": "",
+    "trend": "🔻",
+    "side_state": "🔻_"
+  },
+  "TMGH": {
+    "last_signal": "",
+    "trend": "🔛",
+    "side_state": "🔛_"
+  },
+  "ORHD": {
+    "last_signal": "",
+    "trend": "↗️",
+    "side_state": "↗️_"
+  },
+  "AMOC": {
+    "last_signal": "BUY",
+    "trend": "↗️",
+    "side_state": "↗️_"
+  },
+  "FWRY": {
+    "last_signal": "",
+    "trend": "↗️",
+    "side_state": "↗️_"
+  },
+  "COMI": {
+    "last_signal": "",
+    "trend": "↗️",
+    "side_state": "↗️_"
+  },
+  "ADIB": {
+    "last_signal": "",
+    "trend": "↗️",
+    "side_state": "↗️_"
+  },
+  "PHDC": {
+    "last_signal": "",
+    "trend": "🔛",
+    "side_state": "🔛_"
+  },
+  "MCQE": {
+    "last_signal": "",
+    "trend": "↗️",
+    "side_state": "↗️_"
+  },
+  "SKPC": {
+    "last_signal": "",
+    "trend": "🔛",
+    "side_state": "🔛_"
+  },
+  "EGAL": {
+    "last_signal": "BUY",
+    "trend": "↗️",
+    "side_state": "↗️_"
+  }
+}
