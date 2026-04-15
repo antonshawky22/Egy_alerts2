@@ -81,10 +81,7 @@ EMA_PERIOD = 40
 TREND_LOOKBACK = 40
 SIDE_LOOKBACK = 60
 
-BULLISH_THRESHOLD = 0.90
-BEARISH_THRESHOLD = 0.90
 EMA_FORCED_SELL = 100
-
 SIDE_CLOSE_PERCENT = 0.04
 RSI_SELL = 83
 
@@ -134,27 +131,30 @@ for name, ticker in symbols.items():
     prev_side_buy_price = prev_data.get("prev_side_buy_price", None)
 
     # =====================
-    # Determine Trend
+    # Determine Trend (FIXED)
     # =====================
-    if df["EMA20"].iloc[-1] > df["EMA40"].iloc[-1] > df["EMA100"].iloc[-1]:
+    ema20 = df["EMA20"].iloc[-1]
+    ema40 = df["EMA40"].iloc[-1]
+    ema100 = df["EMA100"].iloc[-1]
+
+    if ema20 > ema40 and ema40 > ema100:
         trend = "↗️"
-    elif df["EMA20"].iloc[-1] < df["EMA40"].iloc[-1] < df["EMA100"].iloc[-1]:
+    elif ema20 < ema40 and ema40 < ema100:
         trend = "🔻"
     else:
         trend = "🔛"
 
     # =====================
-    # Compare with previous trend
+    # Compare Trend (FIXED)
     # =====================
-    trend_changed = False
-    if trend != prev_trend:
-        trend_changed = True
-        # Reset side signals if trend changed
+    trend_changed = (trend != prev_trend)
+
+    if trend_changed:
         prev_side_buy_price = None
         prev_side_actual = ""
 
     # =====================
-    # Side trend calculation
+    # Side trend
     # =====================
     if trend == "🔛":
         high_lookback = df["High"].iloc[-SIDE_LOOKBACK:]
@@ -183,7 +183,7 @@ for name, ticker in symbols.items():
             percent_side = None
 
     # =====================
-    # Reset when trend turns down
+    # Down reset
     # =====================
     if trend == "🔻" and prev_trend != "🔻":
         sell_signal = True
@@ -197,7 +197,7 @@ for name, ticker in symbols.items():
         prev_side_actual = ""
 
     # =====================
-    # Forced Sell
+    # Forced sell
     # =====================
     forced_sell_mark = ""
     if last_close < df["EMA100_forced"].iloc[-1] and not prev_forced:
@@ -209,7 +209,7 @@ for name, ticker in symbols.items():
         last_forced = prev_forced
 
     # =====================
-    # Strategy by Trend
+    # Uptrend strategy
     # =====================
     if trend == "↗️":
         if df["RSI14"].iloc[-1] < 60 and last_close > df["EMA40"].iloc[-1]:
@@ -219,7 +219,7 @@ for name, ticker in symbols.items():
                 sell_signal = True
 
     # =====================
-    # Prevent repetition
+    # Prevent repeat
     # =====================
     if buy_signal and prev_signal == "BUY":
         buy_signal = False
@@ -233,9 +233,10 @@ for name, ticker in symbols.items():
             prev_side_actual = side_signal
 
     # =====================
-    # Prepare messages
+    # Messages
     # =====================
     trend_changed_mark = "🚧 " if trend_changed else ""
+
     if trend == "↗️" and (buy_signal or sell_signal):
         mark = "🟢" if buy_signal else "🔴"
         section_up.append(f"{trend_changed_mark}{forced_sell_mark}{mark} {name} | {last_close:.2f} | {last_candle_date}")
@@ -248,8 +249,11 @@ for name, ticker in symbols.items():
         section_down.append(f"{trend_changed_mark}{forced_sell_mark}{name} | {last_close:.2f} | {last_candle_date}")
 
     # =====================
-    # Update last signals
+    # Save (FIXED - always update trend)
     # =====================
+    if name not in new_signals:
+        new_signals[name] = {}
+
     new_signals[name] = {
         "last_signal": "BUY" if buy_signal else "SELL" if sell_signal else prev_signal,
         "trend": trend,
@@ -259,7 +263,7 @@ for name, ticker in symbols.items():
     }
 
 # =====================
-# Compile Message
+# Message
 # =====================
 alerts = ["🚦 EGX Alerts (m trend EMA 40):\n"]
 
@@ -275,18 +279,17 @@ if section_down:
     alerts.append("\n🔻 هابط:")
     alerts.extend(["- " + s for s in section_down])
 
-# ✅ تصحيح آخر جزء No new signals
 if not section_up and not section_side and not section_down:
     if last_candle_date:
         alerts.append(f"ℹ️ No new signals for today (last candle: {last_candle_date})")
     else:
-        alerts.append("ℹ️ No new signals (no candle data available)")
+        alerts.append("ℹ️ No new signals")
 
 if data_failures:
-    alerts.append("\n⚠️ Failed to fetch data:\n- " + "\n- ".join(data_failures))
+    alerts.append("\n⚠️ Failed:\n- " + "\n- ".join(data_failures))
 
 # =====================
-# Save & Notify
+# Save & send
 # =====================
 with open(SIGNALS_FILE, "w") as f:
     json.dump(new_signals, f, indent=2, ensure_ascii=False)
