@@ -82,7 +82,7 @@
   "DSCW": {
     "last_signal": "SELL",
     "trend": "🔛",
-    "last_side_signal": "🔴"
+    "last_side_signal": ""
   },
   "SUGR": {
     "last_signal": "SELL",
@@ -107,7 +107,7 @@
   "EEII": {
     "last_signal": "SELL",
     "trend": "🔛",
-    "last_side_signal": "🔴"
+    "last_side_signal": ""
   },
   "MPCO": {
     "last_signal": "SELL",
