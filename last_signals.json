@@ -82,7 +82,7 @@
   "DSCW": {
     "last_signal": "",
     "trend": "🔛",
-    "side_state": "🔛_"
+    "side_state": "🔛_🔴"
   },
   "SUGR": {
     "last_signal": "",
@@ -107,7 +107,7 @@
   "EEII": {
     "last_signal": "",
     "trend": "🔛",
-    "side_state": "🔛_"
+    "side_state": "🔛_🔴"
   },
   "MPCO": {
     "last_signal": "",
