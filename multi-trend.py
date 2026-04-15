@@ -113,10 +113,8 @@ for name, ticker in symbols.items():
     df["RSI14"] = rsi(df["Close"], 14)
 
     last_close = df["Close"].iloc[-1]
-    prev_close = df["Close"].iloc[-2]
-    last_ema4 = df["EMA4"].iloc[-1]
     prev_ema4 = df["EMA4"].iloc[-2]
-    last_ema9 = df["EMA9"].iloc[-1]
+    last_ema4 = df["EMA4"].iloc[-1]
     prev_ema9 = df["EMA9"].iloc[-2]
 
     buy_signal = sell_signal = False
@@ -131,7 +129,7 @@ for name, ticker in symbols.items():
     prev_side_buy_price = prev_data.get("prev_side_buy_price", None)
 
     # =====================
-    # Determine Trend (FIXED)
+    # Trend
     # =====================
     ema20 = df["EMA20"].iloc[-1]
     ema40 = df["EMA40"].iloc[-1]
@@ -144,14 +142,15 @@ for name, ticker in symbols.items():
     else:
         trend = "🔛"
 
-    # =====================
-    # Compare Trend (FIXED)
-    # =====================
     trend_changed = (trend != prev_trend)
 
+    # =====================
+    # RESET ON TREND CHANGE (FIX)
+    # =====================
     if trend_changed:
         prev_side_buy_price = None
         prev_side_actual = ""
+        prev_signal = ""   # 🔥 مهم: مسح الإشارات القديمة
 
     # =====================
     # Side trend
@@ -214,23 +213,26 @@ for name, ticker in symbols.items():
     if trend == "↗️":
         if df["RSI14"].iloc[-1] < 60 and last_close > df["EMA40"].iloc[-1]:
             buy_signal = True
-        elif prev_ema4 >= prev_ema9 and last_ema4 < last_ema9:
+        elif prev_ema4 >= prev_ema9 and last_ema4 < prev_ema9:
             if df["RSI14"].iloc[-1] > RSI_SELL:
                 sell_signal = True
 
     # =====================
-    # Prevent repeat
+    # Prevent repeat (FIXED)
     # =====================
     if buy_signal and prev_signal == "BUY":
         buy_signal = False
+
     if sell_signal and prev_signal == "SELL":
         sell_signal = False
 
-    if trend == "🔛":
-        if side_signal == prev_side_actual:
-            side_signal = ""
-        else:
-            prev_side_actual = side_signal
+    # =====================
+    # Update state (FIX)
+    # =====================
+    if buy_signal:
+        prev_signal = "BUY"
+    elif sell_signal:
+        prev_signal = "SELL"
 
     # =====================
     # Messages
@@ -249,13 +251,13 @@ for name, ticker in symbols.items():
         section_down.append(f"{trend_changed_mark}{forced_sell_mark}{name} | {last_close:.2f} | {last_candle_date}")
 
     # =====================
-    # Save (FIXED - always update trend)
+    # Save
     # =====================
     if name not in new_signals:
         new_signals[name] = {}
 
     new_signals[name] = {
-        "last_signal": "BUY" if buy_signal else "SELL" if sell_signal else prev_signal,
+        "last_signal": prev_signal,
         "trend": trend,
         "last_forced_sell": last_forced,
         "last_side_signal_actual": prev_side_actual,
@@ -263,7 +265,7 @@ for name, ticker in symbols.items():
     }
 
 # =====================
-# Message
+# Alerts
 # =====================
 alerts = ["🚦 EGX Alerts (m trend EMA 40):\n"]
 
