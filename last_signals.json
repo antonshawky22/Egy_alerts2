@@ -1,1 +1,172 @@
-{}
+{
+  "OFH": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null
+  },
+  "OLFI": {
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 20.979999542236328
+  },
+  "EMFD": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null
+  },
+  "ETEL": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null
+  },
+  "EAST": {
+    "trend": "🔛",
+    "in_position": false,
+    "entry_price": null
+  },
+  "EFIH": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null
+  },
+  "ABUK": {
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 83.94000244140625
+  },
+  "OIH": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null
+  },
+  "SWDY": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null
+  },
+  "ISPH": {
+    "trend": "🔻",
+    "in_position": false,
+    "entry_price": null
+  },
+  "ATQA": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null
+  },
+  "MTIE": {
+    "trend": "🔻",
+    "in_position": false,
+    "entry_price": null
+  },
+  "ELEC": {
+    "trend": "🔛",
+    "in_position": false,
+    "entry_price": null
+  },
+  "HRHO": {
+    "trend": "🔛",
+    "in_position": false,
+    "entry_price": null
+  },
+  "ORWE": {
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 22.799999237060547
+  },
+  "JUFO": {
+    "trend": "🔛",
+    "in_position": false,
+    "entry_price": null
+  },
+  "DSCW": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null
+  },
+  "SUGR": {
+    "trend": "🔻",
+    "in_position": false,
+    "entry_price": null
+  },
+  "ELSH": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null
+  },
+  "RMDA": {
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 4.460000038146973
+  },
+  "RAYA": {
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 5.480000019073486
+  },
+  "EEII": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null
+  },
+  "MPCO": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null
+  },
+  "GBCO": {
+    "trend": "🔛",
+    "in_position": false,
+    "entry_price": null
+  },
+  "TMGH": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null
+  },
+  "ORHD": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null
+  },
+  "AMOC": {
+    "trend": "🔛",
+    "in_position": false,
+    "entry_price": null
+  },
+  "FWRY": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null
+  },
+  "COMI": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null
+  },
+  "ADIB": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null
+  },
+  "PHDC": {
+    "trend": "🔛",
+    "in_position": false,
+    "entry_price": null
+  },
+  "MCQE": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null
+  },
+  "SKPC": {
+    "trend": "🔛",
+    "in_position": false,
+    "entry_price": null
+  },
+  "EGAL": {
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 307.0
+  }
+}
