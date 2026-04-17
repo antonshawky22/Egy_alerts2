@@ -156,8 +156,8 @@ for name, ticker in symbols.items():
     # =====================
     if trend == "🔛" and not converted_to_trend:
 
-        high = df["High"].iloc[-60:].max()
-        low = df["Low"].iloc[-60:].min()
+        high = df["High"].iloc[-15:].max()
+        low = df["Low"].iloc[-15:].min()
 
         from_high = (high - last_close) / high
         from_low = (last_close - low) / low
