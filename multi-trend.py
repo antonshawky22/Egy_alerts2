@@ -183,7 +183,7 @@ for name, ticker in symbols.items():
             entry_price = None
 
     # =====================
-    # UP TREND LOGIC (UPDATED EXIT)
+    # UP TREND LOGIC
     # =====================
     if trend == "↗️":
 
@@ -193,22 +193,22 @@ for name, ticker in symbols.items():
             entry_price = last_close
 
     # =====================
-    # EXIT LOGIC (UPDATED + MERGED)
-    
-   if in_position:
+    # EXIT LOGIC (FIXED INDENTATION)
+    # =====================
+    if in_position:
 
-    cross_down = prev["EMA4"] >= prev["EMA9"] and last["EMA4"] < last["EMA9"]
+        cross_down = prev["EMA4"] >= prev["EMA9"] and last["EMA4"] < last["EMA9"]
 
-    stop_loss = last_close < entry_price * 0.96
+        stop_loss = last_close < entry_price * 0.96
 
-    trend_flip = (prev_trend == "↗️" and trend in ["🔛", "🔻"])
+        trend_flip = (prev_trend == "↗️" and trend in ["🔛", "🔻"])
 
-    rsi_sell = last["RSI14"] > RSI_SELL   # 🔥 الجديد
+        rsi_sell = last["RSI14"] > RSI_SELL
 
-    if stop_loss or cross_down or trend_flip or rsi_sell:
-        sell_signal = True
-        in_position = False
-        entry_price = None
+        if stop_loss or cross_down or trend_flip or rsi_sell:
+            sell_signal = True
+            in_position = False
+            entry_price = None
 
     # =====================
     # DOWN TREND EXIT
@@ -219,7 +219,7 @@ for name, ticker in symbols.items():
         entry_price = None
 
     # =====================
-    # Messages (UNCHANGED)
+    # Messages
     # =====================
     trend_mark = "🚧 " if trend_changed else ""
 
@@ -244,7 +244,7 @@ for name, ticker in symbols.items():
     }
 
 # =====================
-# Message (UNCHANGED)
+# Message
 # =====================
 alerts = ["🚦 EGX Alerts:\n"]
 
