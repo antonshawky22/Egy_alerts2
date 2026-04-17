@@ -250,14 +250,13 @@ if section_down:
     alerts.append("\n🔻 هابط:")
     alerts.extend(["- " + s for s in section_down])
 
-if not section_up and not section_side and not section_down:
-    alerts.append(f"ℹ️ No new signals for today (last candle: {last_candle_date})")
-else:
-    alerts.append(f"ℹ️ No new signals (no candle data available)")
-
 if data_failures:
-    alerts.append("\n⚠️ Data fail:\n- " + "\n- ".join(data_failures))
+    alerts.append(f"\n⚠️ Data fail (last candle: {last_candle_date})")
+    alerts.extend(["- " + s for s in data_failures])
 
+elif not section_up and not section_side and not section_down:
+    alerts.append(f"ℹ️ No new signals for today (last candle: {last_candle_date})")
+    
 # =====================
 # Save + Send
 # =====================
