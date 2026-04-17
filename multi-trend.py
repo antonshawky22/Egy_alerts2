@@ -77,7 +77,7 @@ def rsi(series, period=14):
 # =====================
 # Parameters
 # =====================
-SIDE_CLOSE_PERCENT = 0.04
+SIDE_CLOSE_PERCENT = 0.10
 RSI_SELL = 83
 
 # =====================
