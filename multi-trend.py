@@ -78,7 +78,7 @@ def rsi(series, period=14):
 # Parameters
 # =====================
 SIDE_CLOSE_PERCENT = 0.04
-RSI_SELL = 83
+RSI_SELL = 78
 
 # =====================
 # Containers
@@ -176,7 +176,7 @@ for name, ticker in symbols.items():
             in_position = False
             entry_price = None
 
-        elif in_position and last_close < entry_price * 0.96:
+        elif in_position and last_close < entry_price * 0.95:
             sell_signal = True
             side_signal = "🔴💥"
             in_position = False
@@ -199,7 +199,7 @@ for name, ticker in symbols.items():
 
         cross_down = prev["EMA4"] >= prev["EMA9"] and last["EMA4"] < last["EMA9"]
 
-        stop_loss = last_close < entry_price * 0.96
+        stop_loss = last_close < entry_price * 0.95
 
         trend_flip = (prev_trend == "↗️" and trend in ["🔛", "🔻"])
 
