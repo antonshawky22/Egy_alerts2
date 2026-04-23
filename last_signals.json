@@ -116,8 +116,8 @@
   },
   "GBCO": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 27.25
   },
   "TMGH": {
     "trend": "↗️",
@@ -146,8 +146,8 @@
   },
   "ADIB": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 43.849998474121094
   },
   "PHDC": {
     "trend": "↗️",
