@@ -45,9 +45,9 @@
     "entry_price": 80.4000015258789
   },
   "ISPH": {
-    "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 11.0600004196167
   },
   "ATQA": {
     "trend": "↗️",
@@ -55,7 +55,7 @@
     "entry_price": null
   },
   "MTIE": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": false,
     "entry_price": null
   },
@@ -166,7 +166,7 @@
   },
   "EGAL": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 303.0
   }
 }
