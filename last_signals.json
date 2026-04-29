@@ -21,8 +21,8 @@
   },
   "EAST": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 40.0
   },
   "EFIH": {
     "trend": "↗️",
@@ -41,8 +41,8 @@
   },
   "SWDY": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 80.4000015258789
+    "in_position": false,
+    "entry_price": null
   },
   "ISPH": {
     "trend": "↗️",
@@ -76,8 +76,8 @@
   },
   "JUFO": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 28.389999389648438
   },
   "DSCW": {
     "trend": "↗️",
