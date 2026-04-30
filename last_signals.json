@@ -131,13 +131,13 @@
   },
   "AMOC": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 8.3100004196167
   },
   "FWRY": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 19.799999237060547
   },
   "COMI": {
     "trend": "↗️",
