@@ -116,8 +116,8 @@
   },
   "GBCO": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 27.25
+    "in_position": false,
+    "entry_price": null
   },
   "TMGH": {
     "trend": "↗️",
@@ -136,13 +136,13 @@
   },
   "FWRY": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 19.799999237060547
+    "in_position": false,
+    "entry_price": null
   },
   "COMI": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 135.0
   },
   "ADIB": {
     "trend": "↗️",
