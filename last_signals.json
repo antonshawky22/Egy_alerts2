@@ -16,8 +16,8 @@
   },
   "ETEL": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 93.0
+    "in_position": false,
+    "entry_price": null
   },
   "EAST": {
     "trend": "↗️",
@@ -31,8 +31,8 @@
   },
   "ABUK": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 83.94000244140625
+    "in_position": false,
+    "entry_price": null
   },
   "OIH": {
     "trend": "↗️",
@@ -76,8 +76,8 @@
   },
   "JUFO": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 28.079999923706055
   },
   "DSCW": {
     "trend": "↗️",
@@ -96,8 +96,8 @@
   },
   "RMDA": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 4.519999980926514
   },
   "RAYA": {
     "trend": "↗️",
@@ -116,8 +116,8 @@
   },
   "GBCO": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 26.600000381469727
+    "in_position": false,
+    "entry_price": null
   },
   "TMGH": {
     "trend": "↗️",
@@ -161,12 +161,12 @@
   },
   "SKPC": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 17.8799991607666
+    "in_position": false,
+    "entry_price": null
   },
   "EGAL": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 304.80999755859375
   }
 }
