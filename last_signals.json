@@ -21,8 +21,8 @@
   },
   "EAST": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 39.529998779296875
   },
   "EFIH": {
     "trend": "↗️",
@@ -51,8 +51,8 @@
   },
   "ATQA": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 10.010000228881836
   },
   "MTIE": {
     "trend": "↗️",
@@ -116,8 +116,8 @@
   },
   "GBCO": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 27.59000015258789
   },
   "TMGH": {
     "trend": "↗️",
