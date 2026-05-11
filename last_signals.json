@@ -51,8 +51,8 @@
   },
   "ATQA": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 10.010000228881836
+    "in_position": false,
+    "entry_price": null
   },
   "MTIE": {
     "trend": "↗️",
@@ -81,8 +81,8 @@
   },
   "DSCW": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 1.9700000286102295
   },
   "SUGR": {
     "trend": "↗️",
