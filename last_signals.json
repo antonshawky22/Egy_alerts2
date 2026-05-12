@@ -161,8 +161,8 @@
   },
   "SKPC": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 17.850000381469727
   },
   "EGAL": {
     "trend": "↗️",
