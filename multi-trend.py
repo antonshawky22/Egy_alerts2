@@ -176,7 +176,7 @@ for name, ticker in symbols.items():
             in_position = False
             entry_price = None
 
-        elif in_position and last_close < entry_price * 0.95:
+        elif in_position and last_close < entry_price * 0.93:
             sell_signal = True
             side_signal = "🔴💥"
             in_position = False
@@ -187,7 +187,7 @@ for name, ticker in symbols.items():
     # =====================
     if trend == "↗️":
 
-        if not in_position and last["RSI14"] < 60 and last_close > last["EMA15"]:
+        if not in_position and last["RSI14"] < 60 :
             buy_signal = True
             in_position = True
             entry_price = last_close
