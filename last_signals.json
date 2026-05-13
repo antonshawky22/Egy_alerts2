@@ -31,8 +31,8 @@
   },
   "ABUK": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 87.19000244140625
   },
   "OIH": {
     "trend": "↗️",
@@ -51,8 +51,8 @@
   },
   "ATQA": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 10.119999885559082
   },
   "MTIE": {
     "trend": "↗️",
