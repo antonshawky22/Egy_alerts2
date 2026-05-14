@@ -99,9 +99,6 @@ for name, ticker in symbols.items():
 
     last_candle_date = df.index[-1].date()
 
-    # =====================
-    # EMA (UPDATED)
-    # =====================
     df["EMA10"] = df["Close"].ewm(span=10, adjust=True).mean()
     df["EMA15"] = df["Close"].ewm(span=15, adjust=True).mean()
     df["EMA30"] = df["Close"].ewm(span=30, adjust=True).mean()
@@ -124,6 +121,7 @@ for name, ticker in symbols.items():
     in_position = prev_data.get("in_position", False)
     entry_price = prev_data.get("entry_price", None)
     prev_trend = prev_data.get("trend", "")
+    last_action = prev_data.get("last_action", "")  # ✅ جديد
 
     buy_signal = False
     sell_signal = False
@@ -131,7 +129,7 @@ for name, ticker in symbols.items():
     percent_side = None
 
     # =====================
-    # Trend (UPDATED)
+    # Trend
     # =====================
     if last["EMA10"] > last["EMA15"] > last["EMA30"]:
         trend = "↗️"
@@ -142,9 +140,6 @@ for name, ticker in symbols.items():
 
     trend_changed = trend != prev_trend
 
-    # =====================
-    # SIDE → TREND CONVERSION
-    # =====================
     converted_to_trend = (
         prev_trend == "🔛" and
         trend == "↗️" and
@@ -162,61 +157,64 @@ for name, ticker in symbols.items():
         from_high = (high - last_close) / high
         from_low = (last_close - low) / low
 
-        if not in_position and from_low <= SIDE_CLOSE_PERCENT:
+        if not in_position and from_low <= SIDE_CLOSE_PERCENT and last_action != "buy":
             buy_signal = True
             side_signal = "🟢"
             percent_side = from_low * 100
             in_position = True
             entry_price = last_close
+            last_action = "buy"
 
-        elif in_position and from_high <= SIDE_CLOSE_PERCENT:
+        elif in_position and from_high <= SIDE_CLOSE_PERCENT and last_action != "sell":
             sell_signal = True
             side_signal = "🔴"
             percent_side = from_high * 100
             in_position = False
             entry_price = None
+            last_action = "sell"
 
-        elif in_position and last_close < entry_price * 0.93:
+        elif in_position and last_close < entry_price * 0.93 and last_action != "sell":
             sell_signal = True
             side_signal = "🔴💥"
             in_position = False
             entry_price = None
+            last_action = "sell"
 
     # =====================
-    # UP TREND LOGIC
+    # UP TREND
     # =====================
     if trend == "↗️":
 
-        if not in_position and last["RSI14"] < 60 :
+        if not in_position and last["RSI14"] < 60 and last_action != "buy":
             buy_signal = True
             in_position = True
             entry_price = last_close
+            last_action = "buy"
 
     # =====================
-    # EXIT LOGIC (FIXED INDENTATION)
+    # EXIT
     # =====================
     if in_position:
 
         cross_down = prev["EMA4"] >= prev["EMA9"] and last["EMA4"] < last["EMA9"]
-
         stop_loss = last_close < entry_price * 0.95
-
         trend_flip = (prev_trend == "↗️" and trend in ["🔛", "🔻"])
-
         rsi_sell = last["RSI14"] > RSI_SELL
 
-        if stop_loss or cross_down or trend_flip or rsi_sell:
+        if (stop_loss or cross_down or trend_flip or rsi_sell) and last_action != "sell":
             sell_signal = True
             in_position = False
             entry_price = None
+            last_action = "sell"
 
     # =====================
     # DOWN TREND EXIT
     # =====================
-    if trend == "🔻" and in_position:
+    if trend == "🔻" and in_position and last_action != "sell":
         sell_signal = True
         in_position = False
         entry_price = None
+        last_action = "sell"
 
     # =====================
     # Messages
@@ -240,7 +238,8 @@ for name, ticker in symbols.items():
     new_signals[name] = {
         "trend": trend,
         "in_position": in_position,
-        "entry_price": entry_price
+        "entry_price": entry_price,
+        "last_action": last_action  # ✅ مهم
     }
 
 # =====================
