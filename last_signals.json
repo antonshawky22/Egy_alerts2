@@ -85,9 +85,9 @@
   },
   "ORWE": {
     "trend": "🔛",
-    "in_position": false,
-    "entry_price": null,
-    "last_action": "sell"
+    "in_position": true,
+    "entry_price": 23.43000030517578,
+    "last_action": "buy"
   },
   "JUFO": {
     "trend": "↗️",
@@ -169,9 +169,9 @@
   },
   "COMI": {
     "trend": "🔛",
-    "in_position": false,
-    "entry_price": null,
-    "last_action": "sell"
+    "in_position": true,
+    "entry_price": 136.4600067138672,
+    "last_action": "buy"
   },
   "ADIB": {
     "trend": "↗️",
