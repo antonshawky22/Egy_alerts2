@@ -80,14 +80,14 @@
     "entry_price": 28.079999923706055
   },
   "DSCW": {
-    "trend": "↗️",
-    "in_position": true,
-    "entry_price": 1.9700000286102295
+    "trend": "🔛",
+    "in_position": false,
+    "entry_price": null
   },
   "SUGR": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 48.59000015258789
+    "in_position": false,
+    "entry_price": null
   },
   "ELSH": {
     "trend": "↗️",
