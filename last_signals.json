@@ -1,1 +1,206 @@
-{}
+{
+  "OFH": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null,
+    "last_action": ""
+  },
+  "OLFI": {
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 22.200000762939453,
+    "last_action": "buy"
+  },
+  "EMFD": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null,
+    "last_action": ""
+  },
+  "ETEL": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null,
+    "last_action": ""
+  },
+  "EAST": {
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 40.11000061035156,
+    "last_action": "buy"
+  },
+  "EFIH": {
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 21.559999465942383,
+    "last_action": "buy"
+  },
+  "ABUK": {
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 85.5999984741211,
+    "last_action": "buy"
+  },
+  "OIH": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null,
+    "last_action": ""
+  },
+  "SWDY": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null,
+    "last_action": ""
+  },
+  "ISPH": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null,
+    "last_action": ""
+  },
+  "ATQA": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null,
+    "last_action": ""
+  },
+  "MTIE": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null,
+    "last_action": ""
+  },
+  "ELEC": {
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 2.200000047683716,
+    "last_action": "buy"
+  },
+  "HRHO": {
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 28.559999465942383,
+    "last_action": "buy"
+  },
+  "ORWE": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null,
+    "last_action": ""
+  },
+  "JUFO": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null,
+    "last_action": ""
+  },
+  "DSCW": {
+    "trend": "🔛",
+    "in_position": true,
+    "entry_price": 1.9299999475479126,
+    "last_action": "buy"
+  },
+  "SUGR": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null,
+    "last_action": "sell"
+  },
+  "ELSH": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null,
+    "last_action": ""
+  },
+  "RMDA": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null,
+    "last_action": ""
+  },
+  "RAYA": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null,
+    "last_action": ""
+  },
+  "EEII": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null,
+    "last_action": ""
+  },
+  "MPCO": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null,
+    "last_action": ""
+  },
+  "GBCO": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null,
+    "last_action": ""
+  },
+  "TMGH": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null,
+    "last_action": ""
+  },
+  "ORHD": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null,
+    "last_action": ""
+  },
+  "AMOC": {
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 8.529999732971191,
+    "last_action": "buy"
+  },
+  "FWRY": {
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 20.530000686645508,
+    "last_action": "buy"
+  },
+  "COMI": {
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 136.4600067138672,
+    "last_action": "buy"
+  },
+  "ADIB": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null,
+    "last_action": ""
+  },
+  "PHDC": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null,
+    "last_action": ""
+  },
+  "MCQE": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null,
+    "last_action": ""
+  },
+  "SKPC": {
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 17.700000762939453,
+    "last_action": "buy"
+  },
+  "EGAL": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null,
+    "last_action": ""
+  }
+}
