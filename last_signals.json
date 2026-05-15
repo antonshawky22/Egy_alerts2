@@ -85,9 +85,9 @@
   },
   "ORWE": {
     "trend": "🔛",
-    "in_position": false,
-    "entry_price": null,
-    "last_action": "sell"
+    "in_position": true,
+    "entry_price": 23.399999618530273,
+    "last_action": "buy"
   },
   "JUFO": {
     "trend": "↗️",
