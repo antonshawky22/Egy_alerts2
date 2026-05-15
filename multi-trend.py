@@ -149,7 +149,7 @@ for name, ticker in symbols.items():
     # =====================
     # SIDE LOGIC
     # =====================
-    if trend == "🔛" and not converted_to_trend:
+    if trend == "🔛" :
 
         high = df["High"].iloc[-30:].max()
         low = df["Low"].iloc[-30:].min()
