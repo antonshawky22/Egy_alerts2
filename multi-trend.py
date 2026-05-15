@@ -196,7 +196,7 @@ for name, ticker in symbols.items():
     # =====================
     if in_position:
 
-        cross_down = prev["EMA4"] >= prev["EMA9"] and last["EMA4"] < last["EMA9"]
+        cross_down = prev["EMA10"] >= prev["EMA15"] and last["EMA10"] < last["EMA15"]
         stop_loss = last_close < entry_price * 0.95
         trend_flip = (prev_trend == "↗️" and trend in ["🔛", "🔻"])
         rsi_sell = last["RSI14"] > RSI_SELL
