@@ -1,6 +1,6 @@
 {
   "OFH": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": false,
     "entry_price": null,
     "last_action": ""
@@ -18,7 +18,7 @@
     "last_action": ""
   },
   "ETEL": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": false,
     "entry_price": null,
     "last_action": ""
@@ -36,16 +36,16 @@
     "last_action": "buy"
   },
   "ABUK": {
-    "trend": "🔛",
-    "in_position": false,
-    "entry_price": null,
-    "last_action": "sell"
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 85.80000305175781,
+    "last_action": "buy"
   },
   "OIH": {
-    "trend": "🔛",
-    "in_position": false,
-    "entry_price": null,
-    "last_action": ""
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 1.5299999713897705,
+    "last_action": "buy"
   },
   "SWDY": {
     "trend": "↗️",
@@ -54,16 +54,16 @@
     "last_action": ""
   },
   "ISPH": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null,
     "last_action": ""
   },
   "ATQA": {
-    "trend": "🔛",
-    "in_position": false,
-    "entry_price": null,
-    "last_action": ""
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 10.039999961853027,
+    "last_action": "buy"
   },
   "MTIE": {
     "trend": "↗️",
@@ -78,16 +78,16 @@
     "last_action": "sell"
   },
   "HRHO": {
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 28.559999465942383,
+    "last_action": "buy"
+  },
+  "ORWE": {
     "trend": "🔛",
     "in_position": false,
     "entry_price": null,
     "last_action": "sell"
-  },
-  "ORWE": {
-    "trend": "🔛",
-    "in_position": true,
-    "entry_price": 23.399999618530273,
-    "last_action": "buy"
   },
   "JUFO": {
     "trend": "↗️",
@@ -96,7 +96,7 @@
     "last_action": ""
   },
   "DSCW": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": true,
     "entry_price": 1.9299999475479126,
     "last_action": "buy"
@@ -138,7 +138,7 @@
     "last_action": ""
   },
   "GBCO": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null,
     "last_action": ""
@@ -156,22 +156,22 @@
     "last_action": ""
   },
   "AMOC": {
-    "trend": "🔛",
-    "in_position": false,
-    "entry_price": null,
-    "last_action": "sell"
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 8.5,
+    "last_action": "buy"
   },
   "FWRY": {
-    "trend": "🔛",
-    "in_position": false,
-    "entry_price": null,
-    "last_action": "sell"
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 20.260000228881836,
+    "last_action": "buy"
   },
   "COMI": {
-    "trend": "🔛",
-    "in_position": false,
-    "entry_price": null,
-    "last_action": "sell"
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 134.50999450683594,
+    "last_action": "buy"
   },
   "ADIB": {
     "trend": "↗️",
@@ -186,7 +186,7 @@
     "last_action": ""
   },
   "MCQE": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": false,
     "entry_price": null,
     "last_action": ""
