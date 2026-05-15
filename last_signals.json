@@ -18,7 +18,7 @@
     "last_action": ""
   },
   "ETEL": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null,
     "last_action": ""
@@ -85,9 +85,9 @@
   },
   "ORWE": {
     "trend": "🔛",
-    "in_position": true,
-    "entry_price": 23.43000030517578,
-    "last_action": "buy"
+    "in_position": false,
+    "entry_price": null,
+    "last_action": "sell"
   },
   "JUFO": {
     "trend": "↗️",
@@ -145,9 +145,9 @@
   },
   "TMGH": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null,
-    "last_action": ""
+    "in_position": true,
+    "entry_price": 95.1500015258789,
+    "last_action": "buy"
   },
   "ORHD": {
     "trend": "↗️",
@@ -162,16 +162,16 @@
     "last_action": "sell"
   },
   "FWRY": {
-    "trend": "↗️",
-    "in_position": true,
-    "entry_price": 20.530000686645508,
-    "last_action": "buy"
+    "trend": "🔛",
+    "in_position": false,
+    "entry_price": null,
+    "last_action": "sell"
   },
   "COMI": {
     "trend": "🔛",
-    "in_position": true,
-    "entry_price": 136.4600067138672,
-    "last_action": "buy"
+    "in_position": false,
+    "entry_price": null,
+    "last_action": "sell"
   },
   "ADIB": {
     "trend": "↗️",
@@ -198,7 +198,7 @@
     "last_action": "sell"
   },
   "EGAL": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": false,
     "entry_price": null,
     "last_action": ""
