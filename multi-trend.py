@@ -99,12 +99,12 @@ for name, ticker in symbols.items():
 
     last_candle_date = df.index[-1].date()
 
+    df["EMA20"] = df["Close"].ewm(span=20, adjust=True).mean()
+    df["EMA40"] = df["Close"].ewm(span=40, adjust=True).mean()
+    df["EMA80"] = df["Close"].ewm(span=80, adjust=True).mean()
+
     df["EMA10"] = df["Close"].ewm(span=10, adjust=True).mean()
     df["EMA15"] = df["Close"].ewm(span=15, adjust=True).mean()
-    df["EMA30"] = df["Close"].ewm(span=30, adjust=True).mean()
-
-    df["EMA4"] = df["Close"].ewm(span=4, adjust=True).mean()
-    df["EMA9"] = df["Close"].ewm(span=9, adjust=True).mean()
 
     df["RSI14"] = rsi(df["Close"], 14)
 
@@ -131,9 +131,9 @@ for name, ticker in symbols.items():
     # =====================
     # Trend
     # =====================
-    if last["EMA10"] > last["EMA15"] * 1.01 and last["EMA15"] > last["EMA30"] * 1.01 :
+    if last["EMA20"] > last["EMA40"] * 1.01 and last["EMA40"] > last["EMA80"] * 1.01 :
         trend = "↗️"
-    elif last["EMA10"] < last["EMA15"] * 0.99 and last["EMA15"] < last["EMA30"] * 0.99 :
+    elif last["EMA20"] < last["EMA40"] * 0.99 and last["EMA40"] < last["EMA80"] * 0.99 :
         trend = "🔻"
     else:
         trend = "🔛"
@@ -151,8 +151,8 @@ for name, ticker in symbols.items():
     # =====================
     if trend == "🔛" and not converted_to_trend:
 
-        high = df["High"].iloc[-20:].max()
-        low = df["Low"].iloc[-20:].min()
+        high = df["High"].iloc[-30:].max()
+        low = df["Low"].iloc[-30:].min()
 
         from_high = (high - last_close) / high
         from_low = (last_close - low) / low
