@@ -77,8 +77,8 @@ def rsi(series, period=14):
 # =====================
 # Parameters
 # =====================
-SIDE_CLOSE_PERCENT = 0.08
-RSI_SELL = 44
+SIDE_CLOSE_PERCENT = 0.04
+RSI_SELL = 78
 
 # =====================
 # Containers
@@ -100,8 +100,8 @@ for name, ticker in symbols.items():
     last_candle_date = df.index[-1].date()
 
     # EMA
-    df["EMA75"] = df["Close"].ewm(span=75, adjust=True).mean()
-    df["EMA78"] = df["Close"].ewm(span=78, adjust=True).mean()
+    df["EMA25"] = df["Close"].ewm(span=25, adjust=True).mean()
+    df["EMA50"] = df["Close"].ewm(span=50, adjust=True).mean()
     df["EMA80"] = df["Close"].ewm(span=80, adjust=True).mean()
 
     df["EMA8"] = df["Close"].ewm(span=8, adjust=True).mean()
@@ -126,9 +126,9 @@ for name, ticker in symbols.items():
     percent_side = None
 
     # Trend
-    if last["EMA75"] > last["EMA78"] > last["EMA80"]:
+    if last["EMA25"] > last["EMA50"] > last["EMA80"]:
         trend = "↗️"
-    elif last["EMA75"] < last["EMA78"] < last["EMA80"]:
+    elif last["EMA25"] < last["EMA50"] < last["EMA80"]:
         trend = "🔻"
     else:
         trend = "🔛"
@@ -142,7 +142,7 @@ for name, ticker in symbols.items():
     # 🟢 UP TREND
     if trend == "↗️":
 
-        if not in_position and last["RSI14"] < 80:
+        if not in_position and last["RSI14"] < 60:
             buy_signal = True
             in_position = True
             entry_price = last_close
@@ -182,7 +182,7 @@ for name, ticker in symbols.items():
                 in_position = False
                 entry_price = None
 
-            elif last_close < entry_price * 0.93:
+            elif last_close < entry_price * 0.94:
                 sell_signal = True
                 side_signal = "🔴💥"
                 in_position = False
