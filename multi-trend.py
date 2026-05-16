@@ -102,7 +102,7 @@ for name, ticker in symbols.items():
     # EMA
     df["EMA10"] = df["Close"].ewm(span=10, adjust=True).mean()
     df["EMA15"] = df["Close"].ewm(span=15, adjust=True).mean()
-    df["EMA80"] = df["Close"].ewm(span=80, adjust=True).mean()
+    df["EMA20"] = df["Close"].ewm(span=20, adjust=True).mean()
 
     df["EMA4"] = df["Close"].ewm(span=4, adjust=True).mean()
     df["EMA9"] = df["Close"].ewm(span=9, adjust=True).mean()
@@ -126,9 +126,9 @@ for name, ticker in symbols.items():
     percent_side = None
 
     # Trend
-    if last["EMA10"] > last["EMA15"] > last["EMA80"]:
+    if last["EMA10"] > last["EMA15"] > last["EMA20"]:
         trend = "↗️"
-    elif last["EMA10"] < last["EMA15"] < last["EMA80"]:
+    elif last["EMA10"] < last["EMA15"] < last["EMA20"]:
         trend = "🔻"
     else:
         trend = "🔛"
@@ -160,8 +160,8 @@ for name, ticker in symbols.items():
     # 🟡 SIDE
     elif trend == "🔛":
 
-        high = df["High"].iloc[-100:].max()
-        low = df["Low"].iloc[-100:].min()
+        high = df["High"].iloc[-10:].max()
+        low = df["Low"].iloc[-10:].min()
 
         from_high = (high - last_close) / high
         from_low = (last_close - low) / low
