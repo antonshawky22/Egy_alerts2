@@ -77,7 +77,7 @@ def rsi(series, period=14):
 # =====================
 # Parameters
 # =====================
-SIDE_CLOSE_PERCENT = 0.04
+SIDE_CLOSE_PERCENT = 0.08
 RSI_SELL = 78
 
 # =====================
@@ -100,9 +100,9 @@ for name, ticker in symbols.items():
     last_candle_date = df.index[-1].date()
 
     # EMA
-    df["EMA10"] = df["Close"].ewm(span=10, adjust=True).mean()
-    df["EMA15"] = df["Close"].ewm(span=15, adjust=True).mean()
-    df["EMA20"] = df["Close"].ewm(span=20, adjust=True).mean()
+    df["EMA40"] = df["Close"].ewm(span=40, adjust=True).mean()
+    df["EMA75"] = df["Close"].ewm(span=75, adjust=True).mean()
+    df["EMA80"] = df["Close"].ewm(span=80, adjust=True).mean()
 
     df["EMA4"] = df["Close"].ewm(span=4, adjust=True).mean()
     df["EMA9"] = df["Close"].ewm(span=9, adjust=True).mean()
@@ -126,9 +126,9 @@ for name, ticker in symbols.items():
     percent_side = None
 
     # Trend
-    if last["EMA10"] > last["EMA15"] > last["EMA20"]:
+    if last["EMA40"] > last["EMA75"] > last["EMA80"]:
         trend = "↗️"
-    elif last["EMA10"] < last["EMA15"] < last["EMA20"]:
+    elif last["EMA40"] < last["EMA75"] < last["EMA80"]:
         trend = "🔻"
     else:
         trend = "🔛"
@@ -142,13 +142,13 @@ for name, ticker in symbols.items():
     # 🟢 UP TREND
     if trend == "↗️":
 
-        if not in_position and last["RSI14"] < 60:
+        if not in_position and last["RSI14"] < 80:
             buy_signal = True
             in_position = True
             entry_price = last_close
 
         elif in_position:
-            cross_down = prev["EMA10"] >= prev["EMA15"] and last["EMA10"] < last["EMA15"]
+            cross_down = prev["EMA4"] >= prev["EMA9"] and last["EMA4"] < last["EMA9"]
             stop_loss = last_close < entry_price * 0.95
             rsi_sell = last["RSI14"] > RSI_SELL
 
@@ -160,8 +160,8 @@ for name, ticker in symbols.items():
     # 🟡 SIDE
     elif trend == "🔛":
 
-        high = df["High"].iloc[-10:].max()
-        low = df["Low"].iloc[-10:].min()
+        high = df["High"].iloc[-20:].max()
+        low = df["Low"].iloc[-20:].min()
 
         from_high = (high - last_close) / high
         from_low = (last_close - low) / low
