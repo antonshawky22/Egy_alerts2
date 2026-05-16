@@ -78,7 +78,7 @@ def rsi(series, period=14):
 # Parameters
 # =====================
 SIDE_CLOSE_PERCENT = 0.08
-RSI_SELL = 78
+RSI_SELL = 44
 
 # =====================
 # Containers
