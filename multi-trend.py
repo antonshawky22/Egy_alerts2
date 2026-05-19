@@ -125,11 +125,22 @@ for name, ticker in symbols.items():
     side_signal = ""
     percent_side = None
 
-    # Trend
-    if last["EMA25"] > last["EMA50"] > last["EMA80"]:
+     #    trend   
+     if Trend (Market Structure)
+     lookback = 10
+
+     recent_high = df["High"].iloc[-lookback:].max()
+     prev_high = df["High"].iloc[-2*lookback:-lookback].max()
+
+     recent_low = df["Low"].iloc[-lookback:].min()
+     prev_low = df["Low"].iloc[-2*lookback:-lookback].min()
+
+    if recent_high > prev_high and recent_low > prev_low:
         trend = "↗️"
-    elif last["EMA25"] < last["EMA50"] < last["EMA80"]:
+
+    elif recent_high < prev_high and recent_low < prev_low:
         trend = "🔻"
+
     else:
         trend = "🔛"
 
