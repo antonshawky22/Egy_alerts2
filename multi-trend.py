@@ -128,7 +128,7 @@ for name, ticker in symbols.items():
     # =====================
     # trend (Market Structure)
     # =====================
-    lookback = 10
+    lookback = 50
 
     recent_high = df["High"].iloc[-lookback:].max()
     prev_high = df["High"].iloc[-2*lookback:-lookback].max()
