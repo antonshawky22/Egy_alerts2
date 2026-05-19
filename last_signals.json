@@ -1,8 +1,8 @@
 {
   "OFH": {
     "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 0.6370000243186951
   },
   "OLFI": {
     "trend": "🔛",
