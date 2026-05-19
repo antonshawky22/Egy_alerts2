@@ -11,8 +11,8 @@
   },
   "EMFD": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 11.0
+    "in_position": false,
+    "entry_price": null
   },
   "ETEL": {
     "trend": "↗️",
@@ -66,8 +66,8 @@
   },
   "HRHO": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 28.559999465942383
+    "in_position": false,
+    "entry_price": null
   },
   "ORWE": {
     "trend": "↗️",
@@ -111,8 +111,8 @@
   },
   "MPCO": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 1.7100000381469727
+    "in_position": false,
+    "entry_price": null
   },
   "GBCO": {
     "trend": "↗️",
@@ -141,8 +141,8 @@
   },
   "COMI": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 134.50999450683594
+    "in_position": false,
+    "entry_price": null
   },
   "ADIB": {
     "trend": "↗️",
