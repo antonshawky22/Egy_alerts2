@@ -125,13 +125,160 @@ for name, ticker in symbols.items():
     side_signal = ""
     percent_side = None
 
-    # trend  (Market Structure)
+    # =====================
+    # trend (Market Structure)
+    # =====================
     lookback = 10
-     recent_high = df["High"].iloc[-lookback:].max()
-     prev_high = df["High"].iloc[-2*lookback:-lookback].max()
 
-     recent_low = df["Low"].iloc[-lookback:].min()
-     prev_low = df["Low"].iloc[-2*lookback:-lookback].min()
+    recent_high = df["High"].iloc[-lookback:].max()
+    prev_high = df["High"].iloc[-2*lookback:-lookback].max()
+
+    recent_low = df["Low"].iloc[-lookback:].min()
+    prev_low = df["Low"].iloc[-2*lookback:-lookback].min()
+f recent_high > prev_high and recent_low > prev_low:
+        trend = "↗️"
+
+    elif recent_high < prev_high and recent_low < prev_low:
+        trend = "🔻"
+
+    else:
+        trend print("EGX ALERTS - Cycle Based Version (Separated Strategies)")
+
+import yfinance as yf
+import requests
+import os
+import json
+import pandas as pd
+
+# =====================
+# Telegram settings
+# =====================
+TOKEN = os.getenv("TELEGRAM_TOKEN")
+CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
+
+def send_telegram(text):
+    if not TOKEN or not CHAT_ID:
+        print("Telegram credentials not set")
+        return
+    url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
+    try:
+        requests.post(url, data={"chat_id": CHAT_ID, "text": text}, timeout=10)
+    except Exception as e:
+        print("Telegram send failed:", e)
+
+# =====================
+# Symbols
+# =====================
+symbols = {
+    "OFH":"OFH.CA","OLFI":"OLFI.CA","EMFD":"EMFD.CA","ETEL":"ETEL.CA",
+    "EAST":"EAST.CA","EFIH":"EFIH.CA","ABUK":"ABUK.CA","OIH":"OIH.CA",
+    "SWDY":"SWDY.CA","ISPH":"ISPH.CA","ATQA":"ATQA.CA","MTIE":"MTIE.CA",
+    "ELEC":"ELEC.CA","HRHO":"HRHO.CA","ORWE":"ORWE.CA","JUFO":"JUFO.CA",
+    "DSCW":"DSCW.CA","SUGR":"SUGR.CA","ELSH":"ELSH.CA","RMDA":"RMDA.CA",
+    "RAYA":"RAYA.CA","EEII":"EEII.CA","MPCO":"MPCO.CA","GBCO":"GBCO.CA",
+    "TMGH":"TMGH.CA","ORHD":"ORHD.CA","AMOC":"AMOC.CA","FWRY":"FWRY.CA",
+    "COMI":"COMI.CA","ADIB":"ADIB.CA","PHDC":"PHDC.CA",
+    "MCQE":"MCQE.CA","SKPC":"SKPC.CA","EGAL":"EGAL.CA"
+}
+
+# =====================
+# Load signals
+# =====================
+SIGNALS_FILE = "last_signals.json"
+try:
+    with open(SIGNALS_FILE, "r") as f:
+        last_signals = json.load(f)
+except:
+    last_signals = {}
+
+new_signals = last_signals.copy()
+data_failures = []
+last_candle_date = None
+
+# =====================
+# Helpers
+# =====================
+def fetch_data(ticker):
+    try:
+        df = yf.download(ticker, period="6mo", interval="1d", auto_adjust=True, progress=False)
+        if df is None or df.empty:
+            return None
+        if isinstance(df.columns, pd.MultiIndex):
+            df.columns = df.columns.get_level_values(0)
+        return df
+    except:
+        return None
+
+def rsi(series, period=14):
+    delta = series.diff()
+    gain = delta.clip(lower=0)
+    loss = -delta.clip(upper=0)
+    avg_gain = gain.ewm(alpha=1/period, adjust=False).mean()
+    avg_loss = loss.ewm(alpha=1/period, adjust=False).mean()
+    rs = avg_gain / avg_loss
+    return 100 - (100 / (1 + rs))
+
+# =====================
+# Parameters
+# =====================
+SIDE_CLOSE_PERCENT = 0.04
+RSI_SELL = 78
+
+# =====================
+# Containers
+# =====================
+section_up = []
+section_side = []
+section_down = []
+
+# =====================
+# Main Loop
+# =====================
+for name, ticker in symbols.items():
+
+    df = fetch_data(ticker)
+    if df is None or len(df) < 100:
+        data_failures.append(name)
+        continue
+
+    last_candle_date = df.index[-1].date()
+
+    # EMA
+    df["EMA25"] = df["Close"].ewm(span=25, adjust=True).mean()
+    df["EMA50"] = df["Close"].ewm(span=50, adjust=True).mean()
+    df["EMA80"] = df["Close"].ewm(span=80, adjust=True).mean()
+
+    df["EMA8"] = df["Close"].ewm(span=8, adjust=True).mean()
+    df["EMA15"] = df["Close"].ewm(span=15, adjust=True).mean()
+
+    df["RSI14"] = rsi(df["Close"], 14)
+
+    last = df.iloc[-1]
+    prev = df.iloc[-2]
+
+    last_close = last["Close"]
+
+    # State
+    prev_data = last_signals.get(name, {})
+    in_position = prev_data.get("in_position", False)
+    entry_price = prev_data.get("entry_price", None)
+    prev_trend = prev_data.get("trend", "")
+
+    buy_signal = False
+    sell_signal = False
+    side_signal = ""
+    percent_side = None
+
+    # =====================
+    # trend (Market Structure)
+    # =====================
+    lookback = 10
+
+    recent_high = df["High"].iloc[-lookback:].max()
+    prev_high = df["High"].iloc[-2*lookback:-lookback].max()
+
+    recent_low = df["Low"].iloc[-lookback:].min()
+    prev_low = df["Low"].iloc[-2*lookback:-lookback].min()
 
     if recent_high > prev_high and recent_low > prev_low:
         trend = "↗️"
@@ -258,4 +405,58 @@ elif not section_up and not section_side and not section_down:
 with open(SIGNALS_FILE, "w") as f:
     json.dump(new_signals, f, indent=2, ensure_ascii=False)
 
-send_telegram("\n".join(alerts))
+send_telegram("\n".join(alerts))￼Enter= "🔛"
+
+    trend_changed = trend != prev_trend
+
+    # =====================
+    # STRATEGIES (Separated)
+    # =====================
+
+    # 🟢 UP TREND
+    if trend == "↗️":
+
+        if not in_position and last["RSI14"] < 60:
+            buy_signal = True
+            in_position = True
+            entry_price = last_close
+
+        elif in_position:
+            cross_down = prev["EMA8"] >= prev["EMA15"] and last["EMA8"] < last["EMA15"]
+            stop_loss = last_close < entry_price * 0.95
+            rsi_sell = last["RSI14"] > RSI_SELL
+
+            if stop_loss or cross_down or rsi_sell:
+                sell_signal = True
+                in_position = False
+                entry_price = None
+
+    # 🟡 SIDE
+    elif trend == "🔛":
+
+        high = df["High"].iloc[-20:].max()
+        low = df["Low"].iloc[-20:].min()
+
+        from_high = (high - last_close) / high
+        from_low = (last_close - low) / low
+
+        if not in_position and from_low <= SIDE_CLOSE_PERCENT:
+            buy_signal = True
+            side_signal = "🟢"
+            percent_side = from_low * 100
+            in_position = True
+            entry_price = last_close
+
+        elif in_position:
+
+            if from_high <= SIDE_CLOSE_PERCENT:
+                sell_signal = True
+                side_signal = "🔴"
+                percent_side = from_high * 100
+                in_position = False
+                entry_price = None
+
+            elif last_close < entry_price * 0.94:
+                sell_signal = True
+                side_signal = "🔴💥"
+                in_position = False
