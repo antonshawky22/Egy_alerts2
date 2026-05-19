@@ -125,10 +125,8 @@ for name, ticker in symbols.items():
     side_signal = ""
     percent_side = None
 
-     #    trend   
-     if Trend (Market Structure)
+     #    trend  (Market Structure)
      lookback = 10
-
      recent_high = df["High"].iloc[-lookback:].max()
      prev_high = df["High"].iloc[-2*lookback:-lookback].max()
 
