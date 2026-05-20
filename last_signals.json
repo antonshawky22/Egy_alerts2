@@ -51,8 +51,8 @@
   },
   "ATQA": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 9.649999618530273
   },
   "MTIE": {
     "trend": "↗️",
@@ -136,8 +136,8 @@
   },
   "FWRY": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 19.43000030517578
   },
   "COMI": {
     "trend": "↗️",
