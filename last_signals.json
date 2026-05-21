@@ -101,8 +101,8 @@
   },
   "RAYA": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 7.110000133514404
   },
   "EEII": {
     "trend": "🔛",
@@ -161,8 +161,8 @@
   },
   "SKPC": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 17.329999923706055
   },
   "EGAL": {
     "trend": "↗️",
