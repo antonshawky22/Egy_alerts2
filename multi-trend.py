@@ -126,24 +126,52 @@ for name, ticker in symbols.items():
     percent_side = None
 
     # =====================
-    # trend (Market Structure)
-    # =====================
-    lookback = 5
+   
 
-    recent_high = df["High"].iloc[-lookback:].max()
-    prev_high = df["High"].iloc[-2*lookback:-lookback].max()
+    def detect_trend(df, lookback=100):
+    df_ = df.iloc[-lookback:]
 
-    recent_low = df["Low"].iloc[-lookback:].min()
-    prev_low = df["Low"].iloc[-2*lookback:-lookback].min()
+    swing_highs = []
+    swing_lows = []
 
-    if recent_high > prev_high and recent_low > prev_low:
-        trend = "↗️"
+    left = 2
+    right = 2
 
-    elif recent_high < prev_high and recent_low < prev_low:
-        trend = "🔻"
+    for i in range(left, len(df_) - right):
 
+        # Swing High
+        if df_["High"].iloc[i] == max(df_["High"].iloc[i-left:i+right+1]):
+            swing_highs.append((i, df_["High"].iloc[i]))
+
+        # Swing Low
+        if df_["Low"].iloc[i] == min(df_["Low"].iloc[i-left:i+right+1]):
+            swing_lows.append((i, df_["Low"].iloc[i]))
+
+    # آخر 3
+    last3_highs = [x[1] for x in swing_highs[-3:]]
+    last3_lows  = [x[1] for x in swing_lows[-3:]]
+
+    # تأكد من كفاية البيانات
+    if len(last3_highs) < 3 or len(last3_lows) < 3:
+        return "🔛"
+
+    h1, h2, h3 = last3_highs
+    l1, l2, l3 = last3_lows
+
+    HH = h3 > h2 > h1
+    HL = l3 > l2 > l1
+
+    LH = h3 < h2 < h1
+    LL = l3 < l2 < l1
+
+    # التصنيف
+    if HH and HL:
+        return ",↗️"   # صاعد
+    elif LH and LL:
+        return "🔻"   # هابط
     else:
-        trend = "🔛"
+        return "🔛"   # عرضي
+    
 
     trend_changed = trend != prev_trend
 
@@ -160,7 +188,7 @@ for name, ticker in symbols.items():
             entry_price = last_close
 
         elif in_position:
-            cross_down = prev["EMA8"] >= prev["EMA15"] and last["EMA8"] < last["EMA15"]
+            cross_down = prev["EMA8"] >= prev["EMA15"] and lat["EMA8"] < last["EMA15"]
             stop_loss = last_close < entry_price * 0.95
             rsi_sell = last["RSI14"] > RSI_SELL
 
