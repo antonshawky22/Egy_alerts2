@@ -65,14 +65,14 @@
     "entry_price": 2.0899999141693115
   },
   "HRHO": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 26.6299991607666
   },
   "ORWE": {
     "trend": "🔛",
-    "in_position": true,
-    "entry_price": 21.700000762939453
+    "in_position": false,
+    "entry_price": null
   },
   "JUFO": {
     "trend": "🔛",
@@ -90,7 +90,7 @@
     "entry_price": 49.0
   },
   "ELSH": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -150,7 +150,7 @@
     "entry_price": 46.0
   },
   "PHDC": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
