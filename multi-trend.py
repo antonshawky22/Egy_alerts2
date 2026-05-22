@@ -77,7 +77,7 @@ def rsi(series, period=14):
 # =====================
 # Trend Function (FIXED ONLY)
 # =====================
-def detect_trend(df, lookback=100):
+def detect_trend(df, lookback=30):
     df_ = df.iloc[-lookback:]
 
     swing_highs = []
