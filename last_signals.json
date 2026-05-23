@@ -60,9 +60,9 @@
     "entry_price": 8.720000267028809
   },
   "ELEC": {
-    "trend": "🔻",
-    "in_position": false,
-    "entry_price": null
+    "trend": "🔛",
+    "in_position": true,
+    "entry_price": 2.0899999141693115
   },
   "HRHO": {
     "trend": "↗️",
@@ -80,7 +80,7 @@
     "entry_price": 27.68000030517578
   },
   "DSCW": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 1.7300000190734863
   },
@@ -91,13 +91,13 @@
   },
   "ELSH": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 8.270000457763672
   },
   "RMDA": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 5.039999961853027
   },
   "RAYA": {
     "trend": "↗️",
@@ -115,14 +115,14 @@
     "entry_price": 1.559999942779541
   },
   "GBCO": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": true,
     "entry_price": 25.520000457763672
   },
   "TMGH": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 98.19999694824219
   },
   "ORHD": {
     "trend": "↗️",
@@ -166,7 +166,7 @@
   },
   "EGAL": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 332.1400146484375
   }
 }
