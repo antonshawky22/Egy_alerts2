@@ -100,9 +100,9 @@ for name, ticker in symbols.items():
     last_candle_date = df.index[-1].date()
 
     # EMA
-    df["EMA25"] = df["Close"].ewm(span=25, adjust=True).mean()
-    df["EMA50"] = df["Close"].ewm(span=50, adjust=True).mean()
-    df["EMA80"] = df["Close"].ewm(span=80, adjust=True).mean()
+    df["EMA20"] = df["Close"].ewm(span=20, adjust=True).mean()
+    df["EMA30"] = df["Close"].ewm(span=30, adjust=True).mean()
+    df["EMA60"] = df["Close"].ewm(span=60, adjust=True).mean()
 
     df["EMA8"] = df["Close"].ewm(span=8, adjust=True).mean()
     df["EMA15"] = df["Close"].ewm(span=15, adjust=True).mean()
@@ -126,9 +126,9 @@ for name, ticker in symbols.items():
     percent_side = None
 
     # Trend
-    if last["EMA25"] > last["EMA50"] > last["EMA80"]:
+    if last["EMA20"] > last["EMA30"] > last["EMA60"]:
         trend = "↗️"
-    elif last["EMA25"] < last["EMA50"] < last["EMA80"]:
+    elif last["EMA20"] < last["EMA30"] < last["EMA60"]:
         trend = "🔻"
     else:
         trend = "🔛"
@@ -142,7 +142,7 @@ for name, ticker in symbols.items():
     # 🟢 UP TREND
     if trend == "↗️":
 
-        if not in_position and last["RSI14"] < 60:
+        if not in_position and last["RSI14"] < 65 and last_close >=["EMA20"]:
             buy_signal = True
             in_position = True
             entry_price = last_close
