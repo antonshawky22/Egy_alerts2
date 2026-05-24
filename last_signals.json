@@ -21,8 +21,8 @@
   },
   "EAST": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 38.0099983215332
+    "in_position": false,
+    "entry_price": null
   },
   "EFIH": {
     "trend": "↗️",
@@ -106,8 +106,8 @@
   },
   "EEII": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 2.2899999618530273
+    "in_position": false,
+    "entry_price": null
   },
   "MPCO": {
     "trend": "↗️",
