@@ -102,10 +102,10 @@ for name, ticker in symbols.items():
     # EMA
     df["EMA20"] = df["Close"].ewm(span=20, adjust=True).mean()
     df["EMA30"] = df["Close"].ewm(span=30, adjust=True).mean()
-    df["EMA60"] = df["Close"].ewm(span=60, adjust=True).mean()
+    df["EMA40"] = df["Close"].ewm(span=40, adjust=True).mean()
 
     df["EMA8"] = df["Close"].ewm(span=8, adjust=True).mean()
-    df["EMA15"] = df["Close"].ewm(span=15, adjust=True).mean()
+    df["EMA12"] = df["Close"].ewm(span=12, adjust=True).mean()
 
     df["RSI14"] = rsi(df["Close"], 14)
 
@@ -126,9 +126,9 @@ for name, ticker in symbols.items():
     percent_side = None
 
     # Trend
-    if last["EMA20"] > last["EMA30"] > last["EMA60"]:
+    if last["EMA20"] > last["EMA30"] > last["EMA40"]:
         trend = "↗️"
-    elif last["EMA20"] < last["EMA30"] < last["EMA60"]:
+    elif last["EMA20"] < last["EMA30"] < last["EMA40"]:
         trend = "🔻"
     else:
         trend = "🔛"
@@ -148,7 +148,7 @@ for name, ticker in symbols.items():
             entry_price = last_close
 
         elif in_position:
-            cross_down = prev["EMA8"] >= prev["EMA15"] and last["EMA8"] < last["EMA15"]
+            cross_down = prev["EMA8"] >= prev["EMA12"] and last["EMA8"] < last["EMA12"]
             stop_loss = last_close < entry_price * 0.95
             rsi_sell = last["RSI14"] > RSI_SELL
 
