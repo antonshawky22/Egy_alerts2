@@ -126,13 +126,14 @@ for name, ticker in symbols.items():
     percent_side = None
 
     # Trend
-    if last["EMA20"] > last["EMA30"] > last["EMA40"]:
+
+    if last["EMA20"] > last["EMA30"] * 1.01 and last["EMA30"] > last["EMA40"] * 1.01:
         trend = "↗️"
-    elif last["EMA20"] < last["EMA30"] < last["EMA40"]:
+    elif last["EMA20"] < last["EMA30"] * 0.99 and last["EMA30"] < last["EMA40"] * 0.99:
         trend = "🔻"
     else:
         trend = "🔛"
-
+    
     trend_changed = trend != prev_trend
 
     # =====================
