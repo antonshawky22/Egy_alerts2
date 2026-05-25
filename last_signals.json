@@ -56,8 +56,8 @@
   },
   "MTIE": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 8.880000114440918
   },
   "ELEC": {
     "trend": "🔻",
