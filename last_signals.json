@@ -1,8 +1,8 @@
 {
   "OFH": {
-    "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "trend": "🔛",
+    "in_position": true,
+    "entry_price": 0.6060000061988831
   },
   "OLFI": {
     "trend": "🔛",
@@ -25,9 +25,9 @@
     "entry_price": null
   },
   "EFIH": {
-    "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 22.5
   },
   "ABUK": {
     "trend": "🔛",
@@ -56,8 +56,8 @@
   },
   "MTIE": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 9.09000015258789
   },
   "ELEC": {
     "trend": "🔛",
@@ -130,9 +130,9 @@
     "entry_price": 34.0
   },
   "AMOC": {
-    "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "trend": "🔛",
+    "in_position": true,
+    "entry_price": 8.260000228881836
   },
   "FWRY": {
     "trend": "🔛",
