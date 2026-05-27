@@ -151,15 +151,15 @@ ema_down = (
 )
 
 # الاتجاه النهائي
-if ema_up and breakout and volume_ok:
-    trend = "↗️"
+      if ema_up and breakout and volume_ok:
+         trend = "↗️"
 
-elif ema_down:
-    trend = "🔻"
+      elif ema_down:
+         trend = "🔻"
 
-else:
-    trend = "🔛"
-    # ✅ FIX: لازم يكون خارج الـ else
+      else:
+         trend = "🔛"
+# ✅ FIX: لازم يكون خارج الـ else
     trend_changed = trend != prev_trend
 
 
