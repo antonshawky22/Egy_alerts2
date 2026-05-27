@@ -160,7 +160,7 @@ ema_down = (
       else:
          trend = "🔛"
 # ✅ FIX: لازم يكون خارج الـ else
-    trend_changed = trend != prev_trend
+trend_changed = trend != prev_trend
 
 
     # =====================
