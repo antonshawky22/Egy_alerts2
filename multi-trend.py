@@ -125,43 +125,42 @@ for name, ticker in symbols.items():
     side_signal = ""
     percent_side = None
 
- 
-# =====================
-# Trend (Updated)
-# =====================
+    # =====================
+    # Trend (Updated)
+    # =====================
 
-# مقاومة (بدون شمعة اليوم)
-resistance = df["High"].iloc[-21:-1].max()
+    # مقاومة (بدون شمعة اليوم)
+    resistance = df["High"].iloc[-21:-1].max()
 
-# متوسط الفوليوم
-avg_volume = df["Volume"].rolling(20).mean().iloc[-1]
+    # متوسط الفوليوم
+    avg_volume = df["Volume"].rolling(20).mean().iloc[-1]
 
-# شروط
-volume_ok = last["Volume"] > avg_volume
-breakout = last_close > resistance * 1.002
+    # شروط
+    volume_ok = last["Volume"] > avg_volume
+    breakout = last_close > resistance * 1.002
 
-ema_up = (
-    last["EMA20"] > last["EMA30"] * 1.01 and
-    last["EMA30"] > last["EMA40"] * 1.01
-)
+    ema_up = (
+        last["EMA20"] > last["EMA30"] * 1.01 and
+        last["EMA30"] > last["EMA40"] * 1.01
+    )
 
-ema_down = (
-    last["EMA20"] < last["EMA30"] * 0.99 and
-    last["EMA30"] < last["EMA40"] * 0.99
-)
+    ema_down = (
+        last["EMA20"] < last["EMA30"] * 0.99 and
+        last["EMA30"] < last["EMA40"] * 0.99
+    )
 
-# الاتجاه النهائي
-      if ema_up and breakout and volume_ok:
-         trend = "↗️"
+    # الاتجاه النهائي
+    if ema_up and breakout and volume_ok:
+        trend = "↗️"
 
-      elif ema_down:
-         trend = "🔻"
+    elif ema_down:
+        trend = "🔻"
 
-      else:
-         trend = "🔛"
-# ✅ FIX: لازم يكون خارج الـ else
-trend_changed = trend != prev_trend
+    else:
+        trend = "🔛"
 
+    # FIX: لازم يكون خارج الـ else
+    trend_changed = trend != prev_trend
 
     # =====================
     # STRATEGIES (Separated)
