@@ -99,7 +99,9 @@ for name, ticker in symbols.items():
 
     last_candle_date = df.index[-1].date()
 
-    # EMA
+    # =====================
+    # Indicators
+    # =====================
     df["EMA20"] = df["Close"].ewm(span=20, adjust=True).mean()
     df["EMA30"] = df["Close"].ewm(span=30, adjust=True).mean()
     df["EMA40"] = df["Close"].ewm(span=40, adjust=True).mean()
@@ -111,10 +113,11 @@ for name, ticker in symbols.items():
 
     last = df.iloc[-1]
     prev = df.iloc[-2]
-
     last_close = last["Close"]
 
+    # =====================
     # State
+    # =====================
     prev_data = last_signals.get(name, {})
     in_position = prev_data.get("in_position", False)
     entry_price = prev_data.get("entry_price", None)
@@ -129,13 +132,9 @@ for name, ticker in symbols.items():
     # Trend (Updated)
     # =====================
 
-    # مقاومة (بدون شمعة اليوم)
     resistance = df["High"].iloc[-21:-1].max()
-
-    # متوسط الفوليوم
     avg_volume = df["Volume"].rolling(20).mean().iloc[-1]
 
-    # شروط
     volume_ok = last["Volume"] > avg_volume
     breakout = last_close > resistance * 1.002
 
@@ -149,7 +148,6 @@ for name, ticker in symbols.items():
         last["EMA30"] < last["EMA40"] * 0.99
     )
 
-    # الاتجاه النهائي
     if ema_up and breakout and volume_ok:
         trend = "↗️"
 
@@ -159,14 +157,13 @@ for name, ticker in symbols.items():
     else:
         trend = "🔛"
 
-    # FIX: لازم يكون خارج الـ else
     trend_changed = trend != prev_trend
 
     # =====================
-    # STRATEGIES (Separated)
+    # STRATEGIES
     # =====================
 
-    # 🟢 UP TREND
+    # UP TREND
     if trend == "↗️":
 
         if not in_position and last["RSI14"] < 65 and last_close >= last["EMA20"]:
@@ -184,7 +181,7 @@ for name, ticker in symbols.items():
                 in_position = False
                 entry_price = None
 
-    # 🟡 SIDE
+    # SIDE
     elif trend == "🔛":
 
         high = df["High"].iloc[-20:].max()
@@ -215,7 +212,7 @@ for name, ticker in symbols.items():
                 in_position = False
                 entry_price = None
 
-    # 🔴 DOWN TREND
+    # DOWN
     elif trend == "🔻":
 
         if in_position:
@@ -239,7 +236,7 @@ for name, ticker in symbols.items():
     elif trend == "🔻" and trend_changed:
         section_down.append(f"{trend_mark}{name} | {last_close:.2f} | {last_candle_date}")
 
-    # Save
+    # Save state
     new_signals[name] = {
         "trend": trend,
         "in_position": in_position,
@@ -247,7 +244,7 @@ for name, ticker in symbols.items():
     }
 
 # =====================
-# Message
+# Alerts
 # =====================
 alerts = ["🚦 EGX Alerts:\n"]
 
