@@ -84,8 +84,8 @@ def detect_trend(df, lookback=100):
     swing_highs = []
     swing_lows = []
 
-    left = 7
-    right = 7
+    left = 5
+    right = 5
 
     for i in range(left, len(df_) - right):
 
