@@ -83,8 +83,8 @@ def detect_trend(df, lookback=100):
     swing_highs = []
     swing_lows = []
 
-    left = 10
-    right = 10
+    left = 7
+    right = 7
 
     for i in range(left, len(df_) - right):
 
@@ -94,28 +94,28 @@ def detect_trend(df, lookback=100):
         if df_["Low"].iloc[i] == min(df_["Low"].iloc[i-left:i+right+1]):
             swing_lows.append((i, df_["Low"].iloc[i]))
 
-    last3_highs = [x[1] for x in swing_highs[-3:]]
-    last3_lows  = [x[1] for x in swing_lows[-3:]]
 
-    if len(last3_highs) < 3 or len(last3_lows) < 3:
-        return "🔛"
+     last3_highs = [x[1] for x in swing_highs[-3:]]
+      last3_lows  = [x[1] for x in swing_lows[-3:]]
 
-    h1, h2, h3 = last3_highs
-    l1, l2, l3 = last3_lows
+       if len(last3_highs) < 3 or len(last3_lows) < 3:
+         return "🔛"
 
-    HH = h3 > h2 > h1
-    HL = l3 > l2 > l1
+       h1, h2, h3 = last3_highs
+       l1, l2, l3 = last3_lows
 
-    LH = h3 < h2 < h1
-    LL = l3 < l2 < l1
+     higher_highs = sum([last3_highs[i] > last3_highs[i-1] for i in range(1, 3)])
+     higher_lows  = sum([last3_lows[i] > last3_lows[i-1] for i in range(1, 3)])
 
-    if HH and HL:
-        return "↗️"
-    elif LH and LL:
-        return "🔻"
+     lower_highs = sum([last3_highs[i] < last3_highs[i-1] for i in range(1, 3)])
+     lower_lows  = sum([last3_lows[i] < last3_lows[i-1] for i in range(1, 3)])
+
+    if higher_highs >= 1 and higher_lows >= 1:
+       return "↗️"
+    elif lower_highs >= 1 and lower_lows >= 1:
+       return "🔻"
     else:
-        return "🔛"
-
+       return "🔛"
 # =====================
 # Parameters
 # =====================
