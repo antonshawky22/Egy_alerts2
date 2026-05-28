@@ -75,6 +75,48 @@ def rsi(series, period=14):
     return 100 - (100 / (1 + rs))
 
 # =====================
+# Trend Function (FIXED ONLY)
+# =====================
+def detect_trend(df, lookback=100):
+    df_ = df.iloc[-lookback:]
+
+    swing_highs = []
+    swing_lows = []
+
+    left = 10
+    right = 10
+
+    for i in range(left, len(df_) - right):
+
+        if df_["High"].iloc[i] == max(df_["High"].iloc[i-left:i+right+1]):
+            swing_highs.append((i, df_["High"].iloc[i]))
+
+        if df_["Low"].iloc[i] == min(df_["Low"].iloc[i-left:i+right+1]):
+            swing_lows.append((i, df_["Low"].iloc[i]))
+
+    last3_highs = [x[1] for x in swing_highs[-3:]]
+    last3_lows  = [x[1] for x in swing_lows[-3:]]
+
+    if len(last3_highs) < 3 or len(last3_lows) < 3:
+        return "🔛"
+
+    h1, h2, h3 = last3_highs
+    l1, l2, l3 = last3_lows
+
+    HH = h3 > h2 > h1
+    HL = l3 > l2 > l1
+
+    LH = h3 < h2 < h1
+    LL = l3 < l2 < l1
+
+    if HH and HL:
+        return "↗️"
+    elif LH and LL:
+        return "🔻"
+    else:
+        return "🔛"
+
+# =====================
 # Parameters
 # =====================
 SIDE_CLOSE_PERCENT = 0.04
@@ -99,25 +141,20 @@ for name, ticker in symbols.items():
 
     last_candle_date = df.index[-1].date()
 
-    # =====================
-    # Indicators
-    # =====================
-    df["EMA20"] = df["Close"].ewm(span=20, adjust=True).mean()
-    df["EMA30"] = df["Close"].ewm(span=30, adjust=True).mean()
-    df["EMA40"] = df["Close"].ewm(span=40, adjust=True).mean()
+    df["EMA25"] = df["Close"].ewm(span=25, adjust=True).mean()
+    df["EMA50"] = df["Close"].ewm(span=50, adjust=True).mean()
+    df["EMA80"] = df["Close"].ewm(span=80, adjust=True).mean()
 
     df["EMA8"] = df["Close"].ewm(span=8, adjust=True).mean()
-    df["EMA12"] = df["Close"].ewm(span=12, adjust=True).mean()
+    df["EMA15"] = df["Close"].ewm(span=15, adjust=True).mean()
 
     df["RSI14"] = rsi(df["Close"], 14)
 
     last = df.iloc[-1]
     prev = df.iloc[-2]
+
     last_close = last["Close"]
 
-    # =====================
-    # State
-    # =====================
     prev_data = last_signals.get(name, {})
     in_position = prev_data.get("in_position", False)
     entry_price = prev_data.get("entry_price", None)
@@ -128,34 +165,8 @@ for name, ticker in symbols.items():
     side_signal = ""
     percent_side = None
 
-    # =====================
-    # Trend (Updated)
-    # =====================
-
-    resistance = df["High"].iloc[-21:-1].max()
-    avg_volume = df["Volume"].rolling(20).mean().iloc[-1]
-
-    volume_ok = last["Volume"] > avg_volume
-    breakout = last_close > resistance * 1.002
-
-    ema_up = (
-        last["EMA20"] > last["EMA30"] * 1.01 and
-        last["EMA30"] > last["EMA40"] * 1.01
-    )
-
-    ema_down = (
-        last["EMA20"] < last["EMA30"] * 0.99 and
-        last["EMA30"] < last["EMA40"] * 0.99
-    )
-
-    if ema_up and breakout and volume_ok:
-        trend = "↗️"
-
-    elif ema_down:
-        trend = "🔻"
-
-    else:
-        trend = "🔛"
+    # FIX: call function
+    trend = detect_trend(df)
 
     trend_changed = trend != prev_trend
 
@@ -163,16 +174,16 @@ for name, ticker in symbols.items():
     # STRATEGIES
     # =====================
 
-    # UP TREND
+    # 🟢 UP TREND
     if trend == "↗️":
 
-        if not in_position and last["RSI14"] < 65 and last_close >= last["EMA20"]:
+        if not in_position and last["RSI14"] < 60 and last_close > last["EMA25"]:
             buy_signal = True
             in_position = True
             entry_price = last_close
 
         elif in_position:
-            cross_down = prev["EMA8"] >= prev["EMA12"] and last["EMA8"] < last["EMA12"]
+            cross_down = prev["EMA8"] >= prev["EMA15"] and last["EMA8"] < last["EMA15"]
             stop_loss = last_close < entry_price * 0.95
             rsi_sell = last["RSI14"] > RSI_SELL
 
@@ -181,7 +192,7 @@ for name, ticker in symbols.items():
                 in_position = False
                 entry_price = None
 
-    # SIDE
+    # 🟡 SIDE
     elif trend == "🔛":
 
         high = df["High"].iloc[-20:].max()
@@ -212,7 +223,7 @@ for name, ticker in symbols.items():
                 in_position = False
                 entry_price = None
 
-    # DOWN
+    # 🔴 DOWN TREND
     elif trend == "🔻":
 
         if in_position:
@@ -220,9 +231,6 @@ for name, ticker in symbols.items():
             in_position = False
             entry_price = None
 
-    # =====================
-    # Messages
-    # =====================
     trend_mark = "🚧 " if trend_changed else ""
 
     if trend == "↗️" and (buy_signal or sell_signal):
@@ -236,7 +244,6 @@ for name, ticker in symbols.items():
     elif trend == "🔻" and trend_changed:
         section_down.append(f"{trend_mark}{name} | {last_close:.2f} | {last_candle_date}")
 
-    # Save state
     new_signals[name] = {
         "trend": trend,
         "in_position": in_position,
@@ -244,7 +251,7 @@ for name, ticker in symbols.items():
     }
 
 # =====================
-# Alerts
+# Message
 # =====================
 alerts = ["🚦 EGX Alerts:\n"]
 
@@ -267,9 +274,6 @@ if data_failures:
 elif not section_up and not section_side and not section_down:
     alerts.append(f"ℹ️ No new signals for today (last candle: {last_candle_date})")
 
-# =====================
-# Save + Send
-# =====================
 with open(SIGNALS_FILE, "w") as f:
     json.dump(new_signals, f, indent=2, ensure_ascii=False)
 
