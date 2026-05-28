@@ -177,7 +177,7 @@ for name, ticker in symbols.items():
     # 🟢 UP TREND
     if trend == "↗️":
 
-        if not in_position and last["RSI14"] < 60 and last_close > last["EMA25"]:
+        if not in_position and last["RSI14"] < 65 and last_close > last["EMA25"]:
             buy_signal = True
             in_position = True
             entry_price = last_close
