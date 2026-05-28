@@ -78,6 +78,7 @@ def rsi(series, period=14):
 # Trend Function (FIXED ONLY)
 # =====================
 def detect_trend(df, lookback=100):
+
     df_ = df.iloc[-lookback:]
 
     swing_highs = []
@@ -89,33 +90,29 @@ def detect_trend(df, lookback=100):
     for i in range(left, len(df_) - right):
 
         if df_["High"].iloc[i] == max(df_["High"].iloc[i-left:i+right+1]):
-            swing_highs.append((i, df_["High"].iloc[i]))
+            swing_highs.append(df_["High"].iloc[i])
 
         if df_["Low"].iloc[i] == min(df_["Low"].iloc[i-left:i+right+1]):
-            swing_lows.append((i, df_["Low"].iloc[i]))
+            swing_lows.append(df_["Low"].iloc[i])
 
+    last3_highs = swing_highs[-3:]
+    last3_lows  = swing_lows[-3:]
 
-     last3_highs = [x[1] for x in swing_highs[-3:]]
-      last3_lows  = [x[1] for x in swing_lows[-3:]]
+    if len(last3_highs) < 3 or len(last3_lows) < 3:
+        return "🔛"
 
-       if len(last3_highs) < 3 or len(last3_lows) < 3:
-         return "🔛"
+    higher_highs = sum([last3_highs[i] > last3_highs[i-1] for i in range(1, 3)])
+    higher_lows  = sum([last3_lows[i] > last3_lows[i-1] for i in range(1, 3)])
 
-       h1, h2, h3 = last3_highs
-       l1, l2, l3 = last3_lows
-
-     higher_highs = sum([last3_highs[i] > last3_highs[i-1] for i in range(1, 3)])
-     higher_lows  = sum([last3_lows[i] > last3_lows[i-1] for i in range(1, 3)])
-
-     lower_highs = sum([last3_highs[i] < last3_highs[i-1] for i in range(1, 3)])
-     lower_lows  = sum([last3_lows[i] < last3_lows[i-1] for i in range(1, 3)])
+    lower_highs = sum([last3_highs[i] < last3_highs[i-1] for i in range(1, 3)])
+    lower_lows  = sum([last3_lows[i] < last3_lows[i-1] for i in range(1, 3)])
 
     if higher_highs >= 1 and higher_lows >= 1:
-       return "↗️"
+        return "↗️"
     elif lower_highs >= 1 and lower_lows >= 1:
-       return "🔻"
+        return "🔻"
     else:
-       return "🔛"
+        return "🔛"
 # =====================
 # Parameters
 # =====================
