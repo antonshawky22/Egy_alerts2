@@ -107,9 +107,9 @@ def detect_trend(df, lookback=100):
     lower_highs = sum([last3_highs[i] < last3_highs[i-1] for i in range(1, 3)])
     lower_lows  = sum([last3_lows[i] < last3_lows[i-1] for i in range(1, 3)])
 
-    if higher_highs >= 1 and higher_lows >= 1:
+    if higher_highs >= 2 and higher_lows >= 2:
         return "↗️"
-    elif lower_highs >= 1 and lower_lows >= 1:
+    elif lower_highs >= 2 and lower_lows >= 2:
         return "🔻"
     else:
         return "🔛"
