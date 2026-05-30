@@ -103,10 +103,9 @@ for name, ticker in symbols.items():
     df["EMA20"] = df["Close"].ewm(span=20, adjust=True).mean()
     df["EMA30"] = df["Close"].ewm(span=30, adjust=True).mean()
     df["EMA40"] = df["Close"].ewm(span=40, adjust=True).mean()
-
     df["EMA8"] = df["Close"].ewm(span=8, adjust=True).mean()
     df["EMA12"] = df["Close"].ewm(span=12, adjust=True).mean()
-
+    df["EMA70"] = df["Close"].ewm(span=70, adjust=True).mean()
     df["RSI14"] = rsi(df["Close"], 14)
 
     last = df.iloc[-1]
@@ -127,7 +126,7 @@ for name, ticker in symbols.items():
 
     # Trend
 
-    if last["EMA20"] > last["EMA30"] * 1.001 and last["EMA30"] > last["EMA40"] * 1.001:
+    if last["EMA12"] > last["EMA20"] * 1.001 and last["EMA20"] > last["EMA30"] * 1.001:
         trend = "↗️"
     elif last["EMA20"] < last["EMA30"] * 0.999 and last["EMA30"] < last["EMA40"] * 0.999:
         trend = "🔻"
