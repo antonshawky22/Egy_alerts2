@@ -1,4 +1,4 @@
-print("EGX ALERTS - Cycle Based Version (Separated Strategies)")
+printed("EGX ALERTS - Cycle Based Version (Separated Strategies)")
 
 import yfinance as yf
 import requests
@@ -126,7 +126,7 @@ for name, ticker in symbols.items():
 
     # Trend
 
-    if last["EMA12"] > last["EMA20"] * 1.001 and last["EMA20"] > last["EMA30"] * 1.001:
+    if last["EMA12"] > last["EMA20"] * 1.001 and last["EM30"] > last["EMA70"] * 1.001:
         trend = "↗️"
     elif last["EMA20"] < last["EMA30"] * 0.999 and last["EMA30"] < last["EMA40"] * 0.999:
         trend = "🔻"
@@ -160,8 +160,8 @@ for name, ticker in symbols.items():
     # 🟡 SIDE
     elif trend == "🔛":
 
-        high = df["High"].iloc[-20:].max()
-        low = df["Low"].iloc[-20:].min()
+        high = df["High"].iloc[-30:].max()
+        low = df["Low"].iloc[-30:].min()
 
         from_high = (high - last_close) / high
         from_low = (last_close - low) / low
