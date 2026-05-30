@@ -1,4 +1,4 @@
-printed("EGX ALERTS - Cycle Based Version (Separated Strategies)")
+print("EGX ALERTS - Cycle Based Version (Separated Strategies)")
 
 import yfinance as yf
 import requests
