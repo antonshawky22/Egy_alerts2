@@ -21,8 +21,8 @@
   },
   "EAST": {
     "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 37.150001525878906
   },
   "EFIH": {
     "trend": "↗️",
@@ -85,14 +85,14 @@
     "entry_price": null
   },
   "SUGR": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": true,
     "entry_price": 48.529998779296875
   },
   "ELSH": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 8.3100004196167
+    "in_position": false,
+    "entry_price": null
   },
   "RMDA": {
     "trend": "↗️",
