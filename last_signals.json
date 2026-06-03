@@ -71,8 +71,8 @@
   },
   "ORWE": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 22.65999984741211
+    "in_position": false,
+    "entry_price": null
   },
   "JUFO": {
     "trend": "↗️",
