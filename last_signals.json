@@ -1,6 +1,6 @@
 {
   "OFH": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": true,
     "entry_price": 0.6060000061988831
   },
@@ -116,8 +116,8 @@
   },
   "GBCO": {
     "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 25.979999542236328
   },
   "TMGH": {
     "trend": "↗️",
