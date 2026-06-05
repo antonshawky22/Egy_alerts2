@@ -21,8 +21,8 @@
   },
   "EAST": {
     "trend": "🔛",
-    "in_position": true,
-    "entry_price": 37.150001525878906
+    "in_position": false,
+    "entry_price": null
   },
   "EFIH": {
     "trend": "↗️",
@@ -50,7 +50,7 @@
     "entry_price": 11.449999809265137
   },
   "ATQA": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": true,
     "entry_price": 9.449999809265137
   },
@@ -110,7 +110,7 @@
     "entry_price": 2.299999952316284
   },
   "MPCO": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": true,
     "entry_price": 1.600000023841858
   },
@@ -136,8 +136,8 @@
   },
   "FWRY": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 20.450000762939453
+    "in_position": false,
+    "entry_price": null
   },
   "COMI": {
     "trend": "🔛",
@@ -151,8 +151,8 @@
   },
   "PHDC": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 15.100000381469727
   },
   "MCQE": {
     "trend": "↗️",
