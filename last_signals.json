@@ -60,7 +60,7 @@
     "entry_price": 9.09000015258789
   },
   "ELEC": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -80,7 +80,7 @@
     "entry_price": 28.09000015258789
   },
   "DSCW": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
