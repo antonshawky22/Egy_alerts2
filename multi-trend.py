@@ -126,9 +126,9 @@ for name, ticker in symbols.items():
 
     # Trend
 
-    if last["EMA12"] > last["EMA20"] * 1.001 and last["EMA40"] > last["EMA70"] * 1.001:
+    if last["EMA12"] > last["EMA20"] * 1.001 and last["EMA30"] > last["EMA40"] * 1.001:
         trend = "↗️"
-    elif last["EMA20"] < last["EMA30"] * 0.999 and last["EMA30"] < last["EMA40"] * 0.999:
+    elif last["EMA20"] < last["EMA30"] * 0.99 and last["EMA30"] < last["EMA40"] * 0.99:
         trend = "🔻"
     else:
         trend = "🔛"
