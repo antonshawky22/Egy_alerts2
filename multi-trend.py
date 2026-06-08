@@ -123,6 +123,7 @@ for name, ticker in symbols.items():
     sell_signal = False
     side_signal = ""
     percent_side = None
+    up_signal = ""
 
     # Trend
 
@@ -144,6 +145,7 @@ for name, ticker in symbols.items():
 
         if not in_position and last["RSI14"] < 68 and last_close >= last["EMA30"]:
             buy_signal = True
+            up_signal = "🟢"
             in_position = True
             entry_price = last_close
 
@@ -152,8 +154,14 @@ for name, ticker in symbols.items():
             stop_loss = last_close < entry_price * 0.95
             rsi_sell = last["RSI14"] > RSI_SELL
 
-            if stop_loss or cross_down or rsi_sell:
+            if stop_loss:
                 sell_signal = True
+                up_signal = "🔴💥"
+            elif cross_down or rsi_sell:
+                sell_signal = True
+                up_signal = "🔴"
+
+            if sell_signal:
                 in_position = False
                 entry_price = None
 
@@ -201,9 +209,8 @@ for name, ticker in symbols.items():
     # =====================
     trend_mark = "🚧 " if trend_changed else ""
 
-    if trend == "↗️" and (buy_signal or sell_signal):
-        mark = "🟢" if buy_signal else "🔴"
-        section_up.append(f"{trend_mark}{mark} {name} | {last_close:.2f} | {last_candle_date}")
+    if trend == "↗️" and up_signal:
+        section_up.append(f"{trend_mark}{up_signal} {name} | {last_close:.2f} | {last_candle_date}")
 
     elif trend == "🔛" and side_signal:
         p = f"{percent_side:.2f}%" if percent_side else ""
