@@ -36,8 +36,8 @@
   },
   "OIH": {
     "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 1.3600000143051147
   },
   "SWDY": {
     "trend": "↗️",
