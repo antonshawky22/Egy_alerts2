@@ -205,19 +205,29 @@ for name, ticker in symbols.items():
             entry_price = None
 
     # =====================
-    # Messages
+    # Messages (UPDATED)
     # =====================
     trend_mark = "🚧 " if trend_changed else ""
 
-    if trend == "↗️" and up_signal:
-        section_up.append(f"{trend_mark}{up_signal} {name} | {last_close:.2f} | {last_candle_date}")
+    # UP
+    if trend == "↗️":
+        if up_signal:
+            section_up.append(f"{trend_mark}{up_signal} {name} | {last_close:.2f} | {last_candle_date}")
+        elif trend_changed:
+            section_up.append(f"{trend_mark}{name} | {last_close:.2f} | {last_candle_date}")
 
-    elif trend == "🔛" and side_signal:
-        p = f"{percent_side:.2f}%" if percent_side else ""
-        section_side.append(f"{trend_mark}{side_signal} {name} | {last_close:.2f} | {last_candle_date} | {p}")
+    # SIDE
+    elif trend == "🔛":
+        if side_signal:
+            p = f"{percent_side:.2f}%" if percent_side else ""
+            section_side.append(f"{trend_mark}{side_signal} {name} | {last_close:.2f} | {last_candle_date} | {p}")
+        elif trend_changed:
+            section_side.append(f"{trend_mark}{name} | {last_close:.2f} | {last_candle_date}")
 
-    elif trend == "🔻" and trend_changed:
-        section_down.append(f"{trend_mark}{name} | {last_close:.2f} | {last_candle_date}")
+    # DOWN
+    elif trend == "🔻":
+        if trend_changed:
+            section_down.append(f"{trend_mark}{name} | {last_close:.2f} | {last_candle_date}")
 
     # Save
     new_signals[name] = {
