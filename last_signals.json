@@ -16,13 +16,13 @@
   },
   "ETEL": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 97.62999725341797
-  },
-  "EAST": {
-    "trend": "🔛",
     "in_position": false,
     "entry_price": null
+  },
+  "EAST": {
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 38.869998931884766
   },
   "EFIH": {
     "trend": "↗️",
@@ -36,8 +36,8 @@
   },
   "OIH": {
     "trend": "🔛",
-    "in_position": true,
-    "entry_price": 1.4800000190734863
+    "in_position": false,
+    "entry_price": null
   },
   "SWDY": {
     "trend": "↗️",
@@ -121,13 +121,13 @@
   },
   "TMGH": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 96.0
+    "in_position": false,
+    "entry_price": null
   },
   "ORHD": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 37.0
   },
   "AMOC": {
     "trend": "🔛",
@@ -135,9 +135,9 @@
     "entry_price": 8.260000228881836
   },
   "FWRY": {
-    "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "trend": "🔛",
+    "in_position": true,
+    "entry_price": 18.700000762939453
   },
   "COMI": {
     "trend": "🔛",
