@@ -146,8 +146,8 @@
   },
   "ADIB": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 46.45000076293945
   },
   "PHDC": {
     "trend": "↗️",
@@ -156,8 +156,8 @@
   },
   "MCQE": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 193.99000549316406
+    "in_position": false,
+    "entry_price": null
   },
   "SKPC": {
     "trend": "🔛",
@@ -166,7 +166,7 @@
   },
   "EGAL": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 322.70001220703125
+    "in_position": false,
+    "entry_price": null
   }
 }
