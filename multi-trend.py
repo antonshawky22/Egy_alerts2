@@ -129,7 +129,7 @@ for name, ticker in symbols.items():
 
     if last["EMA12"] > last["EMA20"] * 1.001 and last["EMA30"] > last["EMA40"] * 1.001:
         trend = "↗️"
-    elif last["EMA12"] < last["EMA30"] * 0.998 and last["EMA20"] < last["EMA30"] * 0.998:
+    elif last["EMA12"] < last["EMA30"] * 0.998 and last["EMA20"] < last["EMA40"] * 0.998:
         trend = "🔻"
     else:
         trend = "🔛"
@@ -174,7 +174,7 @@ for name, ticker in symbols.items():
         from_high = (high - last_close) / high
         from_low = (last_close - low) / low
 
-        if not in_position and from_low <= SIDE_CLOSE_PERCENT:
+        if not in_position and from_low <= SIDE_CLOSE_PERCENT and last["RSI14"] < 33:
             buy_signal = True
             side_signal = "🟢"
             percent_side = from_low * 100
@@ -183,7 +183,7 @@ for name, ticker in symbols.items():
 
         elif in_position:
 
-            if from_high <= SIDE_CLOSE_PERCENT:
+            if from_high <= SIDE_CLOSE_PERCENT or last["RSI14"] > 68:
                 sell_signal = True
                 side_signal = "🔴"
                 percent_side = from_high * 100
