@@ -30,12 +30,12 @@
     "entry_price": 20.889999389648438
   },
   "ABUK": {
-    "trend": "🔻",
-    "in_position": false,
-    "entry_price": null
+    "trend": "🔛",
+    "in_position": true,
+    "entry_price": 72.75
   },
   "OIH": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -135,7 +135,7 @@
     "entry_price": 8.260000228881836
   },
   "FWRY": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
