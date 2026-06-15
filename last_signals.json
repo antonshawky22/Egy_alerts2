@@ -41,8 +41,8 @@
   },
   "SWDY": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 86.37000274658203
   },
   "ISPH": {
     "trend": "↗️",
@@ -56,8 +56,8 @@
   },
   "MTIE": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 9.050000190734863
   },
   "ELEC": {
     "trend": "🔻",
@@ -85,7 +85,7 @@
     "entry_price": null
   },
   "SUGR": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -101,8 +101,8 @@
   },
   "RAYA": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 7.090000152587891
   },
   "EEII": {
     "trend": "↗️",
