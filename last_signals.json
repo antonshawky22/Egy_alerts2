@@ -30,9 +30,9 @@
     "entry_price": 20.889999389648438
   },
   "ABUK": {
-    "trend": "🔛",
-    "in_position": true,
-    "entry_price": 72.75
+    "trend": "🔻",
+    "in_position": false,
+    "entry_price": null
   },
   "OIH": {
     "trend": "🔛",
@@ -40,7 +40,7 @@
     "entry_price": null
   },
   "SWDY": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 86.37000274658203
   },
