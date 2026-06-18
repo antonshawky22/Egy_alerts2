@@ -30,9 +30,9 @@
     "entry_price": 20.889999389648438
   },
   "ABUK": {
-    "trend": "🔻",
-    "in_position": false,
-    "entry_price": null
+    "trend": "🔛",
+    "in_position": true,
+    "entry_price": 71.16000366210938
   },
   "OIH": {
     "trend": "🔛",
