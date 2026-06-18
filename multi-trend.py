@@ -56,7 +56,7 @@ last_candle_date = None
 # =====================
 def fetch_data(ticker):
     try:
-        df = yf.download(ticker, period="6mo", interval="1d", auto_adjust=True, progress=False)
+        df = yf.download(ticker, period="8mo", interval="1d", auto_adjust=True, progress=False)
         if df is None or df.empty:
             return None
         if isinstance(df.columns, pd.MultiIndex):
@@ -127,9 +127,9 @@ for name, ticker in symbols.items():
 
     # Trend
 
-    if last["EMA12"] > last["EMA20"] * 1.001 and last["EMA30"] > last["EMA40"] * 1.001:
+    if last["EMA20"] > last["EMA30"] * 1.001 and last["EMA30"] > last["EMA40"] * 1.001:
         trend = "↗️"
-    elif last["EMA12"] < last["EMA20"] * 0.999 and last["EMA30"] < last["EMA40"] * 0.999:
+    elif last["EMA20"] < last["EMA30"] * 0.999 and last["EMA30"] < last["EMA40"] * 0.999:
         trend = "🔻"
     else:
         trend = "🔛"
@@ -150,8 +150,8 @@ for name, ticker in symbols.items():
             entry_price = last_close
 
         elif in_position:
-            cross_down = prev["EMA8"] >= prev["EMA12"] and last["EMA8"] < last["EMA12"]
-            stop_loss = last_close < entry_price * 0.95
+            cross_down = prev["EMA12"] >= prev["EMA20"] and last["EMA12"] < last["EMA20"]
+            stop_loss = last_close < entry_price * 0.94
             rsi_sell = last["RSI14"] > RSI_SELL
 
             if stop_loss:
@@ -168,8 +168,8 @@ for name, ticker in symbols.items():
     # 🟡 SIDE
     elif trend == "🔛":
 
-        high = df["High"].iloc[-30:].max()
-        low = df["Low"].iloc[-30:].min()
+        high = df["High"].iloc[-35:].max()
+        low = df["Low"].iloc[-35:].min()
 
         from_high = (high - last_close) / high
         from_low = (last_close - low) / low
@@ -190,7 +190,7 @@ for name, ticker in symbols.items():
                 in_position = False
                 entry_price = None
 
-            elif last_close < entry_price * 0.94:
+            elif last_close < entry_price * 0.93:
                 sell_signal = True
                 side_signal = "🔴💥"
                 in_position = False
