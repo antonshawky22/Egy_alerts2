@@ -168,8 +168,8 @@ for name, ticker in symbols.items():
     # 🟡 SIDE
     elif trend == "🔛":
 
-        high = df["High"].iloc[-35:].max()
-        low = df["Low"].iloc[-35:].min()
+        high = df["High"].iloc[-40:].max()
+        low = df["Low"].iloc[-40:].min()
 
         from_high = (high - last_close) / high
         from_low = (last_close - low) / low
