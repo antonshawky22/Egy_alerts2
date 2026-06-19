@@ -25,7 +25,10 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          # تثبيت المكتبات المطلوبة مباشرة لضمان عدم حدوث خطأ Import
+          pip install yfinance tradingview-ta requests pandas
+          # إذا كان لديك مكتبات أخرى في ملف requirements يمكنك ترك السطر التالي، وإذا لم يكن هناك مكتبات أخرى يمكنك حذفه
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: support and resistance 
         env:
@@ -41,3 +44,4 @@ jobs:
           git add last_signals.json
           git diff --cached --quiet || git commit -m "Update last signals [auto]"
           git push
+
