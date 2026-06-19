@@ -1,17 +1,14 @@
-print("EGX ALERTS - Hybrid High-Accuracy Production Version")
-import yfinance as yf
-from tradingview_ta import TA_Handler, Interval as TVInterval
-import requests
-import os
 import json
+import os
 import pandas as pd
-from datetime import datetime, timezone
+import requests
 
 # =====================
 # Telegram settings
 # =====================
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
+
 
 def send_telegram(text):
     if not TOKEN or not CHAT_ID:
@@ -23,25 +20,60 @@ def send_telegram(text):
     except Exception as e:
         print("Telegram send failed:", e)
 
-# =====================
-# Symbols (نظام الرموز الموحد)
-# =====================
-symbols = {
-    "OFH":"OFH", "OLFI":"OLFI", "EMFD":"EMFD", "ETEL":"ETEL",
-    "EAST":"EAST", "EFIH":"EFIH", "ABUK":"ABUK", "OIH":"OIH",
-    "SWDY":"SWDY", "ISPH":"ISPH", "ATQA":"ATQA", "MTIE":"MTIE",
-    "ELEC":"ELEC", "HRHO":"HRHO", "ORWE":"ORWE", "JUFO":"JUFO",
-    "DSCW":"DSCW", "SUGR":"SUGR", "ELSH":"ELSH", "RMDA":"RMDA",
-    "RAYA":"RAYA", "EEII":"EEII", "MPCO":"MPCO", "GBCO":"GBCO",
-    "TMGH":"TMGH", "ORHD":"ORHD", "AMOC":"AMOC", "FWRY":"FWRY",
-    "COMI":"COMI", "ADIB":"ADIB", "PHDC":"PHDC",
-    "MCQE":"MCQE", "SKPC":"SKPC", "EGAL":"EGAL"
-}
 
 # =====================
-# Load signals
+# Symbols & Files
 # =====================
+symbols = {
+    "OFH": "OFH",
+    "OLFI": "OLFI",
+    "EMFD": "EMFD",
+    "ETEL": "ETEL",
+    "EAST": "EAST",
+    "EFIH": "EFIH",
+    "ABUK": "ABUK",
+    "OIH": "OIH",
+    "SWDY": "SWDY",
+    "ISPH": "ISPH",
+    "ATQA": "ATQA",
+    "MTIE": "MTIE",
+    "ELEC": "ELEC",
+    "HRHO": "HRHO",
+    "ORWE": "ORWE",
+    "JUFO": "JUFO",
+    "DSCW": "DSCW",
+    "SUGR": "SUGR",
+    "ELSH": "ELSH",
+    "RMDA": "RMDA",
+    "RAYA": "RAYA",
+    "EEII": "EEII",
+    "MPCO": "MPCO",
+    "GBCO": "GBCO",
+    "TMGH": "TMGH",
+    "ORHD": "ORHD",
+    "AMOC": "AMOC",
+    "FWRY": "FWRY",
+    "COMI": "COMI",
+    "ADIB": "ADIB",
+    "PHDC": "PHDC",
+    "MCQE": "MCQE",
+    "SKPC": "SKPC",
+    "EGAL": "EGAL",
+}
+
+DB_FILE = "egx_history_database.json"
 SIGNALS_FILE = "last_signals.json"
+
+# 1. قراءة قاعدة البيانات المحلية (التي تم إنشاؤها وتحديثها في الخطوة السابقة)
+try:
+    with open(DB_FILE, "r") as f:
+        database = json.load(f)
+    print("💾 Strategy Engine: Successfully loaded local price database.")
+except Exception as e:
+    print(f"❌ Critical Error: Could not find or read {DB_FILE}. Error: {e}")
+    database = {}
+
+# 2. تحميل الإشارات السابقة
 try:
     with open(SIGNALS_FILE, "r") as f:
         last_signals = json.load(f)
@@ -50,59 +82,26 @@ except:
 
 new_signals = last_signals.copy()
 data_failures = []
-last_candle_date = None
+last_candle_date = "2026-06-18"  # تاريخ آخر شمعة تم تحديثها من تريدنج فيو
+
+# Containers للإشارات
+section_up = []
+section_side = []
+section_down = []
+
 
 # =====================
-# دالة جلب البيانات الهجينة المحدثة (The Hybrid Core Engine)
+# Helpers
 # =====================
-def fetch_hybrid_data(name, ticker):
-    try:
-        # 1. سحب 7 أشهر كاملة من ياهو فاينانس (تم التعديل لـ 7mo بنجاح)
-        df = yf.download(f"{ticker}.CA", period="7mo", interval="1d", auto_adjust=False, progress=False)
-        if df is None or df.empty:
-            return None
-            
-        if isinstance(df.columns, pd.MultiIndex):
-            df.columns = df.columns.get_level_values(0)
-            
-        df = df.dropna(subset=["Adj Close"])
-        
-        # 2. سحب السعر الفوري الدقيق والمكتمل لجلسة الخميس من TradingView
-        handler = TA_Handler(
-            symbol=ticker,
-            screener="egypt",
-            exchange="EGX",
-            interval=TVInterval.INTERVAL_1_DAY
-        )
-        tv_analysis = handler.get_analysis()
-        tv_indicators = tv_analysis.indicators
-        
-        tv_close = float(tv_indicators.get("close"))
-        tv_open = float(tv_indicators.get("open", tv_close))
-        tv_high = float(tv_indicators.get("high", tv_close))
-        tv_low = float(tv_indicators.get("low", tv_close))
-        
-        # 3. استبدال السطر الأخير التاريخي بالبيانات الفورية الحية والمغلقة
-        # نستخدم الـ Adj Close والـ Close لضمان توافق حسابات الـ EMA لاحقاً
-        df.iloc[-1, df.columns.get_loc("Adj Close")] = tv_close
-        df.iloc[-1, df.columns.get_loc("Close")] = tv_close
-        df.iloc[-1, df.columns.get_loc("Open")] = tv_open
-        df.iloc[-1, df.columns.get_loc("High")] = tv_high
-        df.iloc[-1, df.columns.get_loc("Low")] = tv_low
-        
-        return df
-    except Exception as e:
-        print(f"💥 Hybrid Fetch Error for {name}: {e}")
-        return None
-
 def rsi(series, period=14):
     delta = series.diff()
     gain = delta.clip(lower=0)
     loss = -delta.clip(upper=0)
-    avg_gain = gain.ewm(alpha=1/period, adjust=False).mean()
-    avg_loss = loss.ewm(alpha=1/period, adjust=False).mean()
+    avg_gain = gain.ewm(alpha=1 / period, adjust=False).mean()
+    avg_loss = loss.ewm(alpha=1 / period, adjust=False).mean()
     rs = avg_gain / avg_loss
     return 100 - (100 / (1 + rs))
+
 
 # =====================
 # Parameters
@@ -111,27 +110,22 @@ SIDE_CLOSE_PERCENT = 0.04
 RSI_SELL = 79
 
 # =====================
-# Containers
-# =====================
-section_up = []
-section_side = []
-section_down = []
-
-# =====================
-# Main Loop
+# Main Loop (قرارات الاستراتيجية)
 # =====================
 for name, ticker in symbols.items():
 
-    # استخدام المحرك الهجين الجديد بدلاً من ياهو المنفرد
-    df = fetch_hybrid_data(name, ticker)
-    if df is None or len(df) < 100:
+    # جلب البيانات المخزنة محلياً للسهم
+    stock_records = database.get(name, [])
+
+    if not stock_records or len(stock_records) < 100:
         data_failures.append(name)
         continue
 
-    # تثبيت تاريخ جلسة الخميس الرسمية المستقرة
-    last_candle_date = "2026-06-18"
+    # تحويل السجلات لـ DataFrame جاهز للحسابات فوراً بدون إنترنت
+    df = pd.DataFrame(stock_records)
+    df.set_index("Date", inplace=True)
 
-    # حساب الـ EMAs بناءً على التاريخ الطويل المصحح والمستقر
+    # حساب المؤشرات الفنية (EMA & RSI) على البيانات الكاملة والمصححة
     df["EMA20"] = df["Close"].ewm(span=20, adjust=True).mean()
     df["EMA30"] = df["Close"].ewm(span=30, adjust=True).mean()
     df["EMA40"] = df["Close"].ewm(span=40, adjust=True).mean()
@@ -145,7 +139,7 @@ for name, ticker in symbols.items():
 
     last_close = last["Close"]
 
-    # State
+    # قراءة الحالة السابقة للسهم
     prev_data = last_signals.get(name, {})
     in_position = prev_data.get("in_position", False)
     entry_price = prev_data.get("entry_price", None)
@@ -157,18 +151,24 @@ for name, ticker in symbols.items():
     percent_side = None
     up_signal = ""
 
-    # Trend Logic
-    if last["EMA20"] > last["EMA30"] * 1.001 and last["EMA30"] > last["EMA70"] * 1.001:
+    # تحديد الاتجاه الحالي (Trend Logic)
+    if (
+        last["EMA20"] > last["EMA30"] * 1.001
+        and last["EMA30"] > last["EMA70"] * 1.001
+    ):
         trend = "↗️"
-    elif last["EMA20"] < last["EMA30"] * 0.999 and last["EMA30"] < last["EMA70"] * 0.999:
+    elif (
+        last["EMA20"] < last["EMA30"] * 0.999
+        and last["EMA30"] < last["EMA70"] * 0.999
+    ):
         trend = "🔻"
     else:
         trend = "🔛"
-    
+
     trend_changed = trend != prev_trend
 
     # =====================
-    # STRATEGIES (Separated)
+    # STRATEGIES
     # =====================
 
     # 🟢 UP TREND
@@ -178,8 +178,11 @@ for name, ticker in symbols.items():
             up_signal = "🟢"
             in_position = True
             entry_price = last_close
+
         elif in_position:
-            cross_down = prev["EMA12"] >= prev["EMA20"] and last["EMA12"] < last["EMA20"]
+            cross_down = (
+                prev["EMA12"] >= prev["EMA20"] and last["EMA12"] < last["EMA20"]
+            )
             stop_loss = last_close < entry_price * 0.94
             rsi_sell = last["RSI14"] > RSI_SELL
 
@@ -202,12 +205,17 @@ for name, ticker in symbols.items():
         from_high = (high - last_close) / high
         from_low = (last_close - low) / low
 
-        if not in_position and from_low <= SIDE_CLOSE_PERCENT and last["RSI14"] < 33:
+        if (
+            not in_position
+            and from_low <= SIDE_CLOSE_PERCENT
+            and last["RSI14"] < 33
+        ):
             buy_signal = True
             side_signal = "🟢"
             percent_side = from_low * 100
             in_position = True
             entry_price = last_close
+
         elif in_position:
             if from_high <= SIDE_CLOSE_PERCENT or last["RSI14"] > 68:
                 sell_signal = True
@@ -215,6 +223,7 @@ for name, ticker in symbols.items():
                 percent_side = from_high * 100
                 in_position = False
                 entry_price = None
+
             elif last_close < entry_price * 0.93:
                 sell_signal = True
                 side_signal = "🔴💥"
@@ -229,36 +238,46 @@ for name, ticker in symbols.items():
             entry_price = None
 
     # =====================
-    # Messages Formatting
+    # Formatting Messages
     # =====================
     trend_mark = "🚧 " if trend_changed else ""
 
     if trend == "↗️":
         if up_signal:
-            section_up.append(f"{trend_mark}{up_signal} {name} | {last_close:.2f} | {last_candle_date}")
+            section_up.append(
+                f"{trend_mark}{up_signal} {name} | {last_close:.2f} | {last_candle_date}"
+            )
         elif trend_changed:
-            section_up.append(f"{trend_mark}{name} | {last_close:.2f} | {last_candle_date}")
+            section_up.append(
+                f"{trend_mark}{name} | {last_close:.2f} | {last_candle_date}"
+            )
 
     elif trend == "🔛":
         if side_signal:
             p = f"{percent_side:.2f}%" if percent_side else ""
-            section_side.append(f"{trend_mark}{side_signal} {name} | {last_close:.2f} | {last_candle_date} | {p}")
+            section_side.append(
+                f"{trend_mark}{side_signal} {name} | {last_close:.2f} | {last_candle_date} | {p}"
+            )
         elif trend_changed:
-            section_side.append(f"{trend_mark}{name} | {last_close:.2f} | {last_candle_date}")
+            section_side.append(
+                f"{trend_mark}{name} | {last_close:.2f} | {last_candle_date}"
+            )
 
     elif trend == "🔻":
         if trend_changed:
-            section_down.append(f"{trend_mark}{name} | {last_close:.2f} | {last_candle_date}")
+            section_down.append(
+                f"{trend_mark}{name} | {last_close:.2f} | {last_candle_date}"
+            )
 
-    # Save tracking metadata
+    # حفظ حالة التتبع
     new_signals[name] = {
         "trend": trend,
         "in_position": in_position,
-        "entry_price": entry_price
+        "entry_price": entry_price,
     }
 
 # =====================
-# Build Telegram Message Body
+# Build & Send Telegram Message
 # =====================
 alerts = ["🚦 EGX Alerts Trend Update:\n"]
 
@@ -275,16 +294,15 @@ if section_down:
     alerts.extend(["- " + s for s in section_down])
 
 if data_failures:
-    alerts.append(f"\n⚠️ Data fail (last candle: {last_candle_date})")
+    alerts.append(f"\n⚠️ Database load failure for symbols:")
     alerts.extend(["- " + s for s in data_failures])
 elif not section_up and not section_side and not section_down:
-    alerts.append(f"ℹ️ No new signals for today (last candle: {last_candle_date})")
+    alerts.append(
+        f"ℹ️ No new signals for today (last candle: {last_candle_date})"
+    )
 
-# =====================
-# Save State + Dispatch
-# =====================
 with open(SIGNALS_FILE, "w") as f:
     json.dump(new_signals, f, indent=2, ensure_ascii=False)
 
 send_telegram("\n".join(alerts))
-print("🏁 Execution completed. Alert sent to Telegram successfully.")
+print("🏁 Strategy Analysis Complete. Alerts Dispatched.")
