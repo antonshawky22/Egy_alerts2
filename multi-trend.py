@@ -82,7 +82,6 @@ except:
 
 new_signals = last_signals.copy()
 data_failures = []
-last_candle_date = "2026-06-18"  # تاريخ آخر شمعة تم تحديثها من تريدنج فيو
 
 # Containers للإشارات
 section_up = []
@@ -113,6 +112,8 @@ RSI_SELL = 79
 # Main Loop (قرارات الاستراتيجية)
 # =====================
 for name, ticker in symbols.items():
+    # يقرأ تاريخ آخر سطر مخزن للسهم تلقائياً
+    last_candle_date = list(df.index)[-1]
 
     # جلب البيانات المخزنة محلياً للسهم
     stock_records = database.get(name, [])
