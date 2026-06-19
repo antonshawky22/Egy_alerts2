@@ -82,6 +82,7 @@ except:
 
 new_signals = last_signals.copy()
 data_failures = []
+global_last_date = "Unknown Date"  # متغير احتياطي لتاريخ آخر شمعة
 
 # Containers للإشارات
 section_up = []
@@ -112,8 +113,6 @@ RSI_SELL = 79
 # Main Loop (قرارات الاستراتيجية)
 # =====================
 for name, ticker in symbols.items():
-    # يقرأ تاريخ آخر سطر مخزن للسهم تلقائياً
-    last_candle_date = list(df.index)[-1]
 
     # جلب البيانات المخزنة محلياً للسهم
     stock_records = database.get(name, [])
@@ -125,6 +124,10 @@ for name, ticker in symbols.items():
     # تحويل السجلات لـ DataFrame جاهز للحسابات فوراً بدون إنترنت
     df = pd.DataFrame(stock_records)
     df.set_index("Date", inplace=True)
+
+    # تصحيح برميجي: قراءة تاريخ آخر شمعة مسجلة بعد تعريف الـ df بنجاح
+    last_candle_date = list(df.index)[-1]
+    global_last_date = last_candle_date
 
     # حساب المؤشرات الفنية (EMA & RSI) على البيانات الكاملة والمصححة
     df["EMA20"] = df["Close"].ewm(span=20, adjust=True).mean()
@@ -299,7 +302,7 @@ if data_failures:
     alerts.extend(["- " + s for s in data_failures])
 elif not section_up and not section_side and not section_down:
     alerts.append(
-        f"ℹ️ No new signals for today (last candle: {last_candle_date})"
+        f"ℹ️ No new signals for today (last candle: {global_last_date})"
     )
 
 with open(SIGNALS_FILE, "w") as f:
@@ -307,3 +310,4 @@ with open(SIGNALS_FILE, "w") as f:
 
 send_telegram("\n".join(alerts))
 print("🏁 Strategy Analysis Complete. Alerts Dispatched.")
+
