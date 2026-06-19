@@ -25,53 +25,26 @@ def send_telegram(text):
 # Symbols & Files
 # =====================
 symbols = {
-    "OFH": "OFH",
-    "OLFI": "OLFI",
-    "EMFD": "EMFD",
-    "ETEL": "ETEL",
-    "EAST": "EAST",
-    "EFIH": "EFIH",
-    "ABUK": "ABUK",
-    "OIH": "OIH",
-    "SWDY": "SWDY",
-    "ISPH": "ISPH",
-    "ATQA": "ATQA",
-    "MTIE": "MTIE",
-    "ELEC": "ELEC",
-    "HRHO": "HRHO",
-    "ORWE": "ORWE",
-    "JUFO": "JUFO",
-    "DSCW": "DSCW",
-    "SUGR": "SUGR",
-    "ELSH": "ELSH",
-    "RMDA": "RMDA",
-    "RAYA": "RAYA",
-    "EEII": "EEII",
-    "MPCO": "MPCO",
-    "GBCO": "GBCO",
-    "TMGH": "TMGH",
-    "ORHD": "ORHD",
-    "AMOC": "AMOC",
-    "FWRY": "FWRY",
-    "COMI": "COMI",
-    "ADIB": "ADIB",
-    "PHDC": "PHDC",
-    "MCQE": "MCQE",
-    "SKPC": "SKPC",
-    "EGAL": "EGAL",
+    "OFH": "OFH", "OLFI": "OLFI", "EMFD": "EMFD", "ETEL": "ETEL", "EAST": "EAST",
+    "EFIH": "EFIH", "ABUK": "ABUK", "OIH": "OIH", "SWDY": "SWDY", "ISPH": "ISPH",
+    "ATQA": "ATQA", "MTIE": "MTIE", "ELEC": "ELEC", "HRHO": "HRHO", "ORWE": "ORWE",
+    "JUFO": "JUFO", "DSCW": "DSCW", "SUGR": "SUGR", "ELSH": "ELSH", "RMDA": "RMDA",
+    "RAYA": "RAYA", "EEII": "EEII", "MPCO": "MPCO", "GBCO": "GBCO", "TMGH": "TMGH",
+    "ORHD": "ORHD", "AMOC": "AMOC", "FWRY": "FWRY", "COMI": "COMI", "ADIB": "ADIB",
+    "PHDC": "PHDC", "MCQE": "MCQE", "SKPC": "SKPC", "EGAL": "EGAL"
 }
 
 DB_FILE = "egx_history_database.json"
 SIGNALS_FILE = "last_signals.json"
 
-# 1. قراءة قاعدة البيانات المحلية (التي تم إنشاؤها وتحديثها في الخطوة السابقة)
+# 1. قراءة قاعدة البيانات المحلية بالهيكل الجديد
 try:
     with open(DB_FILE, "r") as f:
-        database = json.load(f)
-    print("💾 Strategy Engine: Successfully loaded local price database.")
+        raw_database = json.load(f)
+    print("💾 Strategy Engine: Successfully loaded local compact database.")
 except Exception as e:
     print(f"❌ Critical Error: Could not find or read {DB_FILE}. Error: {e}")
-    database = {}
+    raw_database = {}
 
 # 2. تحميل الإشارات السابقة
 try:
@@ -82,7 +55,7 @@ except:
 
 new_signals = last_signals.copy()
 data_failures = []
-global_last_date = "Unknown Date"  # متغير احتياطي لتاريخ آخر شمعة
+global_last_date = "Unknown Date"
 
 # Containers للإشارات
 section_up = []
@@ -114,22 +87,26 @@ RSI_SELL = 79
 # =====================
 for name, ticker in symbols.items():
 
-    # جلب البيانات المخزنة محلياً للسهم
-    stock_records = database.get(name, [])
-
-    if not stock_records or len(stock_records) < 100:
+    # جلب الداتا وقراءتها بناءً على الهيكل الجديد
+    stock_content = raw_database.get(name, {})
+    if not stock_content or "data" not in stock_content:
         data_failures.append(name)
         continue
 
-    # تحويل السجلات لـ DataFrame جاهز للحسابات فوراً بدون إنترنت
-    df = pd.DataFrame(stock_records)
-    df.set_index("Date", inplace=True)
+    # تحويل الداتا المضغوطة فوراً لـ DataFrame جاهز للحسابات
+    df = pd.DataFrame.from_dict(stock_content["data"], orient="index", columns=stock_content["columns"])
+    df.index.name = "Date"
+    df = df.sort_index()
 
-    # تصحيح برميجي: قراءة تاريخ آخر شمعة مسجلة بعد تعريف الـ df بنجاح
-    last_candle_date = list(df.index)[-1]
+    if len(df) < 100:
+        data_failures.append(name)
+        continue
+
+    # قراءة تاريخ آخر شمعة مسجلة ديناميكياً
+    last_candle_date = str(df.index[-1])
     global_last_date = last_candle_date
 
-    # حساب المؤشرات الفنية (EMA & RSI) على البيانات الكاملة والمصححة
+    # حساب المؤشرات الفنية
     df["EMA20"] = df["Close"].ewm(span=20, adjust=True).mean()
     df["EMA30"] = df["Close"].ewm(span=30, adjust=True).mean()
     df["EMA40"] = df["Close"].ewm(span=40, adjust=True).mean()
@@ -156,15 +133,9 @@ for name, ticker in symbols.items():
     up_signal = ""
 
     # تحديد الاتجاه الحالي (Trend Logic)
-    if (
-        last["EMA20"] > last["EMA30"] * 1.001
-        and last["EMA30"] > last["EMA70"] * 1.001
-    ):
+    if last["EMA20"] > last["EMA30"] * 1.001 and last["EMA30"] > last["EMA70"] * 1.001:
         trend = "↗️"
-    elif (
-        last["EMA20"] < last["EMA30"] * 0.999
-        and last["EMA30"] < last["EMA70"] * 0.999
-    ):
+    elif last["EMA20"] < last["EMA30"] * 0.999 and last["EMA30"] < last["EMA70"] * 0.999:
         trend = "🔻"
     else:
         trend = "🔛"
@@ -184,9 +155,7 @@ for name, ticker in symbols.items():
             entry_price = last_close
 
         elif in_position:
-            cross_down = (
-                prev["EMA12"] >= prev["EMA20"] and last["EMA12"] < last["EMA20"]
-            )
+            cross_down = (prev["EMA12"] >= prev["EMA20"] and last["EMA12"] < last["EMA20"])
             stop_loss = last_close < entry_price * 0.94
             rsi_sell = last["RSI14"] > RSI_SELL
 
@@ -209,11 +178,7 @@ for name, ticker in symbols.items():
         from_high = (high - last_close) / high
         from_low = (last_close - low) / low
 
-        if (
-            not in_position
-            and from_low <= SIDE_CLOSE_PERCENT
-            and last["RSI14"] < 33
-        ):
+        if not in_position and from_low <= SIDE_CLOSE_PERCENT and last["RSI14"] < 33:
             buy_signal = True
             side_signal = "🟢"
             percent_side = from_low * 100
@@ -248,30 +213,20 @@ for name, ticker in symbols.items():
 
     if trend == "↗️":
         if up_signal:
-            section_up.append(
-                f"{trend_mark}{up_signal} {name} | {last_close:.2f} | {last_candle_date}"
-            )
+            section_up.append(f"{trend_mark}{up_signal} {name} | {last_close:.2f} | {last_candle_date}")
         elif trend_changed:
-            section_up.append(
-                f"{trend_mark}{name} | {last_close:.2f} | {last_candle_date}"
-            )
+            section_up.append(f"{trend_mark}{name} | {last_close:.2f} | {last_candle_date}")
 
     elif trend == "🔛":
         if side_signal:
             p = f"{percent_side:.2f}%" if percent_side else ""
-            section_side.append(
-                f"{trend_mark}{side_signal} {name} | {last_close:.2f} | {last_candle_date} | {p}"
-            )
+            section_side.append(f"{trend_mark}{side_signal} {name} | {last_close:.2f} | {last_candle_date} | {p}")
         elif trend_changed:
-            section_side.append(
-                f"{trend_mark}{name} | {last_close:.2f} | {last_candle_date}"
-            )
+            section_side.append(f"{trend_mark}{name} | {last_close:.2f} | {last_candle_date}")
 
     elif trend == "🔻":
         if trend_changed:
-            section_down.append(
-                f"{trend_mark}{name} | {last_close:.2f} | {last_candle_date}"
-            )
+            section_down.append(f"{trend_mark}{name} | {last_close:.2f} | {last_candle_date}")
 
     # حفظ حالة التتبع
     new_signals[name] = {
@@ -301,13 +256,10 @@ if data_failures:
     alerts.append(f"\n⚠️ Database load failure for symbols:")
     alerts.extend(["- " + s for s in data_failures])
 elif not section_up and not section_side and not section_down:
-    alerts.append(
-        f"ℹ️ No new signals for today (last candle: {global_last_date})"
-    )
+    alerts.append(f"ℹ️ No new signals for today (last candle: {global_last_date})")
 
 with open(SIGNALS_FILE, "w") as f:
     json.dump(new_signals, f, indent=2, ensure_ascii=False)
 
 send_telegram("\n".join(alerts))
 print("🏁 Strategy Analysis Complete. Alerts Dispatched.")
-
