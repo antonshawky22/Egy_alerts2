@@ -1,10 +1,4 @@
 print("EGX ALERTS - Hybrid High-Accuracy Production Version")
-
-# =====================
-# Install/Update Required Libraries
-# =====================
-!pip install yfinance tradingview-ta requests pandas --quiet
-
 import yfinance as yf
 from tradingview_ta import TA_Handler, Interval as TVInterval
 import requests
