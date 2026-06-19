@@ -25,7 +25,7 @@
     "entry_price": 38.869998931884766
   },
   "EFIH": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 20.889999389648438
   },
@@ -65,7 +65,7 @@
     "entry_price": null
   },
   "HRHO": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -85,7 +85,7 @@
     "entry_price": null
   },
   "SUGR": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
