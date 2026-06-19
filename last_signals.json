@@ -5,7 +5,7 @@
     "entry_price": 0.6060000061988831
   },
   "OLFI": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 21.520000457763672
   },
@@ -20,12 +20,12 @@
     "entry_price": 92.55999755859375
   },
   "EAST": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 38.869998931884766
   },
   "EFIH": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": true,
     "entry_price": 20.889999389648438
   },
@@ -65,7 +65,7 @@
     "entry_price": null
   },
   "HRHO": {
-    "trend": "🔛",
+    "trend": "🔻",
     "in_position": false,
     "entry_price": null
   },
@@ -80,19 +80,19 @@
     "entry_price": 28.09000015258789
   },
   "DSCW": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
   "SUGR": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": false,
     "entry_price": null
   },
   "ELSH": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 13.06
   },
   "RMDA": {
     "trend": "↗️",
@@ -101,8 +101,8 @@
   },
   "RAYA": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 7.3
   },
   "EEII": {
     "trend": "↗️",
