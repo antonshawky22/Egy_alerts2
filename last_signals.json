@@ -1,6 +1,6 @@
 {
   "OFH": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 0.6060000061988831
   },
@@ -91,8 +91,8 @@
   },
   "ELSH": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 13.06
+    "in_position": false,
+    "entry_price": null
   },
   "RMDA": {
     "trend": "↗️",
@@ -155,9 +155,9 @@
     "entry_price": 15.100000381469727
   },
   "MCQE": {
-    "trend": "🔛",
-    "in_position": true,
-    "entry_price": 180.0
+    "trend": "🔻",
+    "in_position": false,
+    "entry_price": null
   },
   "SKPC": {
     "trend": "🔻",
