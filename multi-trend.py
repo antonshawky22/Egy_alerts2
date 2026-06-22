@@ -24,16 +24,6 @@ def send_telegram(text):
 # =====================
 # Symbols & Files
 # =====================
-symbols = {
-    "OFH": "OFH", "OLFI": "OLFI", "EMFD": "EMFD", "ETEL": "ETEL", "EAST": "EAST",
-    "EFIH": "EFIH", "ABUK": "ABUK", "OIH": "OIH", "SWDY": "SWDY", "ISPH": "ISPH",
-    "ATQA": "ATQA", "MTIE": "MTIE", "ELEC": "ELEC", "HRHO": "HRHO", "ORWE": "ORWE",
-    "JUFO": "JUFO", "DSCW": "DSCW", "SUGR": "SUGR", "ELSH": "ELSH", "RMDA": "RMDA",
-    "RAYA": "RAYA", "EEII": "EEII", "MPCO": "MPCO", "GBCO": "GBCO", "TMGH": "TMGH",
-    "ORHD": "ORHD", "AMOC": "AMOC", "FWRY": "FWRY", "COMI": "COMI", "ADIB": "ADIB",
-    "PHDC": "PHDC", "MCQE": "MCQE", "SKPC": "SKPC", "EGAL": "EGAL"
-}
-
 DB_FILE = "egx_history_database.json"
 SIGNALS_FILE = "last_signals.json"
 
@@ -45,6 +35,9 @@ try:
 except Exception as e:
     print(f"❌ Critical Error: Could not find or read {DB_FILE}. Error: {e}")
     raw_database = {}
+
+# 🟢 التعديل المعتمد: استخراج الأسهم تلقائياً من مفاتيح ملف الداتا المحلي (بدون مصفوفة يدوية مكررة)
+symbols_keys = list(raw_database.keys())
 
 # 2. تحميل الإشارات السابقة
 try:
@@ -85,7 +78,8 @@ RSI_SELL = 79
 # =====================
 # Main Loop (قرارات الاستراتيجية)
 # =====================
-for name, ticker in symbols.items():
+# 🟢 التعديل المعتمد: الحلقة التكرارية الآن تمر ديناميكياً على مفاتيح ملف الـ JSON
+for name in symbols_keys:
 
     # جلب الداتا وقراءتها بناءً على الهيكل الجديد
     stock_content = raw_database.get(name, {})
