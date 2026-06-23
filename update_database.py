@@ -61,8 +61,11 @@ for name, ticker in symbols.items():
             df = yf_df[["Open", "High", "Low", "Close"]].copy()
             df.index = df.index.astype(str)
 
+        # 🟢 تعديل ذكي: تحديد نوع الـ screener بناءً على هل هو مؤشر أم سهم عادي لمنع انهيار السحب
+        tv_screener = "indices" if name == "EGX30" else "egypt"
+
         # جلب شمعة اليوم من TradingView
-        handler = TA_Handler(symbol=ticker, screener="egypt", exchange="EGX", interval=TVInterval.INTERVAL_1_DAY)
+        handler = TA_Handler(symbol=ticker, screener=tv_screener, exchange="EGX", interval=TVInterval.INTERVAL_1_DAY)
         analysis = handler.get_analysis()
         tv_indicators = analysis.indicators
         
