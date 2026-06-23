@@ -16,7 +16,8 @@ symbols = {
     "JUFO": "JUFO", "DSCW": "DSCW", "SUGR": "SUGR", "ELSH": "ELSH", "RMDA": "RMDA",
     "RAYA": "RAYA", "EEII": "EEII", "MPCO": "MPCO", "GBCO": "GBCO", "TMGH": "TMGH",
     "ORHD": "ORHD", "AMOC": "AMOC", "FWRY": "FWRY", "COMI": "COMI", "ADIB": "ADIB",
-    "PHDC": "PHDC", "MCQE": "MCQE", "SKPC": "SKPC", "EGAL": "EGAL"
+    "PHDC": "PHDC", "MCQE": "MCQE", "SKPC": "SKPC", "EGAL": "EGAL",
+    "EGX30": "EGX30"  # 🟢 تم إضافة المؤشر بنجاح
 }
 
 DB_FILE = "egx_history_database.json"
@@ -48,7 +49,11 @@ for name, ticker in symbols.items():
         # إذا كانت الداتا فارغة، اسحب من ياهو لأول مرة
         if df.empty or len(df) < 100:
             print(f"📥 Downloading historical baseline for {name} from Yahoo...")
-            yf_df = yf.download(f"{ticker}.CA", period="7mo", interval="1d", auto_adjust=False, progress=False, timeout=15)
+            
+            # 🟢 تعديل جراحي: توجيه البوت لرمز ياهو الصحيح للمؤشر العام
+            yf_ticker = "^CASE30" if name == "EGX30" else f"{ticker}.CA"
+            
+            yf_df = yf.download(yf_ticker, period="7mo", interval="1d", auto_adjust=False, progress=False, timeout=15)
             if isinstance(yf_df.columns, pd.MultiIndex):
                 yf_df.columns = yf_df.columns.get_level_values(0)
             yf_df = yf_df.dropna(subset=["Close"])
