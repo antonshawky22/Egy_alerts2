@@ -168,5 +168,10 @@
     "trend": "🔛",
     "in_position": true,
     "entry_price": 287.33
+  },
+  "EGX30": {
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null
   }
 }
