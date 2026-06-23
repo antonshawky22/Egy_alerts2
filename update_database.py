@@ -7,7 +7,7 @@ import os
 import pandas as pd
 
 # =====================
-# Symbols (تم إضافة المؤشر للقائمة)
+# Symbols
 # =====================
 symbols = {
     "EGX30": "EGX30",  # المؤشر الرئيسي
@@ -32,13 +32,18 @@ except:
     print("🆕 No database found. Initializing a new one...")
 
 database = {}
-# تحويل الهيكل لـ DataFrames للتعامل معها داخل الكود
+# 🔥 إصلاح الحماية: تحويل الهيكل لـ DataFrames مع معالجة استثنائية لكل عنصر لمنع الـ Database load failure
 for name, content in raw_database.items():
-    if "columns" in content and "data" in content:
-        df_temp = pd.DataFrame.from_dict(content["data"], orient="index", columns=content["columns"])
-        df_temp.index.name = "Date"
-        database[name] = df_temp
-    else:
+    try:
+        if isinstance(content, dict) and "columns" in content and "data" in content:
+            df_temp = pd.DataFrame.from_dict(content["data"], orient="index", columns=content["columns"])
+            df_temp.index.name = "Date"
+            database[name] = df_temp
+        else:
+            database[name] = pd.DataFrame()
+    except Exception as e:
+        # إذا كان العنصر القديم معيباً أو بهيكل مختلف (مثل الـ EGX30 القديم)، صفر الداتا لبنائها بشكل صحيح
+        print(f"⚠️ Re-initializing structural breakdown for {name} due to format mismatch.")
         database[name] = pd.DataFrame()
 
 # تحديث الأسعار وضخ البيانات
@@ -46,10 +51,10 @@ for name, ticker in symbols.items():
     try:
         df = database.get(name, pd.DataFrame())
 
-        # إذا كانت الداتا فارغة أو تحتاج بناء الأساس التاريخي
+        # إذا كانت الداتا فارغة أو تحتاج بناء الأساس التاريخي (أو تم تصفيرها في الخطوة السابقة)
         if df.empty or len(df) < 100:
             if name == "EGX30":
-                # 🔥 تكتيك الساعات المخصص للمؤشر لقهر أخطاء التوقيت الصيفي في ياهو
+                # تكتيك الساعات المخصص للمؤشر لقهر أخطاء التوقيت الصيفي في ياهو
                 print(f"📥 Downloading Hourly historical baseline for {name} from Yahoo...")
                 yf_hourly = yf.download("^CASE30", period="5mo", interval="1h", auto_adjust=False, progress=False, timeout=15)
                 
