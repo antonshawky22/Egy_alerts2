@@ -1,10 +1,11 @@
-print("🔄 EGX DATABASE - Advanced Compact Sourcing Engine (With Fixed EGX30)")
+print("⚙️ EGX DATABASE - GitHub Production Sourcing Engine")
 
 import yfinance as yf
 from tradingview_ta import TA_Handler, Interval as TVInterval
 import json
 import os
 import pandas as pd
+import requests
 
 # =====================
 # Symbols
@@ -22,6 +23,12 @@ symbols = {
 
 DB_FILE = "egx_history_database.json"
 
+# تجهيز الـ Session وتخطي حظر جيت هب (Custom User-Agent للبيئة المؤتمتة)
+session = requests.Session()
+session.headers.update({
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+})
+
 # تحميل قاعدة البيانات بالهيكل الجديد المنسق
 try:
     with open(DB_FILE, "r") as f:
@@ -32,7 +39,6 @@ except:
     print("🆕 No database found. Initializing a new one...")
 
 database = {}
-# 🔥 إصلاح الحماية: تحويل الهيكل لـ DataFrames مع معالجة استثنائية لكل عنصر لمنع الـ Database load failure
 for name, content in raw_database.items():
     try:
         if isinstance(content, dict) and "columns" in content and "data" in content:
@@ -42,7 +48,6 @@ for name, content in raw_database.items():
         else:
             database[name] = pd.DataFrame()
     except Exception as e:
-        # إذا كان العنصر القديم معيباً أو بهيكل مختلف (مثل الـ EGX30 القديم)، صفر الداتا لبنائها بشكل صحيح
         print(f"⚠️ Re-initializing structural breakdown for {name} due to format mismatch.")
         database[name] = pd.DataFrame()
 
@@ -51,29 +56,32 @@ for name, ticker in symbols.items():
     try:
         df = database.get(name, pd.DataFrame())
 
-        # إذا كانت الداتا فارغة أو تحتاج بناء الأساس التاريخي (أو تم تصفيرها في الخطوة السابقة)
+        # إذا كانت الداتا فارغة أو تحتاج بناء الأساس التاريخي
         if df.empty or len(df) < 100:
             if name == "EGX30":
-                # تكتيك الساعات المخصص للمؤشر لقهر أخطاء التوقيت الصيفي في ياهو
-                print(f"📥 Downloading Hourly historical baseline for {name} from Yahoo...")
-                yf_hourly = yf.download("^CASE30", period="5mo", interval="1h", auto_adjust=False, progress=False, timeout=15)
+                print(f"📥 Downloading Hourly historical baseline for {name} from Yahoo (GitHub Session Mode)...")
                 
-                if isinstance(yf_hourly.columns, pd.MultiIndex):
-                    yf_hourly.columns = yf_hourly.columns.get_level_values(0)
-                yf_hourly.columns = [str(col).strip() for col in yf_hourly.columns]
+                # استخدام الـ session لتفادي حظر الـ IP في جيت هب، وتوسيع المدة لـ 6 أشهر لضمان تدفق البيانات
+                yf_hourly = yf.download("^CASE30", period="6mo", interval="1h", auto_adjust=False, progress=False, timeout=20, session=session)
                 
-                # تطهير الفهرس الزمني وإعادة التجميع اليومي الصافي
-                yf_hourly.index = pd.to_datetime(yf_hourly.index).tz_localize(None)
-                df_daily = yf_hourly.resample('D').agg({
-                    'Open': 'first', 'High': 'max', 'Low': 'min', 'Close': 'last'
-                }).dropna()
-                
-                df = df_daily[["Open", "High", "Low", "Close"]].copy()
-                df.index = df.index.astype(str).str[:10]
+                if not yf_hourly.empty:
+                    if isinstance(yf_hourly.columns, pd.MultiIndex):
+                        yf_hourly.columns = yf_hourly.columns.get_level_values(0)
+                    yf_hourly.columns = [str(col).strip() for col in yf_hourly.columns]
+                    
+                    yf_hourly.index = pd.to_datetime(yf_hourly.index).tz_localize(None)
+                    df_daily = yf_hourly.resample('D').agg({
+                        'Open': 'first', 'High': 'max', 'Low': 'min', 'Close': 'last'
+                    }).dropna()
+                    
+                    df = df_daily[["Open", "High", "Low", "Close"]].copy()
+                    df.index = df.index.astype(str).str[:10]
+                else:
+                    print("❌ Yahoo hourly returned empty dataframe on GitHub server.")
             else:
-                # آلية السحب اليومية الطبيعية للأسهم العادية
+                # آلية السحب اليومية الطبيعية للأسهم العادية مع الـ session
                 print(f"📥 Downloading historical baseline for {name} from Yahoo...")
-                yf_df = yf.download(f"{ticker}.CA", period="7mo", interval="1d", auto_adjust=False, progress=False, timeout=15)
+                yf_df = yf.download(f"{ticker}.CA", period="7mo", interval="1d", auto_adjust=False, progress=False, timeout=15, session=session)
                 if isinstance(yf_df.columns, pd.MultiIndex):
                     yf_df.columns = yf_df.columns.get_level_values(0)
                 yf_df = yf_df.dropna(subset=["Close"])
@@ -81,7 +89,7 @@ for name, ticker in symbols.items():
                 df = yf_df[["Open", "High", "Low", "Close"]].copy()
                 df.index = df.index.astype(str).str[:10]
 
-        # جلب شمعة اليوم المباشرة والمحدثة من TradingView
+        # جلب شمعة اليوم المباشرة والمحدثة من TradingView (تعمل دائماً بكفاءة على جيت هب)
         handler = TA_Handler(symbol=ticker, screener="egypt", exchange="EGX", interval=TVInterval.INTERVAL_1_DAY)
         analysis = handler.get_analysis()
         tv_indicators = analysis.indicators
@@ -95,8 +103,6 @@ for name, ticker in symbols.items():
         
         # دمج أو تحديث السطر الحصري لجلسة اليوم
         df.loc[last_candle_date] = [tv_open, tv_high, tv_low, tv_close]
-        
-        # تقريب كافة الخلايا لكسرين عشريين لضبط حجم التخزين في الـ JSON
         df = df.round(2)
         
         database[name] = df
@@ -109,7 +115,6 @@ for name, ticker in symbols.items():
 final_json = {}
 for name, df in database.items():
     if not df.empty:
-        # ترتيب التواريخ تصاعدياً من الأقدم للأحدث قبل التصدير النهائي
         df = df.sort_index()
         final_json[name] = {
             "columns": list(df.columns),
