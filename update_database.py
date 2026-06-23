@@ -50,7 +50,7 @@ for name, ticker in symbols.items():
         if df.empty or len(df) < 100:
             print(f"📥 Downloading historical baseline for {name} from Yahoo...")
             
-            # 🟢 تعديل جراحي: توجيه البوت لرمز ياهو الصحيح للمؤشر العام
+            # 🟢 توجيه البوت لرمز ياهو الصحيح للمؤشر العام
             yf_ticker = "^CASE30" if name == "EGX30" else f"{ticker}.CA"
             
             yf_df = yf.download(yf_ticker, period="7mo", interval="1d", auto_adjust=False, progress=False, timeout=15)
@@ -61,11 +61,22 @@ for name, ticker in symbols.items():
             df = yf_df[["Open", "High", "Low", "Close"]].copy()
             df.index = df.index.astype(str)
 
-        # 🟢 تعديل ذكي: تحديد نوع الـ screener بناءً على هل هو مؤشر أم سهم عادي لمنع انهيار السحب
-        tv_screener = "indices" if name == "EGX30" else "egypt"
-
-        # جلب شمعة اليوم من TradingView
-        handler = TA_Handler(symbol=ticker, screener=tv_screener, exchange="EGX", interval=TVInterval.INTERVAL_1_DAY)
+        # 🟢 فصل إعدادات الجلب للمؤشر عن الأسهم العادية لتفادي الـ Failure
+        if name == "EGX30":
+            handler = TA_Handler(
+                symbol="EGX30",
+                screener="indices",
+                exchange="EGX",
+                interval=TVInterval.INTERVAL_1_DAY
+            )
+        else:
+            handler = TA_Handler(
+                symbol=ticker,
+                screener="egypt",
+                exchange="EGX",
+                interval=TVInterval.INTERVAL_1_DAY
+            )
+            
         analysis = handler.get_analysis()
         tv_indicators = analysis.indicators
         
