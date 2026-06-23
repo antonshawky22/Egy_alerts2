@@ -135,7 +135,7 @@
     "entry_price": null
   },
   "FWRY": {
-    "trend": "🔛",
+    "trend": "🔻",
     "in_position": false,
     "entry_price": null
   },
@@ -146,8 +146,8 @@
   },
   "ADIB": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 46.45000076293945
+    "in_position": false,
+    "entry_price": null
   },
   "PHDC": {
     "trend": "↗️",
@@ -166,7 +166,7 @@
   },
   "EGAL": {
     "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 287.33
   }
 }
