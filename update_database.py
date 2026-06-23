@@ -17,7 +17,7 @@ symbols = {
     "RAYA": "RAYA", "EEII": "EEII", "MPCO": "MPCO", "GBCO": "GBCO", "TMGH": "TMGH",
     "ORHD": "ORHD", "AMOC": "AMOC", "FWRY": "FWRY", "COMI": "COMI", "ADIB": "ADIB",
     "PHDC": "PHDC", "MCQE": "MCQE", "SKPC": "SKPC", "EGAL": "EGAL",
-    "EGX30": "EGX30"  # 🟢 تم إضافة المؤشر بنجاح
+    "EGX30": "EGX30"
 }
 
 DB_FILE = "egx_history_database.json"
@@ -46,22 +46,24 @@ for name, ticker in symbols.items():
     try:
         df = database.get(name, pd.DataFrame())
 
-        # إذا كانت الداتا فارغة، اسحب من ياهو لأول مرة
-        if df.empty or len(df) < 100:
+        # 🟢 تعديل الشرط: لو الداتا تحتوي على شمعة واحدة فقط (بسبب فشل ياهو السابق)، اعتبرها فارغة وأعد السحب التاريخي فوراً
+        if df.empty or len(df) <= 5:
             print(f"📥 Downloading historical baseline for {name} from Yahoo...")
             
-            # 🟢 توجيه البوت لرمز ياهو الصحيح للمؤشر العام
             yf_ticker = "^CASE30" if name == "EGX30" else f"{ticker}.CA"
             
             yf_df = yf.download(yf_ticker, period="7mo", interval="1d", auto_adjust=False, progress=False, timeout=15)
+            
+            # 🟢 الحل السحري لتنظيف داتا ياهو للمؤشر والأسهم معاً بدون أخطاء
             if isinstance(yf_df.columns, pd.MultiIndex):
-                yf_df.columns = yf_df.columns.get_level_values(0)
+                yf_df.columns = [col[0] for col in yf_df.columns.values]
+            
             yf_df = yf_df.dropna(subset=["Close"])
             
             df = yf_df[["Open", "High", "Low", "Close"]].copy()
             df.index = df.index.astype(str)
 
-        # 🟢 فصل إعدادات الجلب للمؤشر عن الأسهم العادية لتفادي الـ Failure
+        # فصل إعدادات الجلب للمؤشر عن الأسهم العادية لتفادي الـ Failure
         if name == "EGX30":
             handler = TA_Handler(
                 symbol="EGX30",
@@ -103,7 +105,6 @@ for name, ticker in symbols.items():
 final_json = {}
 for name, df in database.items():
     if not df.empty:
-        # ترتيب التواريخ من الأقدم للأحدث قبل الحفظ
         df = df.sort_index()
         final_json[name] = {
             "columns": list(df.columns),
