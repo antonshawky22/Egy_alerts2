@@ -71,8 +71,8 @@
   },
   "ORWE": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 23.600000381469727
+    "in_position": false,
+    "entry_price": null
   },
   "JUFO": {
     "trend": "↗️",
@@ -96,8 +96,8 @@
   },
   "RMDA": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 5.059999942779541
+    "in_position": false,
+    "entry_price": null
   },
   "RAYA": {
     "trend": "↗️",
@@ -165,9 +165,9 @@
     "entry_price": null
   },
   "EGAL": {
-    "trend": "🔛",
-    "in_position": true,
-    "entry_price": 287.33
+    "trend": "🔻",
+    "in_position": false,
+    "entry_price": null
   },
   "EGX30": {
     "trend": "↗️",
