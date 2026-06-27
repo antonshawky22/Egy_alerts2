@@ -85,7 +85,7 @@
     "entry_price": null
   },
   "SUGR": {
-    "trend": "🔛",
+    "trend": "🔻",
     "in_position": false,
     "entry_price": null
   },
@@ -170,7 +170,7 @@
     "entry_price": null
   },
   "EGX30": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   }
