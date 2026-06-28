@@ -86,13 +86,13 @@
   },
   "SUGR": {
     "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 46.5
   },
   "ELSH": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 12.27
+    "in_position": false,
+    "entry_price": null
   },
   "RMDA": {
     "trend": "🔛",
@@ -161,8 +161,8 @@
   },
   "SKPC": {
     "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 15.73
   },
   "EGAL": {
     "trend": "🔛",
