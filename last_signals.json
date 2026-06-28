@@ -45,7 +45,7 @@
     "entry_price": 87.27
   },
   "ISPH": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": true,
     "entry_price": 11.449999809265137
   },
@@ -105,7 +105,7 @@
     "entry_price": 7.3
   },
   "EEII": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": true,
     "entry_price": 2.299999952316284
   },
@@ -130,9 +130,9 @@
     "entry_price": 37.0
   },
   "AMOC": {
-    "trend": "🔛",
-    "in_position": true,
-    "entry_price": 7.6
+    "trend": "🔻",
+    "in_position": false,
+    "entry_price": null
   },
   "FWRY": {
     "trend": "🔛",
@@ -155,14 +155,14 @@
     "entry_price": 15.100000381469727
   },
   "MCQE": {
-    "trend": "🔛",
-    "in_position": true,
-    "entry_price": 169.03
+    "trend": "🔻",
+    "in_position": false,
+    "entry_price": null
   },
   "SKPC": {
-    "trend": "🔛",
-    "in_position": true,
-    "entry_price": 15.73
+    "trend": "🔻",
+    "in_position": false,
+    "entry_price": null
   },
   "EGAL": {
     "trend": "🔛",
