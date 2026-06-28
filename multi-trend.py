@@ -127,9 +127,9 @@ for name in symbols_keys:
     up_signal = ""
 
     # تحديد الاتجاه الحالي (Trend Logic)
-    if last["EMA20"] > last["EMA30"] * 1.01 and last["EMA30"] > last["EMA40"] * 1.01:
+    if last["EMA20"] > last["EMA30"] * 1.005 and last["EMA30"] > last["EMA40"] * 1.005:
         trend = "↗️"
-    elif last["EMA20"] < last["EMA30"] * 0.99 and last["EMA30"] < last["EMA40"] * 0.99:
+    elif last["EMA20"] < last["EMA30"] * 0.995 and last["EMA30"] < last["EMA40"] * 0.995:
         trend = "🔻"
     else:
         trend = "🔛"
