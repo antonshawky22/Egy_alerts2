@@ -71,8 +71,8 @@
   },
   "ORWE": {
     "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 22.15
   },
   "JUFO": {
     "trend": "↗️",
@@ -81,8 +81,8 @@
   },
   "DSCW": {
     "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 1.71
   },
   "SUGR": {
     "trend": "🔛",
