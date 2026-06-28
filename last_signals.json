@@ -35,17 +35,17 @@
     "entry_price": null
   },
   "OIH": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
   "SWDY": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 87.27
   },
   "ISPH": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 11.449999809265137
   },
@@ -55,12 +55,12 @@
     "entry_price": 9.449999809265137
   },
   "MTIE": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 9.050000190734863
   },
   "ELEC": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -80,12 +80,12 @@
     "entry_price": 28.09000015258789
   },
   "DSCW": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
   "SUGR": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -95,7 +95,7 @@
     "entry_price": 12.27
   },
   "RMDA": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -105,7 +105,7 @@
     "entry_price": 7.3
   },
   "EEII": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 2.299999952316284
   },
@@ -120,7 +120,7 @@
     "entry_price": 25.979999542236328
   },
   "TMGH": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 96.69999694824219
   },
@@ -130,12 +130,12 @@
     "entry_price": 37.0
   },
   "AMOC": {
-    "trend": "🔻",
-    "in_position": false,
-    "entry_price": null
+    "trend": "🔛",
+    "in_position": true,
+    "entry_price": 7.6
   },
   "FWRY": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -155,19 +155,19 @@
     "entry_price": 15.100000381469727
   },
   "MCQE": {
-    "trend": "🔻",
-    "in_position": false,
-    "entry_price": null
+    "trend": "🔛",
+    "in_position": true,
+    "entry_price": 169.03
   },
   "SKPC": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
   "EGAL": {
-    "trend": "🔻",
-    "in_position": false,
-    "entry_price": null
+    "trend": "🔛",
+    "in_position": true,
+    "entry_price": 282.4
   },
   "EGX30": {
     "trend": "🔛",
