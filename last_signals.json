@@ -55,9 +55,9 @@
     "entry_price": 9.449999809265137
   },
   "MTIE": {
-    "trend": "🔛",
-    "in_position": true,
-    "entry_price": 9.050000190734863
+    "trend": "↗️",
+    "in_position": false,
+    "entry_price": null
   },
   "ELEC": {
     "trend": "🔛",
@@ -80,9 +80,9 @@
     "entry_price": 28.09000015258789
   },
   "DSCW": {
-    "trend": "🔛",
-    "in_position": true,
-    "entry_price": 1.71
+    "trend": "🔻",
+    "in_position": false,
+    "entry_price": null
   },
   "SUGR": {
     "trend": "🔛",
@@ -95,7 +95,7 @@
     "entry_price": null
   },
   "RMDA": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": false,
     "entry_price": null
   },
@@ -165,9 +165,9 @@
     "entry_price": null
   },
   "EGAL": {
-    "trend": "🔛",
-    "in_position": true,
-    "entry_price": 282.4
+    "trend": "🔻",
+    "in_position": false,
+    "entry_price": null
   },
   "EGX30": {
     "trend": "🔛",
