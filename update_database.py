@@ -1,11 +1,10 @@
-print("⚙️ EGX DATABASE - GitHub Production Sourcing Engine")
+print("⚙️ EGX DATABASE - GitHub Production Sourcing Engine (With Volume v2)")
 
 import yfinance as yf
 from tradingview_ta import TA_Handler, Interval as TVInterval
 import json
 import os
 import pandas as pd
-import requests
 
 # =====================
 # Symbols
@@ -21,22 +20,17 @@ symbols = {
     "PHDC": "PHDC", "MCQE": "MCQE", "SKPC": "SKPC", "EGAL": "EGAL"
 }
 
-DB_FILE = "egx_history_database.json"
-
-# تجهيز الـ Session وتخطي حظر جيت هب (Custom User-Agent للبيئة المؤتمتة)
-session = requests.Session()
-session.headers.update({
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-})
+# 🟢 اسم الملف الجديد الخماسي
+DB_FILE = "egx_history_database_v2.json"
 
 # تحميل قاعدة البيانات بالهيكل الجديد المنسق
 try:
     with open(DB_FILE, "r") as f:
         raw_database = json.load(f)
-    print("💾 Existing compact database loaded successfully.")
+    print("💾 Existing V2 compact database loaded successfully.")
 except:
     raw_database = {}
-    print("🆕 No database found. Initializing a new one...")
+    print("🆕 No V2 database found. Initializing a clean 5-column database...")
 
 database = {}
 for name, content in raw_database.items():
@@ -59,10 +53,10 @@ for name, ticker in symbols.items():
         # إذا كانت الداتا فارغة أو تحتاج بناء الأساس التاريخي
         if df.empty or len(df) < 100:
             if name == "EGX30":
-                print(f"📥 Downloading Hourly historical baseline for {name} from Yahoo (GitHub Session Mode)...")
+                print(f"📥 Downloading Hourly historical baseline for {name} from Yahoo (Auto-Handling)...")
                 
-                # استخدام الـ session لتفادي حظر الـ IP في جيت هب، وتوسيع المدة لـ 6 أشهر لضمان تدفق البيانات
-                yf_hourly = yf.download("^CASE30", period="6mo", interval="1h", auto_adjust=False, progress=False, timeout=20, session=session)
+                # 🟢 تم إزالة معامل session وترك المكتبة تدير الاتصال داخلياً لحل خطأ curl_cffi
+                yf_hourly = yf.download("^CASE30", period="6mo", interval="1h", auto_adjust=False, progress=False, timeout=20)
                 
                 if not yf_hourly.empty:
                     if isinstance(yf_hourly.columns, pd.MultiIndex):
@@ -70,26 +64,35 @@ for name, ticker in symbols.items():
                     yf_hourly.columns = [str(col).strip() for col in yf_hourly.columns]
                     
                     yf_hourly.index = pd.to_datetime(yf_hourly.index).tz_localize(None)
+                    
+                    # تجميع الساعات ليومي مع تجميع الفوليوم
                     df_daily = yf_hourly.resample('D').agg({
-                        'Open': 'first', 'High': 'max', 'Low': 'min', 'Close': 'last'
+                        'Open': 'first', 'High': 'max', 'Low': 'min', 'Close': 'last', 'Volume': 'sum'
                     }).dropna()
                     
-                    df = df_daily[["Open", "High", "Low", "Close"]].copy()
+                    df = df_daily[["Open", "High", "Low", "Close", "Volume"]].copy()
                     df.index = df.index.astype(str).str[:10]
                 else:
-                    print("❌ Yahoo hourly returned empty dataframe on GitHub server.")
+                    print("❌ Yahoo hourly returned empty dataframe.")
             else:
-                # آلية السحب اليومية الطبيعية للأسهم العادية مع الـ session
-                print(f"📥 Downloading historical baseline for {name} from Yahoo...")
-                yf_df = yf.download(f"{ticker}.CA", period="7mo", interval="1d", auto_adjust=False, progress=False, timeout=15, session=session)
+                # آلية السحب اليومية الطبيعية للأسهم العادية (تم إزالة السيسشن المكررة)
+                print(f"📥 Downloading historical baseline for {name} from Yahoo (Auto-Handling)...")
+                yf_df = yf.download(f"{ticker}.CA", period="7mo", interval="1d", auto_adjust=False, progress=False, timeout=15)
                 if isinstance(yf_df.columns, pd.MultiIndex):
                     yf_df.columns = yf_df.columns.get_level_values(0)
                 yf_df = yf_df.dropna(subset=["Close"])
                 
-                df = yf_df[["Open", "High", "Low", "Close"]].copy()
+                df = yf_df[["Open", "High", "Low", "Close", "Volume"]].copy()
                 df.index = df.index.astype(str).str[:10]
 
-        # جلب شمعة اليوم المباشرة والمحدثة من TradingView (تعمل دائماً بكفاءة على جيت هب)
+        # 🟢 الالتفاف الذكي للمؤشر: يكتفي بداتا ياهو بالفوليوم والأسعار ويمر لمنع تعنت TradingView مع المؤشرات
+        if name == "EGX30":
+            df = df.round(2)
+            database[name] = df
+            print(f"✅ {name} stabilized with Volume via Yahoo. Total days: {len(df)}")
+            continue
+
+        # جلب شمعة اليوم المباشرة والمحدثة من TradingView (للأسهم فقط)
         handler = TA_Handler(symbol=ticker, screener="egypt", exchange="EGX", interval=TVInterval.INTERVAL_1_DAY)
         analysis = handler.get_analysis()
         tv_indicators = analysis.indicators
@@ -100,9 +103,10 @@ for name, ticker in symbols.items():
         tv_open = float(tv_indicators.get("open", tv_close))
         tv_high = float(tv_indicators.get("high", tv_close))
         tv_low = float(tv_indicators.get("low", tv_close))
+        tv_volume = float(tv_indicators.get("volume", 0)) # قنص الفوليوم الدقيق لليوم من تريدنج فيو
         
-        # دمج أو تحديث السطر الحصري لجلسة اليوم
-        df.loc[last_candle_date] = [tv_open, tv_high, tv_low, tv_close]
+        # دمج أو تحديث السطر بالخمس قيم كاملة
+        df.loc[last_candle_date] = [tv_open, tv_high, tv_low, tv_close, tv_volume]
         df = df.round(2)
         
         database[name] = df
