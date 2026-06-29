@@ -25,7 +25,8 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install yfinance tradingview-ta requests pandas
+          # 🟢 تم إضافة مكتبة curl_cffi هنا ليتوافق مع تحديث ياهو فاينانس الأخير
+          pip install yfinance tradingview-ta requests pandas curl_cffi
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       # 1️⃣ تشغيل سكريبت تحديث الأسعار أولاً وبناء ملف الـ json
@@ -39,13 +40,13 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python multi-trend.py
 
-      # 3️⃣ التعديل السحري: حفظ قاعدة البيانات وملف الإشارات معاً داخل الريبو
+      # 3️⃣ حفظ قاعدة البيانات الجديدة وملف الإشارات معاً داخل الريبو
       - name: Commit database and last signals
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          # تم تعديل هذا السطر ليقوم بعمل حفظ للملفين معاً
-          git add last_signals.json egx_history_database.json
-          git diff --cached --quiet || git commit -m "Update database and signals [auto]"
+          # 🟢 تم تعديل السطر ليتتبع ويحفظ الملف الجديد egx_history_database_v2.json
+          git add last_signals.json egx_history_database_v2.json
+          git diff --cached --quiet || git commit -m "Update database v2 and signals [auto]"
           git push
