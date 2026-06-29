@@ -46,8 +46,8 @@
   },
   "ISPH": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 11.449999809265137
+    "in_position": false,
+    "entry_price": null
   },
   "ATQA": {
     "trend": "🔛",
@@ -60,7 +60,7 @@
     "entry_price": null
   },
   "ELEC": {
-    "trend": "🔛",
+    "trend": "🔻",
     "in_position": false,
     "entry_price": null
   },
@@ -95,7 +95,7 @@
     "entry_price": null
   },
   "RMDA": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -135,7 +135,7 @@
     "entry_price": null
   },
   "FWRY": {
-    "trend": "🔛",
+    "trend": "🔻",
     "in_position": false,
     "entry_price": null
   },
@@ -171,7 +171,7 @@
   },
   "EGX30": {
     "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 49757.7
   }
 }
