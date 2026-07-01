@@ -30,8 +30,8 @@ symbols = {
     "TMGH": "TMGH.CA"
 }
 
-STATE_FILE = "last_signals.json"
-DB_FILE = "egx_history_database.json"
+STATE_FILE = "last_signals_strat2.json"
+DB_FILE = "egx_history_database_v2.json"
 
 
 try:
