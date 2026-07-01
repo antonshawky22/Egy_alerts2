@@ -24,19 +24,20 @@ def send_telegram(text):
 # =====================
 # Symbols & Files
 # =====================
-DB_FILE = "egx_history_database.json"
+# 🟢 تم التوجيه لقاعدة البيانات الخماسية الجديدة
+DB_FILE = "egx_history_database_v2.json"
 SIGNALS_FILE = "last_signals.json"
 
 # 1. قراءة قاعدة البيانات المحلية بالهيكل الجديد
 try:
     with open(DB_FILE, "r") as f:
         raw_database = json.load(f)
-    print("💾 Strategy Engine: Successfully loaded local compact database.")
+    print("💾 Strategy Engine: Successfully loaded local compact database v2.")
 except Exception as e:
     print(f"❌ Critical Error: Could not find or read {DB_FILE}. Error: {e}")
     raw_database = {}
 
-# 🟢 التعديل المعتمد: استخراج الأسهم تلقائياً من مفاتيح ملف الداتا المحلي (بدون مصفوفة يدوية مكررة)
+# استخراج الأسهم تلقائياً من مفاتيح ملف الداتا المحلي
 symbols_keys = list(raw_database.keys())
 
 # 2. تحميل الإشارات السابقة
@@ -78,7 +79,7 @@ RSI_SELL = 79
 # =====================
 # Main Loop (قرارات الاستراتيجية)
 # =====================
-# 🟢 التعديل المعتمد: الحلقة التكرارية الآن تمر ديناميكياً على مفاتيح ملف الـ JSON
+# الحلقة التكرارية تمر ديناميكياً على مفاتيح ملف الـ JSON
 for name in symbols_keys:
 
     # جلب الداتا وقراءتها بناءً على الهيكل الجديد
@@ -87,7 +88,7 @@ for name in symbols_keys:
         data_failures.append(name)
         continue
 
-    # تحويل الداتا المضغوطة فوراً لـ DataFrame جاهز للحسابات
+    # 🟢 تحويل الداتا المضغوطة لـ DataFrame مع استيعاب عمود الفوليوم الجديد تلقائياً وبأمان
     df = pd.DataFrame.from_dict(stock_content["data"], orient="index", columns=stock_content["columns"])
     df.index.name = "Date"
     df = df.sort_index()
@@ -100,7 +101,7 @@ for name in symbols_keys:
     last_candle_date = str(df.index[-1])
     global_last_date = last_candle_date
 
-    # حساب المؤشرات الفنية
+    # حساب المؤشرات الفنية (تعمل على عمود الإغلاق والأسعار بسلام تام وتتجاهل الفوليوم حالياً)
     df["EMA20"] = df["Close"].ewm(span=20, adjust=True).mean()
     df["EMA30"] = df["Close"].ewm(span=30, adjust=True).mean()
     df["EMA40"] = df["Close"].ewm(span=40, adjust=True).mean()
@@ -172,7 +173,7 @@ for name in symbols_keys:
         from_high = (high - last_close) / high
         from_low = (last_close - low) / low
 
-        if not in_position and from_low <= SIDE_CLOSE_PERCENT and last["RSI14"] < 33:
+        if not in_position sweetness and from_low <= SIDE_CLOSE_PERCENT and last["RSI14"] < 33:
             buy_signal = True
             side_signal = "🟢"
             percent_side = from_low * 100
