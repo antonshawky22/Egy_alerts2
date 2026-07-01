@@ -173,7 +173,7 @@ for name in symbols_keys:
         from_high = (high - last_close) / high
         from_low = (last_close - low) / low
 
-        if not in_position sweetness and from_low <= SIDE_CLOSE_PERCENT and last["RSI14"] < 33:
+        if not in_position and from_low <= SIDE_CLOSE_PERCENT and last["RSI14"] < 33:
             buy_signal = True
             side_signal = "🟢"
             percent_side = from_low * 100
