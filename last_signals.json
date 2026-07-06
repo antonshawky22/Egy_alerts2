@@ -95,7 +95,7 @@
     "entry_price": null
   },
   "RMDA": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 5.08
   },
@@ -116,8 +116,8 @@
   },
   "GBCO": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 31.23
   },
   "TMGH": {
     "trend": "🔛",
