@@ -1,9 +1,10 @@
-print("EGX LADDER CYCLE SYSTEM - DATABASE SOURCED")
+print("EGX LADDER CYCLE SYSTEM - DATABASE SOURCED (v2.0 Clean Fix)")
 
 import requests
 import os
 import json
 import pandas as pd
+import numpy as np
 import time
 
 TOKEN = os.getenv("TELEGRAM_TOKEN")
@@ -61,11 +62,12 @@ def fetch_local_data(name):
         content = raw_database[name]
         
         if "columns" in content and "data" in content:
-            # إعادة بناء الجدول من صيغة الـ JSON المضغوطة
             df_temp = pd.DataFrame.from_dict(content["data"], orient="index", columns=content["columns"])
             df_temp.index.name = "Date"
-            # تحويل الكشاف لنوع تاريخ لضمان حساب المتوسطات المتحركة والـ RSI بدقة زمنية صحيحة
+            
+            # 🛡️ تحويل حاسم وترتيب تصاعدي إجباري (الأقدم فوق) لضمان حساب المتوسطات والـ RSI بشكل صحيح
             df_temp.index = pd.to_datetime(df_temp.index)
+            df_temp = df_temp.sort_index(ascending=True)
             return df_temp
         else:
             return None
@@ -74,14 +76,18 @@ def fetch_local_data(name):
         return None
 
 
+# 🛡️ دالة الـ RSI الاحترافية المتطابقة مع TradingView بالملي
 def rsi(series, period=14):
+    if len(series) < period:
+        return pd.Series(np.nan, index=series.index)
     delta = series.diff()
     gain = delta.clip(lower=0)
     loss = -delta.clip(upper=0)
-
-    avg_gain = gain.ewm(alpha=1/period, adjust=False).mean()
-    avg_loss = loss.ewm(alpha=1/period, adjust=False).mean()
-
+    
+    # استخدام معادلة Wilder المعتمدة عالمياً في تريدنج فيو
+    avg_gain = gain.ewm(com=period - 1, adjust=False).mean()
+    avg_loss = loss.ewm(com=period - 1, adjust=False).mean()
+    
     rs = avg_gain / avg_loss
     return 100 - (100 / (1 + rs))
 
@@ -92,7 +98,7 @@ def update_avg(old_avg, old_pos, new_price, new_pos):
 
     added_pos = new_pos - old_pos
     if added_pos <= 0:
-        return old_avg  # البيع الجزئي لا يغير متوسط السعر للأسهم المتبقية
+        return old_avg
         
     total_cost = (old_avg * old_pos) + (new_price * added_pos)
     return total_cost / new_pos
@@ -116,9 +122,8 @@ for name, ticker in symbols.items():
 
     time.sleep(0.1)
 
-    # جلب البيانات النظيفة من الملف المحلى بدلاً من ياهو فاينانس
     df = fetch_local_data(name)
-    if df is None or len(df) < 100:
+    if df is None or len(df) < 40: # تأمين الحد الأدنى من الداتا للحساب الذكي
         continue
 
     close = df["Close"]
@@ -143,6 +148,12 @@ for name, ticker in symbols.items():
         }
 
     s = state_data[name]
+    
+    # 🛡️ تأمين جودة ونوع البيانات المسترجعة من الـ JSON لمنع أخطاء الحسابات
+    s["position"] = float(s.get("position", 0.0))
+    s["avg_price"] = float(s.get("avg_price", 0.0))
+    s["peak_profit"] = float(s.get("peak_profit", 0.0))
+    s["cycle"] = int(s.get("cycle", 1))
 
     ema_up = df["EMA75"].iloc[-1] > df["EMA75"].iloc[-10]
 
@@ -150,7 +161,7 @@ for name, ticker in symbols.items():
     buy2 = ema_up and rsi_val <= 45
     buy3 = ema_up and rsi_val <= 40
 
-    profit = 0
+    profit = 0.0
     if s["avg_price"] > 0:
         profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
 
@@ -164,10 +175,10 @@ for name, ticker in symbols.items():
     if s["position"] == 0 and buy1:
         s["position"] = 0.33
         s["avg_price"] = price
-        s["peak_profit"] = 0
+        s["peak_profit"] = 0.0
         action = "🟢 BUY L1"
 
-    # شراء المستوى الثاني (تمت إضافة شرط أن يكون السعر الحالي أقل من أول شراء لضمان التبريد الفعلي)
+    # شراء المستوى الثاني
     elif 0.32 < s["position"] < 0.5 and buy2 and price < s["avg_price"]:
         old_pos = s["position"]
         s["position"] = 0.66
@@ -176,7 +187,7 @@ for name, ticker in symbols.items():
         )
         action = "🟢 BUY L2"
 
-    # شراء المستوى الثالث (تمت إضافة شرط السعر)
+    # شراء المستوى الثالث
     elif 0.65 < s["position"] < 1 and buy3 and price < s["avg_price"]:
         old_pos = s["position"]
         s["position"] = 1.0
@@ -192,7 +203,6 @@ for name, ticker in symbols.items():
 
         stop_triggered = False
 
-        # نسب الستوب لوس المحدثة والمنطقية لتذبذب السوق المصري
         if s["position"] <= 0.33 and profit <= -8:
             stop_triggered = True
         elif s["position"] <= 0.66 and profit <= -5:
@@ -205,15 +215,16 @@ for name, ticker in symbols.items():
 
         if stop_triggered:
             action = "🛑 STOP LOSS"
-            s["position"] = 0
-            s["avg_price"] = 0
-            s["peak_profit"] = 0
+            s["position"] = 0.0
+            s["avg_price"] = 0.0
+            s["peak_profit"] = 0.0
             s["cycle"] += 1
 
         elif sell3:
             action = "🚨 EXIT FULL"
-            s["position"] = 0
-            s["avg_price"] = 0
+            s["position"] = 0.0
+            s["avg_price"] = 0.0
+            s["peak_profit"] = 0.0
             s["cycle"] += 1
 
         elif sell2:
@@ -246,10 +257,10 @@ for name, ticker in symbols.items():
 
 
 with open(STATE_FILE, "w") as f:
-    json.dump(state_data, f)
+    json.dump(state_data, f, indent=2)
 
 
 if alerts:
     send_telegram("\n\n----------------------\n\n".join(alerts))
 else:
-    send_telegram("Ladder Strategy 😴 No new signals ")
+    send_telegram("Ladder Strategy 😴 No new signals")
