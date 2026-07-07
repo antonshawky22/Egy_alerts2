@@ -19,7 +19,7 @@
   },
   "EFIH": {
     "cycle": 1,
-    "position": 0.33,
+    "position": 0.0,
     "avg_price": 20.994999999999997,
     "peak_profit": 10.645391759942859
   },
@@ -27,6 +27,6 @@
     "cycle": 1,
     "position": 1.0,
     "avg_price": 94.08659949645994,
-    "peak_profit": 4.148731620050657
+    "peak_profit": 4.5207293347870445
   }
 }
