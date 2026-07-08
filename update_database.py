@@ -99,7 +99,7 @@ else:
 # ==========================================
 for name, ticker in symbols.items():
     try:
-        time.sleep(1.5) 
+        time.sleep(3) 
         df = database.get(name, pd.DataFrame())
 
         if df.empty or len(df) < 20:
