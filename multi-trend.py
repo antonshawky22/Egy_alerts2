@@ -103,12 +103,15 @@ if EGX30_KEY in raw_database:
                                  ((df_egx["Close"] < df_egx["EMA20"]) & (df_egx["Close"].shift(1) >= df_egx["EMA20"])))
             egx_cross_count = df_egx["crossed"].iloc[-20:].sum()
             
-            if egx_last["Close"] < egx_last["EMA20"] and egx_last["EMA20"] < egx_prev_5["EMA20"]:
-                egx_trend = "🔻"
-            elif egx_cross_count >= 3:
+            # 🔥 التعديل المعتمد: إعادة ترتيب منطق الـ if لتفادي الظلم البرمجي للمؤشر
+            if egx_cross_count >= 3:
                 egx_trend = "🔛"
+            elif egx_last["Close"] < egx_last["EMA20"] and egx_last["EMA20"] < egx_prev_5["EMA20"]:
+                egx_trend = "🔻"
             elif egx_last["Close"] > egx_last["EMA20"] and egx_last["EMA20"] > egx_prev_5["EMA20"]:
                 egx_trend = "↗️"
+            else:
+                egx_trend = "🔛"
 
 print(f"🏛️ Market Filter: EGX30 Trend determined as [{egx_trend}]")
 
