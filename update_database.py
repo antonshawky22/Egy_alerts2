@@ -1,4 +1,4 @@
-print("⚙️ EGX ENGINE v9.7 - Ultimate Anti-429 & Market Pulse Edition")
+print("⚙️ EGX ENGINE v9.8 - Batching Strategy & Ultimate Anti-429 Edition")
 
 import yfinance as yf
 from tradingview_ta import TA_Handler, Interval as TVInterval
@@ -57,13 +57,12 @@ for leader in leaders_to_check:
     try:
         handler = TA_Handler(symbol=symbols[leader], screener="egypt", exchange="EGX", interval=TVInterval.INTERVAL_1_DAY)
         
-        # حماية داخل رادار الفحص ضد الحظر المؤقت في البداية
         try:
             analysis = handler.get_analysis()
         except Exception as pulse_err:
             if "429" in str(pulse_err):
-                print(f"⚠️ Pulse hit 429 for {leader}. Pre-cooldown 10s...")
-                time.sleep(10)
+                print(f"⚠️ Pulse hit 429 for {leader}. Pre-cooldown 15s...")
+                time.sleep(15)
                 analysis = handler.get_analysis()
             else:
                 raise pulse_err
@@ -105,11 +104,16 @@ else:
     print("🟢 Market is OPEN and active. Processing updates...")
 
 # ==========================================
-# 3. تحديث البيانات وضخ الأسعار الجديدة
+# 3. تحديث البيانات وضخ الأسعار الجديدة (نظام المجموعات الذكي)
 # ==========================================
-for name, ticker in symbols.items():
+symbols_items = list(symbols.items())
+total_symbols = len(symbols_items)
+batch_size = 8  # تحديث كل 8 أسهم كحد أقصى ثم تبريد السيرفر
+
+for index, (name, ticker) in enumerate(symbols_items):
     try:
-        time.sleep(3) # ترييحة أساسية 3 ثوانٍ لحماية السيرفر
+        # ترييحة قصيرة بين الأسهم داخل نفس المجموعة
+        time.sleep(2) 
         df = database.get(name, pd.DataFrame())
 
         if df.empty or len(df) < 20:
@@ -124,16 +128,16 @@ for name, ticker in symbols.items():
                 df.index = pd.to_datetime(df.index).strftime('%Y-%m-%d')
                 df.index.name = "Date"
 
-        # جلب شمعة اليوم من TradingView مع صمام الحماية الديناميكي من الـ 429
+        # جلب شمعة اليوم من TradingView مع صمام الحماية الديناميكي
         handler = TA_Handler(symbol=ticker, screener="egypt", exchange="EGX", interval=TVInterval.INTERVAL_1_DAY)
         
         try:
             analysis = handler.get_analysis()
         except Exception as tv_err:
             if "429" in str(tv_err):
-                print(f"⚠️ Rate limit hit (429) for {name}. Sleeping for 15 seconds to cooldown...")
-                time.sleep(15) # ترييحة التبريد الإجبارية للسيرفر
-                analysis = handler.get_analysis() # المحاولة الثانية والنهائية
+                print(f"⚠️ Rate limit hit (429) for {name}. Sleeping for 20 seconds to cooldown...")
+                time.sleep(20)
+                analysis = handler.get_analysis()
             else:
                 raise tv_err
                 
@@ -157,6 +161,12 @@ for name, ticker in symbols.items():
         database[name] = df
         print(f"✅ {name:6} -> Cleanly updated for {last_candle_date}. Volume: {tv_volume:,.0f}. Total days: {len(df)}")
 
+        # 🔥 كمين تبريد السيرفر (Batch Cooldown)
+        # لو خلصنا 8 أسهم ولسه مصلناش لآخر سهم في اللستة، ريح دقيقة كاملة لتصفير عداد تريدنج فيو
+        if (index + 1) % batch_size == 0 and (index + 1) < total_symbols:
+            print(f"☕ Batch of {batch_size} completed ({index + 1}/{total_symbols}). Sleeping for 60 seconds to completely reset TradingView rate limit...")
+            time.sleep(60)
+
     except Exception as e:
         print(f"💥 Failed to update {name}: {e}")
 
@@ -166,7 +176,6 @@ for name, ticker in symbols.items():
 final_blocks = []
 for name, df in database.items():
     if not df.empty:
-        # قلب الترتيب للأحدث فوق فقط عند التصدير والتدوين النهائي في ملف الـ JSON لراحة العين
         df_for_mobile = df.sort_index(ascending=False)
         columns_line = json.dumps(list(df_for_mobile.columns))
         data_line = json.dumps(df_for_mobile.to_dict(orient="index"))
