@@ -1,4 +1,4 @@
-print("⚙️ EGX ENGINE v9.6 - Market Pulse & Volume Detector Edition")
+print("⚙️ EGX ENGINE v9.7 - Ultimate Anti-429 & Market Pulse Edition")
 
 import yfinance as yf
 from tradingview_ta import TA_Handler, Interval as TVInterval
@@ -56,7 +56,18 @@ check_date = None
 for leader in leaders_to_check:
     try:
         handler = TA_Handler(symbol=symbols[leader], screener="egypt", exchange="EGX", interval=TVInterval.INTERVAL_1_DAY)
-        analysis = handler.get_analysis()
+        
+        # حماية داخل رادار الفحص ضد الحظر المؤقت في البداية
+        try:
+            analysis = handler.get_analysis()
+        except Exception as pulse_err:
+            if "429" in str(pulse_err):
+                print(f"⚠️ Pulse hit 429 for {leader}. Pre-cooldown 10s...")
+                time.sleep(10)
+                analysis = handler.get_analysis()
+            else:
+                raise pulse_err
+
         indicators = analysis.indicators
         check_date = str(analysis.time.date())
         
@@ -81,13 +92,12 @@ for leader in leaders_to_check:
                 market_is_open = True
                 break
         else:
-            # لو الداتا فاضية خالص، بنعتبر السوق مفتوح لبناء القاعدة لأول مرة
             market_is_open = True
             break
     except Exception as e:
         print(f"⚠️ Pulse check skipped for {leader}: {e}")
 
-# 🛑 قرار الفرملة الحاسم: لو الأسعار متطابقة بالملي ومفيش أي نبض تغيير
+# قرار الفرملة الحاسم: لو الأسعار متطابقة بالملي ومفيش أي نبض تغيير
 if not market_is_open and check_date is not None:
     print(f"🛑 Market is CLOSED/HOLIDAY for {check_date} (No price movement detected). Script stopped to prevent duplication.")
     sys.exit(0) # الخروج الآمن الفوري دون لمس الـ JSON
@@ -99,7 +109,7 @@ else:
 # ==========================================
 for name, ticker in symbols.items():
     try:
-        time.sleep(3) 
+        time.sleep(3) # ترييحة أساسية 3 ثوانٍ لحماية السيرفر
         df = database.get(name, pd.DataFrame())
 
         if df.empty or len(df) < 20:
@@ -114,11 +124,20 @@ for name, ticker in symbols.items():
                 df.index = pd.to_datetime(df.index).strftime('%Y-%m-%d')
                 df.index.name = "Date"
 
-        # جلب شمعة اليوم من TradingView
+        # جلب شمعة اليوم من TradingView مع صمام الحماية الديناميكي من الـ 429
         handler = TA_Handler(symbol=ticker, screener="egypt", exchange="EGX", interval=TVInterval.INTERVAL_1_DAY)
-        analysis = handler.get_analysis()
-        tv_indicators = analysis.indicators
         
+        try:
+            analysis = handler.get_analysis()
+        except Exception as tv_err:
+            if "429" in str(tv_err):
+                print(f"⚠️ Rate limit hit (429) for {name}. Sleeping for 15 seconds to cooldown...")
+                time.sleep(15) # ترييحة التبريد الإجبارية للسيرفر
+                analysis = handler.get_analysis() # المحاولة الثانية والنهائية
+            else:
+                raise tv_err
+                
+        tv_indicators = analysis.indicators
         last_candle_date = str(analysis.time.date())
         
         tv_close = float(tv_indicators.get("close"))
@@ -126,13 +145,13 @@ for name, ticker in symbols.items():
         tv_high = float(tv_indicators.get("high", tv_close))
         tv_low = float(tv_indicators.get("low", tv_close))
         
-        # ⭐ تعديل جلب فوليوم EGX30 الحقيقي سحب مباشر من التحديث اللحظي
+        # جلب فوليوم EGX30 الحقيقي سحب مباشر من التحديث اللحظي
         tv_volume = float(tv_indicators.get("volume", 0))
 
         # تحديث أو إضافة اليوم الحالي
         df.loc[last_candle_date] = [tv_open, tv_high, tv_low, tv_close, tv_volume]
         
-        # التأكيد النهائي لمسح أي تكرار مع الحفاظ التام على الترتيب التصاعدي للحسابات
+        # التأكيد النهائي لمسح أي تكرار مع الحفاظ التام على الترتيب التصاعدي للحسابات الفنية
         df = df[~df.index.duplicated(keep='last')]
         df = df.sort_index(ascending=True).round(2)
         database[name] = df
