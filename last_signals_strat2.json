@@ -28,5 +28,53 @@
     "position": 1.0,
     "avg_price": 94.08659949645994,
     "peak_profit": 4.5207293347870445
+  },
+  "SWDY": {
+    "cycle": 1,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0
+  },
+  "ABUK": {
+    "cycle": 1,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0
+  },
+  "EAST": {
+    "cycle": 1,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0
+  },
+  "JUFO": {
+    "cycle": 1,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0
+  },
+  "GBCO": {
+    "cycle": 1,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0
+  },
+  "PHDC": {
+    "cycle": 1,
+    "position": 0.33,
+    "avg_price": 14.92,
+    "peak_profit": 0.0
+  },
+  "AMOC": {
+    "cycle": 1,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0
+  },
+  "ETEL": {
+    "cycle": 1,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0
   }
 }
