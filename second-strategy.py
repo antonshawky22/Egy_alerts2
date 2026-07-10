@@ -23,12 +23,21 @@ def send_telegram(text):
         print("Telegram send failed:", e)
 
 
+# تم تحديث القائمة لـ 13 سهماً من أقوى أسهم السوق المصري بتناغم كامل
 symbols = {
-    "COMI": "COMI.CA",
-    "HRHO": "HRHO.CA",
-    "FWRY": "FWRY.CA",
-    "EFIH": "EFIH.CA",
-    "TMGH": "TMGH.CA"
+    "COMI": "COMI",
+    "HRHO": "HRHO",
+    "FWRY": "FWRY",
+    "EFIH": "EFIH",
+    "TMGH": "TMGH",
+    "SWDY": "SWDY",
+    "ABUK": "ABUK",
+    "EAST": "EAST",
+    "JUFO": "JUFO",
+    "GBCO": "GBCO",
+    "PHDC": "PHDC",
+    "AMOC": "AMOC",
+    "ETEL": "ETEL"
 }
 
 STATE_FILE = "last_signals_strat2.json"
