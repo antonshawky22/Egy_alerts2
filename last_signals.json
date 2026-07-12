@@ -26,8 +26,8 @@
   },
   "EFIH": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 22.33
   },
   "ABUK": {
     "trend": "🔻",
@@ -130,7 +130,7 @@
     "entry_price": 39.67
   },
   "AMOC": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
