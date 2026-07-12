@@ -2,6 +2,7 @@ import json
 import os
 import pandas as pd
 import requests
+import numpy as np
 
 # =====================
 # Telegram settings
@@ -26,6 +27,61 @@ def send_telegram(text):
 # =====================
 DB_FILE = "egx_history_database_v2.json"
 SIGNALS_FILE = "last_signals.json"
+TRADES_FILE = "trades.json"  # ✅ ملف سجل الصفقات الجديد
+
+
+# =====================
+# 📒 Trade Logging (نسخة احترافية مأمنة بالكامل)
+# =====================
+def log_buy(symbol, price, date):
+    trade = {
+        "symbol": symbol,
+        "entry_price": price,
+        "entry_date": date
+    }
+
+    if os.path.exists(TRADES_FILE):
+        with open(TRADES_FILE, "r") as f:
+            try:
+                data = json.load(f)
+            except:
+                data = []
+    else:
+        data = []
+
+    data.append(trade)
+
+    with open(TRADES_FILE, "w") as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
+
+
+def log_sell(symbol, price, date):
+    if not os.path.exists(TRADES_FILE):
+        return
+
+    with open(TRADES_FILE, "r") as f:
+        try:
+            data = json.load(f)
+        except:
+            data = []
+
+    # البحث عن آخر صفقة مفتوحة لهذا السهم لتحديثها
+    for trade in reversed(data):
+        if trade["symbol"] == symbol and "exit_price" not in trade:
+            entry_price = trade["entry_price"]
+            if entry_price != 0:
+                profit_pct = ((price - entry_price) / entry_price) * 100
+            else:
+                profit_pct = 0
+                
+            trade["exit_price"] = price
+            trade["exit_date"] = date
+            trade["profit_pct"] = round(profit_pct, 2)
+            break 
+
+    with open(TRADES_FILE, "w") as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
+
 
 # 1. قراءة قاعدة البيانات المحلية
 try:
@@ -166,6 +222,8 @@ for name in symbols_keys:
     entry_price = prev_data.get("entry_price", None)
     prev_trend = prev_data.get("trend", "")
 
+    prev_in_position = in_position  # ✅ حفظ الحالة السابقة بدقة لتأمين دالة الـ Log
+
     buy_signal = False
     sell_signal = False
     side_signal = ""
@@ -246,6 +304,12 @@ for name in symbols_keys:
             in_position = False
             entry_price = None
 
+    # ✅ آلية حفظ الصفقات التلقائية المأمنة خارجياً
+    if buy_signal and not prev_in_position:
+        log_buy(name, last_close, last_candle_date)
+    elif sell_signal and prev_in_position:
+        log_sell(name, last_close, last_candle_date)
+
     trend_mark = "🚧 " if trend_changed else ""
 
     if trend == "↗️":
@@ -292,7 +356,7 @@ if data_failures:
     alerts.append(f"\n⚠️ Database load failure for symbols:")
     alerts.extend(["- " + s for s in data_failures])
 elif not section_up and not section_side and not section_down:
-    alerts.append(f"ℹ️ No new signals for today (last candle: {global_last_date})")
+    alerts.append(f"ℹ️ No new symbols for today (last candle: {global_last_date})")
 
 with open(SIGNALS_FILE, "w") as f:
     json.dump(new_signals, f, indent=2, ensure_ascii=False)
