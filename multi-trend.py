@@ -131,7 +131,7 @@ def rsi(series, period=14):
 # =====================
 # Parameters
 # =====================
-SIDE_CLOSE_PERCENT = 0.20
+SIDE_CLOSE_PERCENT = 0.04
 RSI_SELL = 79
 EGX30_KEY = "EGX30"
 
@@ -276,7 +276,7 @@ for name in symbols_keys:
         from_high = (high - last_close) / high
         from_low = (last_close - low) / low
 
-        if not in_position and from_low <= SIDE_CLOSE_PERCENT and last["RSI14"] < 66:
+        if not in_position and from_low <= SIDE_CLOSE_PERCENT and last["RSI14"] < 33:
             buy_signal = True
             side_signal = "🟢"
             percent_side = from_low * 100
