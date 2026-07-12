@@ -2,51 +2,81 @@
   {
     "symbol": "ETEL",
     "entry_price": 98.68,
-    "entry_date": "2026-07-12"
+    "entry_date": "2026-07-12",
+    "exit_price": 98.68,
+    "exit_date": "2026-07-12",
+    "profit_pct": 0.0
   },
   {
     "symbol": "OIH",
     "entry_price": 1.41,
-    "entry_date": "2026-07-12"
+    "entry_date": "2026-07-12",
+    "exit_price": 1.41,
+    "exit_date": "2026-07-12",
+    "profit_pct": 0.0
   },
   {
     "symbol": "SWDY",
     "entry_price": 88.77,
-    "entry_date": "2026-07-12"
+    "entry_date": "2026-07-12",
+    "exit_price": 88.77,
+    "exit_date": "2026-07-12",
+    "profit_pct": 0.0
   },
   {
     "symbol": "ATQA",
     "entry_price": 9.59,
-    "entry_date": "2026-07-12"
+    "entry_date": "2026-07-12",
+    "exit_price": 9.59,
+    "exit_date": "2026-07-12",
+    "profit_pct": 0.0
   },
   {
     "symbol": "HRHO",
     "entry_price": 26.52,
-    "entry_date": "2026-07-12"
+    "entry_date": "2026-07-12",
+    "exit_price": 26.52,
+    "exit_date": "2026-07-12",
+    "profit_pct": 0.0
   },
   {
     "symbol": "ORWE",
     "entry_price": 22.68,
-    "entry_date": "2026-07-12"
+    "entry_date": "2026-07-12",
+    "exit_price": 22.68,
+    "exit_date": "2026-07-12",
+    "profit_pct": 0.0
   },
   {
     "symbol": "RMDA",
     "entry_price": 5.0,
-    "entry_date": "2026-07-12"
+    "entry_date": "2026-07-12",
+    "exit_price": 5.0,
+    "exit_date": "2026-07-12",
+    "profit_pct": 0.0
   },
   {
     "symbol": "TMGH",
     "entry_price": 96.5,
-    "entry_date": "2026-07-12"
+    "entry_date": "2026-07-12",
+    "exit_price": 96.5,
+    "exit_date": "2026-07-12",
+    "profit_pct": 0.0
   },
   {
     "symbol": "AMOC",
     "entry_price": 8.02,
-    "entry_date": "2026-07-12"
+    "entry_date": "2026-07-12",
+    "exit_price": 8.02,
+    "exit_date": "2026-07-12",
+    "profit_pct": 0.0
   },
   {
     "symbol": "COMI",
     "entry_price": 134.52,
-    "entry_date": "2026-07-12"
+    "entry_date": "2026-07-12",
+    "exit_price": 134.52,
+    "exit_date": "2026-07-12",
+    "profit_pct": 0.0
   }
 ]
