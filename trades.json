@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "symbol": "HRHO",
+    "entry_trend": "🔛",
+    "entry_price": 26.52,
+    "entry_date": "2026-07-12"
+  },
+  {
+    "symbol": "RMDA",
+    "entry_trend": "🔛",
+    "entry_price": 5.0,
+    "entry_date": "2026-07-12"
+  }
+]
