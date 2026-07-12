@@ -40,13 +40,13 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python multi-trend.py
 
-      # 3️⃣ حفظ قاعدة البيانات الجديدة وملف الإشارات معاً داخل الريبو
+      # 3️⃣ حفظ قاعدة البيانات الجديدة وملف الإشارات وملف سجل الصفقات داخل الريبو
       - name: Commit database and last signals
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          # 🟢 تم تعديل السطر ليتتبع ويحفظ الملف الجديد egx_history_database_v2.json
-          git add last_signals.json egx_history_database_v2.json
-          git diff --cached --quiet || git commit -m "Update database v2 and signals [auto]"
+          # 🟢 إضافة ملف trades.json هنا ليتم تتبعه وحفظه داخل الريبو بنجاح مع باقي الملفات
+          git add last_signals.json egx_history_database_v2.json trades.json
+          git diff --cached --quiet || git commit -m "Update database v2, signals and trades log [auto]"
           git push
