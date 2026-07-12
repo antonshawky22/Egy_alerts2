@@ -16,8 +16,8 @@
   },
   "ETEL": {
     "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 98.68
   },
   "EAST": {
     "trend": "🔻",
@@ -36,13 +36,13 @@
   },
   "OIH": {
     "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 1.41
   },
   "SWDY": {
     "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 88.77
   },
   "ISPH": {
     "trend": "🔻",
@@ -51,8 +51,8 @@
   },
   "ATQA": {
     "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 9.59
   },
   "MTIE": {
     "trend": "↗️",
@@ -66,13 +66,13 @@
   },
   "HRHO": {
     "trend": "🔛",
-    "in_position": true,
-    "entry_price": 26.52
+    "in_position": false,
+    "entry_price": null
   },
   "ORWE": {
     "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 22.68
   },
   "JUFO": {
     "trend": "↗️",
@@ -96,8 +96,8 @@
   },
   "RMDA": {
     "trend": "🔛",
-    "in_position": true,
-    "entry_price": 5.0
+    "in_position": false,
+    "entry_price": null
   },
   "RAYA": {
     "trend": "↗️",
@@ -121,8 +121,8 @@
   },
   "TMGH": {
     "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 96.5
   },
   "ORHD": {
     "trend": "↗️",
@@ -131,8 +131,8 @@
   },
   "AMOC": {
     "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 8.02
   },
   "FWRY": {
     "trend": "↗️",
@@ -141,8 +141,8 @@
   },
   "COMI": {
     "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 134.52
   },
   "ADIB": {
     "trend": "↗️",
