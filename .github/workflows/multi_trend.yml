@@ -46,7 +46,12 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          # 🟢 إضافة ملف trades.json هنا ليتم تتبعه وحفظه داخل الريبو بنجاح مع باقي الملفات
-          git add last_signals.json egx_history_database_v2.json trades.json
+          # تتبع ملفات الإشارات وقاعدة البيانات الأساسية
+          git add last_signals.json egx_history_database_v2.json
+          
+          # 🛡️ تأمين تتبع ملف الصفقات فقط في حال وجوده لمنع خطأ fatal: pathspec
+          if [ -f trades.json ]; then git add trades.json; fi
+          
           git diff --cached --quiet || git commit -m "Update database v2, signals and trades log [auto]"
           git push
+
