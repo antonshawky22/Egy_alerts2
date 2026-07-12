@@ -247,7 +247,7 @@ for name in symbols_keys:
 
     # 🟢 UP TREND
     if trend == "↗️":
-        if not in_position and last["RSI14"] < 77 and last_close >= last["EMA30"] and last_close > prev["Close"]:
+        if not in_position and last["RSI14"] < 68 and last_close >= last["EMA30"] and last_close > prev["Close"]:
             buy_signal = True
             up_signal = "🟢"
             in_position = True
