@@ -1,67 +1,8 @@
 [
-  {
-    "symbol": "HRHO",
-    "entry_trend": "🔛",
-    "entry_price": 26.52,
-    "entry_date": "2026-07-12",
-    "exit_price": 26.52,
-    "exit_date": "2026-07-12",
-    "profit_pct": 0.0
   },
   {
-    "symbol": "RMDA",
-    "entry_trend": "🔛",
-    "entry_price": 5.0,
-    "entry_date": "2026-07-12",
-    "exit_price": 5.0,
-    "exit_date": "2026-07-12",
-    "profit_pct": 0.0
-  },
-  {
-    "symbol": "ETEL",
-    "entry_trend": "🔛",
-    "entry_price": 98.68,
-    "entry_date": "2026-07-12"
-  },
-  {
-    "symbol": "OIH",
-    "entry_trend": "🔛",
-    "entry_price": 1.41,
-    "entry_date": "2026-07-12"
-  },
-  {
-    "symbol": "SWDY",
-    "entry_trend": "🔛",
-    "entry_price": 88.77,
-    "entry_date": "2026-07-12"
-  },
-  {
-    "symbol": "ATQA",
-    "entry_trend": "🔛",
-    "entry_price": 9.59,
-    "entry_date": "2026-07-12"
-  },
-  {
-    "symbol": "ORWE",
-    "entry_trend": "🔛",
-    "entry_price": 22.68,
-    "entry_date": "2026-07-12"
-  },
-  {
-    "symbol": "TMGH",
-    "entry_trend": "🔛",
-    "entry_price": 96.5,
-    "entry_date": "2026-07-12"
-  },
-  {
-    "symbol": "AMOC",
-    "entry_trend": "🔛",
-    "entry_price": 8.02,
-    "entry_date": "2026-07-12"
-  },
-  {
-    "symbol": "COMI",
-    "entry_trend": "🔛",
+    "symbol": "jufo",
+    "entry_trend": "↗️",
     "entry_price": 134.52,
     "entry_date": "2026-07-12"
   }
