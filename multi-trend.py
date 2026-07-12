@@ -33,9 +33,10 @@ TRADES_FILE = "trades.json"  # ✅ ملف سجل الصفقات الجديد
 # =====================
 # 📒 Trade Logging (نسخة احترافية مأمنة بالكامل)
 # =====================
-def log_buy(symbol, price, date):
+def log_buy(symbol, price, date, entry_trend):
     trade = {
         "symbol": symbol,
+        "entry_trend": entry_trend,
         "entry_price": price,
         "entry_date": date
     }
@@ -246,7 +247,7 @@ for name in symbols_keys:
 
     # 🟢 UP TREND
     if trend == "↗️":
-        if not in_position and last["RSI14"] < 68 and last_close >= last["EMA30"] and last_close > prev["Close"]:
+        if not in_position and last["RSI14"] < 77 and last_close >= last["EMA30"] and last_close > prev["Close"]:
             buy_signal = True
             up_signal = "🟢"
             in_position = True
@@ -306,7 +307,7 @@ for name in symbols_keys:
 
     # ✅ آلية حفظ الصفقات التلقائية المأمنة خارجياً
     if buy_signal and not prev_in_position:
-        log_buy(name, last_close, last_candle_date)
+        log_buy(name, last_close, last_candle_date, trend)
     elif sell_signal and prev_in_position:
         log_sell(name, last_close, last_candle_date)
 
