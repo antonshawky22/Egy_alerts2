@@ -3,7 +3,7 @@
     "cycle": 1,
     "position": 1.0,
     "avg_price": 131.75379798583984,
-    "peak_profit": 2.473767806973327
+    "peak_profit": 3.9059230874796125
   },
   "HRHO": {
     "cycle": 1,
@@ -31,8 +31,8 @@
   },
   "SWDY": {
     "cycle": 1,
-    "position": 0.0,
-    "avg_price": 0.0,
+    "position": 0.33,
+    "avg_price": 88.47,
     "peak_profit": 0.0
   },
   "ABUK": {
