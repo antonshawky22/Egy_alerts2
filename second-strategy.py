@@ -1,4 +1,4 @@
-print("EGX LADDER CYCLE SYSTEM - DATABASE SOURCED (v2.0 Clean Fix)")
+Print("EGX LADDER CYCLE SYSTEM - DATABASE SOURCED (v2.0 Clean Fix)")
 
 import requests
 import os
@@ -163,6 +163,11 @@ for name, ticker in symbols.items():
     s["avg_price"] = float(s.get("avg_price", 0.0))
     s["peak_profit"] = float(s.get("peak_profit", 0.0))
     s["cycle"] = int(s.get("cycle", 1))
+
+    # 🚀 التعديل الجديد: تصفير البيانات التراكمية إذا كان المركز فارغاً لمنع الأخطاء البصرية والشوائب التراكمية
+    if s["position"] == 0.0:
+        s["avg_price"] = 0.0
+        s["peak_profit"] = 0.0
 
     ema_up = df["EMA75"].iloc[-1] > df["EMA75"].iloc[-10]
 
