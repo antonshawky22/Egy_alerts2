@@ -19,9 +19,9 @@
   },
   "EFIH": {
     "cycle": 1,
-    "position": 0.0,
-    "avg_price": 20.994999999999997,
-    "peak_profit": 10.645391759942859
+    "position": 0.33,
+    "avg_price": 21.87,
+    "peak_profit": 4.167658966420594
   },
   "TMGH": {
     "cycle": 1,
@@ -33,7 +33,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 88.47,
-    "peak_profit": 0.09042613315247915
+    "peak_profit": 0.2599751328133876
   },
   "ABUK": {
     "cycle": 1,
