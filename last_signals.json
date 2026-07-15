@@ -40,9 +40,9 @@
     "entry_price": null
   },
   "SWDY": {
-    "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 89.82
   },
   "ISPH": {
     "trend": "🔻",
@@ -160,7 +160,7 @@
     "entry_price": null
   },
   "SKPC": {
-    "trend": "🔛",
+    "trend": "🔻",
     "in_position": false,
     "entry_price": null
   },

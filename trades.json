@@ -4,5 +4,11 @@
     "entry_trend": "↗️",
     "entry_price": 1.85,
     "entry_date": "2026-07-13"
+  },
+  {
+    "symbol": "SWDY",
+    "entry_trend": "↗️",
+    "entry_price": 89.82,
+    "entry_date": "2026-07-15"
   }
 ]
