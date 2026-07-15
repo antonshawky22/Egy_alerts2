@@ -25,15 +25,15 @@
   },
   "TMGH": {
     "cycle": 1,
-    "position": 0.67,
+    "position": 0.34,
     "avg_price": 94.08659949645994,
-    "peak_profit": 6.869629190693885
+    "peak_profit": 7.358540472918848
   },
   "SWDY": {
     "cycle": 1,
     "position": 0.33,
     "avg_price": 88.47,
-    "peak_profit": 1.69548999660902
+    "peak_profit": 2.2945631287442083
   },
   "ABUK": {
     "cycle": 1,
@@ -63,7 +63,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 14.92,
-    "peak_profit": 0.26809651474531454
+    "peak_profit": 1.8766756032171539
   },
   "AMOC": {
     "cycle": 1,
