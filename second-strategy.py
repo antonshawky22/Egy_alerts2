@@ -1,4 +1,4 @@
-Print("EGX LADDER CYCLE SYSTEM - DATABASE SOURCED (v2.0 Clean Fix)")
+print("EGX LADDER CYCLE SYSTEM - DATABASE SOURCED (v2.0 Clean Fix)")
 
 import requests
 import os
