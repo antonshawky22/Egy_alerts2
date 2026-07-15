@@ -13,27 +13,27 @@
   },
   "FWRY": {
     "cycle": 1,
-    "position": 0.33,
-    "avg_price": 18.889999389648438,
+    "position": 0.66,
+    "avg_price": 18.739999694824217,
     "peak_profit": 2.6469064399523448
   },
   "EFIH": {
     "cycle": 1,
     "position": 0.33,
     "avg_price": 21.87,
-    "peak_profit": 0.0
+    "peak_profit": 0.8230452674897106
   },
   "TMGH": {
     "cycle": 1,
-    "position": 1.0,
+    "position": 0.67,
     "avg_price": 94.08659949645994,
-    "peak_profit": 4.5207293347870445
+    "peak_profit": 6.869629190693885
   },
   "SWDY": {
     "cycle": 1,
     "position": 0.33,
     "avg_price": 88.47,
-    "peak_profit": 0.2599751328133876
+    "peak_profit": 1.69548999660902
   },
   "ABUK": {
     "cycle": 1,
