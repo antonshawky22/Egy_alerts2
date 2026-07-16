@@ -10,5 +10,17 @@
     "entry_trend": "↗️",
     "entry_price": 89.82,
     "entry_date": "2026-07-15"
+  },
+  {
+    "symbol": "HRHO",
+    "entry_trend": "🔛",
+    "entry_price": 26.74,
+    "entry_date": "2026-07-16"
+  },
+  {
+    "symbol": "RMDA",
+    "entry_trend": "🔛",
+    "entry_price": 4.98,
+    "entry_date": "2026-07-16"
   }
 ]
