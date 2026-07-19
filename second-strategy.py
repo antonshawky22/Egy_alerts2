@@ -37,7 +37,7 @@ symbols = {
     "GBCO": "GBCO",
     "PHDC": "PHDC",
     "AMOC": "AMOC",
-    "ETEL": "ETEL"
+    "ETEL": "ETEL",
 }
 
 STATE_FILE = "last_signals_strat2.json"
@@ -52,28 +52,27 @@ except:
 
 
 def fetch_local_data(name):
-    """
-    قراءة البيانات التاريخية والحديثة مباشرة من قاعدة البيانات المحلية المضغوطة
-    وتحويلها إلى DataFrame جاهز لحساب المؤشرات الفنية.
-    """
+    """قراءة البيانات التاريخية والحديثة مباشرة من قاعدة البيانات المحلية المضغوطة وتحويلها إلى DataFrame جاهز لحساب المؤشرات الفنية."""
     try:
         if not os.path.exists(DB_FILE):
             print(f"⚠️ Database file '{DB_FILE}' not found!")
             return None
-            
+
         with open(DB_FILE, "r") as f:
             raw_database = json.load(f)
-            
+
         if name not in raw_database:
             print(f"⚠️ {name} not found in database.")
             return None
-            
+
         content = raw_database[name]
-        
+
         if "columns" in content and "data" in content:
-            df_temp = pd.DataFrame.from_dict(content["data"], orient="index", columns=content["columns"])
+            df_temp = pd.DataFrame.from_dict(
+                content["data"], orient="index", columns=content["columns"]
+            )
             df_temp.index.name = "Date"
-            
+
             # 🛡️ تحويل حاسم وترتيب تصاعدي إجباري (الأقدم فوق) لضمان حساب المتوسطات والـ RSI بشكل صحيح
             df_temp.index = pd.to_datetime(df_temp.index)
             df_temp = df_temp.sort_index(ascending=True)
@@ -92,11 +91,11 @@ def rsi(series, period=14):
     delta = series.diff()
     gain = delta.clip(lower=0)
     loss = -delta.clip(upper=0)
-    
+
     # استخدام معادلة Wilder المعتمدة عالمياً في تريدنج فيو
     avg_gain = gain.ewm(com=period - 1, adjust=False).mean()
     avg_loss = loss.ewm(com=period - 1, adjust=False).mean()
-    
+
     rs = avg_gain / avg_loss
     return 100 - (100 / (1 + rs))
 
@@ -108,7 +107,7 @@ def update_avg(old_avg, old_pos, new_price, new_pos):
     added_pos = new_pos - old_pos
     if added_pos <= 0:
         return old_avg
-        
+
     total_cost = (old_avg * old_pos) + (new_price * added_pos)
     return total_cost / new_pos
 
@@ -132,7 +131,9 @@ for name, ticker in symbols.items():
     time.sleep(0.1)
 
     df = fetch_local_data(name)
-    if df is None or len(df) < 40: # تأمين الحد الأدنى من الداتا للحساب الذكي
+    if (
+        df is None or len(df) < 40
+    ):  # تأمين الحد الأدنى من الداتا للحساب الذكي
         continue
 
     close = df["Close"]
@@ -153,11 +154,11 @@ for name, ticker in symbols.items():
             "cycle": 1,
             "position": 0.0,
             "avg_price": 0.0,
-            "peak_profit": 0.0
+            "peak_profit": 0.0,
         }
 
     s = state_data[name]
-    
+
     # 🛡️ تأمين جودة ونوع البيانات المسترجعة من الـ JSON لمنع أخطاء الحسابات
     s["position"] = float(s.get("position", 0.0))
     s["avg_price"] = float(s.get("avg_price", 0.0))
@@ -190,6 +191,7 @@ for name, ticker in symbols.items():
         s["position"] = 0.33
         s["avg_price"] = price
         s["peak_profit"] = 0.0
+        profit = 0.0  # تصفير الربح لأن السعر الحالي = متوسط التكلفة
         action = "🟢 BUY L1"
 
     # شراء المستوى الثاني
@@ -199,6 +201,8 @@ for name, ticker in symbols.items():
         s["avg_price"] = update_avg(
             s["avg_price"], old_pos, price, s["position"]
         )
+        # ✨ إصلاح رئيسي: إعادة حساب الأرباح بناءً على المتوسط الجديد قبل الإرسال
+        profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
         action = "🟢 BUY L2"
 
     # شراء المستوى الثالث
@@ -208,6 +212,8 @@ for name, ticker in symbols.items():
         s["avg_price"] = update_avg(
             s["avg_price"], old_pos, price, s["position"]
         )
+        # ✨ إصلاح رئيسي: إعادة حساب الأرباح بناءً على المتوسط الجديد قبل الإرسال
+        profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
         action = "🟢 BUY L3"
 
     if profit > s["peak_profit"]:
@@ -265,7 +271,7 @@ for name, ticker in symbols.items():
                 s["avg_price"],
                 rsi_val,
                 s["cycle"],
-                profit
+                profit,
             )
         )
 
