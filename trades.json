@@ -15,12 +15,27 @@
     "symbol": "HRHO",
     "entry_trend": "🔛",
     "entry_price": 26.74,
-    "entry_date": "2026-07-16"
+    "entry_date": "2026-07-16",
+    "exit_price": 26.53,
+    "exit_date": "2026-07-19",
+    "profit_pct": -0.79
   },
   {
     "symbol": "RMDA",
     "entry_trend": "🔛",
     "entry_price": 4.98,
     "entry_date": "2026-07-16"
+  },
+  {
+    "symbol": "ETEL",
+    "entry_trend": "↗️",
+    "entry_price": 99.0,
+    "entry_date": "2026-07-19"
+  },
+  {
+    "symbol": "EGAL",
+    "entry_trend": "↗️",
+    "entry_price": 311.35,
+    "entry_date": "2026-07-19"
   }
 ]

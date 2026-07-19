@@ -15,9 +15,9 @@
     "entry_price": 11.9
   },
   "ETEL": {
-    "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 99.0
   },
   "EAST": {
     "trend": "🔻",
@@ -65,9 +65,9 @@
     "entry_price": null
   },
   "HRHO": {
-    "trend": "🔛",
-    "in_position": true,
-    "entry_price": 26.74
+    "trend": "🔻",
+    "in_position": false,
+    "entry_price": null
   },
   "ORWE": {
     "trend": "🔛",
@@ -145,7 +145,7 @@
     "entry_price": null
   },
   "ADIB": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 47.22
   },
@@ -155,7 +155,7 @@
     "entry_price": 14.94
   },
   "MCQE": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -166,7 +166,7 @@
   },
   "EGAL": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 311.35
   }
 }
