@@ -21,7 +21,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 21.87,
-    "peak_profit": 1.6460905349794213
+    "peak_profit": 1.6918152720621737
   },
   "TMGH": {
     "cycle": 1,
@@ -49,8 +49,8 @@
   },
   "JUFO": {
     "cycle": 1,
-    "position": 0.33,
-    "avg_price": 30.61,
+    "position": 0.66,
+    "avg_price": 29.989999999999995,
     "peak_profit": 0.0
   },
   "GBCO": {
