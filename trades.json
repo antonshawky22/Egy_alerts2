@@ -37,5 +37,17 @@
     "entry_trend": "↗️",
     "entry_price": 311.35,
     "entry_date": "2026-07-19"
+  },
+  {
+    "symbol": "JUFO",
+    "entry_trend": "🔛",
+    "entry_price": 28.98,
+    "entry_date": "2026-07-20"
+  },
+  {
+    "symbol": "COMI",
+    "entry_trend": "↗️",
+    "entry_price": 136.77,
+    "entry_date": "2026-07-20"
   }
 ]

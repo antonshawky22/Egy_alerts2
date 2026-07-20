@@ -30,7 +30,7 @@
     "entry_price": 22.33
   },
   "ABUK": {
-    "trend": "🔛",
+    "trend": "🔻",
     "in_position": false,
     "entry_price": null
   },
@@ -65,7 +65,7 @@
     "entry_price": null
   },
   "HRHO": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -76,8 +76,8 @@
   },
   "JUFO": {
     "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 28.98
   },
   "DSCW": {
     "trend": "↗️",
@@ -140,14 +140,14 @@
     "entry_price": null
   },
   "COMI": {
-    "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 136.77
   },
   "ADIB": {
     "trend": "🔛",
-    "in_position": true,
-    "entry_price": 47.22
+    "in_position": false,
+    "entry_price": null
   },
   "PHDC": {
     "trend": "↗️",
@@ -155,7 +155,7 @@
     "entry_price": 14.94
   },
   "MCQE": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": false,
     "entry_price": null
   },
