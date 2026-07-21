@@ -1,11 +1,11 @@
 print("EGX LADDER CYCLE SYSTEM - DATABASE SOURCED (v2.0 Clean Fix)")
 
-import requests
-import os
 import json
-import pandas as pd
-import numpy as np
+import os
 import time
+import numpy as np
+import pandas as pd
+import requests
 
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
@@ -23,7 +23,7 @@ def send_telegram(text):
         print("Telegram send failed:", e)
 
 
-# تم تحديث القائمة لـ 13 سهماً من أقوى أسهم السوق المصري بتناغم كامل
+# قائمة الـ 13 سهماً القيادية
 symbols = {
     "COMI": "COMI",
     "HRHO": "HRHO",
@@ -139,6 +139,8 @@ for name, ticker in symbols.items():
     close = df["Close"]
     df["EMA20"] = close.ewm(span=20, adjust=False).mean()
     df["EMA30"] = close.ewm(span=30, adjust=False).mean()
+    # ⚡ إضافي مهم: حساب EMA50 المطلوب لشرط ema_up
+    df["EMA50"] = close.ewm(span=50, adjust=False).mean()
     df["EMA75"] = close.ewm(span=75, adjust=False).mean()
     df["RSI"] = rsi(close)
 
@@ -165,12 +167,15 @@ for name, ticker in symbols.items():
     s["peak_profit"] = float(s.get("peak_profit", 0.0))
     s["cycle"] = int(s.get("cycle", 1))
 
-    # 🚀 التعديل الجديد: تصفير البيانات التراكمية إذا كان المركز فارغاً لمنع الأخطاء البصرية والشوائب التراكمية
+    # 🚀 تصفير البيانات التراكمية إذا كان المركز فارغاً لمنع الأخطاء البصرية
     if s["position"] == 0.0:
         s["avg_price"] = 0.0
         s["peak_profit"] = 0.0
 
-    ema_up = df["EMA75"].iloc[-1] > df["EMA75"].iloc[-10] and (price > df["EMA50"].iloc[-1])
+    # 🎯 شرط الاتجاه المطور مع وجود EMA50 محسبوبة بوضوح
+    ema_up = (df["EMA75"].iloc[-1] > df["EMA75"].iloc[-10]) and (
+        price > df["EMA50"].iloc[-1]
+    )
 
     buy1 = ema_up and rsi_val <= 55
     buy2 = ema_up and rsi_val <= 45
@@ -191,7 +196,7 @@ for name, ticker in symbols.items():
         s["position"] = 0.33
         s["avg_price"] = price
         s["peak_profit"] = 0.0
-        profit = 0.0  # تصفير الربح لأن السعر الحالي = متوسط التكلفة
+        profit = 0.0
         action = "🟢 BUY L1"
 
     # شراء المستوى الثاني
@@ -201,7 +206,6 @@ for name, ticker in symbols.items():
         s["avg_price"] = update_avg(
             s["avg_price"], old_pos, price, s["position"]
         )
-        # ✨ إصلاح رئيسي: إعادة حساب الأرباح بناءً على المتوسط الجديد قبل الإرسال
         profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
         action = "🟢 BUY L2"
 
@@ -212,7 +216,6 @@ for name, ticker in symbols.items():
         s["avg_price"] = update_avg(
             s["avg_price"], old_pos, price, s["position"]
         )
-        # ✨ إصلاح رئيسي: إعادة حساب الأرباح بناءً على المتوسط الجديد قبل الإرسال
         profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
         action = "🟢 BUY L3"
 
@@ -250,13 +253,11 @@ for name, ticker in symbols.items():
         elif sell2:
             sell_amount = min(0.33, s["position"])
             s["position"] -= sell_amount
-            s["peak_profit"] = profit
             action = "🔴 SELL L2 (33%)"
 
         elif sell1:
             sell_amount = min(0.33, s["position"])
             s["position"] -= sell_amount
-            s["peak_profit"] = profit
             action = "🔴 SELL L1 (33%)"
 
         s["position"] = round(s["position"], 2)
