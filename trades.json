@@ -3,7 +3,10 @@
     "symbol": "DSCW",
     "entry_trend": "↗️",
     "entry_price": 1.85,
-    "entry_date": "2026-07-13"
+    "entry_date": "2026-07-13",
+    "exit_price": 1.99,
+    "exit_date": "2026-07-21",
+    "profit_pct": 7.57
   },
   {
     "symbol": "SWDY",
