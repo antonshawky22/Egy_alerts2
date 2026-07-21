@@ -170,11 +170,11 @@ for name, ticker in symbols.items():
         s["avg_price"] = 0.0
         s["peak_profit"] = 0.0
 
-    ema_up = df["EMA75"].iloc[-1] > df["EMA75"].iloc[-10]
+    ema_up = df["EMA75"].iloc[-1] > df["EMA75"].iloc[-10] and (price > df["EMA50"].iloc[-1])
 
     buy1 = ema_up and rsi_val <= 55
     buy2 = ema_up and rsi_val <= 45
-    buy3 = ema_up and rsi_val <= 40
+    buy3 = ema_up and rsi_val <= 35
 
     profit = 0.0
     if s["avg_price"] > 0:
