@@ -52,5 +52,11 @@
     "entry_trend": "↗️",
     "entry_price": 136.77,
     "entry_date": "2026-07-20"
+  },
+  {
+    "symbol": "ISPH",
+    "entry_trend": "🔛",
+    "entry_price": 11.64,
+    "entry_date": "2026-07-21"
   }
 ]
