@@ -1,9 +1,9 @@
 {
   "COMI": {
     "cycle": 1,
-    "position": 0.66,
+    "position": 0.33,
     "avg_price": 131.75379798583984,
-    "peak_profit": 6.236026695065893
+    "peak_profit": 6.281566179253248
   },
   "HRHO": {
     "cycle": 1,
@@ -19,9 +19,9 @@
   },
   "EFIH": {
     "cycle": 1,
-    "position": 0.33,
+    "position": 0.0,
     "avg_price": 21.87,
-    "peak_profit": 5.898491083676265
+    "peak_profit": 6.9501600365797875
   },
   "TMGH": {
     "cycle": 1,
@@ -55,8 +55,8 @@
   },
   "GBCO": {
     "cycle": 1,
-    "position": 0.0,
-    "avg_price": 0.0,
+    "position": 0.33,
+    "avg_price": 31.59,
     "peak_profit": 0.0
   },
   "PHDC": {
