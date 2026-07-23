@@ -173,13 +173,10 @@ for name, ticker in symbols.items():
         s["peak_profit"] = 0.0
 
     # 🎯 شرط الاتجاه المطور مع وجود EMA50 محسبوبة بوضوح
-    ema_up = (df["EMA75"].iloc[-1] > df["EMA75"].iloc[-10]) and (
-        price > df["EMA50"].iloc[-1]
-    )
-
+    ema_up = (df["EMA75"].iloc[-1] > df["EMA75"].iloc[-10]) and (price <= df["EMA75"].iloc[-1] * 1.07)
     buy1 = ema_up and rsi_val <= 55
-    buy2 = ema_up and rsi_val <= 45
-    buy3 = ema_up and rsi_val <= 35
+    buy2 = ema_up and rsi_val <= 43
+    buy3 = ema_up and rsi_val <= 33
 
     profit = 0.0
     if s["avg_price"] > 0:
