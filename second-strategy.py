@@ -139,7 +139,6 @@ for name, ticker in symbols.items():
     close = df["Close"]
     df["EMA20"] = close.ewm(span=20, adjust=False).mean()
     df["EMA30"] = close.ewm(span=30, adjust=False).mean()
-    # ⚡ إضافي مهم: حساب EMA50 المطلوب لشرط ema_up
     df["EMA50"] = close.ewm(span=50, adjust=False).mean()
     df["EMA75"] = close.ewm(span=75, adjust=False).mean()
     df["RSI"] = rsi(close)
@@ -172,7 +171,6 @@ for name, ticker in symbols.items():
         s["avg_price"] = 0.0
         s["peak_profit"] = 0.0
 
-    # 🎯 شرط الاتجاه المطور مع وجود EMA50 محسبوبة بوضوح
     ema_up = (df["EMA75"].iloc[-1] > df["EMA75"].iloc[-10]) and (price <= df["EMA75"].iloc[-1] * 1.07)
     buy1 = ema_up and rsi_val <= 55
     buy2 = ema_up and rsi_val <= 43
