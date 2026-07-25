@@ -49,14 +49,14 @@
   },
   "JUFO": {
     "cycle": 1,
-    "position": 0.0,
-    "avg_price": 0.0,
+    "position": 0.33,
+    "avg_price": 28.9,
     "peak_profit": 0.0
   },
   "GBCO": {
     "cycle": 1,
-    "position": 0.0,
-    "avg_price": 0.0,
+    "position": 0.33,
+    "avg_price": 31.31,
     "peak_profit": 0.0
   },
   "PHDC": {
