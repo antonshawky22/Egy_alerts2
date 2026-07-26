@@ -12,7 +12,10 @@
     "symbol": "SWDY",
     "entry_trend": "↗️",
     "entry_price": 89.82,
-    "entry_date": "2026-07-15"
+    "entry_date": "2026-07-15",
+    "exit_price": 96.35,
+    "exit_date": "2026-07-26",
+    "profit_pct": 7.27
   },
   {
     "symbol": "HRHO",
@@ -61,5 +64,17 @@
     "exit_price": 11.63,
     "exit_date": "2026-07-26",
     "profit_pct": -0.09
+  },
+  {
+    "symbol": "ISPH",
+    "entry_trend": "🔛",
+    "entry_price": 11.64,
+    "entry_date": "2026-07-26"
+  },
+  {
+    "symbol": "HRHO",
+    "entry_trend": "🔛",
+    "entry_price": 26.76,
+    "entry_date": "2026-07-26"
   }
 ]
