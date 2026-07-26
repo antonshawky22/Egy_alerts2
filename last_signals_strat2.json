@@ -25,8 +25,8 @@
   },
   "TMGH": {
     "cycle": 1,
-    "position": 0.0,
-    "avg_price": 0.0,
+    "position": 0.33,
+    "avg_price": 99.27,
     "peak_profit": 0.0
   },
   "SWDY": {
@@ -51,7 +51,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 28.9,
-    "peak_profit": 0.0
+    "peak_profit": 1.3494809688581335
   },
   "GBCO": {
     "cycle": 1,
