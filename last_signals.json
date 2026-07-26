@@ -45,9 +45,9 @@
     "entry_price": 89.82
   },
   "ISPH": {
-    "trend": "🔛",
-    "in_position": true,
-    "entry_price": 11.64
+    "trend": "🔻",
+    "in_position": false,
+    "entry_price": null
   },
   "ATQA": {
     "trend": "🔛",
@@ -151,8 +151,8 @@
   },
   "PHDC": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 14.94
+    "in_position": false,
+    "entry_price": null
   },
   "MCQE": {
     "trend": "↗️",
@@ -165,7 +165,7 @@
     "entry_price": null
   },
   "EGAL": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 311.35
   }

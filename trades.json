@@ -57,6 +57,9 @@
     "symbol": "ISPH",
     "entry_trend": "🔛",
     "entry_price": 11.64,
-    "entry_date": "2026-07-21"
+    "entry_date": "2026-07-21",
+    "exit_price": 11.63,
+    "exit_date": "2026-07-26",
+    "profit_pct": -0.09
   }
 ]
