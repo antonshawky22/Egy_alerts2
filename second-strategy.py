@@ -38,6 +38,7 @@ symbols = {
     "PHDC": "PHDC",
     "AMOC": "AMOC",
     "ETEL": "ETEL",
+    "ORWE": "ORWE",
 }
 
 STATE_FILE = "last_signals_strat2.json"
