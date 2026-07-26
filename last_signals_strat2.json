@@ -51,7 +51,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 28.9,
-    "peak_profit": 1.3494809688581335
+    "peak_profit": 1.4878892733564004
   },
   "GBCO": {
     "cycle": 1,
@@ -75,6 +75,12 @@
     "cycle": 1,
     "position": 0.0,
     "avg_price": 0.0,
+    "peak_profit": 0.0
+  },
+  "ORWE": {
+    "cycle": 1,
+    "position": 0.33,
+    "avg_price": 22.96,
     "peak_profit": 0.0
   }
 }
