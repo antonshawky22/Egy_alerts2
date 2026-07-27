@@ -30,7 +30,10 @@
     "symbol": "RMDA",
     "entry_trend": "🔛",
     "entry_price": 4.98,
-    "entry_date": "2026-07-16"
+    "entry_date": "2026-07-16",
+    "exit_price": 5.3,
+    "exit_date": "2026-07-27",
+    "profit_pct": 6.43
   },
   {
     "symbol": "ETEL",
@@ -76,5 +79,17 @@
     "entry_trend": "🔛",
     "entry_price": 26.76,
     "entry_date": "2026-07-26"
+  },
+  {
+    "symbol": "TMGH",
+    "entry_trend": "↗️",
+    "entry_price": 99.71,
+    "entry_date": "2026-07-27"
+  },
+  {
+    "symbol": "MCQE",
+    "entry_trend": "↗️",
+    "entry_price": 188.7,
+    "entry_date": "2026-07-27"
   }
 ]
