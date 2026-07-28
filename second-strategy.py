@@ -196,7 +196,7 @@ for name, ticker in symbols.items():
         action = "🟢 BUY L1"
 
     # شراء المستوى الثاني
-    elif 0.32 < s["position"] < 0.5 and buy2 and price < s["avg_price"]:
+    elif 0.32 < s["position"] < 0.5 and buy2 and price < s["avg_price"] * 0.98 :
         old_pos = s["position"]
         s["position"] = 0.66
         s["avg_price"] = update_avg(
@@ -206,7 +206,7 @@ for name, ticker in symbols.items():
         action = "🟢 BUY L2"
 
     # شراء المستوى الثالث
-    elif 0.65 < s["position"] < 1 and buy3 and price < s["avg_price"]:
+    elif 0.65 < s["position"] < 1 and buy3 and price < s["avg_price"] 0.97 :
         old_pos = s["position"]
         s["position"] = 1.0
         s["avg_price"] = update_avg(
