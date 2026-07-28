@@ -97,5 +97,11 @@
     "entry_trend": "↗️",
     "entry_price": 188.7,
     "entry_date": "2026-07-27"
+  },
+  {
+    "symbol": "PHDC",
+    "entry_trend": "🔛",
+    "entry_price": 14.6,
+    "entry_date": "2026-07-28"
   }
 ]

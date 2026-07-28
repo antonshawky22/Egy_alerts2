@@ -10,7 +10,7 @@
     "entry_price": 22.9
   },
   "EMFD": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 11.9
   },
@@ -101,8 +101,8 @@
   },
   "RAYA": {
     "trend": "🔛",
-    "in_position": true,
-    "entry_price": 7.96
+    "in_position": false,
+    "entry_price": null
   },
   "EEII": {
     "trend": "↗️",
@@ -150,9 +150,9 @@
     "entry_price": null
   },
   "PHDC": {
-    "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "trend": "🔛",
+    "in_position": true,
+    "entry_price": 14.6
   },
   "MCQE": {
     "trend": "↗️",
