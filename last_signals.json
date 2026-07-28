@@ -10,7 +10,7 @@
     "entry_price": 22.9
   },
   "EMFD": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": true,
     "entry_price": 11.9
   },
@@ -45,9 +45,9 @@
     "entry_price": null
   },
   "ISPH": {
-    "trend": "↗️",
-    "in_position": true,
-    "entry_price": 11.64
+    "trend": "🔻",
+    "in_position": false,
+    "entry_price": null
   },
   "ATQA": {
     "trend": "🔛",
@@ -115,7 +115,7 @@
     "entry_price": 1.92
   },
   "GBCO": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": true,
     "entry_price": 30.89
   },
@@ -145,7 +145,7 @@
     "entry_price": 136.77
   },
   "ADIB": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": false,
     "entry_price": null
   },
@@ -165,8 +165,8 @@
     "entry_price": null
   },
   "EGAL": {
-    "trend": "🔛",
-    "in_position": true,
-    "entry_price": 311.35
+    "trend": "🔻",
+    "in_position": false,
+    "entry_price": null
   }
 }

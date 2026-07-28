@@ -45,7 +45,10 @@
     "symbol": "EGAL",
     "entry_trend": "↗️",
     "entry_price": 311.35,
-    "entry_date": "2026-07-19"
+    "entry_date": "2026-07-19",
+    "exit_price": 297.45,
+    "exit_date": "2026-07-28",
+    "profit_pct": -4.46
   },
   {
     "symbol": "JUFO",
@@ -72,7 +75,10 @@
     "symbol": "ISPH",
     "entry_trend": "🔛",
     "entry_price": 11.64,
-    "entry_date": "2026-07-26"
+    "entry_date": "2026-07-26",
+    "exit_price": 11.5,
+    "exit_date": "2026-07-28",
+    "profit_pct": -1.2
   },
   {
     "symbol": "HRHO",
