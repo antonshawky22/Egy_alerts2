@@ -65,9 +65,9 @@
     "entry_price": null
   },
   "HRHO": {
-    "trend": "🔛",
-    "in_position": true,
-    "entry_price": 26.76
+    "trend": "🔻",
+    "in_position": false,
+    "entry_price": null
   },
   "ORWE": {
     "trend": "🔛",
@@ -75,9 +75,9 @@
     "entry_price": null
   },
   "JUFO": {
-    "trend": "🔛",
-    "in_position": true,
-    "entry_price": 28.98
+    "trend": "🔻",
+    "in_position": false,
+    "entry_price": null
   },
   "DSCW": {
     "trend": "↗️",
@@ -115,7 +115,7 @@
     "entry_price": 1.92
   },
   "GBCO": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 30.89
   },
@@ -130,9 +130,9 @@
     "entry_price": 39.67
   },
   "AMOC": {
-    "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 8.28
   },
   "FWRY": {
     "trend": "🔛",
@@ -165,7 +165,7 @@
     "entry_price": null
   },
   "EGAL": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   }

@@ -54,7 +54,10 @@
     "symbol": "JUFO",
     "entry_trend": "🔛",
     "entry_price": 28.98,
-    "entry_date": "2026-07-20"
+    "entry_date": "2026-07-20",
+    "exit_price": 28.75,
+    "exit_date": "2026-07-29",
+    "profit_pct": -0.79
   },
   {
     "symbol": "COMI",
@@ -84,7 +87,10 @@
     "symbol": "HRHO",
     "entry_trend": "🔛",
     "entry_price": 26.76,
-    "entry_date": "2026-07-26"
+    "entry_date": "2026-07-26",
+    "exit_price": 26.42,
+    "exit_date": "2026-07-29",
+    "profit_pct": -1.27
   },
   {
     "symbol": "TMGH",
@@ -103,5 +109,11 @@
     "entry_trend": "🔛",
     "entry_price": 14.6,
     "entry_date": "2026-07-28"
+  },
+  {
+    "symbol": "AMOC",
+    "entry_trend": "↗️",
+    "entry_price": 8.28,
+    "entry_date": "2026-07-29"
   }
 ]
