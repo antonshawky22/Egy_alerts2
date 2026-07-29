@@ -154,14 +154,14 @@ if EGX30_KEY in raw_database:
             # 🛡️ تصحيح الـ adjust=False للتطابق مع الشارت
             df_egx["EMA20"] = df_egx["Close"].ewm(span=20, adjust=False).mean()
             egx_last = df_egx.iloc[-1]
-            egx_prev_5 = df_egx.iloc[-5] if len(df_egx) > 5 else df_egx.iloc[-2]
+            egx_prev_5 = df_egx.iloc[-8] if len(df_egx) > 5 else df_egx.iloc[-2]
             
             df_egx["crossed"] = (((df_egx["Close"] > df_egx["EMA20"]) & (df_egx["Close"].shift(1) <= df_egx["EMA20"])) | 
                                  ((df_egx["Close"] < df_egx["EMA20"]) & (df_egx["Close"].shift(1) >= df_egx["EMA20"])))
             egx_cross_count = df_egx["crossed"].iloc[-20:].sum()
             
             # 🔥 التعديل المعتمد: إعادة ترتيب منطق الـ if لتفادي الظلم البرمجي للمؤشر
-            if egx_cross_count >= 3:
+            if egx_cross_count >= 5:
                 egx_trend = "🔛"
             elif egx_last["Close"] < egx_last["EMA20"] and egx_last["EMA20"] < egx_prev_5["EMA20"]:
                 egx_trend = "🔻"
@@ -214,7 +214,7 @@ for name in symbols_keys:
 
     last = df.iloc[-1]
     prev = df.iloc[-2]
-    prev_5 = df.iloc[-5] if len(df) > 5 else df.iloc[-2]
+    prev_5 = df.iloc[-8] if len(df) > 5 else df.iloc[-2]
 
     last_close = last["Close"]
 
@@ -234,7 +234,7 @@ for name in symbols_keys:
     if egx_trend == "🔻":
         trend = "🔻"
     else:
-        if cross_count >= 3:
+        if cross_count >= 5:
             trend = "🔛"
         elif last_close > last["EMA40"] and last["EMA40"] > prev_5["EMA40"]:
             trend = "↗️"
