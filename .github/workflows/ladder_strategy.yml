@@ -52,8 +52,11 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python second-strategy.py
 
-      # 3️⃣ الحفظ التلقائي في جيت هب
+      # 3️⃣ الحفظ التلقائي وإرسال التنبيهات المؤكدة
       - name: Commit database and last signals
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -72,4 +75,3 @@ jobs:
           else
             echo "ℹ️ No changes detected in files to commit."
           fi
-
