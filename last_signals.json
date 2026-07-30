@@ -10,9 +10,9 @@
     "entry_price": 22.9
   },
   "EMFD": {
-    "trend": "🔛",
-    "in_position": true,
-    "entry_price": 11.9
+    "trend": "🔻",
+    "in_position": false,
+    "entry_price": null
   },
   "ETEL": {
     "trend": "↗️",
@@ -71,8 +71,8 @@
   },
   "ORWE": {
     "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 22.65
   },
   "JUFO": {
     "trend": "🔻",
@@ -100,7 +100,7 @@
     "entry_price": null
   },
   "RAYA": {
-    "trend": "🔛",
+    "trend": "🔻",
     "in_position": false,
     "entry_price": null
   },
@@ -120,7 +120,7 @@
     "entry_price": 30.89
   },
   "TMGH": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 99.71
   },
@@ -155,7 +155,7 @@
     "entry_price": 14.6
   },
   "MCQE": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 188.7
   },
@@ -165,7 +165,7 @@
     "entry_price": null
   },
   "EGAL": {
-    "trend": "🔛",
+    "trend": "🔻",
     "in_position": false,
     "entry_price": null
   }

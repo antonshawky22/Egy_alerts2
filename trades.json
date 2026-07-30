@@ -115,5 +115,11 @@
     "entry_trend": "↗️",
     "entry_price": 8.28,
     "entry_date": "2026-07-29"
+  },
+  {
+    "symbol": "ORWE",
+    "entry_trend": "🔛",
+    "entry_price": 22.65,
+    "entry_date": "2026-07-30"
   }
 ]
