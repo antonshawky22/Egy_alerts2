@@ -92,49 +92,32 @@ if not bulk_analysis:
     sys.exit(1)
 
 # ==========================================
-# 🚨 3. رادار فحص نبض السوق الفعلي (Market Pulse Sensor)
+# 🚨 3. رادار فحص نبض السوق (Market Pulse Sensor)
 # ==========================================
 print("🔍 Scanning market pulse using leaders...")
-market_is_open = False
 check_date = None
 
 try:
     comi_analysis = bulk_analysis.get("EGX:COMI")
     if comi_analysis:
-        indicators = comi_analysis.indicators
         check_date = str(comi_analysis.time.date())
-        new_close = float(indicators.get("close", 0))
-        new_open = float(indicators.get("open", new_close))
-        
-        df_comi = database.get("COMI", pd.DataFrame())
-        if not df_comi.empty:
-            old_data = df_comi.iloc[-1].values
-            if new_close != old_data[3] or new_open != old_data[0]:
-                market_is_open = True
 except Exception as e:
     print(f"⚠️ Pulse check error: {e}")
-    market_is_open = True # صمام أمان
 
-if not market_is_open and check_date is not None:
-    msg = f"🛑 **تنبيه حالة السوق**\nالسوق مغلق أو عطلة رسمية بتاريخ `{check_date}`. لم يتم رصد أي تغير في الأسعار."
-    print(msg)
-    # خياري: يمكنك إلغاء التعليق عن السطر التالي لو حابب يوصلك إشعار بإغلاق السوق
-    # send_telegram(msg) 
-    sys.exit(0)
-else:
-    print("🟢 Market is OPEN and active. Processing updates...")
+print(f"🟢 Processing market updates for date: {check_date}...")
 
 # ==========================================
 # 4. تفكيك البيانات المستلمة وضخها في الجداول
 # ==========================================
 updated_count = 0
+has_real_price_changes = False # تتبع وجود تغييرات حقيقية في الأسعار
 failed_tickers = []
 
 for name, ticker in symbols.items():
     try:
         df = database.get(name, pd.DataFrame())
         
-        # لو السهم جديد خالص، هيروح لياهو يسحب الهيستوري القديم
+        # لو السهم جديد، هيروح لياهو يسحب الهيستوري القديم
         if df.empty or len(df) < 20:
             print(f"📥 Downloading base history for {name} from Yahoo...")
             yf_ticker = "^CASE30" if name == "EGX30" else f"{ticker}.CA"
@@ -160,6 +143,17 @@ for name, ticker in symbols.items():
         tv_high = float(tv_indicators.get("high", tv_close))
         tv_low = float(tv_indicators.get("low", tv_close))
         tv_volume = float(tv_indicators.get("volume", 0))
+
+        # فحص هل توجد قيمة جديدة بالفعل تختلف عن آخر سعر مسجل في الداتا
+        if not df.empty and last_candle_date in df.index:
+            old_row = df.loc[last_candle_date]
+            if (old_row["Close"] != tv_close or 
+                old_row["Open"] != tv_open or 
+                old_row["High"] != tv_high or 
+                old_row["Low"] != tv_low):
+                has_real_price_changes = True
+        else:
+            has_real_price_changes = True
 
         # تحديث اليوم الحالي
         df.loc[last_candle_date] = [tv_open, tv_high, tv_low, tv_close, tv_volume]
@@ -192,12 +186,16 @@ if database:
     with open(DB_FILE, "w") as f:
         f.write("{\n" + ",\n".join(final_blocks) + "\n}")
 
-    success_msg = f"✅ **تم تحديث أسعار البورصة بنجاح!**\n📅 التاريخ: `{check_date}`\n📊 عدد الأسهم التابعة: {updated_count}/{len(symbols)}"
-    if failed_tickers:
-        success_msg += f"\n⚠️ أسهم لم يتم تحديثها: {', '.join(failed_tickers)}"
-    
     print(f"\n🏁 Complete! File '{DB_FILE}' updated.")
-    send_telegram(success_msg)
+
+    # 🎯 الإرسال الذكي: تليجرام يصلك فقط لو كانت هناك أسعار حديثة وتغيرت بالفعل
+    if updated_count > 0 and has_real_price_changes:
+        success_msg = f"✅ **تم تحديث أسعار البورصة بنجاح!**\n📅 التاريخ: `{check_date}`\n📊 الأسهم المحدثة: {updated_count}/{len(symbols)}"
+        if failed_tickers:
+            success_msg += f"\n⚠️ أسهم لم يتم تحديثها: {', '.join(failed_tickers)}"
+        send_telegram(success_msg)
+    else:
+        print("ℹ️ No new price changes detected. Telegram notification skipped to avoid noise.")
 
 else:
-    send_telegram("⚠️ **تحذير:** محاولة حفظ قاعدة بيانات فاضية! تم إيقاف الحفظ لحماية البيانات القديمة.")
+    send_telegram("⚠️ **تحذير:** محاولة حفظ قاعدة بيانات فارغة! تم إيقاف الحفظ لحماية البيانات القديمة.")
