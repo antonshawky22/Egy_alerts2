@@ -1,4 +1,4 @@
-Name: ladder_strategy
+name: ladder_strategy
 
 on:
   workflow_dispatch:
@@ -7,11 +7,11 @@ on:
     - cron: '10 08 * * 0-4'  # الساعة 11:10 صباحاً بتوقيت مصر
     - cron: '10 10 * * 0-4'  # الساعة 1:10 ظهراً بتوقيت مصر
 
-# 🔒 منح صلاحيات الكتابة الكاملة للبوت لحفظ وحقن ملف الـ JSON داخل الريبو
+# 🔒 منح صلاحيات الكتابة للبوت لحفظ الملفات
 permissions:
   contents: write
 
-# 🔒 حماية لمنع تشغيل نسختين في نفس الوقت وتعارض الـ Git
+# 🔒 حماية لمنع التعارض إذا اشتغل الوركفلو مرتين في نفس الوقت
 concurrency:
   group: ladder-strategy-group
   cancel-in-progress: false
@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           persist-credentials: true
-          fetch-depth: 0 # جلب كامل الهيستوري لمنع مشاكل الـ Merge
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -38,37 +38,38 @@ jobs:
           pip install yfinance tradingview-ta requests pandas curl_cffi
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      # 1️⃣ تشغيل سكريبت تحديث الأسعار (مع إتاحة التليجرام للتنبيهات)
+      # 1️⃣ تشغيل سكريبت تحديث الأسعار
       - name: Update Price Database
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python update_database.py
 
-      # 2️⃣ تشغيل سكريبت استراتيجية السلم وإرسال التليجرام
+      # 2️⃣ تشغيل سكريبت استراتيجية السلم
       - name: Run Trading Strategies 
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python second-strategy.py
 
-      # 3️⃣ حفظ الملفات المؤمّن مع تفادي التعارض (Auto Rebase)
+      # 3️⃣ الحفظ التلقائي في جيت هب
       - name: Commit database and last signals
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # جلب وسحب أي تغييرات قديمة وتطبيق الـ rebase
-          git pull origin main --rebase || true
+          # سحب أي تعديلات قديمة لتجنب المشاكل
+          git pull origin HEAD --rebase || true
 
-          # إضافة الملفات المحدثة بالكامل
+          # إضافة الملفات المحدثة
           git add last_signals_strat2.json egx_history_database_v2.json
           
-          # التحقق والتنفيذ لضمان التخزين
+          # التحقق من وجود تغييرات ثم رفعها
           if ! git diff --cached --quiet; then
             git commit -m "Auto-update: Database v2 & Ladder Strategy Signals [skip ci]"
-            git push origin main
+            git push origin HEAD
             echo "✅ State and signals successfully saved to GitHub!"
           else
             echo "ℹ️ No changes detected in files to commit."
           fi
+
