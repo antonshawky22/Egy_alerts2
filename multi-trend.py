@@ -154,7 +154,7 @@ if EGX30_KEY in raw_database:
             # 🛡️ تصحيح الـ adjust=False للتطابق مع الشارت
             df_egx["EMA20"] = df_egx["Close"].ewm(span=20, adjust=False).mean()
             egx_last = df_egx.iloc[-1]
-            egx_prev_5 = df_egx.iloc[-8] if len(df_egx) > 8 else df_egx.iloc[-2]
+            egx_prev_5 = df_egx.iloc[-14] if len(df_egx) > 14 else df_egx.iloc[-2]
             
             df_egx["crossed"] = (((df_egx["Close"] > df_egx["EMA20"]) & (df_egx["Close"].shift(1) <= df_egx["EMA20"])) | 
                                  ((df_egx["Close"] < df_egx["EMA20"]) & (df_egx["Close"].shift(1) >= df_egx["EMA20"])))
