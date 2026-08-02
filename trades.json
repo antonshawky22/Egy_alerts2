@@ -145,5 +145,23 @@
     "entry_trend": "↗️",
     "entry_price": 1.97,
     "entry_date": "2026-08-02"
+  },
+  {
+    "symbol": "EMFD",
+    "entry_trend": "🔛",
+    "entry_price": 11.4,
+    "entry_date": "2026-08-02"
+  },
+  {
+    "symbol": "ATQA",
+    "entry_trend": "↗️",
+    "entry_price": 9.89,
+    "entry_date": "2026-08-02"
+  },
+  {
+    "symbol": "EGAL",
+    "entry_trend": "↗️",
+    "entry_price": 300.27,
+    "entry_date": "2026-08-02"
   }
 ]
