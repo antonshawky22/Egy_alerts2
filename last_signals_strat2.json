@@ -15,7 +15,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 18.77,
-    "peak_profit": 1.758124667021853
+    "peak_profit": 1.917954182205644
   },
   "EFIH": {
     "cycle": 1,
@@ -27,7 +27,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 97.3,
-    "peak_profit": 0.20554984583761854
+    "peak_profit": 0.7605344295991872
   },
   "SWDY": {
     "cycle": 1,
@@ -63,7 +63,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 14.45,
-    "peak_profit": 0.0
+    "peak_profit": 0.6228373702422135
   },
   "AMOC": {
     "cycle": 1,
@@ -81,6 +81,6 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 22.6,
-    "peak_profit": 1.5044247787610612
+    "peak_profit": 1.5486725663716718
   }
 }
