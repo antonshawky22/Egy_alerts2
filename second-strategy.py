@@ -172,10 +172,27 @@ for name, ticker in symbols.items():
         s["avg_price"] = 0.0
         s["peak_profit"] = 0.0
 
+    # ==========================================
+    # 🎯 حساب فلتر منع قمم الصعود الصاروخي (Parabolic Run Filter)
+    # ==========================================
+    lookback = min(len(df), 80)  # ضمان ألا يحدث أخطاء لو الشموع أقل من 80
+    lowest_80 = float(df["Low"].tail(lookback).min())
+    highest_80 = float(df["High"].tail(lookback).max())
+    
+    # حساب نسبة الصعود الإجمالية في آخر 80 شمعة
+    run_up_percent = ((highest_80 - lowest_80) / lowest_80) * 100 if lowest_80 > 0 else 0.0
+    
+    # يمنع الشراء تماماً إذا كان السهم حقق ارتفاعاً تجاوز 60%
+    safe_to_buy = run_up_percent <= 60.0
+
+    # ------------------------------------------
+    # 🚀 تطبيق شروط الشراء المحدثة
+    # ------------------------------------------
     ema_up = (df["EMA75"].iloc[-1] > df["EMA75"].iloc[-10]) and (price <= df["EMA75"].iloc[-1] * 1.05)
-    buy1 = ema_up and rsi_val <= 55
-    buy2 = ema_up and rsi_val <= 43
-    buy3 = ema_up and rsi_val <= 33
+    
+    buy1 = safe_to_buy and ema_up and rsi_val <= 55
+    buy2 = safe_to_buy and ema_up and rsi_val <= 43
+    buy3 = safe_to_buy and ema_up and rsi_val <= 33
 
     profit = 0.0
     if s["avg_price"] > 0:
