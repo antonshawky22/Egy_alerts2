@@ -114,7 +114,10 @@
     "symbol": "AMOC",
     "entry_trend": "↗️",
     "entry_price": 8.28,
-    "entry_date": "2026-07-29"
+    "entry_date": "2026-07-29",
+    "exit_price": 9.63,
+    "exit_date": "2026-08-02",
+    "profit_pct": 16.3
   },
   {
     "symbol": "ORWE",
@@ -126,6 +129,21 @@
     "symbol": "EMFD",
     "entry_trend": "🔛",
     "entry_price": 11.25,
-    "entry_date": "2026-07-30"
+    "entry_date": "2026-07-30",
+    "exit_price": 11.35,
+    "exit_date": "2026-08-02",
+    "profit_pct": 0.89
+  },
+  {
+    "symbol": "SWDY",
+    "entry_trend": "↗️",
+    "entry_price": 94.91,
+    "entry_date": "2026-08-02"
+  },
+  {
+    "symbol": "DSCW",
+    "entry_trend": "↗️",
+    "entry_price": 1.97,
+    "entry_date": "2026-08-02"
   }
 ]
