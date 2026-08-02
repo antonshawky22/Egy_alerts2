@@ -158,10 +158,10 @@ if EGX30_KEY in raw_database:
             
             df_egx["crossed"] = (((df_egx["Close"] > df_egx["EMA20"]) & (df_egx["Close"].shift(1) <= df_egx["EMA20"])) | 
                                  ((df_egx["Close"] < df_egx["EMA20"]) & (df_egx["Close"].shift(1) >= df_egx["EMA20"])))
-            egx_cross_count = df_egx["crossed"].iloc[-20:].sum()
+            egx_cross_count = df_egx["crossed"].iloc[-30:].sum()
             
             # 🔥 التعديل المعتمد: إعادة ترتيب منطق الـ if لتفادي الظلم البرمجي للمؤشر
-            if egx_cross_count >= 5:
+            if egx_cross_count >= 7:
                 egx_trend = "🔛"
             elif egx_last["Close"] < egx_last["EMA20"] and egx_last["EMA20"] < egx_prev_5["EMA20"]:
                 egx_trend = "🔻"
@@ -210,11 +210,11 @@ for name in symbols_keys:
 
     df["crossed"] = (((df["Close"] > df["EMA40"]) & (df["Close"].shift(1) <= df["EMA40"])) | 
                      ((df["Close"] < df["EMA40"]) & (df["Close"].shift(1) >= df["EMA40"])))
-    cross_count = df["crossed"].iloc[-20:].sum()
+    cross_count = df["crossed"].iloc[-30:].sum()
 
     last = df.iloc[-1]
     prev = df.iloc[-2]
-    prev_5 = df.iloc[-8] if len(df) > 8 else df.iloc[-2]
+    prev_5 = df.iloc[-14] if len(df) > 14 else df.iloc[-2]
 
     last_close = last["Close"]
 
@@ -234,7 +234,7 @@ for name in symbols_keys:
     if egx_trend == "🔻":
         trend = "🔻"
     else:
-        if cross_count >= 5:
+        if cross_count >= 7:
             trend = "🔛"
         elif last_close > last["EMA40"] and last["EMA40"] > prev_5["EMA40"]:
             trend = "↗️"
