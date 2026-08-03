@@ -57,7 +57,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 29.66,
-    "peak_profit": 3.2703978422117292
+    "peak_profit": 5.192178017532027
   },
   "PHDC": {
     "cycle": 1,
@@ -81,6 +81,6 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 22.6,
-    "peak_profit": 1.6814159292035353
+    "peak_profit": 2.1238938053097205
   }
 }
