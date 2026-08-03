@@ -30,7 +30,7 @@
     "entry_price": 22.33
   },
   "ABUK": {
-    "trend": "🔛",
+    "trend": "🔻",
     "in_position": false,
     "entry_price": null
   },
@@ -45,7 +45,7 @@
     "entry_price": 94.91
   },
   "ISPH": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": false,
     "entry_price": null
   },
@@ -70,12 +70,12 @@
     "entry_price": null
   },
   "ORWE": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": true,
     "entry_price": 22.65
   },
   "JUFO": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -115,7 +115,7 @@
     "entry_price": 1.92
   },
   "GBCO": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": true,
     "entry_price": 30.89
   },
@@ -150,7 +150,7 @@
     "entry_price": null
   },
   "PHDC": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": true,
     "entry_price": 14.6
   },
@@ -165,7 +165,7 @@
     "entry_price": null
   },
   "EGAL": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 300.27
   }
