@@ -57,7 +57,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 29.66,
-    "peak_profit": 6.1024949426837445
+    "peak_profit": 8.226567768037766
   },
   "PHDC": {
     "cycle": 1,
@@ -79,8 +79,8 @@
   },
   "ORWE": {
     "cycle": 1,
-    "position": 0.33,
+    "position": 0.0,
     "avg_price": 22.6,
-    "peak_profit": 2.1238938053097205
+    "peak_profit": 5.973451327433618
   }
 }
