@@ -27,7 +27,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 97.3,
-    "peak_profit": 1.3360739979444987
+    "peak_profit": 2.672147995889012
   },
   "SWDY": {
     "cycle": 1,
@@ -80,7 +80,7 @@
   "ORWE": {
     "cycle": 1,
     "position": 0.0,
-    "avg_price": 22.6,
-    "peak_profit": 5.973451327433618
+    "avg_price": 0.0,
+    "peak_profit": 0.0
   }
 }
