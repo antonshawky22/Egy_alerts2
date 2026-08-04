@@ -138,7 +138,10 @@
     "symbol": "SWDY",
     "entry_trend": "↗️",
     "entry_price": 94.91,
-    "entry_date": "2026-08-02"
+    "entry_date": "2026-08-02",
+    "exit_price": 105.0,
+    "exit_date": "2026-08-04",
+    "profit_pct": 10.63
   },
   {
     "symbol": "DSCW",
@@ -163,5 +166,11 @@
     "entry_trend": "↗️",
     "entry_price": 300.27,
     "entry_date": "2026-08-02"
+  },
+  {
+    "symbol": "AMOC",
+    "entry_trend": "↗️",
+    "entry_price": 9.15,
+    "entry_date": "2026-08-04"
   }
 ]

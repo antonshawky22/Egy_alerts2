@@ -30,7 +30,7 @@
     "entry_price": 22.33
   },
   "ABUK": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -41,8 +41,8 @@
   },
   "SWDY": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 94.91
+    "in_position": false,
+    "entry_price": null
   },
   "ISPH": {
     "trend": "↗️",
@@ -65,7 +65,7 @@
     "entry_price": null
   },
   "HRHO": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -85,7 +85,7 @@
     "entry_price": 1.97
   },
   "SUGR": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -100,7 +100,7 @@
     "entry_price": null
   },
   "RAYA": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": false,
     "entry_price": null
   },
@@ -120,7 +120,7 @@
     "entry_price": 30.89
   },
   "TMGH": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 99.71
   },
@@ -131,8 +131,8 @@
   },
   "AMOC": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 9.15
   },
   "FWRY": {
     "trend": "🔛",
