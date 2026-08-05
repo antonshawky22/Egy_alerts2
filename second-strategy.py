@@ -23,23 +23,15 @@ def send_telegram(text):
         print("Telegram send failed:", e)
 
 
-# قائمة الـ 13 سهماً القيادية
+# قائمة الاسهم
 symbols = {
-    "COMI": "COMI",
-    "HRHO": "HRHO",
-    "FWRY": "FWRY",
-    "EFIH": "EFIH",
-    "TMGH": "TMGH",
-    "SWDY": "SWDY",
-    "ABUK": "ABUK",
-    "EAST": "EAST",
-    "JUFO": "JUFO",
-    "GBCO": "GBCO",
-    "PHDC": "PHDC",
-    "AMOC": "AMOC",
-    "ETEL": "ETEL",
-    "ORWE": "ORWE",
-}
+    "OLFI": "OLFI", "EMFD": "EMFD", "ETEL": "ETEL", "EAST": "EAST",
+    "EFIH": "EFIH", "ABUK": "ABUK", "OIH": "OIH", "SWDY": "SWDY", "ISPH": "ISPH",
+    "ATQA": "ATQA", "MTIE": "MTIE", "HRHO": "HRHO", "ORWE": "ORWE",
+    "JUFO": "JUFO", "DSCW": "DSCW", "SUGR": "SUGR", "ELSH": "ELSH", "RMDA": "RMDA",
+    "RAYA": "RAYA", "EEII": "EEII", "MPCO": "MPCO", "GBCO": "GBCO", "TMGH": "TMGH",
+    "ORHD": "ORHD", "AMOC": "AMOC", "FWRY": "FWRY", "COMI": "COMI", "ADIB": "ADIB",
+    "PHDC": "PHDC", "MCQE": "MCQE", "SKPC": "SKPC", "EGAL": "EGAL"}
 
 STATE_FILE = "last_signals_strat2.json"
 DB_FILE = "egx_history_database_v2.json"
