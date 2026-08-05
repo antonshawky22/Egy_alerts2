@@ -82,5 +82,113 @@
     "position": 0.0,
     "avg_price": 0.0,
     "peak_profit": 0.0
+  },
+  "OLFI": {
+    "cycle": 1,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0
+  },
+  "EMFD": {
+    "cycle": 1,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0
+  },
+  "OIH": {
+    "cycle": 1,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0
+  },
+  "ISPH": {
+    "cycle": 1,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0
+  },
+  "ATQA": {
+    "cycle": 1,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0
+  },
+  "MTIE": {
+    "cycle": 1,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0
+  },
+  "DSCW": {
+    "cycle": 1,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0
+  },
+  "SUGR": {
+    "cycle": 1,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0
+  },
+  "ELSH": {
+    "cycle": 1,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0
+  },
+  "RMDA": {
+    "cycle": 1,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0
+  },
+  "RAYA": {
+    "cycle": 1,
+    "position": 0.33,
+    "avg_price": 7.5,
+    "peak_profit": 0.0
+  },
+  "EEII": {
+    "cycle": 1,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0
+  },
+  "MPCO": {
+    "cycle": 1,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0
+  },
+  "ORHD": {
+    "cycle": 1,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0
+  },
+  "ADIB": {
+    "cycle": 1,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0
+  },
+  "MCQE": {
+    "cycle": 1,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0
+  },
+  "SKPC": {
+    "cycle": 1,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0
+  },
+  "EGAL": {
+    "cycle": 1,
+    "position": 0.33,
+    "avg_price": 298.0,
+    "peak_profit": 0.0
   }
 }
