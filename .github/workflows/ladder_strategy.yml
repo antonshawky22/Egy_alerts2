@@ -64,14 +64,14 @@ jobs:
           # سحب أي تعديلات قديمة لتجنب المشاكل
           git pull origin HEAD --rebase || true
 
-          # إضافة الملفات المحدثة
-          git add last_signals_strat2.json egx_history_database_v2.json
+          # إضافة الملفات المحدثة (تضمين ملف السجل الجديد trades2.json)
+          git add last_signals_strat2.json egx_history_database_v2.json trades2.json
           
           # التحقق من وجود تغييرات ثم رفعها
           if ! git diff --cached --quiet; then
-            git commit -m "Auto-update: Database v2 & Ladder Strategy Signals [skip ci]"
+            git commit -m "Auto-update: Database v2, Ladder Strategy Signals & Trades History [skip ci]"
             git push origin HEAD
-            echo "✅ State and signals successfully saved to GitHub!"
+            echo "✅ State, signals, and trades history successfully saved to GitHub!"
           else
             echo "ℹ️ No changes detected in files to commit."
           fi
