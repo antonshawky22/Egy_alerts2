@@ -1,4 +1,4 @@
-print("EGX LADDER CYCLE SYSTEM - DATABASE SOURCED (v3.1 Trades History & Partial Exits Tracker)")
+print("EGX LADDER CYCLE SYSTEM - DATABASE SOURCED (v3.2 Fully Audited)")
 
 import json
 import os
@@ -322,8 +322,7 @@ for name, ticker in symbols.items():
             # تسجيل عملية البيع الجزئي في السجل
             if trades_history[name] and trades_history[name][-1].get("status") == "OPEN":
                 active_trade = trades_history[name][-1]
-                partial_profit = profit
-                exit_log = f"{current_date}: Sold 33% at price {price:.2f} (Profit: {partial_profit:+.2f}%)"
+                exit_log = f"{current_date}: Sold 33% at price {price:.2f} (Profit: {profit:+.2f}%)"
                 
                 if "exits" not in active_trade:
                     active_trade["exits"] = []
@@ -335,9 +334,6 @@ for name, ticker in symbols.items():
                     active_trade["exit_price"] = round(price, 2)
                     active_trade["exit_date"] = current_date
                     active_trade["profit_pct"] = round(profit, 2)
-                    s["avg_price"] = 0.0
-                    s["peak_profit"] = 0.0
-                    s["cycle"] += 1
 
         # 🔴 بيع جزئي مستوى أول (33%)
         elif sell1:
@@ -348,8 +344,7 @@ for name, ticker in symbols.items():
             # تسجيل عملية البيع الجزئي في السجل
             if trades_history[name] and trades_history[name][-1].get("status") == "OPEN":
                 active_trade = trades_history[name][-1]
-                partial_profit = profit
-                exit_log = f"{current_date}: Sold 33% at price {price:.2f} (Profit: {partial_profit:+.2f}%)"
+                exit_log = f"{current_date}: Sold 33% at price {price:.2f} (Profit: {profit:+.2f}%)"
                 
                 if "exits" not in active_trade:
                     active_trade["exits"] = []
@@ -361,12 +356,10 @@ for name, ticker in symbols.items():
                     active_trade["exit_price"] = round(price, 2)
                     active_trade["exit_date"] = current_date
                     active_trade["profit_pct"] = round(profit, 2)
-                    s["avg_price"] = 0.0
-                    s["peak_profit"] = 0.0
-                    s["cycle"] += 1
 
         s["position"] = round(s["position"], 2)
 
+    # إرسال التنبيه أولاً قبل تصفير المتوسط إذا أغلقت الصفقة بالكامل
     if action:
         alerts.append(
             format_alert(
@@ -380,15 +373,21 @@ for name, ticker in symbols.items():
                 profit,
             )
         )
+        
+        # إذا أصبحت الكمية صفر بعد تنفيذ إشارات البيع، يتم إعادة ضبط قيم السهم
+        if s["position"] == 0.0 and "SELL" in action:
+            s["avg_price"] = 0.0
+            s["peak_profit"] = 0.0
+            s["cycle"] += 1
 
 
 # حفظ ملف الحالة الحالية
 with open(STATE_FILE, "w") as f:
     json.dump(state_data, f, indent=2)
 
-# حفظ ملف سجل الصفقات التاريخي
+# حفظ ملف سجل الصفقات التاريخي (تم تصحيح اسم المتغير)
 with open(TRADES_FILE, "w") as f:
-    json.dump(trades2, f, indent=2)
+    json.dump(trades_history, f, indent=2)
 
 
 if alerts:
