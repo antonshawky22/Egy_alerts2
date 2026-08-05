@@ -10,7 +10,7 @@
     "entry_price": 22.9
   },
   "EMFD": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": true,
     "entry_price": 11.4
   },
@@ -71,8 +71,8 @@
   },
   "ORWE": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 22.65
+    "in_position": false,
+    "entry_price": null
   },
   "JUFO": {
     "trend": "🔛",
@@ -146,8 +146,8 @@
   },
   "ADIB": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 51.9
   },
   "PHDC": {
     "trend": "↗️",

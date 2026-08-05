@@ -123,7 +123,10 @@
     "symbol": "ORWE",
     "entry_trend": "🔛",
     "entry_price": 22.65,
-    "entry_date": "2026-07-30"
+    "entry_date": "2026-07-30",
+    "exit_price": 26.02,
+    "exit_date": "2026-08-05",
+    "profit_pct": 14.88
   },
   {
     "symbol": "EMFD",
@@ -172,5 +175,11 @@
     "entry_trend": "↗️",
     "entry_price": 9.15,
     "entry_date": "2026-08-04"
+  },
+  {
+    "symbol": "ADIB",
+    "entry_trend": "↗️",
+    "entry_price": 51.9,
+    "entry_date": "2026-08-05"
   }
 ]
