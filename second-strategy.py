@@ -1,4 +1,4 @@
-print("EGX LADDER CYCLE SYSTEM - DATABASE SOURCED (v2.0 Clean Fix)")
+print("EGX LADDER CYCLE SYSTEM - DATABASE SOURCED (v3.1 Trades History & Partial Exits Tracker)")
 
 import json
 import os
@@ -23,7 +23,7 @@ def send_telegram(text):
         print("Telegram send failed:", e)
 
 
-# قائمة الاسهم
+# قائمة الأسهم
 symbols = {
     "OLFI": "OLFI", "EMFD": "EMFD", "ETEL": "ETEL", "EAST": "EAST",
     "EFIH": "EFIH", "ABUK": "ABUK", "OIH": "OIH", "SWDY": "SWDY", "ISPH": "ISPH",
@@ -31,21 +31,31 @@ symbols = {
     "JUFO": "JUFO", "DSCW": "DSCW", "SUGR": "SUGR", "ELSH": "ELSH", "RMDA": "RMDA",
     "RAYA": "RAYA", "EEII": "EEII", "MPCO": "MPCO", "GBCO": "GBCO", "TMGH": "TMGH",
     "ORHD": "ORHD", "AMOC": "AMOC", "FWRY": "FWRY", "COMI": "COMI", "ADIB": "ADIB",
-    "PHDC": "PHDC", "MCQE": "MCQE", "SKPC": "SKPC", "EGAL": "EGAL"}
+    "PHDC": "PHDC", "MCQE": "MCQE", "SKPC": "SKPC", "EGAL": "EGAL"
+}
 
 STATE_FILE = "last_signals_strat2.json"
 DB_FILE = "egx_history_database_v2.json"
+TRADES_FILE = "trades2.json"
 
 
+# تحميل ملف الحالة
 try:
     with open(STATE_FILE, "r") as f:
         state_data = json.load(f)
-except:
+except Exception:
     state_data = {}
+
+# تحميل ملف سجل الصفقات
+try:
+    with open(TRADES_FILE, "r") as f:
+        trades_history = json.load(f)
+except Exception:
+    trades_history = {}
 
 
 def fetch_local_data(name):
-    """قراءة البيانات التاريخية والحديثة مباشرة من قاعدة البيانات المحلية المضغوطة وتحويلها إلى DataFrame جاهز لحساب المؤشرات الفنية."""
+    """قراءة البيانات التاريخية والحديثة مباشرة من قاعدة البيانات المحلية المضغوطة."""
     try:
         if not os.path.exists(DB_FILE):
             print(f"⚠️ Database file '{DB_FILE}' not found!")
@@ -66,7 +76,7 @@ def fetch_local_data(name):
             )
             df_temp.index.name = "Date"
 
-            # 🛡️ تحويل حاسم وترتيب تصاعدي إجباري (الأقدم فوق) لضمان حساب المتوسطات والـ RSI بشكل صحيح
+            # تحويل حاسم وترتيب تصاعدي إجباري
             df_temp.index = pd.to_datetime(df_temp.index)
             df_temp = df_temp.sort_index(ascending=True)
             return df_temp
@@ -77,7 +87,7 @@ def fetch_local_data(name):
         return None
 
 
-# 🛡️ دالة الـ RSI الاحترافية المتطابقة مع TradingView بالملي
+# دالة الـ RSI الاحترافية
 def rsi(series, period=14):
     if len(series) < period:
         return pd.Series(np.nan, index=series.index)
@@ -85,7 +95,6 @@ def rsi(series, period=14):
     gain = delta.clip(lower=0)
     loss = -delta.clip(upper=0)
 
-    # استخدام معادلة Wilder المعتمدة عالمياً في تريدنج فيو
     avg_gain = gain.ewm(com=period - 1, adjust=False).mean()
     avg_loss = loss.ewm(com=period - 1, adjust=False).mean()
 
@@ -124,9 +133,7 @@ for name, ticker in symbols.items():
     time.sleep(0.1)
 
     df = fetch_local_data(name)
-    if (
-        df is None or len(df) < 40
-    ):  # تأمين الحد الأدنى من الداتا للحساب الذكي
+    if df is None or len(df) < 40:
         continue
 
     close = df["Close"]
@@ -137,6 +144,7 @@ for name, ticker in symbols.items():
     df["RSI"] = rsi(close)
 
     last = df.iloc[-1]
+    current_date = str(df.index[-1].strftime("%Y-%m-%d"))
     price = float(last["Close"])
     rsi_val = float(last["RSI"])
 
@@ -153,33 +161,24 @@ for name, ticker in symbols.items():
 
     s = state_data[name]
 
-    # 🛡️ تأمين جودة ونوع البيانات المسترجعة من الـ JSON لمنع أخطاء الحسابات
     s["position"] = float(s.get("position", 0.0))
     s["avg_price"] = float(s.get("avg_price", 0.0))
     s["peak_profit"] = float(s.get("peak_profit", 0.0))
     s["cycle"] = int(s.get("cycle", 1))
 
-    # 🚀 تصفير البيانات التراكمية إذا كان المركز فارغاً لمنع الأخطاء البصرية
     if s["position"] == 0.0:
         s["avg_price"] = 0.0
         s["peak_profit"] = 0.0
 
-    # ==========================================
-    # 🎯 حساب فلتر منع قمم الصعود الصاروخي (Parabolic Run Filter)
-    # ==========================================
-    lookback = min(len(df), 80)  # ضمان ألا يحدث أخطاء لو الشموع أقل من 80
+    # فلتر منع قمم الصعود الصاروخي
+    lookback = min(len(df), 80)
     lowest_80 = float(df["Low"].tail(lookback).min())
     highest_80 = float(df["High"].tail(lookback).max())
     
-    # حساب نسبة الصعود الإجمالية في آخر 80 شمعة
     run_up_percent = ((highest_80 - lowest_80) / lowest_80) * 100 if lowest_80 > 0 else 0.0
-    
-    # يمنع الشراء تماماً إذا كان السهم حقق ارتفاعاً تجاوز 60%
     safe_to_buy = run_up_percent <= 60.0
 
-    # ------------------------------------------
-    # 🚀 تطبيق شروط الشراء المحدثة
-    # ------------------------------------------
+    # شروط الشراء
     ema_up = (df["EMA75"].iloc[-1] > df["EMA75"].iloc[-10]) and (price <= df["EMA75"].iloc[-1] * 1.05)
     
     buy1 = safe_to_buy and ema_up and rsi_val <= 55
@@ -196,7 +195,15 @@ for name, ticker in symbols.items():
 
     action = None
 
-    # شراء المستوى الأول
+    # تجهيز السجل للسهم في ملف الصفقات
+    if name not in trades_history:
+        trades_history[name] = []
+
+    # ==========================================
+    # 🟢 تنفيذ أومـر الـشـراء وتسجيل الصفقات
+    # ==========================================
+    
+    # شراء المستوى الأول L1
     if s["position"] == 0 and buy1:
         s["position"] = 0.33
         s["avg_price"] = price
@@ -204,29 +211,58 @@ for name, ticker in symbols.items():
         profit = 0.0
         action = "🟢 BUY L1"
 
-    # شراء المستوى الثاني
-    elif 0.32 < s["position"] < 0.5 and buy2 and price < s["avg_price"] * 0.98 :
+        # إنشاء سجل صفقة جديدة
+        new_trade = {
+            "symbol": name,
+            "cycle": s["cycle"],
+            "status": "OPEN",
+            "first_entry": f"{current_date} with price {price:.2f}",
+            "second_entry": None,
+            "third_entry": None,
+            "last_totally_average_price": round(price, 2),
+            "exits": [],
+            "exit_price": None,
+            "exit_date": None,
+            "profit_pct": None
+        }
+        trades_history[name].append(new_trade)
+
+    # شراء المستوى الثاني L2
+    elif 0.32 < s["position"] < 0.5 and buy2 and price < s["avg_price"] * 0.98:
         old_pos = s["position"]
         s["position"] = 0.66
-        s["avg_price"] = update_avg(
-            s["avg_price"], old_pos, price, s["position"]
-        )
+        s["avg_price"] = update_avg(s["avg_price"], old_pos, price, s["position"])
         profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
         action = "🟢 BUY L2"
 
-    # شراء المستوى الثالث
-    elif 0.65 < s["position"] < 1 and buy3 and price < s["avg_price"] * 0.97 :
+        # تحديث الصفقة المفتوحة الحالية
+        if trades_history[name]:
+            active_trade = trades_history[name][-1]
+            if active_trade.get("status") == "OPEN":
+                active_trade["second_entry"] = f"{current_date} with price {price:.2f}"
+                active_trade["last_totally_average_price"] = round(s["avg_price"], 2)
+
+    # شراء المستوى الثالث L3
+    elif 0.65 < s["position"] < 1 and buy3 and price < s["avg_price"] * 0.97:
         old_pos = s["position"]
         s["position"] = 1.0
-        s["avg_price"] = update_avg(
-            s["avg_price"], old_pos, price, s["position"]
-        )
+        s["avg_price"] = update_avg(s["avg_price"], old_pos, price, s["position"])
         profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
         action = "🟢 BUY L3"
+
+        # تحديث الصفقة المفتوحة الحالية
+        if trades_history[name]:
+            active_trade = trades_history[name][-1]
+            if active_trade.get("status") == "OPEN":
+                active_trade["third_entry"] = f"{current_date} with price {price:.2f}"
+                active_trade["last_totally_average_price"] = round(s["avg_price"], 2)
 
     if profit > s["peak_profit"]:
         s["peak_profit"] = profit
 
+    # ==========================================
+    # 🔴 تنفيذ أومـر الـبـيـع وإغلاق الصفقات
+    # ==========================================
     if s["position"] > 0:
 
         stop_triggered = False
@@ -241,29 +277,93 @@ for name, ticker in symbols.items():
         if s["peak_profit"] > 10 and (s["peak_profit"] - profit) >= 4:
             stop_triggered = True
 
+        # إغلاق كلي (وقف خسارة)
         if stop_triggered:
             action = "🛑 STOP LOSS"
+            
+            # تسجيل إغلاق الصفقة في الهستوري
+            if trades_history[name]:
+                active_trade = trades_history[name][-1]
+                if active_trade.get("status") == "OPEN":
+                    active_trade["status"] = "CLOSED"
+                    active_trade["exit_price"] = round(price, 2)
+                    active_trade["exit_date"] = current_date
+                    active_trade["profit_pct"] = round(profit, 2)
+
             s["position"] = 0.0
             s["avg_price"] = 0.0
             s["peak_profit"] = 0.0
             s["cycle"] += 1
 
+        # إغلاق كلي (تارجت أو خروج كامـل)
         elif sell3:
             action = "🚨 EXIT FULL"
+
+            # تسجيل إغلاق الصفقة في الهستوري
+            if trades_history[name]:
+                active_trade = trades_history[name][-1]
+                if active_trade.get("status") == "OPEN":
+                    active_trade["status"] = "CLOSED"
+                    active_trade["exit_price"] = round(price, 2)
+                    active_trade["exit_date"] = current_date
+                    active_trade["profit_pct"] = round(profit, 2)
+
             s["position"] = 0.0
             s["avg_price"] = 0.0
             s["peak_profit"] = 0.0
             s["cycle"] += 1
 
+        # 🔴 بيع جزئي مستوى ثاني (33%)
         elif sell2:
             sell_amount = min(0.33, s["position"])
             s["position"] -= sell_amount
             action = "🔴 SELL L2 (33%)"
+            
+            # تسجيل عملية البيع الجزئي في السجل
+            if trades_history[name] and trades_history[name][-1].get("status") == "OPEN":
+                active_trade = trades_history[name][-1]
+                partial_profit = profit
+                exit_log = f"{current_date}: Sold 33% at price {price:.2f} (Profit: {partial_profit:+.2f}%)"
+                
+                if "exits" not in active_trade:
+                    active_trade["exits"] = []
+                active_trade["exits"].append(exit_log)
 
+                # إذا أدت عملية البيع الجزئي لإفراغ المحفظة تماماً (0%)
+                if round(s["position"], 2) == 0.0:
+                    active_trade["status"] = "CLOSED"
+                    active_trade["exit_price"] = round(price, 2)
+                    active_trade["exit_date"] = current_date
+                    active_trade["profit_pct"] = round(profit, 2)
+                    s["avg_price"] = 0.0
+                    s["peak_profit"] = 0.0
+                    s["cycle"] += 1
+
+        # 🔴 بيع جزئي مستوى أول (33%)
         elif sell1:
             sell_amount = min(0.33, s["position"])
             s["position"] -= sell_amount
             action = "🔴 SELL L1 (33%)"
+            
+            # تسجيل عملية البيع الجزئي في السجل
+            if trades_history[name] and trades_history[name][-1].get("status") == "OPEN":
+                active_trade = trades_history[name][-1]
+                partial_profit = profit
+                exit_log = f"{current_date}: Sold 33% at price {price:.2f} (Profit: {partial_profit:+.2f}%)"
+                
+                if "exits" not in active_trade:
+                    active_trade["exits"] = []
+                active_trade["exits"].append(exit_log)
+
+                # إذا أدت عملية البيع الجزئي لإفراغ المحفظة تماماً (0%)
+                if round(s["position"], 2) == 0.0:
+                    active_trade["status"] = "CLOSED"
+                    active_trade["exit_price"] = round(price, 2)
+                    active_trade["exit_date"] = current_date
+                    active_trade["profit_pct"] = round(profit, 2)
+                    s["avg_price"] = 0.0
+                    s["peak_profit"] = 0.0
+                    s["cycle"] += 1
 
         s["position"] = round(s["position"], 2)
 
@@ -282,8 +382,13 @@ for name, ticker in symbols.items():
         )
 
 
+# حفظ ملف الحالة الحالية
 with open(STATE_FILE, "w") as f:
     json.dump(state_data, f, indent=2)
+
+# حفظ ملف سجل الصفقات التاريخي
+with open(TRADES_FILE, "w") as f:
+    json.dump(trades2, f, indent=2)
 
 
 if alerts:
