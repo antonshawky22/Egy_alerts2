@@ -277,49 +277,38 @@ for name, ticker in symbols.items():
         if s["peak_profit"] > 10 and (s["peak_profit"] - profit) >= 4:
             stop_triggered = True
 
-        # إغلاق كلي (وقف خسارة)
+        # 1️⃣ إغلاق كلي (وقف خسارة)
         if stop_triggered:
             action = "🛑 STOP LOSS"
             
-            # تسجيل إغلاق الصفقة في الهستوري
-            if trades_history[name]:
+            if trades_history[name] and trades_history[name][-1].get("status") == "OPEN":
                 active_trade = trades_history[name][-1]
-                if active_trade.get("status") == "OPEN":
-                    active_trade["status"] = "CLOSED"
-                    active_trade["exit_price"] = round(price, 2)
-                    active_trade["exit_date"] = current_date
-                    active_trade["profit_pct"] = round(profit, 2)
+                active_trade["status"] = "CLOSED"
+                active_trade["exit_price"] = round(price, 2)
+                active_trade["exit_date"] = current_date
+                active_trade["profit_pct"] = round(profit, 2)
 
             s["position"] = 0.0
-            s["avg_price"] = 0.0
-            s["peak_profit"] = 0.0
-            s["cycle"] += 1
 
-        # إغلاق كلي (تارجت أو خروج كامـل)
+        # 2️⃣ إغلاق كلي (تارجت أو خروج كامـل)
         elif sell3:
             action = "🚨 EXIT FULL"
 
-            # تسجيل إغلاق الصفقة في الهستوري
-            if trades_history[name]:
+            if trades_history[name] and trades_history[name][-1].get("status") == "OPEN":
                 active_trade = trades_history[name][-1]
-                if active_trade.get("status") == "OPEN":
-                    active_trade["status"] = "CLOSED"
-                    active_trade["exit_price"] = round(price, 2)
-                    active_trade["exit_date"] = current_date
-                    active_trade["profit_pct"] = round(profit, 2)
+                active_trade["status"] = "CLOSED"
+                active_trade["exit_price"] = round(price, 2)
+                active_trade["exit_date"] = current_date
+                active_trade["profit_pct"] = round(profit, 2)
 
             s["position"] = 0.0
-            s["avg_price"] = 0.0
-            s["peak_profit"] = 0.0
-            s["cycle"] += 1
 
-        # 🔴 بيع جزئي مستوى ثاني (33%)
+        # 3️⃣ بيع جزئي مستوى ثاني (33%)
         elif sell2:
             sell_amount = min(0.33, s["position"])
             s["position"] -= sell_amount
             action = "🔴 SELL L2 (33%)"
             
-            # تسجيل عملية البيع الجزئي في السجل
             if trades_history[name] and trades_history[name][-1].get("status") == "OPEN":
                 active_trade = trades_history[name][-1]
                 exit_log = f"{current_date}: Sold 33% at price {price:.2f} (Profit: {profit:+.2f}%)"
@@ -335,13 +324,12 @@ for name, ticker in symbols.items():
                     active_trade["exit_date"] = current_date
                     active_trade["profit_pct"] = round(profit, 2)
 
-        # 🔴 بيع جزئي مستوى أول (33%)
+        # 4️⃣ بيع جزئي مستوى أول (33%)
         elif sell1:
             sell_amount = min(0.33, s["position"])
             s["position"] -= sell_amount
             action = "🔴 SELL L1 (33%)"
             
-            # تسجيل عملية البيع الجزئي في السجل
             if trades_history[name] and trades_history[name][-1].get("status") == "OPEN":
                 active_trade = trades_history[name][-1]
                 exit_log = f"{current_date}: Sold 33% at price {price:.2f} (Profit: {profit:+.2f}%)"
@@ -359,7 +347,9 @@ for name, ticker in symbols.items():
 
         s["position"] = round(s["position"], 2)
 
-    # إرسال التنبيه أولاً قبل تصفير المتوسط إذا أغلقت الصفقة بالكامل
+    # ==========================================
+    # 🔔 إرسال التنبيه وتحديث السايكل في مكان واحد فقط
+    # ==========================================
     if action:
         alerts.append(
             format_alert(
@@ -374,8 +364,8 @@ for name, ticker in symbols.items():
             )
         )
         
-        # إذا أصبحت الكمية صفر بعد تنفيذ إشارات البيع، يتم إعادة ضبط قيم السهم
-        if s["position"] == 0.0 and "SELL" in action:
+        # 🎯 النقطة المركزية الموحدة: لو الصفقة أصبحت مغلقة بالكامل (Position = 0)
+        if s["position"] == 0.0 and ("SELL" in action or "EXIT" in action or "STOP" in action):
             s["avg_price"] = 0.0
             s["peak_profit"] = 0.0
             s["cycle"] += 1
@@ -385,7 +375,7 @@ for name, ticker in symbols.items():
 with open(STATE_FILE, "w") as f:
     json.dump(state_data, f, indent=2)
 
-# حفظ ملف سجل الصفقات التاريخي (تم تصحيح اسم المتغير)
+# حفظ ملف سجل الصفقات التاريخي
 with open(TRADES_FILE, "w") as f:
     json.dump(trades_history, f, indent=2)
 
