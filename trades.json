@@ -168,7 +168,10 @@
     "symbol": "EGAL",
     "entry_trend": "↗️",
     "entry_price": 300.27,
-    "entry_date": "2026-08-02"
+    "entry_date": "2026-08-02",
+    "exit_price": 297.03,
+    "exit_date": "2026-08-06",
+    "profit_pct": -1.08
   },
   {
     "symbol": "AMOC",
@@ -181,5 +184,17 @@
     "entry_trend": "↗️",
     "entry_price": 51.9,
     "entry_date": "2026-08-05"
+  },
+  {
+    "symbol": "ISPH",
+    "entry_trend": "↗️",
+    "entry_price": 13.45,
+    "entry_date": "2026-08-06"
+  },
+  {
+    "symbol": "JUFO",
+    "entry_trend": "🔛",
+    "entry_price": 26.99,
+    "entry_date": "2026-08-06"
   }
 ]
