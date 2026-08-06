@@ -12,7 +12,21 @@
   "MTIE": [],
   "HRHO": [],
   "ORWE": [],
-  "JUFO": [],
+  "JUFO": [
+    {
+      "symbol": "JUFO",
+      "cycle": 1,
+      "status": "OPEN",
+      "first_entry": "2026-08-06 with price 26.83",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 26.83,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
+    }
+  ],
   "DSCW": [],
   "SUGR": [],
   "ELSH": [],
