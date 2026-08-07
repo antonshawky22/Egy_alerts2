@@ -1,7 +1,7 @@
 name: weekly_database_update
 
 on:
-  workflow_dispatch: # للتشغيل اليدوي في أي وقت للفيصل والاختبار
+  workflow_dispatch: # للتشغيل اليدوي في أي وقت للتحقق والاختبار
 
   schedule:
     # تشغيل تلقائي كل يوم جمعة الساعة 6:00 مساءً بتوقيت مصر (15:00 UTC) بعد إغلاق الأسبوع
@@ -38,14 +38,14 @@ jobs:
           pip install yfinance tradingview-ta requests pandas curl_cffi
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      # 1️⃣ تشغيل سكريبت تحديث الأسعار الأسبوعية الجديد
+      # 1️⃣ تشغيل سكريبت تحديث الأسعار الأسبوعية
       - name: Update Weekly Price Database
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python update_database_weekly.py
 
-      # 2️⃣ تشغيل سكريبت الاستراتيجية (معطل مؤقتاً لحين كتابة الاستراتيجية الجديدة)
+      # 2️⃣ تشغيل سكريبت الاستراتيجية (معطل مؤقتاً لحين ربط كود الاستراتيجية)
       # - name: Run Weekly Trading Strategy 
       #   env:
       #     TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
@@ -61,7 +61,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # سحب أي تعديلات قديمة لتجنب المشاكل
+          # سحب أي تعديلات قديمة لتجنب التعارض
           git pull origin HEAD --rebase || true
 
           # إضافة ملف قاعدة البيانات الأسبوعية الجديد
