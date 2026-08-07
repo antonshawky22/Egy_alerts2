@@ -31,24 +31,21 @@ def send_telegram(message):
         print(f"⚠️ Failed to send Telegram message: {e}")
       
 symbols = {
-"EGX30": "EGX30", "OLFI": "OLFI", "EMFD": "EMFD", "ETEL": "ETEL", "EAST": "EAST",
-"EFIH": "EFIH", "ABUK": "ABUK", "OIH": "OIH", "SWDY": "SWDY", "ISPH": "ISPH",
-"ATQA": "ATQA", "MTIE": "MTIE", "HRHO": "HRHO", "ORWE": "ORWE",
-"JUFO": "JUFO", "DSCW": "DSCW", "SUGR": "SUGR", "ELSH": "ELSH", "RMDA": "RMDA",
-"RAYA": "RAYA", "EEII": "EEII", "MPCO": "MPCO", "GBCO": "GBCO", "TMGH": "TMGH",
-"ORHD": "ORHD", "AMOC": "AMOC", "FWRY": "FWRY", "COMI": "COMI", "ADIB": "ADIB",
-"PHDC": "PHDC", "MCQE": "MCQE", "SKPC": "SKPC", "EGAL": "EGAL", "HELI": "HELI",
-"QNBA": "QNBA", "HDBK": "HDBK", "FAIT": "FAIT", "SAUD": "SAUD",
-"CCAP": "CCAP", "EKHO": "EKHO", "EGTS": "EGTS", "SDTI": "SDTI", "ARAB": "ARAB",
-"KABO": "KABO", "SPIN": "SPIN", "MBSC": "MBSC", "EFIC": "EFIC",
-"UBEE": "UBEE", "DAPH": "DAPH", "ACGC": "ACGC", "ASCM": "ASCM",
-"BTFH": "BTFH", "CNFN": "CNFN", "MOIN": "MOIN", "INFI": "INFI",
-"POUL": "POUL", "PRMH": "PRMH", "EPPK": "EPPK", "VERT": "VERT",
-"MEPA": "MEPA", "NEDA": "NEDA", "OCDI": "OCDI", "GDWA": "GDWA",
-"EGCH": "EGCH", "NDRL": "NDRL", "AJWA": "AJWA", "RAKT": "RAKT",
-"NCCW": "NCCW", "EGSA": "EGSA", "EGAS": "EGAS", "BIOC": "BIOC",
-"MEDI": "MEDI", "CLHO": "CLHO", "ICFC": "ICFC", "MHOT": "MHOT",
-"ROTO": "ROTO", "PACH": "PACH", "UPMS": "UPMS", "UNIT": "UNIT"
+    "EGX30": "EGX30", "OLFI": "OLFI", "EMFD": "EMFD", "ETEL": "ETEL", "EAST": "EAST",
+    "EFIH": "EFIH", "ABUK": "ABUK", "OIH": "OIH", "SWDY": "SWDY", "ISPH": "ISPH",
+    "ATQA": "ATQA", "MTIE": "MTIE", "HRHO": "HRHO", "ORWE": "ORWE",
+    "JUFO": "JUFO", "DSCW": "DSCW", "SUGR": "SUGR", "ELSH": "ELSH", "RMDA": "RMDA",
+    "RAYA": "RAYA", "EEII": "EEII", "MPCO": "MPCO", "GBCO": "GBCO", "TMGH": "TMGH",
+    "ORHD": "ORHD", "AMOC": "AMOC", "FWRY": "FWRY", "COMI": "COMI", "ADIB": "ADIB",
+    "PHDC": "PHDC", "MCQE": "MCQE", "SKPC": "SKPC", "EGAL": "EGAL", "HELI": "HELI",
+    "HDBK": "HDBK", "FAIT": "FAIT", "SAUD": "SAUD", "CCAP": "CCAP", "EKHO": "EKHO",
+    "EGTS": "EGTS", "SDTI": "SDTI", "ARAB": "ARAB", "KABO": "KABO", "SPIN": "SPIN",
+    "MBSC": "MBSC", "EFIC": "EFIC", "DAPH": "DAPH", "ACGC": "ACGC", "ASCM": "ASCM",
+    "BTFH": "BTFH", "CNFN": "CNFN", "MOIN": "MOIN", "INFI": "INFI", "POUL": "POUL",
+    "PRMH": "PRMH", "EPPK": "EPPK", "MEPA": "MEPA", "NEDA": "NEDA", "OCDI": "OCDI",
+    "GDWA": "GDWA", "EGCH": "EGCH", "NDRL": "NDRL", "AJWA": "AJWA", "RAKT": "RAKT",
+    "NCCW": "NCCW", "EGSA": "EGSA", "EGAS": "EGAS", "BIOC": "BIOC", "CLHO": "CLHO",
+    "ICFC": "ICFC", "MHOT": "MHOT", "ROTO": "ROTO", "UNIT": "UNIT"
 }
 
 # ==========================================
