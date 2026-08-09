@@ -91,8 +91,8 @@
   },
   "EMFD": {
     "cycle": 1,
-    "position": 0.0,
-    "avg_price": 0.0,
+    "position": 0.33,
+    "avg_price": 11.81,
     "peak_profit": 0.0
   },
   "OIH": {
@@ -189,6 +189,6 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 298.0,
-    "peak_profit": 0.3255033557047071
+    "peak_profit": 2.348993288590604
   }
 }
