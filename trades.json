@@ -196,5 +196,11 @@
     "entry_trend": "🔛",
     "entry_price": 26.99,
     "entry_date": "2026-08-06"
+  },
+  {
+    "symbol": "HRHO",
+    "entry_trend": "↗️",
+    "entry_price": 27.55,
+    "entry_date": "2026-08-09"
   }
 ]

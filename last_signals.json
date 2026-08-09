@@ -65,9 +65,9 @@
     "entry_price": null
   },
   "HRHO": {
-    "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 27.55
   },
   "ORWE": {
     "trend": "↗️",
@@ -100,7 +100,7 @@
     "entry_price": null
   },
   "RAYA": {
-    "trend": "🔛",
+    "trend": "🔻",
     "in_position": false,
     "entry_price": null
   },
