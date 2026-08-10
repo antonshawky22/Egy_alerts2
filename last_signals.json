@@ -75,9 +75,9 @@
     "entry_price": null
   },
   "JUFO": {
-    "trend": "🔛",
-    "in_position": true,
-    "entry_price": 26.99
+    "trend": "🔻",
+    "in_position": false,
+    "entry_price": null
   },
   "DSCW": {
     "trend": "↗️",
@@ -95,7 +95,7 @@
     "entry_price": 13.7
   },
   "RMDA": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": false,
     "entry_price": null
   },

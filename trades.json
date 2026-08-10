@@ -195,7 +195,10 @@
     "symbol": "JUFO",
     "entry_trend": "🔛",
     "entry_price": 26.99,
-    "entry_date": "2026-08-06"
+    "entry_date": "2026-08-06",
+    "exit_price": 26.65,
+    "exit_date": "2026-08-10",
+    "profit_pct": -1.26
   },
   {
     "symbol": "HRHO",
