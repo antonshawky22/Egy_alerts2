@@ -102,7 +102,10 @@
     "symbol": "MCQE",
     "entry_trend": "↗️",
     "entry_price": 188.7,
-    "entry_date": "2026-07-27"
+    "entry_date": "2026-07-27",
+    "exit_price": 243.6,
+    "exit_date": "2026-08-11",
+    "profit_pct": 29.09
   },
   {
     "symbol": "PHDC",
@@ -162,7 +165,10 @@
     "symbol": "ATQA",
     "entry_trend": "↗️",
     "entry_price": 9.89,
-    "entry_date": "2026-08-02"
+    "entry_date": "2026-08-02",
+    "exit_price": 11.18,
+    "exit_date": "2026-08-11",
+    "profit_pct": 13.04
   },
   {
     "symbol": "EGAL",

@@ -51,8 +51,8 @@
   },
   "ATQA": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 9.89
+    "in_position": false,
+    "entry_price": null
   },
   "MTIE": {
     "trend": "↗️",
@@ -85,7 +85,7 @@
     "entry_price": 1.97
   },
   "SUGR": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": false,
     "entry_price": null
   },
@@ -156,8 +156,8 @@
   },
   "MCQE": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 188.7
+    "in_position": false,
+    "entry_price": null
   },
   "SKPC": {
     "trend": "🔛",
@@ -165,7 +165,7 @@
     "entry_price": null
   },
   "EGAL": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": false,
     "entry_price": null
   }
