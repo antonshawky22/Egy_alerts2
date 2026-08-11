@@ -4,14 +4,12 @@ on:
   workflow_dispatch:
 
   schedule:
-    - cron: '10 08 * * 0-4'  # الساعة 11:10 صباحاً بتوقيت مصر
-    - cron: '10 10 * * 0-4'  # الساعة 1:10 ظهراً بتوقيت مصر
+    - cron: '10 08 * * 0-4'
+    - cron: '10 10 * * 0-4'
 
-# 🔒 منح صلاحيات الكتابة للبوت لحفظ الملفات
 permissions:
   contents: write
 
-# 🔒 حماية لمنع التعارض إذا اشتغل الوركفلو مرتين في نفس الوقت
 concurrency:
   group: ladder-strategy-group
   cancel-in-progress: false
@@ -21,57 +19,97 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # ==========================================
+      # Checkout Repository
+      # ==========================================
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
           persist-credentials: true
           fetch-depth: 0
 
+      # ==========================================
+      # Python
+      # ==========================================
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
+      # ==========================================
+      # Dependencies
+      # ==========================================
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install yfinance tradingview-ta requests pandas curl_cffi
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      # 1️⃣ تشغيل سكريبت تحديث الأسعار
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          fi
+
+      # ==========================================
+      # 1️⃣ تحديث قاعدة الأسعار
+      # ==========================================
       - name: Update Price Database
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python update_database.py
+        run: |
+          python update_database.py
 
-      # 2️⃣ تشغيل سكريبت استراتيجية السلم
-      - name: Run Trading Strategies 
-        env:
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python second-strategy.py
-
-      # 3️⃣ الحفظ التلقائي وإرسال التنبيهات المؤكدة
-      - name: Commit database and last signals
+      # ==========================================
+      # 2️⃣ تشغيل استراتيجية السلم
+      # ==========================================
+      - name: Run Trading Strategies
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
+          python second-strategy.py
+
+      # ==========================================
+      # 3️⃣ حفظ الملفات المحدثة في GitHub
+      # ==========================================
+      - name: Commit database and strategy state
+        run: |
           git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          # سحب أي تعديلات قديمة لتجنب المشاكل
-          git pull origin HEAD --rebase || true
+          echo "📦 Staging generated files..."
 
-          # إضافة الملفات المحدثة (تضمين ملف السجل الجديد trades2.json)
-          git add last_signals_strat2.json egx_history_database_v2.json trades2.json
-          
-          # التحقق من وجود تغييرات ثم رفعها
-          if ! git diff --cached --quiet; then
-            git commit -m "Auto-update: Database v2, Ladder Strategy Signals & Trades History [skip ci]"
-            git push origin HEAD
-            echo "✅ State, signals, and trades history successfully saved to GitHub!"
-          else
-            echo "ℹ️ No changes detected in files to commit."
+          git add \
+            last_signals_strat2.json \
+            egx_history_database_v2.json \
+            trades2.json
+
+          # ==========================================
+          # التحقق من وجود تغييرات
+          # ==========================================
+          if git diff --cached --quiet; then
+            echo "ℹ️ No changes detected."
+            exit 0
           fi
+
+          # ==========================================
+          # إنشاء Commit محلي
+          # ==========================================
+          echo "💾 Creating commit..."
+
+          git commit -m "Auto-update: Database v2, Ladder Strategy Signals & Trades History [skip ci]"
+
+          # ==========================================
+          # مزامنة آخر نسخة من GitHub
+          # ==========================================
+          echo "🔄 Syncing with latest remote Main..."
+
+          git pull --rebase origin Main
+
+          # ==========================================
+          # رفع التحديثات
+          # ==========================================
+          echo "🚀 Pushing changes..."
+
+          git push origin HEAD:Main
+
+          echo "✅ Successfully saved all generated files!"
