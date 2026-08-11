@@ -226,7 +226,7 @@
             </div>
         </div>
 
-        <!-- سجل كل الصفقات المجمعة (مفتوحة ومغلقة) -->
+        <!-- سجل كل الصفقات المجمعة -->
         <div class="box">
             <div class="box-header">
                 <h2>📋 سجل كافة الصفقات (المفتوحة والمغلقة)</h2>
@@ -375,7 +375,7 @@
 
     function getLatestClosePrice(symbol) {
         if (pricesData[symbol] && pricesData[symbol].data) {
-            const dates = Object.keys(pricesData[symbol].data);
+            const dates = Object.keys(pricesData[symbol].data).sort().reverse();
             if (dates.length > 0) {
                 return pricesData[symbol].data[dates[0]].Close;
             }
@@ -385,8 +385,9 @@
 
     async function initDashboard() {
         try {
+            // استخدام اسم الملف الجديد الصحيح egx_history_database_v2.json
             const [resPrices, resTrades1, resTrades2] = await Promise.all([
-                fetch('prices.json').catch(() => null),
+                fetch('egx_history_database_v2.json').catch(() => null),
                 fetch('trades.json').catch(() => null),
                 fetch('trades2.json').catch(() => null)
             ]);
@@ -409,22 +410,24 @@
 
         const symbols = Object.keys(pricesData);
         if (symbols.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">لم يتم العثور على بيانات الأسعار</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">لم يتم العثور على بيانات الأسعار (تأكد من وجود egx_history_database_v2.json)</td></tr>';
             return;
         }
 
         symbols.forEach(sym => {
             const stockObj = pricesData[sym];
             if (stockObj && stockObj.data) {
-                const dates = Object.keys(stockObj.data);
+                const dates = Object.keys(stockObj.data).sort().reverse();
+                
                 if (dates.length > 0) {
                     const latestDate = dates[0];
                     const latestData = stockObj.data[latestDate];
                     
                     let changePct = null;
                     if (dates.length > 1) {
-                        const prevClose = stockObj.data[dates[1]].Close;
-                        if (prevClose) {
+                        const prevDate = dates[1];
+                        const prevClose = stockObj.data[prevDate].Close;
+                        if (prevClose && latestData.Close) {
                             changePct = ((latestData.Close - prevClose) / prevClose) * 100;
                         }
                     }
@@ -444,7 +447,7 @@
                             <td>${latestData.High ? latestData.High.toFixed(2) : '-'}</td>
                             <td>${latestData.Low ? latestData.Low.toFixed(2) : '-'}</td>
                             <td class="${changeClass}">${changeText}</td>
-                            <td>${latestData.Volume ? latestData.Volume.toLocaleString('ar-EG') : '-'}</td>
+                            <td>${latestData.Volume ? Number(latestData.Volume).toLocaleString('ar-EG') : '-'}</td>
                         </tr>
                     `;
                 }
@@ -480,7 +483,6 @@
         document.getElementById('s1-winrate').innerText = `${s1WinRate}%`;
         document.getElementById('s1-pnl').innerText = `${s1TotalPnL.toFixed(2)}%`;
 
-        // جدول صفقات الاستراتيجية الأولى
         document.getElementById('s1-trades-table').innerHTML = trades1Data.map(t => {
             const isClosed = t.profit_pct !== null;
             const pnlClass = isClosed ? (t.profit_pct >= 0 ? 'positive' : 'negative') : '';
@@ -521,7 +523,6 @@
         document.getElementById('s2-winrate').innerText = `${s2WinRate}%`;
         document.getElementById('s2-pnl').innerText = `${s2TotalPnL.toFixed(2)}%`;
 
-        // جدول صفقات الاستراتيجية الثانية
         document.getElementById('s2-trades-table').innerHTML = s2All.map(t => {
             const isClosed = t.status === 'CLOSED' || t.profit_pct !== null;
             const pnlClass = isClosed ? (t.profit_pct >= 0 ? 'positive' : 'negative') : '';
