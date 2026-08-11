@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة أداء استراتيجية الأسهم المصرية</title>
+    <!-- Chart.js للمخططات البيانية -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --accent-green: #22c55e;
+            --accent-red: #ef4444;
+            --accent-blue: #3b82f6;
+            --border-color: #334155;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+        }
+
+        /* كروت أرقام الأداء */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            padding: 18px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        }
+
+        .card h3 {
+            margin: 0 0 8px 0;
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .card .value {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        /* حاوية الرسم البياني والجدول */
+        .box {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        }
+
+        .box h2 {
+            margin-top: 0;
+            font-size: 1.2rem;
+            color: #cbd5e1;
+            margin-bottom: 15px;
+        }
+
+        /* جدول الصفقات المفتوحة */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: right;
+        }
+
+        th, td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9rem;
+        }
+
+        th {
+            background-color: #0f172a;
+            color: #94a3b8;
+        }
+
+        .positive { color: var(--accent-green); }
+        .negative { color: var(--accent-red); }
+        .badge-open {
+            background-color: #0284c7;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📊 لوحة أداء الاستراتيجية (trades2)</h1>
+
+    <!-- ملخص الأداء -->
+    <div class="stats-grid">
+        <div class="card">
+            <h3>صفقات مغلقة</h3>
+            <div class="value" id="closed-trades">-</div>
+        </div>
+        <div class="card">
+            <h3>صفقات مفتوحة</h3>
+            <div class="value" id="open-trades">-</div>
+        </div>
+        <div class="card">
+            <h3>نسبة النجاح (Win Rate)</h3>
+            <div class="value" id="win-rate">-</div>
+        </div>
+        <div class="card">
+            <h3>إجمالي الربح التراكمي</h3>
+            <div class="value" id="total-profit-pct">-</div>
+        </div>
+    </div>
+
+    <!-- الرسم البياني للأرباح التراكمية -->
+    <div class="box">
+        <h2>📈 منحنى الأرباح التراكمية (%)</h2>
+        <canvas id="equityChart"></canvas>
+    </div>
+
+    <!-- جدول الصفقات المفتوحة حالياً -->
+    <div class="box">
+        <h2>⚡ الصفقات المفتوحة حالياً (Active Positions)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>السهم</th>
+                    <th>الدورة (Cycle)</th>
+                    <th>تاريخ ودخول الدخول الأول</th>
+                    <th>متوسط السعر</th>
+                    <th>الحالة</th>
+                </tr>
+            </thead>
+            <tbody id="open-trades-table">
+                <tr><td colspan="5" style="text-align: center;">جاري تحميل البيانات...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    async function loadDashboard() {
+        try {
+            // 1. جلب الملف
+            const response = await fetch('trades2.json');
+            if (!response.ok) throw new Error('تعذر تحميل الملف trades2.json');
+            
+            const data = await response.json();
+
+            // 2. تجميع كل الصفقات من جميع الأسهم في قائمة واحدة
+            let allClosedTrades = [];
+            let allOpenTrades = [];
+
+            Object.keys(data).forEach(symbol => {
+                const tradesList = data[symbol];
+                if (Array.isArray(tradesList)) {
+                    tradesList.forEach(trade => {
+                        if (trade.status === 'CLOSED' || trade.profit_pct !== null) {
+                            allClosedTrades.push(trade);
+                        } else if (trade.status === 'OPEN') {
+                            allOpenTrades.push(trade);
+                        }
+                    });
+                }
+            });
+
+            // 3. ترتيب الصفقات المغلقة حسب تاريخ الخروج (exit_date)
+            allClosedTrades.sort((a, b) => new Date(a.exit_date) - new Date(b.exit_date));
+
+            // 4. حساب المؤشرات
+            const totalClosed = allClosedTrades.length;
+            const winningTrades = allClosedTrades.filter(t => t.profit_pct > 0).length;
+            const winRate = totalClosed > 0 ? ((winningTrades / totalClosed) * 100).toFixed(1) : 0;
+
+            let cumulativeProfitPct = 0;
+            const chartLabels = [];
+            const chartData = [];
+
+            allClosedTrades.forEach(trade => {
+                cumulativeProfitPct += trade.profit_pct;
+                chartLabels.push(`${trade.symbol} (${trade.exit_date})`);
+                chartData.push(cumulativeProfitPct.toFixed(2));
+            });
+
+            // 5. عرض الأرقام في الواجهة
+            document.getElementById('closed-trades').innerText = totalClosed;
+            document.getElementById('open-trades').innerText = allOpenTrades.length;
+            document.getElementById('win-rate').innerText = `${winRate}%`;
+
+            const profitElement = document.getElementById('total-profit-pct');
+            profitElement.innerText = `${cumulativeProfitPct >= 0 ? '+' : ''}${cumulativeProfitPct.toFixed(2)}%`;
+            profitElement.className = `value ${cumulativeProfitPct >= 0 ? 'positive' : 'negative'}`;
+
+            // 6. ملء جدول الصفقات المفتوحة
+            const tableBody = document.getElementById('open-trades-table');
+            if (allOpenTrades.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">لا توجد صفقات مفتوحة حالياً</td></tr>';
+            } else {
+                tableBody.innerHTML = allOpenTrades.map(t => `
+                    <tr>
+                        <td><strong>${t.symbol}</strong></td>
+                        <td>#${t.cycle}</td>
+                        <td>${t.first_entry || '-'}</td>
+                        <td>${t.last_totally_average_price || '-'}</td>
+                        <td><span class="badge-open">OPEN</span></td>
+                    </tr>
+                `).join('');
+            }
+
+            // 7. رسم المنحنى البياني
+            const ctx = document.getElementById('equityChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: chartLabels.length > 0 ? chartLabels : ['لا توجد صفقات مغلقة'],
+                    datasets: [{
+                        label: 'نسبة الربح التراكمية (%)',
+                        data: chartData.length > 0 ? chartData : [0],
+                        borderColor: cumulativeProfitPct >= 0 ? '#22c55e' : '#ef4444',
+                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.1,
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { labels: { color: '#f8fafc' } }
+                    },
+                    scales: {
+                        x: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } },
+                        y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } }
+                    }
+                }
+            });
+
+        } catch (error) {
+            console.error('خطأ:', error);
+            document.getElementById('open-trades-table').innerHTML = 
+                `<tr><td colspan="5" style="text-align: center; color: var(--accent-red);">تعذر قراءة الملف trades2.json، تأكد من الرفع.</td></tr>`;
+        }
+    }
+
+    loadDashboard();
+</script>
+
+</body>
+</html>
