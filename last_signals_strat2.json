@@ -3,7 +3,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 139.05,
-    "peak_profit": 0.0
+    "peak_profit": 0.17259978425025577
   },
   "HRHO": {
     "cycle": 1,
@@ -57,7 +57,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 29.66,
-    "peak_profit": 8.226567768037766
+    "peak_profit": 8.563722184760628
   },
   "PHDC": {
     "cycle": 1,
@@ -85,8 +85,8 @@
   },
   "OLFI": {
     "cycle": 1,
-    "position": 0.0,
-    "avg_price": 0.0,
+    "position": 0.33,
+    "avg_price": 23.8,
     "peak_profit": 0.0
   },
   "EMFD": {
