@@ -3,15 +3,17 @@
     {
       "symbol": "OLFI",
       "cycle": 1,
-      "status": "OPEN",
+      "status": "CLOSED",
       "first_entry": "2026-08-11 with price 23.80",
       "second_entry": null,
       "third_entry": null,
       "last_totally_average_price": 23.8,
-      "exits": [],
-      "exit_price": null,
-      "exit_date": null,
-      "profit_pct": null
+      "exits": [
+        "2026-08-12: Sold 33% at price 25.41 (Profit: +6.76%)"
+      ],
+      "exit_price": 25.41,
+      "exit_date": "2026-08-12",
+      "profit_pct": 6.76
     }
   ],
   "EMFD": [
