@@ -226,5 +226,11 @@
     "entry_trend": "↗️",
     "entry_price": 74.76,
     "entry_date": "2026-08-12"
+  },
+  {
+    "symbol": "SUGR",
+    "entry_trend": "↗️",
+    "entry_price": 49.25,
+    "entry_date": "2026-08-12"
   }
 ]
