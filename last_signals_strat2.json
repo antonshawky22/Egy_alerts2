@@ -51,7 +51,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 26.83,
-    "peak_profit": 0.6336190831159214
+    "peak_profit": 2.161759224748423
   },
   "GBCO": {
     "cycle": 1,
@@ -115,8 +115,8 @@
   },
   "MTIE": {
     "cycle": 1,
-    "position": 0.0,
-    "avg_price": 0.0,
+    "position": 0.33,
+    "avg_price": 9.77,
     "peak_profit": 0.0
   },
   "DSCW": {
