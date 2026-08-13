@@ -49,9 +49,9 @@
   },
   "JUFO": {
     "cycle": 1,
-    "position": 0.33,
-    "avg_price": 26.83,
-    "peak_profit": 2.161759224748423
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0
   },
   "GBCO": {
     "cycle": 1,
@@ -115,8 +115,8 @@
   },
   "MTIE": {
     "cycle": 1,
-    "position": 0.33,
-    "avg_price": 9.77,
+    "position": 0.0,
+    "avg_price": 0.0,
     "peak_profit": 0.0
   },
   "DSCW": {
