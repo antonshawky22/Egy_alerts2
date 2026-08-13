@@ -65,7 +65,7 @@
     "entry_price": null
   },
   "HRHO": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 27.55
   },
@@ -131,8 +131,8 @@
   },
   "AMOC": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 9.15
+    "in_position": false,
+    "entry_price": null
   },
   "FWRY": {
     "trend": "🔛",
