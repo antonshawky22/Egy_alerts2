@@ -199,10 +199,9 @@ for name, ticker in symbols.items():
     if s["avg_price"] > 0:
         profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
 
-    sell1 = rsi_val >= 65 and profit > 1
-    sell2 = rsi_val >= 72 and profit > 2
-    sell3 = rsi_val >= 78 and profit > 3
-
+    sell1 = s["position"] > 0.70 and rsi_val >= 65 and profit > 1
+    sell2 = 0.30 < s["position"] <= 0.70 and rsi_val >= 72 and profit > 2
+    sell3 = s["position"] > 0.00 and rsi_val >= 78 and profit > 3
     action = None
 
     # تجهيز السجل للسهم في ملف الصفقات
