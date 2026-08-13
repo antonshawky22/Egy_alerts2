@@ -39,21 +39,7 @@
   "SWDY": [],
   "ISPH": [],
   "ATQA": [],
-  "MTIE": [
-    {
-      "symbol": "MTIE",
-      "cycle": 1,
-      "status": "OPEN",
-      "first_entry": "2026-08-13 with price 9.77",
-      "second_entry": null,
-      "third_entry": null,
-      "last_totally_average_price": 9.77,
-      "exits": [],
-      "exit_price": null,
-      "exit_date": null,
-      "profit_pct": null
-    }
-  ],
+  "MTIE": [],
   "HRHO": [
     {
       "symbol": "HRHO",
@@ -70,21 +56,7 @@
     }
   ],
   "ORWE": [],
-  "JUFO": [
-    {
-      "symbol": "JUFO",
-      "cycle": 1,
-      "status": "OPEN",
-      "first_entry": "2026-08-06 with price 26.83",
-      "second_entry": null,
-      "third_entry": null,
-      "last_totally_average_price": 26.83,
-      "exits": [],
-      "exit_price": null,
-      "exit_date": null,
-      "profit_pct": null
-    }
-  ],
+  "JUFO": [],
   "DSCW": [],
   "SUGR": [],
   "ELSH": [],
