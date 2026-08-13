@@ -177,13 +177,23 @@ for name, ticker in symbols.items():
     
     run_up_percent = ((highest_80 - lowest_80) / lowest_80) * 100 if lowest_80 > 0 else 0.0
     safe_to_buy = run_up_percent <= 60.0
+    # ==========================================
+    # فلتر فجوة هبوط بين إغلاق أمس وفتح اليوم
+    # ==========================================
 
-    # شروط الشراء
+    yesterday_close = float(df["Close"].iloc[-2])
+    today_open = float(df["Open"].iloc[-1])
+    gap_percent = ((today_open - yesterday_close) / yesterday_close) * 100
+    # مثال: منع الشراء إذا كانت الفجوة -3% أو أكثر
+    gap_down = gap_percent <= -3.0
+    # السماح بالشراء فقط إذا لا توجد فجوة هبوط قوية
+    no_gap_down = not gap_down
+    
     ema_up = (df["EMA75"].iloc[-1] > df["EMA75"].iloc[-10]) and (price <= df["EMA75"].iloc[-1] * 1.05)
     
-    buy1 = safe_to_buy and ema_up and rsi_val <= 55
-    buy2 = safe_to_buy and ema_up and rsi_val <= 43
-    buy3 = safe_to_buy and ema_up and rsi_val <= 33
+    buy1 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 55
+    buy2 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 43
+    buy3 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 33
 
     profit = 0.0
     if s["avg_price"] > 0:
