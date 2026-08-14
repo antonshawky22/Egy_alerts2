@@ -1,4 +1,4 @@
-print("EGX LADDER CYCLE SYSTEM - DATABASE SOURCED (v3.2 Fully Audited)")
+print("EGX LADDER CYCLE SYSTEM - DATABASE SOURCED (v3.3 Fully Audited)")
 
 import json
 import os
@@ -38,7 +38,6 @@ STATE_FILE = "last_signals_strat2.json"
 DB_FILE = "egx_history_database_v2.json"
 TRADES_FILE = "trades2.json"
 
-
 # تحميل ملف الحالة
 try:
     with open(STATE_FILE, "r") as f:
@@ -53,19 +52,22 @@ try:
 except Exception:
     trades_history = {}
 
-
-def fetch_local_data(name):
-    """قراءة البيانات التاريخية والحديثة مباشرة من قاعدة البيانات المحلية المضغوطة."""
+# ⚡ تحسين الأداء: تحميل قاعدة البيانات المحلية مرة واحدة فقط في الذاكرة
+raw_database = {}
+if os.path.exists(DB_FILE):
     try:
-        if not os.path.exists(DB_FILE):
-            print(f"⚠️ Database file '{DB_FILE}' not found!")
-            return None
-
         with open(DB_FILE, "r") as f:
             raw_database = json.load(f)
+    except Exception as e:
+        print(f"⚠️ Failed to load database file: {e}")
+else:
+    print(f"⚠️ Database file '{DB_FILE}' not found!")
 
+
+def fetch_local_data(name):
+    """قراءة البيانات من قاعدة البيانات المحملة بالذاكرة."""
+    try:
         if name not in raw_database:
-            print(f"⚠️ {name} not found in database.")
             return None
 
         content = raw_database[name]
@@ -75,21 +77,17 @@ def fetch_local_data(name):
                 content["data"], orient="index", columns=content["columns"]
             )
             df_temp.index.name = "Date"
-
-            # تحويل حاسم وترتيب تصاعدي إجباري
             df_temp.index = pd.to_datetime(df_temp.index)
             df_temp = df_temp.sort_index(ascending=True)
             return df_temp
-        else:
-            return None
+        return None
     except Exception as e:
-        print(f"💥 Error reading local data for {name}: {e}")
+        print(f"💥 Error processing data for {name}: {e}")
         return None
 
 
-# دالة الـ RSI الاحترافية
 def rsi(series, period=14):
-    if len(series) < period:
+    if len(series) < period + 1:
         return pd.Series(np.nan, index=series.index)
     delta = series.diff()
     gain = delta.clip(lower=0)
@@ -104,7 +102,7 @@ def rsi(series, period=14):
 
 def update_avg(old_avg, old_pos, new_price, new_pos):
     if new_pos == 0:
-        return 0
+        return 0.0
 
     added_pos = new_pos - old_pos
     if added_pos <= 0:
@@ -129,8 +127,6 @@ def format_alert(title, name, price, position, avg, rsi_val, cycle, profit):
 alerts = []
 
 for name, ticker in symbols.items():
-
-    time.sleep(0.1)
 
     df = fetch_local_data(name)
     if df is None or len(df) < 40:
@@ -157,6 +153,7 @@ for name, ticker in symbols.items():
             "position": 0.0,
             "avg_price": 0.0,
             "peak_profit": 0.0,
+            "realized_pnl_tracker": []
         }
 
     s = state_data[name]
@@ -165,6 +162,8 @@ for name, ticker in symbols.items():
     s["avg_price"] = float(s.get("avg_price", 0.0))
     s["peak_profit"] = float(s.get("peak_profit", 0.0))
     s["cycle"] = int(s.get("cycle", 1))
+    if "realized_pnl_tracker" not in s:
+        s["realized_pnl_tracker"] = []
 
     if s["position"] == 0.0:
         s["avg_price"] = 0.0
@@ -177,58 +176,48 @@ for name, ticker in symbols.items():
     
     run_up_percent = ((highest_80 - lowest_80) / lowest_80) * 100 if lowest_80 > 0 else 0.0
     safe_to_buy = run_up_percent <= 60.0
-    # ==========================================
-    # فلتر فجوة هبوط بين إغلاق أمس وفتح اليوم
-    # ==========================================
 
+    # فلتر فجوة هبوط بين إغلاق أمس وفتح اليوم
     yesterday_close = float(df["Close"].iloc[-2])
     today_open = float(df["Open"].iloc[-1])
     gap_percent = ((today_open - yesterday_close) / yesterday_close) * 100
-    # مثال: منع الشراء إذا كانت الفجوة -3% أو أكثر
-    gap_down = gap_percent <= -3.0
-    # السماح بالشراء فقط إذا لا توجد فجوة هبوط قوية
-    no_gap_down = not gap_down
+    no_gap_down = gap_percent > -3.0
     
     ema_up = (
-    df["EMA75"].iloc[-1] > df["EMA75"].iloc[-5]
-    and df["EMA75"].iloc[-5] > df["EMA75"].iloc[-10]
-    and df["EMA75"].iloc[-1] > df["EMA75"].iloc[-10] * 1.002
-    and price <= df["EMA75"].iloc[-1] * 1.08
+        df["EMA75"].iloc[-1] > df["EMA75"].iloc[-5]
+        and df["EMA75"].iloc[-5] > df["EMA75"].iloc[-10]
+        and df["EMA75"].iloc[-1] > df["EMA75"].iloc[-10] * 1.002
+        and price <= df["EMA75"].iloc[-1] * 1.08
     )
     
     buy1 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 60
     buy2 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 50
     buy3 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 42
 
+    # حساب الربح اللحظي الحالي
     profit = 0.0
     if s["avg_price"] > 0:
         profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
 
-    sell1 = s["position"] > 0.70 and rsi_val >= 68 and profit > 3
-    sell2 = 0.30 < s["position"] <= 0.70 and rsi_val >= 74 and profit > 5
-    sell3 = s["position"] > 0.00 and rsi_val >= 80 and profit > 7
+    sell1 = s["position"] > 0.70 and rsi_val >= 68 and profit > 3.0
+    sell2 = 0.30 < s["position"] <= 0.70 and rsi_val >= 74 and profit > 5.0
+    sell3 = s["position"] > 0.00 and rsi_val >= 80 and profit > 7.0
     action = None
 
-    # تجهيز السجل للسهم في ملف الصفقات
     if name not in trades_history:
         trades_history[name] = []
-            
 
-    # حساب الربح اللحظي الحالي بناءً على متوسط الشراء
-    profit = 0.0
-    if s["avg_price"] > 0:
-        profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
+    # الاحتفاظ بحالة الدخول السابقة لمنع الشراء والبيع بنفس الشمعة
+    initial_pos = s["position"]
 
     # ==========================================
     # 🟢 تنفيذ أومـر الـشـراء وتسجيل الصفقات
     # ==========================================
-    
-    # شراء المستوى الأول L1
     if s["position"] == 0 and buy1:
         s["position"] = 0.33
         s["avg_price"] = price
         s["peak_profit"] = 0.0
-        s["realized_pnl_tracker"] = []  # قائمة لتسجيل أرباح البيع الجزئي
+        s["realized_pnl_tracker"] = []
         profit = 0.0
         action = "🟢 BUY L1"
 
@@ -247,11 +236,12 @@ for name, ticker in symbols.items():
         }
         trades_history[name].append(new_trade)
 
-    # شراء المستوى الثاني L2
     elif 0.32 < s["position"] < 0.5 and buy2 and price < s["avg_price"] * 0.98:
         old_pos = s["position"]
         s["position"] = 0.66
         s["avg_price"] = update_avg(s["avg_price"], old_pos, price, s["position"])
+        # 🧮 تصحيح حاسم: إعادة حساب الربح بالمتوسط الجديد فوراً
+        profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
         action = "🟢 BUY L2"
 
         if trades_history[name] and trades_history[name][-1].get("status") == "OPEN":
@@ -259,11 +249,12 @@ for name, ticker in symbols.items():
             active_trade["second_entry"] = f"{current_date} with price {price:.2f}"
             active_trade["last_totally_average_price"] = round(s["avg_price"], 2)
 
-    # شراء المستوى الثالث L3
     elif 0.65 < s["position"] < 1 and buy3 and price < s["avg_price"] * 0.97:
         old_pos = s["position"]
         s["position"] = 1.0
         s["avg_price"] = update_avg(s["avg_price"], old_pos, price, s["position"])
+        # 🧮 تصحيح حاسم: إعادة حساب الربح بالمتوسط الجديد فوراً
+        profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
         action = "🟢 BUY L3"
 
         if trades_history[name] and trades_history[name][-1].get("status") == "OPEN":
@@ -277,7 +268,8 @@ for name, ticker in symbols.items():
     # ==========================================
     # 🔴 تنفيذ أومـر الـبـيـع وإغلاق الصفقات
     # ==========================================
-    if s["position"] > 0:
+    # تنفيذ البيع فقط إذا كان لدينا مركز قائم قبل دخول الشمعة الحالية
+    if initial_pos > 0 and s["position"] > 0:
 
         stop_triggered = False
 
@@ -298,8 +290,7 @@ for name, ticker in symbols.items():
             if trades_history[name] and trades_history[name][-1].get("status") == "OPEN":
                 active_trade = trades_history[name][-1]
                 
-                # حساب صافي الربح الإجمالي لو كان فيه بيع جزئي سابق
-                if "realized_pnl_tracker" in s and s["realized_pnl_tracker"]:
+                if s["realized_pnl_tracker"]:
                     s["realized_pnl_tracker"].append((s["position"], profit))
                     total_profit = sum(p * w for w, p in s["realized_pnl_tracker"]) / sum(w for w, _ in s["realized_pnl_tracker"])
                 else:
@@ -319,7 +310,7 @@ for name, ticker in symbols.items():
             if trades_history[name] and trades_history[name][-1].get("status") == "OPEN":
                 active_trade = trades_history[name][-1]
 
-                if "realized_pnl_tracker" in s and s["realized_pnl_tracker"]:
+                if s["realized_pnl_tracker"]:
                     s["realized_pnl_tracker"].append((s["position"], profit))
                     total_profit = sum(p * w for w, p in s["realized_pnl_tracker"]) / sum(w for w, _ in s["realized_pnl_tracker"])
                 else:
@@ -335,8 +326,6 @@ for name, ticker in symbols.items():
         # 3️⃣ بيع جزئي مستوى ثاني (33%)
         elif sell2:
             sell_amount = min(0.33, s["position"])
-            
-            if "realized_pnl_tracker" not in s: s["realized_pnl_tracker"] = []
             s["realized_pnl_tracker"].append((sell_amount, profit))
 
             s["position"] -= sell_amount
@@ -350,7 +339,6 @@ for name, ticker in symbols.items():
                     active_trade["exits"] = []
                 active_trade["exits"].append(exit_log)
 
-                # إذا أدت عملية البيع لإفراغ المحفظة تماماً (0%)
                 if round(s["position"], 2) == 0.0:
                     total_profit = sum(p * w for w, p in s["realized_pnl_tracker"]) / sum(w for w, _ in s["realized_pnl_tracker"])
                     active_trade["status"] = "CLOSED"
@@ -361,8 +349,6 @@ for name, ticker in symbols.items():
         # 4️⃣ بيع جزئي مستوى أول (33%)
         elif sell1:
             sell_amount = min(0.33, s["position"])
-            
-            if "realized_pnl_tracker" not in s: s["realized_pnl_tracker"] = []
             s["realized_pnl_tracker"].append((sell_amount, profit))
 
             s["position"] -= sell_amount
@@ -376,7 +362,6 @@ for name, ticker in symbols.items():
                     active_trade["exits"] = []
                 active_trade["exits"].append(exit_log)
 
-                # إذا أدت عملية البيع لإفراغ المحفظة تماماً (0%)
                 if round(s["position"], 2) == 0.0:
                     total_profit = sum(p * w for w, p in s["realized_pnl_tracker"]) / sum(w for w, _ in s["realized_pnl_tracker"])
                     active_trade["status"] = "CLOSED"
@@ -403,14 +388,12 @@ for name, ticker in symbols.items():
             )
         )
         
-        # تصفير بيانات السهم استعداداً للسايكل القادمة
+        # تصفير بيانات السهم عند الخروج التام
         if s["position"] == 0.0 and ("SELL" in action or "EXIT" in action or "STOP" in action):
             s["avg_price"] = 0.0
             s["peak_profit"] = 0.0
             s["realized_pnl_tracker"] = []
             s["cycle"] += 1
-
-
 
 
 # حفظ ملف الحالة الحالية
