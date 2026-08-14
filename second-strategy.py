@@ -212,6 +212,12 @@ for name, ticker in symbols.items():
     # تجهيز السجل للسهم في ملف الصفقات
     if name not in trades_history:
         trades_history[name] = []
+            
+
+    # حساب الربح اللحظي الحالي بناءً على متوسط الشراء
+    profit = 0.0
+    if s["avg_price"] > 0:
+        profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
 
     # ==========================================
     # 🟢 تنفيذ أومـر الـشـراء وتسجيل الصفقات
@@ -222,11 +228,10 @@ for name, ticker in symbols.items():
         s["position"] = 0.33
         s["avg_price"] = price
         s["peak_profit"] = 0.0
-        s["realized_pnl_tracker"] = []  # ➕ متتبع تجميع الأرباح الجزئية
+        s["realized_pnl_tracker"] = []  # قائمة لتسجيل أرباح البيع الجزئي
         profit = 0.0
         action = "🟢 BUY L1"
 
-        # إنشاء سجل صفقة جديدة
         new_trade = {
             "symbol": name,
             "cycle": s["cycle"],
@@ -247,7 +252,6 @@ for name, ticker in symbols.items():
         old_pos = s["position"]
         s["position"] = 0.66
         s["avg_price"] = update_avg(s["avg_price"], old_pos, price, s["position"])
-        profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
         action = "🟢 BUY L2"
 
         if trades_history[name] and trades_history[name][-1].get("status") == "OPEN":
@@ -260,17 +264,12 @@ for name, ticker in symbols.items():
         old_pos = s["position"]
         s["position"] = 1.0
         s["avg_price"] = update_avg(s["avg_price"], old_pos, price, s["position"])
-        profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
         action = "🟢 BUY L3"
 
         if trades_history[name] and trades_history[name][-1].get("status") == "OPEN":
             active_trade = trades_history[name][-1]
             active_trade["third_entry"] = f"{current_date} with price {price:.2f}"
             active_trade["last_totally_average_price"] = round(s["avg_price"], 2)
-
-    # 🧮 إعادة حساب الربح الحالي بدقة للسعر اللحظي
-    if s["avg_price"] > 0:
-        profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
 
     if profit > s["peak_profit"]:
         s["peak_profit"] = profit
@@ -299,10 +298,10 @@ for name, ticker in symbols.items():
             if trades_history[name] and trades_history[name][-1].get("status") == "OPEN":
                 active_trade = trades_history[name][-1]
                 
-                # حساب الإجمالي إذا كان هناك بيع جزئي سابق
+                # حساب صافي الربح الإجمالي لو كان فيه بيع جزئي سابق
                 if "realized_pnl_tracker" in s and s["realized_pnl_tracker"]:
                     s["realized_pnl_tracker"].append((s["position"], profit))
-                    total_profit = sum(p * weight for weight, p in s["realized_pnl_tracker"]) / sum(w for w, _ in s["realized_pnl_tracker"])
+                    total_profit = sum(p * w for w, p in s["realized_pnl_tracker"]) / sum(w for w, _ in s["realized_pnl_tracker"])
                 else:
                     total_profit = profit
 
@@ -322,7 +321,7 @@ for name, ticker in symbols.items():
 
                 if "realized_pnl_tracker" in s and s["realized_pnl_tracker"]:
                     s["realized_pnl_tracker"].append((s["position"], profit))
-                    total_profit = sum(p * weight for weight, p in s["realized_pnl_tracker"]) / sum(w for w, _ in s["realized_pnl_tracker"])
+                    total_profit = sum(p * w for w, p in s["realized_pnl_tracker"]) / sum(w for w, _ in s["realized_pnl_tracker"])
                 else:
                     total_profit = profit
 
@@ -337,7 +336,6 @@ for name, ticker in symbols.items():
         elif sell2:
             sell_amount = min(0.33, s["position"])
             
-            # تسجيل الوزن والربح للجزء المبيوع
             if "realized_pnl_tracker" not in s: s["realized_pnl_tracker"] = []
             s["realized_pnl_tracker"].append((sell_amount, profit))
 
@@ -352,9 +350,9 @@ for name, ticker in symbols.items():
                     active_trade["exits"] = []
                 active_trade["exits"].append(exit_log)
 
-                # إذا أدت عملية البيع الجزئي لإفراغ المحفظة تماماً (0%)
+                # إذا أدت عملية البيع لإفراغ المحفظة تماماً (0%)
                 if round(s["position"], 2) == 0.0:
-                    total_profit = sum(p * weight for weight, p in s["realized_pnl_tracker"]) / sum(w for w, _ in s["realized_pnl_tracker"])
+                    total_profit = sum(p * w for w, p in s["realized_pnl_tracker"]) / sum(w for w, _ in s["realized_pnl_tracker"])
                     active_trade["status"] = "CLOSED"
                     active_trade["exit_price"] = round(price, 2)
                     active_trade["exit_date"] = current_date
@@ -364,7 +362,6 @@ for name, ticker in symbols.items():
         elif sell1:
             sell_amount = min(0.33, s["position"])
             
-            # تسجيل الوزن والربح للجزء المبيوع
             if "realized_pnl_tracker" not in s: s["realized_pnl_tracker"] = []
             s["realized_pnl_tracker"].append((sell_amount, profit))
 
@@ -379,9 +376,9 @@ for name, ticker in symbols.items():
                     active_trade["exits"] = []
                 active_trade["exits"].append(exit_log)
 
-                # إذا أدت عملية البيع الجزئي لإفراغ المحفظة تماماً (0%)
+                # إذا أدت عملية البيع لإفراغ المحفظة تماماً (0%)
                 if round(s["position"], 2) == 0.0:
-                    total_profit = sum(p * weight for weight, p in s["realized_pnl_tracker"]) / sum(w for w, _ in s["realized_pnl_tracker"])
+                    total_profit = sum(p * w for w, p in s["realized_pnl_tracker"]) / sum(w for w, _ in s["realized_pnl_tracker"])
                     active_trade["status"] = "CLOSED"
                     active_trade["exit_price"] = round(price, 2)
                     active_trade["exit_date"] = current_date
@@ -406,11 +403,11 @@ for name, ticker in symbols.items():
             )
         )
         
-        # لو الصفقة أصبحت مغلقة بالكامل (Position = 0)
+        # تصفير بيانات السهم استعداداً للسايكل القادمة
         if s["position"] == 0.0 and ("SELL" in action or "EXIT" in action or "STOP" in action):
             s["avg_price"] = 0.0
             s["peak_profit"] = 0.0
-            s["realized_pnl_tracker"] = []  # صفّر المتتبع للسايكل القادمة
+            s["realized_pnl_tracker"] = []
             s["cycle"] += 1
 
 
