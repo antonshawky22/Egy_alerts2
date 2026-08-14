@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome TONY  update Prices and Results startgy</title>
+    <title>Welcome TONY update Prices and Results startgy</title>
     <!-- Chart.js للمخططات البيانية -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -169,14 +169,14 @@
 <body>
 
 <div class="container">
-    <h1>📈 Welcome TONY  update Prices and Results startgy</h1>
+    <h1>📈 Welcome TONY update Prices and Results startgy</h1>
 
     <!-- أزرار التبديل -->
     <div class="tabs">
         <button class="tab-btn active" onclick="switchTab('combined', this)">General Vision </button>
         <button class="tab-btn" onclick="switchTab('market-prices', this)">📊 أسعار إغلاق اليوم (الكل)</button>
-        <button class="tab-btn" onclick="switchTab('strat1', this)">multi trend strategy  (trades)</button>
-        <button class="tab-btn" onclick="switchTab('strat2', this)"> ladder strategy(trades2)</button>
+        <button class="tab-btn" onclick="switchTab('strat1', this)">multi trend strategy (trades)</button>
+        <button class="tab-btn" onclick="switchTab('strat2', this)">ladder strategy(trades2)</button>
     </div>
 
     <!-- 1. الشاشة الشاملة -->
@@ -297,11 +297,11 @@
             </div>
         </div>
         <div class="box">
-            <h2>منحنى الأرباح - الاتجاهات (trades)</h2>
+            <h2>منحنى الأرباح - multi trend strategy (trades)</h2>
             <canvas id="chartStrat1"></canvas>
         </div>
         <div class="box">
-            <h2>📋 سجل صفقات multi trend strategy  (trades)</h2>
+            <h2>📋 سجل صفقات multi trend strategy (trades)</h2>
             <div class="table-responsive">
                 <table>
                     <thead>
@@ -336,7 +336,7 @@
             </div>
         </div>
         <div class="box">
-            <h2>منحنى الأرباح - الدوائر (trades2)</h2>
+            <h2>منحنى الأرباح - Ladder strategy (trades2)</h2>
             <canvas id="chartStrat2"></canvas>
         </div>
         <div class="box">
@@ -385,7 +385,6 @@
 
     async function initDashboard() {
         try {
-            // استخدام اسم الملف الجديد الصحيح egx_history_database_v2.json
             const [resPrices, resTrades1, resTrades2] = await Promise.all([
                 fetch('egx_history_database_v2.json').catch(() => null),
                 fetch('trades.json').catch(() => null),
@@ -410,7 +409,7 @@
 
         const symbols = Object.keys(pricesData);
         if (symbols.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">لم يتم العثور على بيانات الأسعار (تأكد من وجود egx_history_database_v2.json)</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">لم يتم العثور على بيانات الأسعار</td></tr>';
             return;
         }
 
@@ -472,9 +471,10 @@
     }
 
     function processDashboardData() {
-        // --- معالجة trades ---
-        let s1Closed = trades1Data.filter(t => t.profit_pct !== null && t.exit_price !== null);
-        let s1Open = trades1Data.filter(t => t.profit_pct === null || t.exit_price === null);
+        // --- معالجة trades (multi trend strategy) ---
+        // الصفقة تكون مغلقة فقط إذا وجد مفتاح 'exit_price' أو 'profit_pct'
+        let s1Closed = trades1Data.filter(t => t.hasOwnProperty('exit_price') || t.hasOwnProperty('profit_pct'));
+        let s1Open = trades1Data.filter(t => !t.hasOwnProperty('exit_price') && !t.hasOwnProperty('profit_pct'));
         
         let s1WinRate = s1Closed.length > 0 ? (s1Closed.filter(t => t.profit_pct > 0).length / s1Closed.length * 100).toFixed(1) : 0;
         let s1TotalPnL = s1Closed.reduce((acc, t) => acc + (t.profit_pct || 0), 0);
@@ -484,20 +484,20 @@
         document.getElementById('s1-pnl').innerText = `${s1TotalPnL.toFixed(2)}%`;
 
         document.getElementById('s1-trades-table').innerHTML = trades1Data.map(t => {
-            const isClosed = t.profit_pct !== null;
-            const pnlClass = isClosed ? (t.profit_pct >= 0 ? 'positive' : 'negative') : '';
+            const isClosed = t.hasOwnProperty('exit_price') || t.hasOwnProperty('profit_pct');
+            const pnlClass = isClosed ? ((t.profit_pct || 0) >= 0 ? 'positive' : 'negative') : '';
             return `
                 <tr class="search-row">
                     <td><strong>${t.symbol}</strong></td>
                     <td>${t.entry_trend || '-'}</td>
                     <td>${t.entry_date || ''} (${t.entry_price ? t.entry_price + ' EGP' : '-'})</td>
-                    <td>${isClosed ? `${t.exit_date} (${t.exit_price} EGP)` : '<span class="badge badge-open">OPEN</span>'}</td>
-                    <td class="${pnlClass}"><strong>${isClosed ? (t.profit_pct >= 0 ? '+' : '') + t.profit_pct + '%' : '-'}</strong></td>
+                    <td>${isClosed ? `${t.exit_date || '-'} (${t.exit_price || '-'} EGP)` : '<span class="badge badge-open">OPEN</span>'}</td>
+                    <td class="${pnlClass}"><strong>${isClosed ? (t.profit_pct >= 0 ? '+' : '') + t.profit_pct + '%' : 'مفتوحة ⚡'}</strong></td>
                 </tr>
             `;
         }).join('') || '<tr><td colspan="5" style="text-align:center;">لا توجد صفقات</td></tr>';
 
-        // --- معالجة trades2 ---
+        // --- معالجة trades2 (ladder strategy) ---
         let s2All = [];
         let s2Closed = [];
         let s2Open = [];
@@ -533,7 +533,7 @@
                     <td><span class="badge ${isClosed ? 'badge-closed' : 'badge-open'}">${t.status}</span></td>
                     <td>${t.first_entry || '-'} (متوسط: ${t.last_totally_average_price || '-'})</td>
                     <td>${isClosed ? `${t.exit_date || '-'} (${t.exit_price || '-'} EGP)` : '-'}</td>
-                    <td class="${pnlClass}"><strong>${isClosed ? (t.profit_pct >= 0 ? '+' : '') + t.profit_pct + '%' : '-'}</strong></td>
+                    <td class="${pnlClass}"><strong>${isClosed ? (t.profit_pct >= 0 ? '+' : '') + t.profit_pct + '%' : 'مفتوحة ⚡'}</strong></td>
                 </tr>
             `;
         }).join('') || '<tr><td colspan="6" style="text-align:center;">لا توجد صفقات</td></tr>';
@@ -571,10 +571,10 @@
 
             openHTML += `
                 <tr>
-                    <td><small>اتجاهات (trades)</small></td>
+                    <td><small>multi trend (trades)</small></td>
                     <td><strong>${t.symbol}</strong></td>
                     <td>${t.entry_date || ''} (${t.entry_price || '-'} EGP)</td>
-                    <td>${currentClose ? currentClose + ' EGP' : 'غير متوفر'}</td>
+                    <td>${currentClose ? currentClose.toFixed(2) + ' EGP' : 'غير متوفر'}</td>
                     <td class="${colorClass}"><strong>${unrealized}</strong></td>
                 </tr>
             `;
@@ -594,10 +594,10 @@
 
             openHTML += `
                 <tr>
-                    <td><small>دوائر (trades2)</small></td>
+                    <td><small>ladder strategy (trades2)</small></td>
                     <td><strong>${t.symbol}</strong></td>
                     <td>${t.first_entry || '-'}</td>
-                    <td>${currentClose ? currentClose + ' EGP' : 'غير متوفر'}</td>
+                    <td>${currentClose ? currentClose.toFixed(2) + ' EGP' : 'غير متوفر'}</td>
                     <td class="${colorClass}"><strong>${unrealized}</strong></td>
                 </tr>
             `;
@@ -609,16 +609,16 @@
         let allHTML = '';
 
         trades1Data.forEach(t => {
-            const isClosed = t.profit_pct !== null && t.exit_price !== null;
-            const pnlClass = isClosed ? (t.profit_pct >= 0 ? 'positive' : 'negative') : '';
+            const isClosed = t.hasOwnProperty('exit_price') || t.hasOwnProperty('profit_pct');
+            const pnlClass = isClosed ? ((t.profit_pct || 0) >= 0 ? 'positive' : 'negative') : '';
             allHTML += `
                 <tr class="search-row">
-                    <td><small>اتجاهات (trades)</small></td>
+                    <td><small>multi trend (trades)</small></td>
                     <td><strong>${t.symbol}</strong></td>
                     <td><span class="badge ${isClosed ? 'badge-closed' : 'badge-open'}">${isClosed ? 'CLOSED' : 'OPEN'}</span></td>
                     <td>${t.entry_date || ''} (${t.entry_price || '-'} EGP)</td>
                     <td>${isClosed ? `${t.exit_date} (${t.exit_price} EGP)` : '-'}</td>
-                    <td class="${pnlClass}"><strong>${isClosed ? (t.profit_pct >= 0 ? '+' : '') + t.profit_pct + '%' : '-'}</strong></td>
+                    <td class="${pnlClass}"><strong>${isClosed ? (t.profit_pct >= 0 ? '+' : '') + t.profit_pct + '%' : 'مفتوحة ⚡'}</strong></td>
                 </tr>
             `;
         });
@@ -628,12 +628,12 @@
             const pnlClass = isClosed ? (t.profit_pct >= 0 ? 'positive' : 'negative') : '';
             allHTML += `
                 <tr class="search-row">
-                    <td><small>دوائر (trades2)</small></td>
+                    <td><small>ladder strategy (trades2)</small></td>
                     <td><strong>${t.symbol}</strong></td>
                     <td><span class="badge ${isClosed ? 'badge-closed' : 'badge-open'}">${t.status || 'OPEN'}</span></td>
                     <td>${t.first_entry || '-'}</td>
                     <td>${isClosed ? `${t.exit_date || '-'} (${t.exit_price || '-'} EGP)` : '-'}</td>
-                    <td class="${pnlClass}"><strong>${isClosed ? (t.profit_pct >= 0 ? '+' : '') + t.profit_pct + '%' : '-'}</strong></td>
+                    <td class="${pnlClass}"><strong>${isClosed ? (t.profit_pct >= 0 ? '+' : '') + t.profit_pct + '%' : 'مفتوحة ⚡'}</strong></td>
                 </tr>
             `;
         });
@@ -669,8 +669,8 @@
             data: {
                 labels: Array.from({length: Math.max(c1Data.length, c2Data.length)}, (_, i) => `صفقة ${i + 1}`),
                 datasets: [
-                    { label: 'اتجاهات (trades)', data: c1Data, borderColor: '#3b82f6', tension: 0.2 },
-                    { label: 'دوائر (trades2)', data: c2Data, borderColor: '#22c55e', tension: 0.2 }
+                    { label: 'multi trend (trades)', data: c1Data, borderColor: '#3b82f6', tension: 0.2 },
+                    { label: 'ladder strategy (trades2)', data: c2Data, borderColor: '#22c55e', tension: 0.2 }
                 ]
             },
             options: {
