@@ -485,6 +485,21 @@
 
         document.getElementById('s1-trades-table').innerHTML = trades1Data.map(t => {
             const isClosed = t.hasOwnProperty('exit_price') || t.hasOwnProperty('profit_pct');
+
+            function processDashboardData() {
+        // --- 1. معالجة trades (multi trend strategy) ---
+        let s1Closed = trades1Data.filter(t => t.hasOwnProperty('exit_price') || t.hasOwnProperty('profit_pct'));
+        let s1Open = trades1Data.filter(t => !t.hasOwnProperty('exit_price') && !t.hasOwnProperty('profit_pct'));
+        
+        let s1WinRate = s1Closed.length > 0 ? (s1Closed.filter(t => t.profit_pct > 0).length / s1Closed.length * 100).toFixed(1) : 0;
+        let s1TotalPnL = s1Closed.reduce((acc, t) => acc + (Number(t.profit_pct) || 0), 0);
+
+        document.getElementById('s1-count').innerText = trades1Data.length;
+        document.getElementById('s1-winrate').innerText = `${s1WinRate}%`;
+        document.getElementById('s1-pnl').innerText = `${s1TotalPnL >= 0 ? '+' : ''}${s1TotalPnL.toFixed(2)}%`;
+
+        document.getElementById('s1-trades-table').innerHTML = trades1Data.map(t => {
+            const isClosed = t.hasOwnProperty('exit_price') || t.hasOwnProperty('profit_pct');
             const pnlClass = isClosed ? ((t.profit_pct || 0) >= 0 ? 'positive' : 'negative') : '';
             return `
                 <tr class="search-row">
@@ -497,7 +512,7 @@
             `;
         }).join('') || '<tr><td colspan="5" style="text-align:center;">لا توجد صفقات</td></tr>';
 
-        // --- معالجة trades2 (ladder strategy) ---
+        // --- 2. معالجة trades2 (ladder strategy) بدون تكرار ---
         let s2All = [];
         let s2Closed = [];
         let s2Open = [];
@@ -507,9 +522,9 @@
             if (Array.isArray(list)) {
                 list.forEach(t => {
                     s2All.push(t);
-                    if (t.status === 'CLOSED' || t.profit_pct !== null) {
+                    if (t.status === 'CLOSED' && t.profit_pct !== null && t.profit_pct !== undefined) {
                         s2Closed.push(t);
-                    } else {
+                    } else if (t.status !== 'CLOSED') {
                         s2Open.push(t);
                     }
                 });
@@ -517,14 +532,14 @@
         });
 
         let s2WinRate = s2Closed.length > 0 ? (s2Closed.filter(t => t.profit_pct > 0).length / s2Closed.length * 100).toFixed(1) : 0;
-        let s2TotalPnL = s2Closed.reduce((acc, t) => acc + (t.profit_pct || 0), 0);
+        let s2TotalPnL = s2Closed.reduce((acc, t) => acc + (Number(t.profit_pct) || 0), 0);
 
         document.getElementById('s2-count').innerText = s2All.length;
         document.getElementById('s2-winrate').innerText = `${s2WinRate}%`;
-        document.getElementById('s2-pnl').innerText = `${s2TotalPnL.toFixed(2)}%`;
+        document.getElementById('s2-pnl').innerText = `${s2TotalPnL >= 0 ? '+' : ''}${s2TotalPnL.toFixed(2)}%`;
 
         document.getElementById('s2-trades-table').innerHTML = s2All.map(t => {
-            const isClosed = t.status === 'CLOSED' || t.profit_pct !== null;
+            const isClosed = t.status === 'CLOSED' && t.profit_pct !== null && t.profit_pct !== undefined;
             const pnlClass = isClosed ? (t.profit_pct >= 0 ? 'positive' : 'negative') : '';
             return `
                 <tr class="search-row">
@@ -538,11 +553,12 @@
             `;
         }).join('') || '<tr><td colspan="6" style="text-align:center;">لا توجد صفقات</td></tr>';
 
-        // --- الشاشة الشاملة ---
+        // --- 3. الشاشة الشاملة الدقيقة ---
         const totalTrades = trades1Data.length + s2All.length;
         const totalClosed = s1Closed.length + s2Closed.length;
         const totalWins = s1Closed.filter(t => t.profit_pct > 0).length + s2Closed.filter(t => t.profit_pct > 0).length;
         const combinedWinRate = totalClosed > 0 ? ((totalWins / totalClosed) * 100).toFixed(1) : 0;
+        
         const combinedPnL = s1TotalPnL + s2TotalPnL;
 
         document.getElementById('c-total-trades').innerText = totalTrades;
@@ -554,7 +570,7 @@
 
         document.getElementById('c-open-count').innerText = s1Open.length + s2Open.length;
 
-        // 1. جدول الصفقات المفتوحة مع الربح الحي
+        // جدول الصفقات المفتوحة
         const openTable = document.getElementById('open-positions-table');
         let openHTML = '';
 
@@ -605,7 +621,7 @@
 
         openTable.innerHTML = openHTML || '<tr><td colspan="5" style="text-align:center;">لا توجد صفقات مفتوحة حالياً</td></tr>';
 
-        // 2. جدول جميع الصفقات المجمعة
+        // جدول جميع الصفقات
         let allHTML = '';
 
         trades1Data.forEach(t => {
@@ -624,7 +640,7 @@
         });
 
         s2All.forEach(t => {
-            const isClosed = t.status === 'CLOSED' || t.profit_pct !== null;
+            const isClosed = t.status === 'CLOSED' && t.profit_pct !== null && t.profit_pct !== undefined;
             const pnlClass = isClosed ? (t.profit_pct >= 0 ? 'positive' : 'negative') : '';
             allHTML += `
                 <tr class="search-row">
@@ -642,6 +658,7 @@
 
         renderCharts(s1Closed, s2Closed);
     }
+
 
     function renderCharts(s1Closed, s2Closed) {
         let cum1 = 0;
