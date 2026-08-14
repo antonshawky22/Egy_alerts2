@@ -471,22 +471,6 @@
     }
 
     function processDashboardData() {
-        // --- معالجة trades (multi trend strategy) ---
-        // الصفقة تكون مغلقة فقط إذا وجد مفتاح 'exit_price' أو 'profit_pct'
-        let s1Closed = trades1Data.filter(t => t.hasOwnProperty('exit_price') || t.hasOwnProperty('profit_pct'));
-        let s1Open = trades1Data.filter(t => !t.hasOwnProperty('exit_price') && !t.hasOwnProperty('profit_pct'));
-        
-        let s1WinRate = s1Closed.length > 0 ? (s1Closed.filter(t => t.profit_pct > 0).length / s1Closed.length * 100).toFixed(1) : 0;
-        let s1TotalPnL = s1Closed.reduce((acc, t) => acc + (t.profit_pct || 0), 0);
-
-        document.getElementById('s1-count').innerText = trades1Data.length;
-        document.getElementById('s1-winrate').innerText = `${s1WinRate}%`;
-        document.getElementById('s1-pnl').innerText = `${s1TotalPnL.toFixed(2)}%`;
-
-        document.getElementById('s1-trades-table').innerHTML = trades1Data.map(t => {
-            const isClosed = t.hasOwnProperty('exit_price') || t.hasOwnProperty('profit_pct');
-
-            function processDashboardData() {
         // --- 1. معالجة trades (multi trend strategy) ---
         let s1Closed = trades1Data.filter(t => t.hasOwnProperty('exit_price') || t.hasOwnProperty('profit_pct'));
         let s1Open = trades1Data.filter(t => !t.hasOwnProperty('exit_price') && !t.hasOwnProperty('profit_pct'));
@@ -659,10 +643,9 @@
         renderCharts(s1Closed, s2Closed);
     }
 
-
     function renderCharts(s1Closed, s2Closed) {
         let cum1 = 0;
-        const c1Data = s1Closed.map(t => (cum1 += t.profit_pct));
+        const c1Data = s1Closed.map(t => (cum1 += Number(t.profit_pct) || 0));
         new Chart(document.getElementById('chartStrat1'), {
             type: 'line',
             data: {
@@ -672,7 +655,7 @@
         });
 
         let cum2 = 0;
-        const c2Data = s2Closed.map(t => (cum2 += t.profit_pct));
+        const c2Data = s2Closed.map(t => (cum2 += Number(t.profit_pct) || 0));
         new Chart(document.getElementById('chartStrat2'), {
             type: 'line',
             data: {
@@ -706,3 +689,4 @@
 
 </body>
 </html>
+
