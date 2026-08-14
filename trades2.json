@@ -39,7 +39,21 @@
   "SWDY": [],
   "ISPH": [],
   "ATQA": [],
-  "MTIE": [],
+  "MTIE": [
+    {
+      "symbol": "MTIE",
+      "cycle": 1,
+      "status": "OPEN",
+      "first_entry": "2026-08-14 with price 9.57",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 9.57,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
+    }
+  ],
   "HRHO": [
     {
       "symbol": "HRHO",
