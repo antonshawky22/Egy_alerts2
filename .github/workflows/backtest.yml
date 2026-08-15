@@ -3,6 +3,9 @@ name: Multi Trend Backtest
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   backtest:
     runs-on: ubuntu-latest
@@ -24,10 +27,16 @@ jobs:
         run: |
           python backtest_multi_trend.py
 
-      - name: Upload Backtest Results
-        uses: actions/upload-artifact@v4
-        with:
-          name: multi-trend-backtest-results
-          path: |
-            backtest_results.json
-            backtest_trades.json
+      - name: Save Results to Repository
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add backtest_results.json backtest_trades.json
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Update multi-trend backtest results"
+            git push
+          fi
