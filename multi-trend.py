@@ -132,8 +132,8 @@ def rsi(series, period=14):
 # =====================
 # Parameters
 # =====================
-SIDE_CLOSE_PERCENT = 0.04
-RSI_SELL = 78
+SIDE_CLOSE_PERCENT = 0.03
+RSI_SELL = 79
 EGX30_KEY = "EGX30"
 
 # =====================
