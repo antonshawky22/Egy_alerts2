@@ -236,7 +236,7 @@ for name in symbols_keys:
     else:
         if cross_count >= 7:
             trend = "🔛"
-        elif last_close > last["EMA40"] and last["EMA40"] > prev_5["EMA40"]:
+        elif last_close > last["EMA40"] and last["EMA40"] > (prev_5["EMA40"] * 0.985 ):
             trend = "↗️"
         elif last_close < last["EMA40"] and last["EMA40"] < (prev_5["EMA40"] * 0.985 ):
             trend = "🔻"
