@@ -18,15 +18,6 @@
     "profit_pct": 7.27
   },
   {
-    "symbol": "HRHO",
-    "entry_trend": "🔛",
-    "entry_price": 26.74,
-    "entry_date": "2026-07-16",
-    "exit_price": 26.53,
-    "exit_date": "2026-07-19",
-    "profit_pct": -0.79
-  },
-  {
     "symbol": "RMDA",
     "entry_trend": "🔛",
     "entry_price": 4.98,
@@ -51,15 +42,6 @@
     "profit_pct": -4.46
   },
   {
-    "symbol": "JUFO",
-    "entry_trend": "🔛",
-    "entry_price": 28.98,
-    "entry_date": "2026-07-20",
-    "exit_price": 28.75,
-    "exit_date": "2026-07-29",
-    "profit_pct": -0.79
-  },
-  {
     "symbol": "COMI",
     "entry_trend": "↗️",
     "entry_price": 136.77,
@@ -73,15 +55,6 @@
     "exit_price": 11.63,
     "exit_date": "2026-07-26",
     "profit_pct": -0.09
-  },
-  {
-    "symbol": "ISPH",
-    "entry_trend": "🔛",
-    "entry_price": 11.64,
-    "entry_date": "2026-07-26",
-    "exit_price": 11.5,
-    "exit_date": "2026-07-28",
-    "profit_pct": -1.2
   },
   {
     "symbol": "HRHO",
