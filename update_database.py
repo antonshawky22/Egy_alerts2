@@ -1,4 +1,4 @@
-print("⚙️ EGX ENGINE v10.0 - TradingView Bulk Fetch Production Engine")
+print("⚙️ EGX ENGINE v10.1 - TradingView Bulk Fetch Production Engine (Pulse Sensor Integrated)")
 
 import json
 import os
@@ -94,15 +94,45 @@ if not bulk_analysis:
 # ==========================================
 # 🚨 3. رادار فحص نبض السوق (Market Pulse Sensor)
 # ==========================================
-print("🔍 Scanning market pulse using leaders...")
+print("🔍 Scanning market pulse using market leaders (COMI, SWDY, HRHO)...")
+
+market_active = False
+leader_tickers = ["COMI", "SWDY", "HRHO"]
 check_date = None
 
-try:
-    comi_analysis = bulk_analysis.get("EGX:COMI")
-    if comi_analysis:
-        check_date = str(comi_analysis.time.date())
-except Exception as e:
-    print(f"⚠️ Pulse check error: {e}")
+for l_name in leader_tickers:
+    l_analysis = bulk_analysis.get(f"EGX:{symbols[l_name]}")
+    if not l_analysis:
+        continue
+
+    l_indicators = l_analysis.indicators
+    l_volume = float(l_indicators.get("volume", 0))
+    l_close = float(l_indicators.get("close", 0))
+    l_open = float(l_indicators.get("open", 0))
+    l_high = float(l_indicators.get("high", 0))
+    l_low = float(l_indicators.get("low", 0))
+
+    check_date = str(l_analysis.time.date())
+
+    # قراءة آخر شمعة مسجلة في الداتا للرائد
+    df_leader = database.get(l_name, pd.DataFrame())
+
+    if not df_leader.empty:
+        last_recorded = df_leader.iloc[-1]
+        # فحص هل توجد حركة فوليوم حقيقية + اختلاف في الأسعار عن آخر شمعة مسجلة
+        if l_volume > 0 and (
+            l_close != last_recorded["Close"]
+            or l_open != last_recorded["Open"]
+            or l_high != last_recorded["High"]
+            or l_low != last_recorded["Low"]
+        ):
+            market_active = True
+            print(f"🟢 Market activity detected via {l_name} (Vol: {l_volume:,.0f}) for date: {check_date}")
+            break
+
+if not market_active:
+    print("😴 Market is Closed or No New Trading Activity Detected (Weekend/Holiday). Exiting safely without modifying database...")
+    sys.exit(0)
 
 print(f"🟢 Processing market updates for date: {check_date}...")
 
