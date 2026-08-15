@@ -1,47 +1,19 @@
 {
-  "COMI": {
-    "cycle": 1,
-    "position": 0.33,
-    "avg_price": 139.05,
-    "peak_profit": 0.6760158216468879,
-    "realized_pnl_tracker": []
-  },
-  "HRHO": {
-    "cycle": 1,
-    "position": 0.66,
-    "avg_price": 26.945000000000004,
-    "peak_profit": 0.9548292324641865,
-    "realized_pnl_tracker": []
-  },
-  "FWRY": {
-    "cycle": 1,
-    "position": 0.33,
-    "avg_price": 18.77,
-    "peak_profit": 4.688332445391577,
-    "realized_pnl_tracker": []
-  },
-  "EFIH": {
+  "OLFI": {
     "cycle": 1,
     "position": 0.0,
     "avg_price": 0.0,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
-  "TMGH": {
+  "EMFD": {
     "cycle": 1,
     "position": 0.33,
-    "avg_price": 97.3,
-    "peak_profit": 2.672147995889012,
-    "realized_pnl_tracker": []
-  },
-  "SWDY": {
-    "cycle": 1,
-    "position": 0.0,
-    "avg_price": 0.0,
+    "avg_price": 11.74,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
-  "ABUK": {
+  "ETEL": {
     "cycle": 1,
     "position": 0.0,
     "avg_price": 0.0,
@@ -55,63 +27,28 @@
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
-  "JUFO": {
+  "EFIH": {
     "cycle": 1,
     "position": 0.0,
     "avg_price": 0.0,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
-  "GBCO": {
-    "cycle": 1,
-    "position": 0.33,
-    "avg_price": 29.66,
-    "peak_profit": 8.563722184760628,
-    "realized_pnl_tracker": []
-  },
-  "PHDC": {
+  "ABUK": {
     "cycle": 1,
     "position": 0.0,
     "avg_price": 0.0,
     "peak_profit": 0.0,
-    "realized_pnl_tracker": []
-  },
-  "AMOC": {
-    "cycle": 1,
-    "position": 0.0,
-    "avg_price": 0.0,
-    "peak_profit": 0.0,
-    "realized_pnl_tracker": []
-  },
-  "ETEL": {
-    "cycle": 1,
-    "position": 0.0,
-    "avg_price": 0.0,
-    "peak_profit": 0.0,
-    "realized_pnl_tracker": []
-  },
-  "ORWE": {
-    "cycle": 1,
-    "position": 0.0,
-    "avg_price": 0.0,
-    "peak_profit": 0.0,
-    "realized_pnl_tracker": []
-  },
-  "OLFI": {
-    "cycle": 2,
-    "position": 0.0,
-    "avg_price": 0.0,
-    "peak_profit": 0.0,
-    "realized_pnl_tracker": []
-  },
-  "EMFD": {
-    "cycle": 1,
-    "position": 0.33,
-    "avg_price": 11.81,
-    "peak_profit": 0.9314140558848385,
     "realized_pnl_tracker": []
   },
   "OIH": {
+    "cycle": 1,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0,
+    "realized_pnl_tracker": []
+  },
+  "SWDY": {
     "cycle": 1,
     "position": 0.0,
     "avg_price": 0.0,
@@ -133,6 +70,27 @@
     "realized_pnl_tracker": []
   },
   "MTIE": {
+    "cycle": 1,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0,
+    "realized_pnl_tracker": []
+  },
+  "HRHO": {
+    "cycle": 1,
+    "position": 0.33,
+    "avg_price": 26.66,
+    "peak_profit": 0.0,
+    "realized_pnl_tracker": []
+  },
+  "ORWE": {
+    "cycle": 1,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0,
+    "realized_pnl_tracker": []
+  },
+  "JUFO": {
     "cycle": 1,
     "position": 0.0,
     "avg_price": 0.0,
@@ -169,9 +127,9 @@
   },
   "RAYA": {
     "cycle": 1,
-    "position": .33,
-    "avg_price": 7.37,
-    "peak_profit": -1.76,
+    "position": 0.33,
+    "avg_price": 7.07,
+    "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
   "EEII": {
@@ -188,6 +146,20 @@
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
+  "GBCO": {
+    "cycle": 1,
+    "position": 0.33,
+    "avg_price": 31.5,
+    "peak_profit": 0.0,
+    "realized_pnl_tracker": []
+  },
+  "TMGH": {
+    "cycle": 1,
+    "position": 0.33,
+    "avg_price": 97.8,
+    "peak_profit": 0.0,
+    "realized_pnl_tracker": []
+  },
   "ORHD": {
     "cycle": 1,
     "position": 0.0,
@@ -195,7 +167,35 @@
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
+  "AMOC": {
+    "cycle": 1,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0,
+    "realized_pnl_tracker": []
+  },
+  "FWRY": {
+    "cycle": 1,
+    "position": 0.33,
+    "avg_price": 19.01,
+    "peak_profit": 0.0,
+    "realized_pnl_tracker": []
+  },
+  "COMI": {
+    "cycle": 1,
+    "position": 0.33,
+    "avg_price": 139.27,
+    "peak_profit": 0.0,
+    "realized_pnl_tracker": []
+  },
   "ADIB": {
+    "cycle": 1,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0,
+    "realized_pnl_tracker": []
+  },
+  "PHDC": {
     "cycle": 1,
     "position": 0.0,
     "avg_price": 0.0,
@@ -217,7 +217,7 @@
     "realized_pnl_tracker": []
   },
   "EGAL": {
-    "cycle": 2,
+    "cycle": 1,
     "position": 0.0,
     "avg_price": 0.0,
     "peak_profit": 0.0,
