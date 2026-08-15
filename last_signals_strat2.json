@@ -8,8 +8,8 @@
   },
   "EMFD": {
     "cycle": 1,
-    "position": 0.0,
-    "avg_price": 0.0,
+    "position": 0.33,
+    "avg_price": 11.74,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
@@ -78,8 +78,8 @@
   },
   "HRHO": {
     "cycle": 1,
-    "position": 0.0,
-    "avg_price": 0.0,
+    "position": 0.33,
+    "avg_price": 26.66,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
@@ -127,8 +127,8 @@
   },
   "RAYA": {
     "cycle": 1,
-    "position": 0.33,
-    "avg_price": 7.50,
+    "position": 0.66,
+    "avg_price": 7.285,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
@@ -148,15 +148,15 @@
   },
   "GBCO": {
     "cycle": 1,
-    "position": 0.0,
-    "avg_price": 0.0,
+    "position": 0.33,
+    "avg_price": 31.5,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
   "TMGH": {
     "cycle": 1,
-    "position": 0.0,
-    "avg_price": 0.0,
+    "position": 0.33,
+    "avg_price": 97.8,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
@@ -176,15 +176,15 @@
   },
   "FWRY": {
     "cycle": 1,
-    "position": 0.0,
-    "avg_price": 0.0,
+    "position": 0.33,
+    "avg_price": 19.01,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
   "COMI": {
     "cycle": 1,
-    "position": 0.0,
-    "avg_price": 0.0,
+    "position": 0.33,
+    "avg_price": 139.27,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },

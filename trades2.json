@@ -1,6 +1,20 @@
 {
   "OLFI": [],
-  "EMFD": [],
+  "EMFD": [
+    {
+      "symbol": "EMFD",
+      "cycle": 1,
+      "status": "OPEN",
+      "first_entry": "2026-08-13 with price 11.74",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 11.74,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
+    }
+  ],
   "ETEL": [],
   "EAST": [],
   "EFIH": [],
@@ -10,7 +24,21 @@
   "ISPH": [],
   "ATQA": [],
   "MTIE": [],
-  "HRHO": [],
+  "HRHO": [
+    {
+      "symbol": "HRHO",
+      "cycle": 1,
+      "status": "OPEN",
+      "first_entry": "2026-08-13 with price 26.66",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 26.66,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
+    }
+  ],
   "ORWE": [],
   "JUFO": [],
   "DSCW": [],
@@ -23,9 +51,9 @@
       "cycle": 1,
       "status": "OPEN",
       "first_entry": "2026-08-05 with price 7.50",
-      "second_entry": null,
+      "second_entry": "2026-08-13 with price 7.07",
       "third_entry": null,
-      "last_totally_average_price": 7.50,
+      "last_totally_average_price": 7.29,
       "exits": [],
       "exit_price": null,
       "exit_date": null,
@@ -34,12 +62,68 @@
   ],
   "EEII": [],
   "MPCO": [],
-  "GBCO": [],
-  "TMGH": [],
+  "GBCO": [
+    {
+      "symbol": "GBCO",
+      "cycle": 1,
+      "status": "OPEN",
+      "first_entry": "2026-08-13 with price 31.50",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 31.5,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
+    }
+  ],
+  "TMGH": [
+    {
+      "symbol": "TMGH",
+      "cycle": 1,
+      "status": "OPEN",
+      "first_entry": "2026-08-13 with price 97.80",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 97.8,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
+    }
+  ],
   "ORHD": [],
   "AMOC": [],
-  "FWRY": [],
-  "COMI": [],
+  "FWRY": [
+    {
+      "symbol": "FWRY",
+      "cycle": 1,
+      "status": "OPEN",
+      "first_entry": "2026-08-13 with price 19.01",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 19.01,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
+    }
+  ],
+  "COMI": [
+    {
+      "symbol": "COMI",
+      "cycle": 1,
+      "status": "OPEN",
+      "first_entry": "2026-08-13 with price 139.27",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 139.27,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
+    }
+  ],
   "ADIB": [],
   "PHDC": [],
   "MCQE": [],
