@@ -1,0 +1,33 @@
+name: Multi Trend Backtest
+
+on:
+  workflow_dispatch:
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install pandas numpy
+
+      - name: Run Backtest
+        run: |
+          python backtest_multi_trend.py
+
+      - name: Upload Backtest Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: multi-trend-backtest-results
+          path: |
+            backtest_results.json
+            backtest_trades.json
