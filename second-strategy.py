@@ -178,10 +178,14 @@ for name, ticker in symbols.items():
     safe_to_buy = run_up_percent <= 60.0
 
     # فلتر فجوة هبوط بين إغلاق أمس وفتح اليوم
-    yesterday_close = float(df["Close"].iloc[-2])
-    today_open = float(df["Open"].iloc[-1])
-    gap_percent = ((today_open - yesterday_close) / yesterday_close) * 100
-    no_gap_down = gap_percent > -3.0
+    # فلتر فجوة الهبوط: فحص آخر 3 جلسات متتالية (اليوم، أمس، وقبل أمس)
+    gap1 = ((df["Open"].iloc[-1] - df["Close"].iloc[-2]) / df["Close"].iloc[-2]) * 100
+    gap2 = ((df["Open"].iloc[-2] - df["Close"].iloc[-3]) / df["Close"].iloc[-3]) * 100
+    gap3 = ((df["Open"].iloc[-3] - df["Close"].iloc[-4]) / df["Close"].iloc[-4]) * 100
+
+    # يمر الفلتر فقط إذا لم توجد أي فجوة هبوط (-3% أو أكثر) في آخر 3 أيام
+    no_gap_down = (gap1 > -3.0) and (gap2 > -3.0) and (gap3 > -3.0)
+
     
     ema_up = (
         df["EMA75"].iloc[-1] > df["EMA75"].iloc[-5]
@@ -190,7 +194,7 @@ for name, ticker in symbols.items():
         and price <= df["EMA75"].iloc[-1] * 1.08
     )
     
-    buy1 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 60
+    buy1 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 58
     buy2 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 50
     buy3 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 42
 
@@ -236,7 +240,7 @@ for name, ticker in symbols.items():
         }
         trades_history[name].append(new_trade)
 
-    elif 0.32 < s["position"] < 0.5 and buy2 and price < s["avg_price"] * 0.98:
+    elif 0.32 < s["position"] < 0.5 and buy2 and price < s["avg_price"] * 0.97:
         old_pos = s["position"]
         s["position"] = 0.66
         s["avg_price"] = update_avg(s["avg_price"], old_pos, price, s["position"])
@@ -249,7 +253,7 @@ for name, ticker in symbols.items():
             active_trade["second_entry"] = f"{current_date} with price {price:.2f}"
             active_trade["last_totally_average_price"] = round(s["avg_price"], 2)
 
-    elif 0.65 < s["position"] < 1 and buy3 and price < s["avg_price"] * 0.97:
+    elif 0.65 < s["position"] < 1 and buy3 and price < s["avg_price"] * 0.96:
         old_pos = s["position"]
         s["position"] = 1.0
         s["avg_price"] = update_avg(s["avg_price"], old_pos, price, s["position"])
