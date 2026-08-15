@@ -797,7 +797,185 @@ with open(
         ensure_ascii=False
     )
 
+# ============================================================
+# Per Stock Summary
+# ============================================================
 
+stock_summary = {}
+
+for trade in trades:
+
+    symbol = trade["symbol"]
+    profit = trade["profit_pct"]
+
+    if symbol not in stock_summary:
+        stock_summary[symbol] = {
+            "symbol": symbol,
+            "total_trades": 0,
+            "winning_trades": 0,
+            "losing_trades": 0,
+            "win_rate_percent": 0,
+            "total_profit_percent": 0,
+            "average_profit_percent": 0,
+            "average_loss_percent": 0,
+            "best_trade_percent": None,
+            "worst_trade_percent": None
+        }
+
+    stock_summary[symbol]["total_trades"] += 1
+
+    stock_summary[symbol]["total_profit_percent"] += profit
+
+    if profit > 0:
+        stock_summary[symbol]["winning_trades"] += 1
+    else:
+        stock_summary[symbol]["losing_trades"] += 1
+
+
+# ============================================================
+# Calculate Stock Statistics
+# ============================================================
+
+for symbol, summary in stock_summary.items():
+
+    total = summary["total_trades"]
+    wins = summary["winning_trades"]
+    losses = summary["losing_trades"]
+
+    symbol_trades = [
+        t for t in trades
+        if t["symbol"] == symbol
+    ]
+
+    winning_profits = [
+        t["profit_pct"]
+        for t in symbol_trades
+        if t["profit_pct"] > 0
+    ]
+
+    losing_profits = [
+        t["profit_pct"]
+        for t in symbol_trades
+        if t["profit_pct"] <= 0
+    ]
+
+    summary["win_rate_percent"] = round(
+        (wins / total) * 100
+        if total > 0
+        else 0,
+        2
+    )
+
+    summary["total_profit_percent"] = round(
+        summary["total_profit_percent"],
+        2
+    )
+
+    summary["average_profit_percent"] = round(
+        float(np.mean(winning_profits))
+        if winning_profits
+        else 0,
+        2
+    )
+
+    summary["average_loss_percent"] = round(
+        float(np.mean(losing_profits))
+        if losing_profits
+        else 0,
+        2
+    )
+
+    if symbol_trades:
+
+        summary["best_trade_percent"] = round(
+            max(
+                t["profit_pct"]
+                for t in symbol_trades
+            ),
+            2
+        )
+
+        summary["worst_trade_percent"] = round(
+            min(
+                t["profit_pct"]
+                for t in symbol_trades
+            ),
+            2
+        )
+
+
+# ============================================================
+# Sort Stocks By Total Profit
+# ============================================================
+
+stock_summary_list = list(
+    stock_summary.values()
+)
+
+stock_summary_list.sort(
+    key=lambda x: x["total_profit_percent"],
+    reverse=True
+)
+
+
+# ============================================================
+# Save Per Stock Summary
+# ============================================================
+
+STOCK_SUMMARY_FILE = "backtest_summary_by_stock.json"
+
+with open(
+    STOCK_SUMMARY_FILE,
+    "w",
+    encoding="utf-8"
+) as f:
+
+    json.dump(
+        stock_summary_list,
+        f,
+        indent=2,
+        ensure_ascii=False
+    )
+
+
+print(
+    f"📊 Stock summary saved to: "
+    f"{STOCK_SUMMARY_FILE}"
+)
+
+
+# ============================================================
+# Print Top / Worst Stocks
+# ============================================================
+
+print()
+print("=" * 60)
+print("🏆 TOP 10 STOCKS")
+print("=" * 60)
+
+for stock in stock_summary_list[:10]:
+
+    print(
+        f"{stock['symbol']} | "
+        f"Trades: {stock['total_trades']} | "
+        f"Win Rate: {stock['win_rate_percent']:.2f}% | "
+        f"Result: {stock['total_profit_percent']:.2f}%"
+    )
+
+
+print()
+print("=" * 60)
+print("💥 WORST 10 STOCKS")
+print("=" * 60)
+
+for stock in stock_summary_list[-10:]:
+
+    print(
+        f"{stock['symbol']} | "
+        f"Trades: {stock['total_trades']} | "
+        f"Win Rate: {stock['win_rate_percent']:.2f}% | "
+        f"Result: {stock['total_profit_percent']:.2f}%"
+    )
 # ============================================================
 # Console Report
 # ============================================================
