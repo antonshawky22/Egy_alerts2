@@ -208,5 +208,17 @@
     "entry_trend": "↗️",
     "entry_price": 49.25,
     "entry_date": "2026-08-12"
+  },
+  {
+    "symbol": "EAST",
+    "entry_trend": "🔛",
+    "entry_price": 36.26,
+    "entry_date": "2026-08-13"
+  },
+  {
+    "symbol": "RAYA",
+    "entry_trend": "🔛",
+    "entry_price": 7.07,
+    "entry_date": "2026-08-13"
   }
 ]

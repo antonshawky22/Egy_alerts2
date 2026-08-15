@@ -20,9 +20,9 @@
     "entry_price": 99.0
   },
   "EAST": {
-    "trend": "🔻",
-    "in_position": false,
-    "entry_price": null
+    "trend": "🔛",
+    "in_position": true,
+    "entry_price": 36.26
   },
   "EFIH": {
     "trend": "↗️",
@@ -100,9 +100,9 @@
     "entry_price": null
   },
   "RAYA": {
-    "trend": "🔻",
-    "in_position": false,
-    "entry_price": null
+    "trend": "🔛",
+    "in_position": true,
+    "entry_price": 7.07
   },
   "EEII": {
     "trend": "↗️",
@@ -160,7 +160,7 @@
     "entry_price": null
   },
   "SKPC": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": false,
     "entry_price": null
   },
