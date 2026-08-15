@@ -8,8 +8,8 @@
   },
   "HRHO": {
     "cycle": 1,
-    "position": 0.33,
-    "avg_price": 27.23,
+    "position": 0.66,
+    "avg_price": 26.945000000000004,
     "peak_profit": 0.9548292324641865,
     "realized_pnl_tracker": []
   },
@@ -169,8 +169,8 @@
   },
   "RAYA": {
     "cycle": 1,
-    "position": 0.66,
-    "avg_price": 7.37,
+    "position": 1.0,
+    "avg_price": 7.268000000000001,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
