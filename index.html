@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome TONY update Prices and Results startgy</title>
-    <!-- Chart.js للمخططات البيانية -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
@@ -36,7 +35,6 @@
             font-size: 1.8rem;
         }
 
-        /* نظام التبويب (Tabs) */
         .tabs {
             display: flex;
             justify-content: center;
@@ -61,7 +59,6 @@
             border-color: var(--accent-blue);
         }
 
-        /* كروت الأرقام الإحصائية */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -111,7 +108,6 @@
             color: #cbd5e1;
         }
 
-        /* حقل البحث */
         .search-input {
             background-color: #0f172a;
             border: 1px solid var(--border-color);
@@ -122,7 +118,6 @@
             font-size: 0.9rem;
         }
 
-        /* الجداول */
         .table-responsive {
             overflow-x: auto;
             max-height: 500px;
@@ -154,7 +149,6 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* الشارات (Badges) */
         .badge {
             padding: 3px 8px;
             border-radius: 4px;
@@ -171,15 +165,14 @@
 <div class="container">
     <h1>📈 Welcome TONY update Prices and Results startgy</h1>
 
-    <!-- أزرار التبديل -->
     <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('combined', this)">General Vision </button>
+        <button class="tab-btn active" onclick="switchTab('combined', this)">General Vision</button>
         <button class="tab-btn" onclick="switchTab('market-prices', this)">📊 أسعار إغلاق اليوم (الكل)</button>
         <button class="tab-btn" onclick="switchTab('strat1', this)">multi trend strategy (trades)</button>
         <button class="tab-btn" onclick="switchTab('strat2', this)">ladder strategy(trades2)</button>
     </div>
 
-    <!-- 1. الشاشة الشاملة -->
+    <!-- الشاشة الشاملة -->
     <div id="combined" class="tab-content active">
         <div class="stats-grid">
             <div class="card">
@@ -191,8 +184,8 @@
                 <div class="value" id="c-win-rate">-</div>
             </div>
             <div class="card">
-                <h3>الأرباح المحققة التراكمية</h3>
-                <div class="value" id="c-realized-pnl">-</div>
+                <h3>متوسط ربح الصفقة المنتهية</h3>
+                <div class="value" id="c-avg-pnl">-</div>
             </div>
             <div class="card">
                 <h3>الصفقات المفتوحة حالياً</h3>
@@ -201,11 +194,10 @@
         </div>
 
         <div class="box">
-            <h2>📊 مقارنة الأداء التراكمي (%)</h2>
+            <h2>📊 تراكم أرباح الصفقات المنتهية (%)</h2>
             <canvas id="combinedChart"></canvas>
         </div>
 
-        <!-- الصفقات المفتوحة والربح الحي -->
         <div class="box">
             <h2>⚡ الصفقات المفتوحة حالياً + الربح العائم (Live P&L)</h2>
             <div class="table-responsive">
@@ -226,7 +218,6 @@
             </div>
         </div>
 
-        <!-- سجل كل الصفقات المجمعة -->
         <div class="box">
             <div class="box-header">
                 <h2>📋 سجل كافة الصفقات (المفتوحة والمغلقة)</h2>
@@ -252,7 +243,7 @@
         </div>
     </div>
 
-    <!-- 2. تبويب أسعار إغلاق كل الأسهم -->
+    <!-- أسعار إغلاق كل الأسهم -->
     <div id="market-prices" class="tab-content">
         <div class="box">
             <div class="box-header">
@@ -280,7 +271,7 @@
         </div>
     </div>
 
-    <!-- 3. استراتيجية trades -->
+    <!-- استراتيجية trades -->
     <div id="strat1" class="tab-content">
         <div class="stats-grid">
             <div class="card">
@@ -292,8 +283,8 @@
                 <div class="value" id="s1-winrate">-</div>
             </div>
             <div class="card">
-                <h3>إجمالي العائد المحقق</h3>
-                <div class="value" id="s1-pnl">-</div>
+                <h3>متوسط ربح الصفقة المنتهية</h3>
+                <div class="value" id="s1-avg-pnl">-</div>
             </div>
         </div>
         <div class="box">
@@ -319,7 +310,7 @@
         </div>
     </div>
 
-    <!-- 4. استراتيجية trades2 -->
+    <!-- استراتيجية trades2 -->
     <div id="strat2" class="tab-content">
         <div class="stats-grid">
             <div class="card">
@@ -331,8 +322,8 @@
                 <div class="value" id="s2-winrate">-</div>
             </div>
             <div class="card">
-                <h3>إجمالي العائد المحقق</h3>
-                <div class="value" id="s2-pnl">-</div>
+                <h3>متوسط ربح الصفقة المنتهية</h3>
+                <div class="value" id="s2-avg-pnl">-</div>
             </div>
         </div>
         <div class="box">
@@ -471,20 +462,26 @@
     }
 
     function processDashboardData() {
-        // --- 1. معالجة trades (multi trend strategy) ---
-        let s1Closed = trades1Data.filter(t => t.hasOwnProperty('exit_price') || t.hasOwnProperty('profit_pct'));
-        let s1Open = trades1Data.filter(t => !t.hasOwnProperty('exit_price') && !t.hasOwnProperty('profit_pct'));
+        // --- 1. استخراج الصفقات المنتهية والمفتوحة من trades1 ---
+        let s1Closed = trades1Data.filter(t => t.profit_pct !== undefined && t.profit_pct !== null);
+        let s1Open = trades1Data.filter(t => t.profit_pct === undefined || t.profit_pct === null);
         
-        let s1WinRate = s1Closed.length > 0 ? (s1Closed.filter(t => t.profit_pct > 0).length / s1Closed.length * 100).toFixed(1) : 0;
-        let s1TotalPnL = s1Closed.reduce((acc, t) => acc + (Number(t.profit_pct) || 0), 0);
+        let s1WinRate = s1Closed.length > 0 ? (s1Closed.filter(t => Number(t.profit_pct) > 0).length / s1Closed.length * 100).toFixed(1) : 0;
+        
+        // حساب متوسط الربح للاستراتيجية الأولى
+        let s1SumPnL = s1Closed.reduce((acc, t) => acc + Number(t.profit_pct), 0);
+        let s1AvgPnL = s1Closed.length > 0 ? (s1SumPnL / s1Closed.length) : 0;
 
         document.getElementById('s1-count').innerText = trades1Data.length;
         document.getElementById('s1-winrate').innerText = `${s1WinRate}%`;
-        document.getElementById('s1-pnl').innerText = `${s1TotalPnL >= 0 ? '+' : ''}${s1TotalPnL.toFixed(2)}%`;
+        
+        const s1AvgEl = document.getElementById('s1-avg-pnl');
+        s1AvgEl.innerText = `${s1AvgPnL >= 0 ? '+' : ''}${s1AvgPnL.toFixed(2)}%`;
+        s1AvgEl.className = `value ${s1AvgPnL >= 0 ? 'positive' : 'negative'}`;
 
         document.getElementById('s1-trades-table').innerHTML = trades1Data.map(t => {
-            const isClosed = t.hasOwnProperty('exit_price') || t.hasOwnProperty('profit_pct');
-            const pnlClass = isClosed ? ((t.profit_pct || 0) >= 0 ? 'positive' : 'negative') : '';
+            const isClosed = t.profit_pct !== undefined && t.profit_pct !== null;
+            const pnlClass = isClosed ? (t.profit_pct >= 0 ? 'positive' : 'negative') : '';
             return `
                 <tr class="search-row">
                     <td><strong>${t.symbol}</strong></td>
@@ -496,7 +493,7 @@
             `;
         }).join('') || '<tr><td colspan="5" style="text-align:center;">لا توجد صفقات</td></tr>';
 
-        // --- 2. معالجة trades2 (ladder strategy) بدون تكرار ---
+        // --- 2. استخراج الصفقات المنتهية والمفتوحة من trades2 ---
         let s2All = [];
         let s2Closed = [];
         let s2Open = [];
@@ -506,30 +503,36 @@
             if (Array.isArray(list)) {
                 list.forEach(t => {
                     s2All.push(t);
-                    if (t.status === 'CLOSED' && t.profit_pct !== null && t.profit_pct !== undefined) {
+                    if (t.profit_pct !== undefined && t.profit_pct !== null) {
                         s2Closed.push(t);
-                    } else if (t.status !== 'CLOSED') {
+                    } else {
                         s2Open.push(t);
                     }
                 });
             }
         });
 
-        let s2WinRate = s2Closed.length > 0 ? (s2Closed.filter(t => t.profit_pct > 0).length / s2Closed.length * 100).toFixed(1) : 0;
-        let s2TotalPnL = s2Closed.reduce((acc, t) => acc + (Number(t.profit_pct) || 0), 0);
+        let s2WinRate = s2Closed.length > 0 ? (s2Closed.filter(t => Number(t.profit_pct) > 0).length / s2Closed.length * 100).toFixed(1) : 0;
+        
+        // حساب متوسط الربح للاستراتيجية الثانية
+        let s2SumPnL = s2Closed.reduce((acc, t) => acc + Number(t.profit_pct), 0);
+        let s2AvgPnL = s2Closed.length > 0 ? (s2SumPnL / s2Closed.length) : 0;
 
         document.getElementById('s2-count').innerText = s2All.length;
         document.getElementById('s2-winrate').innerText = `${s2WinRate}%`;
-        document.getElementById('s2-pnl').innerText = `${s2TotalPnL >= 0 ? '+' : ''}${s2TotalPnL.toFixed(2)}%`;
+        
+        const s2AvgEl = document.getElementById('s2-avg-pnl');
+        s2AvgEl.innerText = `${s2AvgPnL >= 0 ? '+' : ''}${s2AvgPnL.toFixed(2)}%`;
+        s2AvgEl.className = `value ${s2AvgPnL >= 0 ? 'positive' : 'negative'}`;
 
         document.getElementById('s2-trades-table').innerHTML = s2All.map(t => {
-            const isClosed = t.status === 'CLOSED' && t.profit_pct !== null && t.profit_pct !== undefined;
+            const isClosed = t.profit_pct !== undefined && t.profit_pct !== null;
             const pnlClass = isClosed ? (t.profit_pct >= 0 ? 'positive' : 'negative') : '';
             return `
                 <tr class="search-row">
                     <td><strong>${t.symbol}</strong></td>
                     <td>#${t.cycle || 1}</td>
-                    <td><span class="badge ${isClosed ? 'badge-closed' : 'badge-open'}">${t.status}</span></td>
+                    <td><span class="badge ${isClosed ? 'badge-closed' : 'badge-open'}">${t.status || (isClosed ? 'CLOSED' : 'OPEN')}</span></td>
                     <td>${t.first_entry || '-'} (متوسط: ${t.last_totally_average_price || '-'})</td>
                     <td>${isClosed ? `${t.exit_date || '-'} (${t.exit_price || '-'} EGP)` : '-'}</td>
                     <td class="${pnlClass}"><strong>${isClosed ? (t.profit_pct >= 0 ? '+' : '') + t.profit_pct + '%' : 'مفتوحة ⚡'}</strong></td>
@@ -537,20 +540,23 @@
             `;
         }).join('') || '<tr><td colspan="6" style="text-align:center;">لا توجد صفقات</td></tr>';
 
-        // --- 3. الشاشة الشاملة الدقيقة ---
+        // --- 3. الحساب الشامل والدقيق لكل الصفقات المنتهية ---
         const totalTrades = trades1Data.length + s2All.length;
         const totalClosed = s1Closed.length + s2Closed.length;
-        const totalWins = s1Closed.filter(t => t.profit_pct > 0).length + s2Closed.filter(t => t.profit_pct > 0).length;
+        const totalWins = s1Closed.filter(t => Number(t.profit_pct) > 0).length + s2Closed.filter(t => Number(t.profit_pct) > 0).length;
+        
         const combinedWinRate = totalClosed > 0 ? ((totalWins / totalClosed) * 100).toFixed(1) : 0;
         
-        const combinedPnL = s1TotalPnL + s2TotalPnL;
+        // الجمع الكلي وقسمته مباشرة على عدد الصفقات المنتهية للحصول على المتوسط
+        const totalClosedPnLSum = s1SumPnL + s2SumPnL;
+        const combinedAvgPnL = totalClosed > 0 ? (totalClosedPnLSum / totalClosed) : 0;
 
         document.getElementById('c-total-trades').innerText = totalTrades;
         document.getElementById('c-win-rate').innerText = `${combinedWinRate}%`;
         
-        const combinedPnlEl = document.getElementById('c-realized-pnl');
-        combinedPnlEl.innerText = `${combinedPnL >= 0 ? '+' : ''}${combinedPnL.toFixed(2)}%`;
-        combinedPnlEl.className = `value ${combinedPnL >= 0 ? 'positive' : 'negative'}`;
+        const combinedAvgEl = document.getElementById('c-avg-pnl');
+        combinedAvgEl.innerText = `${combinedAvgPnL >= 0 ? '+' : ''}${combinedAvgPnL.toFixed(2)}%`;
+        combinedAvgEl.className = `value ${combinedAvgPnL >= 0 ? 'positive' : 'negative'}`;
 
         document.getElementById('c-open-count').innerText = s1Open.length + s2Open.length;
 
@@ -609,8 +615,8 @@
         let allHTML = '';
 
         trades1Data.forEach(t => {
-            const isClosed = t.hasOwnProperty('exit_price') || t.hasOwnProperty('profit_pct');
-            const pnlClass = isClosed ? ((t.profit_pct || 0) >= 0 ? 'positive' : 'negative') : '';
+            const isClosed = t.profit_pct !== undefined && t.profit_pct !== null;
+            const pnlClass = isClosed ? (t.profit_pct >= 0 ? 'positive' : 'negative') : '';
             allHTML += `
                 <tr class="search-row">
                     <td><small>multi trend (trades)</small></td>
@@ -624,13 +630,13 @@
         });
 
         s2All.forEach(t => {
-            const isClosed = t.status === 'CLOSED' && t.profit_pct !== null && t.profit_pct !== undefined;
+            const isClosed = t.profit_pct !== undefined && t.profit_pct !== null;
             const pnlClass = isClosed ? (t.profit_pct >= 0 ? 'positive' : 'negative') : '';
             allHTML += `
                 <tr class="search-row">
                     <td><small>ladder strategy (trades2)</small></td>
                     <td><strong>${t.symbol}</strong></td>
-                    <td><span class="badge ${isClosed ? 'badge-closed' : 'badge-open'}">${t.status || 'OPEN'}</span></td>
+                    <td><span class="badge ${isClosed ? 'badge-closed' : 'badge-open'}">${t.status || (isClosed ? 'CLOSED' : 'OPEN')}</span></td>
                     <td>${t.first_entry || '-'}</td>
                     <td>${isClosed ? `${t.exit_date || '-'} (${t.exit_price || '-'} EGP)` : '-'}</td>
                     <td class="${pnlClass}"><strong>${isClosed ? (t.profit_pct >= 0 ? '+' : '') + t.profit_pct + '%' : 'مفتوحة ⚡'}</strong></td>
@@ -650,7 +656,7 @@
             type: 'line',
             data: {
                 labels: s1Closed.map(t => `${t.symbol} (${t.exit_date})`),
-                datasets: [{ label: 'الأرباح التراكمية (%)', data: c1Data, borderColor: '#3b82f6', fill: false }]
+                datasets: [{ label: 'تراكم ربح الصفقات (%)', data: c1Data, borderColor: '#3b82f6', fill: false }]
             }
         });
 
@@ -660,7 +666,7 @@
             type: 'line',
             data: {
                 labels: s2Closed.map(t => `${t.symbol} (${t.exit_date})`),
-                datasets: [{ label: 'الأرباح التراكمية (%)', data: c2Data, borderColor: '#22c55e', fill: false }]
+                datasets: [{ label: 'تراكم ربح الصفقات (%)', data: c2Data, borderColor: '#22c55e', fill: false }]
             }
         });
 
@@ -689,4 +695,3 @@
 
 </body>
 </html>
-
