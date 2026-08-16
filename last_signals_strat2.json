@@ -80,7 +80,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 26.66,
-    "peak_profit": 0.0,
+    "peak_profit": 0.3000750187546823,
     "realized_pnl_tracker": []
   },
   "ORWE": {
@@ -178,7 +178,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 19.01,
-    "peak_profit": 0.0,
+    "peak_profit": 1.9463440294581664,
     "realized_pnl_tracker": []
   },
   "COMI": {
