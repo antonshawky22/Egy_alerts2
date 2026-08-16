@@ -425,17 +425,19 @@ for current_date in all_dates:
         # ====================================================
 
         if trend == "↗️":
-
-            if (
-                not in_position
-                and
-                row["RSI14"] < 68
-                and
-                close >= row["EMA30"]
-                and
-                close > df.iloc[current_index - 1]["Close"]
+           if (
+              not in_position
+              and
+              row["RSI14"] < 65
+              and
+              close > row["EMA30"]
+              and
+              row["EMA12"] > row["EMA20"]
+              and
+              row["EMA20"] > row["EMA40"]
+              and
+              close > df.iloc[current_index - 1]["Close"]
             ):
-
                 buy_signal = True
 
             elif in_position:
