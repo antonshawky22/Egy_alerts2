@@ -148,8 +148,8 @@
   },
   "GBCO": {
     "cycle": 1,
-    "position": 0.33,
-    "avg_price": 31.5,
+    "position": 0.66,
+    "avg_price": 30.83,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
@@ -157,7 +157,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 97.8,
-    "peak_profit": 0.0,
+    "peak_profit": 0.0920245398773041,
     "realized_pnl_tracker": []
   },
   "ORHD": {
@@ -185,7 +185,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 139.27,
-    "peak_profit": 0.0,
+    "peak_profit": 0.30875278236517434,
     "realized_pnl_tracker": []
   },
   "ADIB": {
@@ -197,8 +197,8 @@
   },
   "PHDC": {
     "cycle": 1,
-    "position": 0.0,
-    "avg_price": 0.0,
+    "position": 0.33,
+    "avg_price": 15.27,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },

@@ -68,9 +68,9 @@
       "cycle": 1,
       "status": "OPEN",
       "first_entry": "2026-08-13 with price 31.50",
-      "second_entry": null,
+      "second_entry": "2026-08-16 with price 30.16",
       "third_entry": null,
-      "last_totally_average_price": 31.5,
+      "last_totally_average_price": 30.83,
       "exits": [],
       "exit_price": null,
       "exit_date": null,
@@ -125,7 +125,21 @@
     }
   ],
   "ADIB": [],
-  "PHDC": [],
+  "PHDC": [
+    {
+      "symbol": "PHDC",
+      "cycle": 1,
+      "status": "OPEN",
+      "first_entry": "2026-08-16 with price 15.27",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 15.27,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
+    }
+  ],
   "MCQE": [],
   "SKPC": [],
   "EGAL": []
