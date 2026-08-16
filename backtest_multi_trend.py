@@ -474,14 +474,14 @@ for current_date in all_dates:
 
         elif trend == "🔛":
 
-            last_40 = df.iloc[
-                current_index - 39:
+            last_60 = df.iloc[
+                current_index - 59:
                 current_index + 1
             ]
 
-            high = last_40["High"].max()
+            high = last_60["High"].max()
 
-            low = last_40["Low"].min()
+            low = last_60["Low"].min()
 
             if high == 0 or low == 0:
                 continue
@@ -500,7 +500,7 @@ for current_date in all_dates:
                 (
                     from_low <= SIDE_CLOSE_PERCENT
                     or
-                    row["RSI14"] < 38
+                    row["RSI14"] < 25
                 )
             ):
 
