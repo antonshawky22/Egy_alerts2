@@ -1,1 +1,166 @@
-
+{
+  "backtest_period": {
+    "start": "2025-11-30",
+    "end": "2026-08-16"
+  },
+  "statistics": {
+    "total_trades": 120,
+    "winning_trades": 48,
+    "losing_trades": 72,
+    "win_rate_percent": 40.0,
+    "total_profit_percent": 72.08,
+    "average_winning_trade_percent": 7.52,
+    "average_losing_trade_percent": -4.01,
+    "maximum_drawdown_percent": 142.02
+  },
+  "best_trade": {
+    "symbol": "RAYA",
+    "entry_date": "2026-04-08",
+    "exit_date": "2026-06-10",
+    "entry_price": 5.32,
+    "exit_price": 6.94,
+    "entry_trend": "↗️",
+    "exit_trend": "🔻",
+    "profit_pct": 30.45,
+    "exit_reason": "DOWN_TREND"
+  },
+  "worst_trade": {
+    "symbol": "TMGH",
+    "entry_date": "2026-02-12",
+    "exit_date": "2026-03-03",
+    "entry_price": 88.87,
+    "exit_price": 78.0,
+    "entry_trend": "↗️",
+    "exit_trend": "🔛",
+    "profit_pct": -12.23,
+    "exit_reason": "STOP_LOSS"
+  },
+  "open_positions": [
+    {
+      "symbol": "OLFI",
+      "entry_date": "2026-07-06",
+      "entry_price": 22.7,
+      "last_date": "2026-08-16",
+      "last_price": 25.2
+    },
+    {
+      "symbol": "EMFD",
+      "entry_date": "2026-08-02",
+      "entry_price": 11.4,
+      "last_date": "2026-08-16",
+      "last_price": 11.66
+    },
+    {
+      "symbol": "ETEL",
+      "entry_date": "2026-07-09",
+      "entry_price": 97.85,
+      "last_date": "2026-08-16",
+      "last_price": 118.1
+    },
+    {
+      "symbol": "EAST",
+      "entry_date": "2026-08-13",
+      "entry_price": 36.26,
+      "last_date": "2026-08-16",
+      "last_price": 36.69
+    },
+    {
+      "symbol": "EFIH",
+      "entry_date": "2026-07-12",
+      "entry_price": 22.3,
+      "last_date": "2026-08-16",
+      "last_price": 24.95
+    },
+    {
+      "symbol": "ATQA",
+      "entry_date": "2026-08-02",
+      "entry_price": 9.89,
+      "last_date": "2026-08-16",
+      "last_price": 11.0
+    },
+    {
+      "symbol": "HRHO",
+      "entry_date": "2026-07-12",
+      "entry_price": 26.52,
+      "last_date": "2026-08-16",
+      "last_price": 26.31
+    },
+    {
+      "symbol": "SUGR",
+      "entry_date": "2026-07-30",
+      "entry_price": 46.55,
+      "last_date": "2026-08-16",
+      "last_price": 50.7
+    },
+    {
+      "symbol": "ELSH",
+      "entry_date": "2026-07-20",
+      "entry_price": 14.3,
+      "last_date": "2026-08-16",
+      "last_price": 13.87
+    },
+    {
+      "symbol": "RAYA",
+      "entry_date": "2026-08-13",
+      "entry_price": 7.07,
+      "last_date": "2026-08-16",
+      "last_price": 7.23
+    },
+    {
+      "symbol": "EEII",
+      "entry_date": "2026-07-15",
+      "entry_price": 2.74,
+      "last_date": "2026-08-16",
+      "last_price": 3.08
+    },
+    {
+      "symbol": "MPCO",
+      "entry_date": "2026-07-09",
+      "entry_price": 1.91,
+      "last_date": "2026-08-16",
+      "last_price": 2.18
+    },
+    {
+      "symbol": "GBCO",
+      "entry_date": "2026-07-06",
+      "entry_price": 31.23,
+      "last_date": "2026-08-16",
+      "last_price": 30.7
+    },
+    {
+      "symbol": "ORHD",
+      "entry_date": "2026-07-06",
+      "entry_price": 38.65,
+      "last_date": "2026-08-16",
+      "last_price": 42.31
+    },
+    {
+      "symbol": "COMI",
+      "entry_date": "2026-07-16",
+      "entry_price": 135.8,
+      "last_date": "2026-08-16",
+      "last_price": 139.96
+    },
+    {
+      "symbol": "ADIB",
+      "entry_date": "2026-07-06",
+      "entry_price": 47.01,
+      "last_date": "2026-08-16",
+      "last_price": 55.19
+    },
+    {
+      "symbol": "PHDC",
+      "entry_date": "2026-07-28",
+      "entry_price": 14.6,
+      "last_date": "2026-08-16",
+      "last_price": 15.27
+    },
+    {
+      "symbol": "SKPC",
+      "entry_date": "2026-08-16",
+      "entry_price": 16.98,
+      "last_date": "2026-08-16",
+      "last_price": 16.98
+    }
+  ]
+}
