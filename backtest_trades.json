@@ -1,0 +1,134 @@
+[
+  {
+    "symbol": "ATQA",
+    "entry_date": "2026-02-24",
+    "exit_date": "2026-02-26",
+    "entry_price": 8.99,
+    "exit_price": 8.6,
+    "entry_trend": "🔛",
+    "exit_trend": "🔻",
+    "profit_pct": -4.34,
+    "exit_reason": "DOWN_TREND"
+  },
+  {
+    "symbol": "DSCW",
+    "entry_date": "2026-02-25",
+    "exit_date": "2026-03-01",
+    "entry_price": 1.62,
+    "exit_price": 1.58,
+    "entry_trend": "🔛",
+    "exit_trend": "🔻",
+    "profit_pct": -2.47,
+    "exit_reason": "DOWN_TREND"
+  },
+  {
+    "symbol": "EMFD",
+    "entry_date": "2026-02-25",
+    "exit_date": "2026-03-05",
+    "entry_price": 9.08,
+    "exit_price": 9.27,
+    "entry_trend": "🔛",
+    "exit_trend": "🔻",
+    "profit_pct": 2.09,
+    "exit_reason": "DOWN_TREND"
+  },
+  {
+    "symbol": "ORWE",
+    "entry_date": "2026-05-20",
+    "exit_date": "2026-06-10",
+    "entry_price": 21.62,
+    "exit_price": 23.16,
+    "entry_trend": "🔛",
+    "exit_trend": "🔻",
+    "profit_pct": 7.12,
+    "exit_reason": "DOWN_TREND"
+  },
+  {
+    "symbol": "SKPC",
+    "entry_date": "2026-06-04",
+    "exit_date": "2026-06-10",
+    "entry_price": 17.05,
+    "exit_price": 16.9,
+    "entry_trend": "🔛",
+    "exit_trend": "🔻",
+    "profit_pct": -0.88,
+    "exit_reason": "DOWN_TREND"
+  },
+  {
+    "symbol": "AMOC",
+    "entry_date": "2026-06-15",
+    "exit_date": "2026-06-16",
+    "entry_price": 7.81,
+    "exit_price": 7.85,
+    "entry_trend": "🔛",
+    "exit_trend": "🔻",
+    "profit_pct": 0.51,
+    "exit_reason": "DOWN_TREND"
+  },
+  {
+    "symbol": "SKPC",
+    "entry_date": "2026-06-15",
+    "exit_date": "2026-06-16",
+    "entry_price": 16.37,
+    "exit_price": 16.25,
+    "entry_trend": "🔛",
+    "exit_trend": "🔻",
+    "profit_pct": -0.73,
+    "exit_reason": "DOWN_TREND"
+  },
+  {
+    "symbol": "AMOC",
+    "entry_date": "2026-06-17",
+    "exit_date": "2026-06-18",
+    "entry_price": 7.85,
+    "exit_price": 7.85,
+    "entry_trend": "🔛",
+    "exit_trend": "🔻",
+    "profit_pct": 0.0,
+    "exit_reason": "DOWN_TREND"
+  },
+  {
+    "symbol": "EAST",
+    "entry_date": "2026-07-06",
+    "exit_date": "2026-07-07",
+    "entry_price": 37.5,
+    "exit_price": 37.7,
+    "entry_trend": "🔛",
+    "exit_trend": "🔻",
+    "profit_pct": 0.53,
+    "exit_reason": "DOWN_TREND"
+  },
+  {
+    "symbol": "ISPH",
+    "entry_date": "2026-07-30",
+    "exit_date": "2026-08-03",
+    "entry_price": 11.37,
+    "exit_price": 14.11,
+    "entry_trend": "🔛",
+    "exit_trend": "↗️",
+    "profit_pct": 24.1,
+    "exit_reason": "RSI"
+  },
+  {
+    "symbol": "EAST",
+    "entry_date": "2026-08-06",
+    "exit_date": "2026-08-11",
+    "entry_price": 36.7,
+    "exit_price": 36.2,
+    "entry_trend": "🔛",
+    "exit_trend": "🔻",
+    "profit_pct": -1.36,
+    "exit_reason": "DOWN_TREND"
+  },
+  {
+    "symbol": "JUFO",
+    "entry_date": "2026-08-06",
+    "exit_date": "2026-08-12",
+    "entry_price": 26.61,
+    "exit_price": 26.7,
+    "entry_trend": "🔛",
+    "exit_trend": "🔻",
+    "profit_pct": 0.34,
+    "exit_reason": "DOWN_TREND"
+  }
+]

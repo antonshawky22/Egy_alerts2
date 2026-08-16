@@ -1,0 +1,61 @@
+{
+  "backtest_period": {
+    "start": "2025-11-30",
+    "end": "2026-08-16"
+  },
+  "statistics": {
+    "total_trades": 12,
+    "winning_trades": 6,
+    "losing_trades": 6,
+    "win_rate_percent": 50.0,
+    "total_profit_percent": 24.92,
+    "average_winning_trade_percent": 5.78,
+    "average_losing_trade_percent": -1.63,
+    "maximum_drawdown_percent": 6.81
+  },
+  "best_trade": {
+    "symbol": "ISPH",
+    "entry_date": "2026-07-30",
+    "exit_date": "2026-08-03",
+    "entry_price": 11.37,
+    "exit_price": 14.11,
+    "entry_trend": "🔛",
+    "exit_trend": "↗️",
+    "profit_pct": 24.1,
+    "exit_reason": "RSI"
+  },
+  "worst_trade": {
+    "symbol": "ATQA",
+    "entry_date": "2026-02-24",
+    "exit_date": "2026-02-26",
+    "entry_price": 8.99,
+    "exit_price": 8.6,
+    "entry_trend": "🔛",
+    "exit_trend": "🔻",
+    "profit_pct": -4.34,
+    "exit_reason": "DOWN_TREND"
+  },
+  "open_positions": [
+    {
+      "symbol": "EAST",
+      "entry_date": "2026-08-13",
+      "entry_price": 36.26,
+      "last_date": "2026-08-16",
+      "last_price": 36.69
+    },
+    {
+      "symbol": "HRHO",
+      "entry_date": "2026-07-12",
+      "entry_price": 26.52,
+      "last_date": "2026-08-16",
+      "last_price": 26.31
+    },
+    {
+      "symbol": "SUGR",
+      "entry_date": "2026-07-30",
+      "entry_price": 46.55,
+      "last_date": "2026-08-16",
+      "last_price": 50.7
+    }
+  ]
+}
