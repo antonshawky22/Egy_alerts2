@@ -176,11 +176,11 @@ def get_egx_trend(df):
 
     cross_count = (
         df["crossed"]
-        .iloc[-30:]
+        .iloc[-50:]
         .sum()
     )
 
-    if cross_count >= 7:
+    if cross_count >= 4:
 
         return "🔛"
 
@@ -247,7 +247,7 @@ def calculate_trend(
     # Sideways
     # --------------------------------------------------------
 
-    if cross_count >= 7:
+    if cross_count >= 4:
 
         return "🔛"
 
@@ -430,7 +430,7 @@ for current_date in all_dates:
             if (
                 not in_position
                 and
-                row["RSI14"] < 45 ):
+                row["RSI14"] < 55 ):
 
                 buy_signal = True
 
@@ -500,7 +500,7 @@ for current_date in all_dates:
                 (
                     from_low <= SIDE_CLOSE_PERCENT
                     or
-                    row["RSI14"] < 25
+                    row["RSI14"] < 28
                 )
             ):
 
