@@ -169,8 +169,8 @@ def get_egx_trend(df):
     last = df.iloc[-1]
 
     prev_5 = (
-        df.iloc[-14]
-        if len(df) > 14
+        df.iloc[-25]
+        if len(df) > 25
         else df.iloc[-2]
     )
 
