@@ -1,0 +1,89 @@
+{
+  "backtest_period": {
+    "start": "2025-11-30",
+    "end": "2026-08-17"
+  },
+  "statistics": {
+    "total_trades": 49,
+    "winning_trades": 32,
+    "losing_trades": 17,
+    "win_rate_percent": 65.31,
+    "total_profit_percent": 199.9,
+    "average_winning_trade_percent": 8.89,
+    "average_losing_trade_percent": -4.97,
+    "maximum_drawdown_percent": 34.99
+  },
+  "best_trade": {
+    "symbol": "ISPH",
+    "entry_date": "2026-07-30",
+    "exit_date": "2026-08-03",
+    "entry_price": 11.37,
+    "exit_price": 14.11,
+    "entry_trend": "🔛",
+    "exit_trend": "🔛",
+    "profit_pct": 24.1,
+    "exit_reason": "SIDE_TARGET"
+  },
+  "worst_trade": {
+    "symbol": "ABUK",
+    "entry_date": "2026-05-05",
+    "exit_date": "2026-06-11",
+    "entry_price": 84.85,
+    "exit_price": 76.5,
+    "entry_trend": "↗️",
+    "exit_trend": "🔛",
+    "profit_pct": -9.84,
+    "exit_reason": "STOP_LOSS"
+  },
+  "open_positions": [
+    {
+      "symbol": "EAST",
+      "entry_date": "2026-07-04",
+      "entry_price": 37.4,
+      "last_date": "2026-08-17",
+      "last_price": 36.66
+    },
+    {
+      "symbol": "HRHO",
+      "entry_date": "2026-08-16",
+      "entry_price": 26.31,
+      "last_date": "2026-08-17",
+      "last_price": 26.46
+    },
+    {
+      "symbol": "JUFO",
+      "entry_date": "2026-08-06",
+      "entry_price": 26.61,
+      "last_date": "2026-08-17",
+      "last_price": 27.19
+    },
+    {
+      "symbol": "ELSH",
+      "entry_date": "2026-06-28",
+      "entry_price": 11.2,
+      "last_date": "2026-08-17",
+      "last_price": 13.74
+    },
+    {
+      "symbol": "RAYA",
+      "entry_date": "2026-06-18",
+      "entry_price": 7.01,
+      "last_date": "2026-08-17",
+      "last_price": 7.23
+    },
+    {
+      "symbol": "EEII",
+      "entry_date": "2026-06-11",
+      "entry_price": 2.32,
+      "last_date": "2026-08-17",
+      "last_price": 3.05
+    },
+    {
+      "symbol": "PHDC",
+      "entry_date": "2026-07-27",
+      "entry_price": 14.72,
+      "last_date": "2026-08-17",
+      "last_price": 15.68
+    }
+  ]
+}
