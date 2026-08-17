@@ -11,7 +11,7 @@ DB_FILE = "egx_history_database_v2.json"
 RESULTS_FILE = "backtest_results.json"
 TRADES_FILE = "backtest_trades.json"
 
-SIDE_CLOSE_PERCENT = 0.03
+SIDE_CLOSE_PERCENT = 0.02
 RSI_SELL = 79
 EGX30_KEY = "EGX30"
 
@@ -431,7 +431,8 @@ for current_date in all_dates:
                 not in_position
                 and
                 row["RSI14"] < 48  and
-                row["EMA12"] > row["EMA20"] ) :
+                row["EMA12"] > row["EMA20"] and
+                row["Close"] <= row["EMA20"] * 1.05) :
 
                 buy_signal = True
 
