@@ -430,7 +430,8 @@ for current_date in all_dates:
             if (
                 not in_position
                 and
-                row["RSI14"] < 48 ):
+                row["RSI14"] < 48  and
+                row["EMA12"] > row["EMA20"] ) :
 
                 buy_signal = True
 
