@@ -1,0 +1,106 @@
+{
+  "backtest_period": {
+    "start": "2025-11-30",
+    "end": "2026-08-17"
+  },
+  "strategy": {
+    "primary_indicator": "EMA70",
+    "ema70_levels": [
+      "current",
+      "4_candles_ago",
+      "8_candles_ago",
+      "12_candles_ago"
+    ],
+    "uptrend_rule": "EMA70 current > EMA70-4 > EMA70-8 > EMA70-12 with clear positive steps",
+    "sideways_rule": "EMA70 levels are close",
+    "downtrend_rule": "EMA70 levels decrease with very clear negative steps",
+    "up_entry": "EMA12 crosses EMA20 upward",
+    "up_exit": "EMA12 crosses EMA20 downward",
+    "side_entry": "RSI14 < 28",
+    "side_exit": "RSI14 > 65",
+    "down_action": "No buy + close open positions",
+    "stop_loss_percent": 7.0,
+    "egx30_market_filter": "DISABLED"
+  },
+  "statistics": {
+    "total_trades": 16,
+    "winning_trades": 8,
+    "losing_trades": 8,
+    "win_rate_percent": 50.0,
+    "total_profit_percent": 90.79,
+    "average_winning_trade_percent": 13.83,
+    "average_losing_trade_percent": -2.48,
+    "maximum_drawdown_percent": 7.69
+  },
+  "trend_days": {
+    "↗️": 1491,
+    "🔛": 1653,
+    "🔻": 17
+  },
+  "best_trade": {
+    "symbol": "RAYA",
+    "entry_date": "2026-04-08",
+    "exit_date": "2026-06-17",
+    "entry_price": 5.32,
+    "exit_price": 7.01,
+    "entry_trend": "↗️",
+    "exit_trend": "↗️",
+    "profit_pct": 31.77,
+    "exit_reason": "EMA_CROSS_DOWN"
+  },
+  "worst_trade": {
+    "symbol": "ABUK",
+    "entry_date": "2026-06-14",
+    "exit_date": "2026-06-28",
+    "entry_price": 72.75,
+    "exit_price": 67.8,
+    "entry_trend": "🔛",
+    "exit_trend": "🔻",
+    "profit_pct": -6.8,
+    "exit_reason": "EMA70_STRONG_DOWN"
+  },
+  "open_positions": [
+    {
+      "symbol": "MTIE",
+      "entry_date": "2026-07-01",
+      "entry_price": 9.35,
+      "last_date": "2026-08-17",
+      "last_price": 9.4
+    },
+    {
+      "symbol": "RMDA",
+      "entry_date": "2026-07-27",
+      "entry_price": 5.3,
+      "last_date": "2026-08-17",
+      "last_price": 6.47
+    },
+    {
+      "symbol": "GBCO",
+      "entry_date": "2026-08-04",
+      "entry_price": 32.01,
+      "last_date": "2026-08-17",
+      "last_price": 30.45
+    },
+    {
+      "symbol": "AMOC",
+      "entry_date": "2026-06-23",
+      "entry_price": 7.6,
+      "last_date": "2026-08-17",
+      "last_price": 11.59
+    },
+    {
+      "symbol": "ADIB",
+      "entry_date": "2026-07-20",
+      "entry_price": 46.99,
+      "last_date": "2026-08-17",
+      "last_price": 55.4
+    },
+    {
+      "symbol": "PHDC",
+      "entry_date": "2026-08-05",
+      "entry_price": 15.45,
+      "last_date": "2026-08-17",
+      "last_price": 15.68
+    }
+  ]
+}
