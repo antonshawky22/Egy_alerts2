@@ -129,7 +129,7 @@
     "cycle": 1,
     "position": 0.66,
     "avg_price": 7.285,
-    "peak_profit": 0.0,
+    "peak_profit": 1.0295126973232693,
     "realized_pnl_tracker": []
   },
   "EEII": {
@@ -157,7 +157,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 97.8,
-    "peak_profit": 0.0920245398773041,
+    "peak_profit": 0.4089979550102308,
     "realized_pnl_tracker": []
   },
   "ORHD": {
@@ -178,7 +178,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 19.01,
-    "peak_profit": 1.9463440294581664,
+    "peak_profit": 2.104155707522349,
     "realized_pnl_tracker": []
   },
   "COMI": {
@@ -199,7 +199,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 15.27,
-    "peak_profit": 0.0,
+    "peak_profit": 0.32743942370661894,
     "realized_pnl_tracker": []
   },
   "MCQE": {
