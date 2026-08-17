@@ -605,54 +605,21 @@ if trend == "↗️":
             close
             <
             entry_price * 0.93
-        )
-
-        if rsi_sell:
-
-            sell_signal = True
-            sell_reason = "RSI_77"
-
-        elif stop_loss:
-
-            sell_signal = True
-            sell_reason = "STOP_LOSS"
-       
-
-                # --------------------------------------------
-                # Safety Stop Loss
-                # --------------------------------------------
-
-                elif (
-                    close
-                    <
-                    entry_price
-                    *
-                    (
-                        1
-                        -
-                        STOP_LOSS_PERCENT
-                        /
-                        100
-                    )
-                ):
-
-                    sell_signal = True
-
-                    sell_reason = (
-                        "STOP_LOSS"
-                    )
-
-
         # ====================================================
-        # SIDEWAYS / FLAT EMA70
-        #
-        # Buy:
-        # RSI < 28
-        #
-        # Sell:
-        # RSI > 65
+        # UP TREND
         # ====================================================
 
+        if trend == "↗️":
+
+            if (
+                not in_position
+                and
+                bool(row["cross_up"])
+            ):
+
+                buy_signal = True
+
+            elif in_position:
         elif trend == "🔛":
 
             if (
