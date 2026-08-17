@@ -99,8 +99,8 @@
   },
   "DSCW": {
     "cycle": 1,
-    "position": 0.0,
-    "avg_price": 0.0,
+    "position": 0.33,
+    "avg_price": 2.03,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
@@ -199,7 +199,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 15.27,
-    "peak_profit": 0.32743942370661894,
+    "peak_profit": 2.685003274394238,
     "realized_pnl_tracker": []
   },
   "MCQE": {
