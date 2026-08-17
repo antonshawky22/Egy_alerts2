@@ -561,41 +561,62 @@ for current_date in all_dates:
         sell_reason = ""
 
 
-        # ====================================================
-        # UP TREND
-        #
-        # EMA70 clearly rising
-        #
-        # Entry:
-        # EMA12 crosses EMA20 upward
-        #
-        # Exit:
-        # EMA12 crosses EMA20 downward
-        # ====================================================
+# UP TREND
+#
+# EMA70 clearly rising
+#
+# Entry:
+# EMA70 clearly rising
+# +
+# RSI14 < 48
+#
+# Exit:
+# RSI14 > 77
+#
+# Stop Loss:
+# -7%
+# ====================================================
 
-        if trend == "↗️":
+if trend == "↗️":
 
-            if (
-                not in_position
-                and
-                bool(row["cross_up"])
-            ):
+    # ------------------------------------------------
+    # BUY
+    # ------------------------------------------------
 
-                buy_signal = True
+    if (
+        not in_position
+        and
+        row["RSI14"] < 48
+    ):
 
-            elif in_position:
+        buy_signal = True
 
-                # --------------------------------------------
-                # EMA12 / EMA20 bearish cross
-                # --------------------------------------------
+    # ------------------------------------------------
+    # SELL
+    # ------------------------------------------------
 
-                if bool(row["cross_down"]):
+    elif in_position:
 
-                    sell_signal = True
+        rsi_sell = (
+            row["RSI14"] > 77
+        )
 
-                    sell_reason = (
-                        "EMA_CROSS_DOWN"
-                    )
+        stop_loss = (
+            close
+            <
+            entry_price * 0.93
+        )
+
+        if rsi_sell:
+
+            sell_signal = True
+            sell_reason = "RSI_77"
+
+        elif stop_loss:
+
+            sell_signal = True
+            sell_reason = "STOP_LOSS"
+       
 
                 # --------------------------------------------
                 # Safety Stop Loss
