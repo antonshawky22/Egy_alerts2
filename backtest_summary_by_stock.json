@@ -1,27 +1,75 @@
 [
   {
-    "symbol": "RMDA",
-    "total_trades": 1,
-    "winning_trades": 1,
+    "symbol": "RAYA",
+    "total_trades": 2,
+    "winning_trades": 2,
     "losing_trades": 0,
     "win_rate_percent": 100.0,
-    "total_profit_percent": 52.3,
-    "average_profit_percent": 52.3,
+    "total_profit_percent": 12.73,
+    "average_profit_percent": 6.37,
     "average_loss_percent": 0,
-    "best_trade_percent": 52.3,
-    "worst_trade_percent": 52.3
+    "best_trade_percent": 6.44,
+    "worst_trade_percent": 6.29
   },
   {
-    "symbol": "MPCO",
+    "symbol": "RMDA",
+    "total_trades": 3,
+    "winning_trades": 3,
+    "losing_trades": 0,
+    "win_rate_percent": 100.0,
+    "total_profit_percent": 10.97,
+    "average_profit_percent": 3.66,
+    "average_loss_percent": 0,
+    "best_trade_percent": 4.77,
+    "worst_trade_percent": 2.0
+  },
+  {
+    "symbol": "EEII",
+    "total_trades": 2,
+    "winning_trades": 2,
+    "losing_trades": 0,
+    "win_rate_percent": 100.0,
+    "total_profit_percent": 10.89,
+    "average_profit_percent": 5.45,
+    "average_loss_percent": 0,
+    "best_trade_percent": 5.89,
+    "worst_trade_percent": 5.0
+  },
+  {
+    "symbol": "ADIB",
+    "total_trades": 2,
+    "winning_trades": 2,
+    "losing_trades": 0,
+    "win_rate_percent": 100.0,
+    "total_profit_percent": 10.52,
+    "average_profit_percent": 5.26,
+    "average_loss_percent": 0,
+    "best_trade_percent": 5.59,
+    "worst_trade_percent": 4.93
+  },
+  {
+    "symbol": "JUFO",
+    "total_trades": 3,
+    "winning_trades": 3,
+    "losing_trades": 0,
+    "win_rate_percent": 100.0,
+    "total_profit_percent": 9.49,
+    "average_profit_percent": 3.16,
+    "average_loss_percent": 0,
+    "best_trade_percent": 4.32,
+    "worst_trade_percent": 2.26
+  },
+  {
+    "symbol": "ELSH",
     "total_trades": 1,
     "winning_trades": 1,
     "losing_trades": 0,
     "win_rate_percent": 100.0,
-    "total_profit_percent": 25.99,
-    "average_profit_percent": 25.99,
+    "total_profit_percent": 7.83,
+    "average_profit_percent": 7.83,
     "average_loss_percent": 0,
-    "best_trade_percent": 25.99,
-    "worst_trade_percent": 25.99
+    "best_trade_percent": 7.83,
+    "worst_trade_percent": 7.83
   },
   {
     "symbol": "ISPH",
@@ -29,11 +77,35 @@
     "winning_trades": 1,
     "losing_trades": 0,
     "win_rate_percent": 100.0,
-    "total_profit_percent": 23.34,
-    "average_profit_percent": 23.34,
+    "total_profit_percent": 7.78,
+    "average_profit_percent": 7.78,
     "average_loss_percent": 0,
-    "best_trade_percent": 23.34,
-    "worst_trade_percent": 23.34
+    "best_trade_percent": 7.78,
+    "worst_trade_percent": 7.78
+  },
+  {
+    "symbol": "MPCO",
+    "total_trades": 1,
+    "winning_trades": 1,
+    "losing_trades": 0,
+    "win_rate_percent": 100.0,
+    "total_profit_percent": 6.4,
+    "average_profit_percent": 6.4,
+    "average_loss_percent": 0,
+    "best_trade_percent": 6.4,
+    "worst_trade_percent": 6.4
+  },
+  {
+    "symbol": "EMFD",
+    "total_trades": 1,
+    "winning_trades": 1,
+    "losing_trades": 0,
+    "win_rate_percent": 100.0,
+    "total_profit_percent": 5.93,
+    "average_profit_percent": 5.93,
+    "average_loss_percent": 0,
+    "best_trade_percent": 5.93,
+    "worst_trade_percent": 5.93
   },
   {
     "symbol": "MTIE",
@@ -41,83 +113,11 @@
     "winning_trades": 1,
     "losing_trades": 0,
     "win_rate_percent": 100.0,
-    "total_profit_percent": 23.17,
-    "average_profit_percent": 23.17,
+    "total_profit_percent": 3.17,
+    "average_profit_percent": 3.17,
     "average_loss_percent": 0,
-    "best_trade_percent": 23.17,
-    "worst_trade_percent": 23.17
-  },
-  {
-    "symbol": "EEII",
-    "total_trades": 1,
-    "winning_trades": 1,
-    "losing_trades": 0,
-    "win_rate_percent": 100.0,
-    "total_profit_percent": 22.84,
-    "average_profit_percent": 22.84,
-    "average_loss_percent": 0,
-    "best_trade_percent": 22.84,
-    "worst_trade_percent": 22.84
-  },
-  {
-    "symbol": "JUFO",
-    "total_trades": 2,
-    "winning_trades": 2,
-    "losing_trades": 0,
-    "win_rate_percent": 100.0,
-    "total_profit_percent": 22.0,
-    "average_profit_percent": 11.0,
-    "average_loss_percent": 0,
-    "best_trade_percent": 15.21,
-    "worst_trade_percent": 6.79
-  },
-  {
-    "symbol": "AMOC",
-    "total_trades": 2,
-    "winning_trades": 1,
-    "losing_trades": 1,
-    "win_rate_percent": 50.0,
-    "total_profit_percent": 21.29,
-    "average_profit_percent": 28.94,
-    "average_loss_percent": -7.65,
-    "best_trade_percent": 28.94,
-    "worst_trade_percent": -7.65
-  },
-  {
-    "symbol": "OLFI",
-    "total_trades": 1,
-    "winning_trades": 1,
-    "losing_trades": 0,
-    "win_rate_percent": 100.0,
-    "total_profit_percent": 12.29,
-    "average_profit_percent": 12.29,
-    "average_loss_percent": 0,
-    "best_trade_percent": 12.29,
-    "worst_trade_percent": 12.29
-  },
-  {
-    "symbol": "EGAL",
-    "total_trades": 1,
-    "winning_trades": 1,
-    "losing_trades": 0,
-    "win_rate_percent": 100.0,
-    "total_profit_percent": 11.86,
-    "average_profit_percent": 11.86,
-    "average_loss_percent": 0,
-    "best_trade_percent": 11.86,
-    "worst_trade_percent": 11.86
-  },
-  {
-    "symbol": "ORWE",
-    "total_trades": 1,
-    "winning_trades": 1,
-    "losing_trades": 0,
-    "win_rate_percent": 100.0,
-    "total_profit_percent": 11.01,
-    "average_profit_percent": 11.01,
-    "average_loss_percent": 0,
-    "best_trade_percent": 11.01,
-    "worst_trade_percent": 11.01
+    "best_trade_percent": 3.17,
+    "worst_trade_percent": 3.17
   },
   {
     "symbol": "EFIH",
@@ -125,23 +125,11 @@
     "winning_trades": 1,
     "losing_trades": 0,
     "win_rate_percent": 100.0,
-    "total_profit_percent": 8.47,
-    "average_profit_percent": 8.47,
+    "total_profit_percent": 2.82,
+    "average_profit_percent": 2.82,
     "average_loss_percent": 0,
-    "best_trade_percent": 8.47,
-    "worst_trade_percent": 8.47
-  },
-  {
-    "symbol": "MCQE",
-    "total_trades": 2,
-    "winning_trades": 1,
-    "losing_trades": 1,
-    "win_rate_percent": 50.0,
-    "total_profit_percent": 7.36,
-    "average_profit_percent": 14.73,
-    "average_loss_percent": -7.37,
-    "best_trade_percent": 14.73,
-    "worst_trade_percent": -7.37
+    "best_trade_percent": 2.82,
+    "worst_trade_percent": 2.82
   },
   {
     "symbol": "TMGH",
@@ -149,11 +137,23 @@
     "winning_trades": 1,
     "losing_trades": 0,
     "win_rate_percent": 100.0,
-    "total_profit_percent": 6.89,
-    "average_profit_percent": 6.89,
+    "total_profit_percent": 2.3,
+    "average_profit_percent": 2.3,
     "average_loss_percent": 0,
-    "best_trade_percent": 6.89,
-    "worst_trade_percent": 6.89
+    "best_trade_percent": 2.3,
+    "worst_trade_percent": 2.3
+  },
+  {
+    "symbol": "EGAL",
+    "total_trades": 2,
+    "winning_trades": 1,
+    "losing_trades": 1,
+    "win_rate_percent": 50.0,
+    "total_profit_percent": 1.78,
+    "average_profit_percent": 4.86,
+    "average_loss_percent": -3.08,
+    "best_trade_percent": 4.86,
+    "worst_trade_percent": -3.08
   },
   {
     "symbol": "SWDY",
@@ -161,11 +161,11 @@
     "winning_trades": 1,
     "losing_trades": 0,
     "win_rate_percent": 100.0,
-    "total_profit_percent": 4.83,
-    "average_profit_percent": 4.83,
+    "total_profit_percent": 1.61,
+    "average_profit_percent": 1.61,
     "average_loss_percent": 0,
-    "best_trade_percent": 4.83,
-    "worst_trade_percent": 4.83
+    "best_trade_percent": 1.61,
+    "worst_trade_percent": 1.61
   },
   {
     "symbol": "ETEL",
@@ -173,11 +173,11 @@
     "winning_trades": 1,
     "losing_trades": 0,
     "win_rate_percent": 100.0,
-    "total_profit_percent": 4.33,
-    "average_profit_percent": 4.33,
+    "total_profit_percent": 1.44,
+    "average_profit_percent": 1.44,
     "average_loss_percent": 0,
-    "best_trade_percent": 4.33,
-    "worst_trade_percent": 4.33
+    "best_trade_percent": 1.44,
+    "worst_trade_percent": 1.44
   },
   {
     "symbol": "ATQA",
@@ -185,23 +185,23 @@
     "winning_trades": 1,
     "losing_trades": 0,
     "win_rate_percent": 100.0,
-    "total_profit_percent": 4.33,
-    "average_profit_percent": 4.33,
+    "total_profit_percent": 1.44,
+    "average_profit_percent": 1.44,
     "average_loss_percent": 0,
-    "best_trade_percent": 4.33,
-    "worst_trade_percent": 4.33
+    "best_trade_percent": 1.44,
+    "worst_trade_percent": 1.44
   },
   {
-    "symbol": "COMI",
+    "symbol": "MCQE",
     "total_trades": 1,
-    "winning_trades": 1,
-    "losing_trades": 0,
-    "win_rate_percent": 100.0,
-    "total_profit_percent": 4.06,
-    "average_profit_percent": 4.06,
-    "average_loss_percent": 0,
-    "best_trade_percent": 4.06,
-    "worst_trade_percent": 4.06
+    "winning_trades": 0,
+    "losing_trades": 1,
+    "win_rate_percent": 0.0,
+    "total_profit_percent": -2.46,
+    "average_profit_percent": 0,
+    "average_loss_percent": -2.46,
+    "best_trade_percent": -2.46,
+    "worst_trade_percent": -2.46
   },
   {
     "symbol": "OIH",
@@ -209,11 +209,11 @@
     "winning_trades": 0,
     "losing_trades": 1,
     "win_rate_percent": 0.0,
-    "total_profit_percent": -7.48,
+    "total_profit_percent": -2.49,
     "average_profit_percent": 0,
-    "average_loss_percent": -7.48,
-    "best_trade_percent": -7.48,
-    "worst_trade_percent": -7.48
+    "average_loss_percent": -2.49,
+    "best_trade_percent": -2.49,
+    "worst_trade_percent": -2.49
   },
   {
     "symbol": "FWRY",
@@ -221,11 +221,23 @@
     "winning_trades": 0,
     "losing_trades": 1,
     "win_rate_percent": 0.0,
-    "total_profit_percent": -7.63,
+    "total_profit_percent": -2.54,
     "average_profit_percent": 0,
-    "average_loss_percent": -7.63,
-    "best_trade_percent": -7.63,
-    "worst_trade_percent": -7.63
+    "average_loss_percent": -2.54,
+    "best_trade_percent": -2.54,
+    "worst_trade_percent": -2.54
+  },
+  {
+    "symbol": "AMOC",
+    "total_trades": 1,
+    "winning_trades": 0,
+    "losing_trades": 1,
+    "win_rate_percent": 0.0,
+    "total_profit_percent": -2.55,
+    "average_profit_percent": 0,
+    "average_loss_percent": -2.55,
+    "best_trade_percent": -2.55,
+    "worst_trade_percent": -2.55
   },
   {
     "symbol": "DSCW",
@@ -233,22 +245,22 @@
     "winning_trades": 0,
     "losing_trades": 1,
     "win_rate_percent": 0.0,
-    "total_profit_percent": -8.47,
+    "total_profit_percent": -2.82,
     "average_profit_percent": 0,
-    "average_loss_percent": -8.47,
-    "best_trade_percent": -8.47,
-    "worst_trade_percent": -8.47
+    "average_loss_percent": -2.82,
+    "best_trade_percent": -2.82,
+    "worst_trade_percent": -2.82
   },
   {
     "symbol": "ABUK",
-    "total_trades": 2,
+    "total_trades": 1,
     "winning_trades": 0,
-    "losing_trades": 2,
+    "losing_trades": 1,
     "win_rate_percent": 0.0,
-    "total_profit_percent": -16.64,
+    "total_profit_percent": -3.28,
     "average_profit_percent": 0,
-    "average_loss_percent": -8.32,
-    "best_trade_percent": -6.8,
-    "worst_trade_percent": -9.84
+    "average_loss_percent": -3.28,
+    "best_trade_percent": -3.28,
+    "worst_trade_percent": -3.28
   }
 ]

@@ -14,23 +14,27 @@
     "uptrend_rule": "EMA70 current > EMA70-4 > EMA70-8 > EMA70-12 with clear positive steps",
     "sideways_rule": "EMA70 levels are close",
     "downtrend_rule": "EMA70 levels decrease with very clear negative steps",
-    "up_entry": "EMA70 clearly rising + RSI14 < 48",
-    "up_exit": "RSI14 > 77",
-    "side_entry": "RSI14 < 28",
-    "side_exit": "RSI14 > 65",
-    "down_action": "No buy + close open positions",
+    "position_model": "3 equal capital tranches",
+    "tranche_size_percent": 33.33,
+    "first_entry": "EMA70 clearly rising + RSI14 < 48",
+    "second_entry": "EMA70 sideways + RSI14 <= 30 after first tranche",
+    "third_entry": "EMA70 sideways + RSI14 <= 25 after second tranche",
+    "important_rule": "Third tranche is bought only at a lower price/RSI level; never because price is rising",
+    "partial_exit": "RSI14 > 66 -> sell one tranche",
+    "final_exit": "RSI14 > 77 -> sell all remaining",
+    "down_action": "No new buy + close all open tranches",
     "stop_loss_percent": 7.0,
     "egx30_market_filter": "DISABLED"
   },
   "statistics": {
-    "total_trades": 25,
-    "winning_trades": 18,
+    "total_trades": 30,
+    "winning_trades": 23,
     "losing_trades": 7,
-    "win_rate_percent": 72.0,
-    "total_profit_percent": 226.12,
-    "average_winning_trade_percent": 15.63,
-    "average_losing_trade_percent": -7.89,
-    "maximum_drawdown_percent": 46.79
+    "win_rate_percent": 76.67,
+    "total_profit_percent": 80.97,
+    "average_winning_trade_percent": 4.36,
+    "average_losing_trade_percent": -2.75,
+    "maximum_drawdown_percent": 16.4
   },
   "trend_days": {
     "↗️": 1491,
@@ -38,97 +42,191 @@
     "🔻": 17
   },
   "best_trade": {
-    "symbol": "RMDA",
-    "entry_date": "2026-03-29",
-    "exit_date": "2026-08-03",
-    "entry_price": 4.13,
-    "exit_price": 6.29,
+    "symbol": "ELSH",
+    "entry_date": "2026-06-28",
+    "exit_date": "2026-07-05",
     "entry_trend": "↗️",
     "exit_trend": "↗️",
-    "profit_pct": 52.3,
-    "exit_reason": "RSI_77"
+    "profit_pct": 7.83,
+    "exit_reason": "RSI_66",
+    "sales": [
+      {
+        "entry_date": "2026-06-28",
+        "entry_price": 11.2,
+        "exit_date": "2026-07-05",
+        "exit_price": 13.83,
+        "size": 0.3333,
+        "profit_pct_on_tranche": 23.48,
+        "portfolio_contribution_pct": 7.83,
+        "reason": "RSI_66"
+      }
+    ]
   },
   "worst_trade": {
     "symbol": "ABUK",
     "entry_date": "2026-05-05",
     "exit_date": "2026-06-11",
-    "entry_price": 84.85,
-    "exit_price": 76.5,
     "entry_trend": "↗️",
     "exit_trend": "🔛",
-    "profit_pct": -9.84,
-    "exit_reason": "STOP_LOSS"
+    "profit_pct": -3.28,
+    "exit_reason": "STOP_LOSS",
+    "sales": [
+      {
+        "entry_date": "2026-05-05",
+        "entry_price": 84.85,
+        "exit_date": "2026-06-11",
+        "exit_price": 76.5,
+        "size": 0.3333,
+        "profit_pct_on_tranche": -9.84,
+        "portfolio_contribution_pct": -3.28,
+        "reason": "STOP_LOSS"
+      }
+    ]
   },
   "open_positions": [
     {
       "symbol": "EMFD",
-      "entry_date": "2026-05-20",
-      "entry_price": 10.0,
+      "entry_date": "2026-06-28",
+      "average_entry_price": 11.32,
+      "position_size": 0.3333,
       "last_date": "2026-08-17",
-      "last_price": 11.64
+      "last_price": 11.64,
+      "unrealized_profit_percent": 2.83,
+      "tranches": [
+        {
+          "size": 0.3333333333333333,
+          "price": 11.32,
+          "date": "2026-06-28"
+        }
+      ]
     },
     {
       "symbol": "MTIE",
       "entry_date": "2026-08-13",
-      "entry_price": 9.57,
+      "average_entry_price": 9.57,
+      "position_size": 0.3333,
       "last_date": "2026-08-17",
-      "last_price": 9.4
+      "last_price": 9.4,
+      "unrealized_profit_percent": -1.78,
+      "tranches": [
+        {
+          "size": 0.3333333333333333,
+          "price": 9.57,
+          "date": "2026-08-13"
+        }
+      ]
     },
     {
       "symbol": "HRHO",
       "entry_date": "2026-05-17",
-      "entry_price": 27.81,
+      "average_entry_price": 27.81,
+      "position_size": 0.3333,
       "last_date": "2026-08-17",
-      "last_price": 26.46
+      "last_price": 26.46,
+      "unrealized_profit_percent": -4.85,
+      "tranches": [
+        {
+          "size": 0.3333333333333333,
+          "price": 27.81,
+          "date": "2026-05-17"
+        }
+      ]
     },
     {
       "symbol": "ELSH",
-      "entry_date": "2026-06-28",
-      "entry_price": 11.2,
+      "entry_date": "2026-07-30",
+      "average_entry_price": 13.41,
+      "position_size": 0.3333,
       "last_date": "2026-08-17",
-      "last_price": 13.74
+      "last_price": 13.74,
+      "unrealized_profit_percent": 2.46,
+      "tranches": [
+        {
+          "size": 0.3333333333333333,
+          "price": 13.41,
+          "date": "2026-07-30"
+        }
+      ]
     },
     {
       "symbol": "RAYA",
-      "entry_date": "2026-03-30",
-      "entry_price": 5.14,
+      "entry_date": "2026-07-21",
+      "average_entry_price": 7.58,
+      "position_size": 0.3333,
       "last_date": "2026-08-17",
-      "last_price": 7.23
-    },
-    {
-      "symbol": "EEII",
-      "entry_date": "2026-07-30",
-      "entry_price": 2.6,
-      "last_date": "2026-08-17",
-      "last_price": 3.05
+      "last_price": 7.23,
+      "unrealized_profit_percent": -4.62,
+      "tranches": [
+        {
+          "size": 0.3333333333333333,
+          "price": 7.58,
+          "date": "2026-07-21"
+        }
+      ]
     },
     {
       "symbol": "GBCO",
       "entry_date": "2026-07-27",
-      "entry_price": 30.3,
+      "average_entry_price": 30.3,
+      "position_size": 0.3333,
       "last_date": "2026-08-17",
-      "last_price": 30.45
+      "last_price": 30.45,
+      "unrealized_profit_percent": 0.5,
+      "tranches": [
+        {
+          "size": 0.3333333333333333,
+          "price": 30.3,
+          "date": "2026-07-27"
+        }
+      ]
     },
     {
       "symbol": "TMGH",
       "entry_date": "2026-07-30",
-      "entry_price": 97.3,
+      "average_entry_price": 97.3,
+      "position_size": 0.3333,
       "last_date": "2026-08-17",
-      "last_price": 96.5
+      "last_price": 96.5,
+      "unrealized_profit_percent": -0.82,
+      "tranches": [
+        {
+          "size": 0.3333333333333333,
+          "price": 97.3,
+          "date": "2026-07-30"
+        }
+      ]
     },
     {
-      "symbol": "ADIB",
-      "entry_date": "2026-03-30",
-      "entry_price": 38.11,
+      "symbol": "COMI",
+      "entry_date": "2026-05-14",
+      "average_entry_price": 134.51,
+      "position_size": 0.3333,
       "last_date": "2026-08-17",
-      "last_price": 55.4
+      "last_price": 138.85,
+      "unrealized_profit_percent": 3.23,
+      "tranches": [
+        {
+          "size": 0.3333333333333333,
+          "price": 134.51,
+          "date": "2026-05-14"
+        }
+      ]
     },
     {
       "symbol": "PHDC",
       "entry_date": "2026-06-28",
-      "entry_price": 14.65,
+      "average_entry_price": 14.65,
+      "position_size": 0.3333,
       "last_date": "2026-08-17",
-      "last_price": 15.68
+      "last_price": 15.68,
+      "unrealized_profit_percent": 7.03,
+      "tranches": [
+        {
+          "size": 0.3333333333333333,
+          "price": 14.65,
+          "date": "2026-06-28"
+        }
+      ]
     }
   ]
 }
