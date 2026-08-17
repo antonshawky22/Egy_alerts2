@@ -235,7 +235,7 @@ def calculate_trend(
     # Cross Count
     # --------------------------------------------------------
 
-    start = max(0, index - 29)
+    start = max(0, index - 60)
 
     cross_count = (
         df["crossed"]
