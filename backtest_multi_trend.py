@@ -169,8 +169,8 @@ def get_egx_trend(df):
     last = df.iloc[-1]
 
     prev_5 = (
-        df.iloc[-25]
-        if len(df) > 25
+        df.iloc[-40]
+        if len(df) > 40
         else df.iloc[-2]
     )
 
@@ -180,7 +180,7 @@ def get_egx_trend(df):
         .sum()
     )
 
-    if cross_count >= 4:
+    if cross_count >= 6:
 
         return "🔛"
 
@@ -218,8 +218,8 @@ def calculate_trend(
     prev = df.iloc[index - 1]
 
     prev_5 = (
-        df.iloc[index - 13]
-        if index > 13
+        df.iloc[index - 40]
+        if index > 40
         else df.iloc[index - 1]
     )
 
@@ -430,7 +430,7 @@ for current_date in all_dates:
             if (
                 not in_position
                 and
-                row["RSI14"] < 55 ):
+                row["RSI14"] < 48 ):
 
                 buy_signal = True
 
