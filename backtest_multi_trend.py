@@ -30,7 +30,11 @@ EMA70_SIDE_MAX_DISTANCE_PERCENT = 1.00
 # with a very clear difference
 EMA70_DOWN_MIN_STEP_PERCENT = 1.00
 
-# Sideways RSI
+# Up Trend
+RSI_UP_BUY = 48
+RSI_UP_SELL = 77
+
+# Sideways
 RSI_SIDE_BUY = 28
 RSI_SIDE_SELL = 65
 
@@ -47,17 +51,11 @@ EGX30_KEY = "EGX30"
 # ============================================================
 
 def rsi(series, period=14):
-
     if len(series) < period:
-        return pd.Series(
-            np.nan,
-            index=series.index
-        )
+        return pd.Series(np.nan, index=series.index)
 
     delta = series.diff()
-
     gain = delta.clip(lower=0)
-
     loss = -delta.clip(upper=0)
 
     avg_gain = gain.ewm(
@@ -72,9 +70,7 @@ def rsi(series, period=14):
 
     rs = avg_gain / avg_loss
 
-    return 100 - (
-        100 / (1 + rs)
-    )
+    return 100 - (100 / (1 + rs))
 
 
 # ============================================================
@@ -82,34 +78,19 @@ def rsi(series, period=14):
 # ============================================================
 
 if not os.path.exists(DB_FILE):
-
     raise FileNotFoundError(
         f"❌ Database file not found: {DB_FILE}"
     )
 
-
-with open(
-    DB_FILE,
-    "r",
-    encoding="utf-8"
-) as f:
-
+with open(DB_FILE, "r", encoding="utf-8") as f:
     raw_database = json.load(f)
-
 
 print("✅ Historical database loaded.")
 
-
-symbols = list(
-    raw_database.keys()
-)
-
+symbols = list(raw_database.keys())
 
 if EGX30_KEY not in raw_database:
-
-    raise ValueError(
-        "❌ EGX30 not found in database."
-    )
+    raise ValueError("❌ EGX30 not found in database.")
 
 
 # ============================================================
@@ -118,39 +99,24 @@ if EGX30_KEY not in raw_database:
 
 prepared_data = {}
 
-
 for symbol in symbols:
+    content = raw_database.get(symbol, {})
 
-    content = raw_database.get(
-        symbol,
-        {}
-    )
-
-    if (
-        "data" not in content
-        or
-        "columns" not in content
-    ):
-
+    if "data" not in content or "columns" not in content:
         continue
 
     try:
-
         df = pd.DataFrame.from_dict(
             content["data"],
             orient="index",
             columns=content["columns"]
         )
 
-        df.index = pd.to_datetime(
-            df.index
-        )
-
+        df.index = pd.to_datetime(df.index)
         df = df.sort_index()
 
-        # EMA70 requires enough historical data
+        # EMA70 + safety history
         if len(df) < 80:
-
             continue
 
         # ----------------------------------------------------
@@ -172,125 +138,77 @@ for symbol in symbols:
             adjust=False
         ).mean()
 
-        df["RSI14"] = rsi(
-            df["Close"],
-            14
-        )
+        df["RSI14"] = rsi(df["Close"], 14)
 
         # ----------------------------------------------------
         # EMA12 / EMA20 Cross
+        # Kept for analysis / future testing.
+        # NOT used by current entry/exit logic.
         # ----------------------------------------------------
 
         df["cross_up"] = (
-            (
-                df["EMA12"] > df["EMA20"]
-            )
-            &
-            (
-                df["EMA12"].shift(1)
-                <=
-                df["EMA20"].shift(1)
-            )
+            (df["EMA12"] > df["EMA20"]) &
+            (df["EMA12"].shift(1) <= df["EMA20"].shift(1))
         )
 
         df["cross_down"] = (
-            (
-                df["EMA12"] < df["EMA20"]
-            )
-            &
-            (
-                df["EMA12"].shift(1)
-                >=
-                df["EMA20"].shift(1)
-            )
+            (df["EMA12"] < df["EMA20"]) &
+            (df["EMA12"].shift(1) >= df["EMA20"].shift(1))
         )
 
         prepared_data[symbol] = df
 
     except Exception as e:
+        print(f"⚠️ Failed preparing {symbol}: {e}")
 
-        print(
-            f"⚠️ Failed preparing {symbol}: {e}"
-        )
-
-
-print(
-    f"📊 Prepared "
-    f"{len(prepared_data)} symbols."
-)
+print(f"📊 Prepared {len(prepared_data)} symbols.")
 
 
 # ============================================================
 # EMA70 Trend Detection
 # ============================================================
 
-def calculate_trend(
-    df,
-    index
-):
+def calculate_trend(df, index):
 
     if index < 12:
-
         return "🔛"
 
-    current = df.iloc[index]
-
-    ema70_now = float(
-        current["EMA70"]
-    )
-
-    ema70_4 = float(
-        df.iloc[index - 4]["EMA70"]
-    )
-
-    ema70_8 = float(
-        df.iloc[index - 8]["EMA70"]
-    )
-
-    ema70_12 = float(
-        df.iloc[index - 12]["EMA70"]
-    )
+    ema70_now = float(df.iloc[index]["EMA70"])
+    ema70_4 = float(df.iloc[index - 4]["EMA70"])
+    ema70_8 = float(df.iloc[index - 8]["EMA70"])
+    ema70_12 = float(df.iloc[index - 12]["EMA70"])
 
     if (
-        pd.isna(ema70_now)
-        or
-        pd.isna(ema70_4)
-        or
-        pd.isna(ema70_8)
-        or
+        pd.isna(ema70_now) or
+        pd.isna(ema70_4) or
+        pd.isna(ema70_8) or
         pd.isna(ema70_12)
     ):
-
         return "🔛"
 
-    # ========================================================
-    # Percentage Changes
-    # ========================================================
+    # --------------------------------------------------------
+    # Percentage change between EMA70 levels
+    # --------------------------------------------------------
 
     step_1 = (
-        (ema70_now - ema70_4)
-        / ema70_4
+        (ema70_now - ema70_4) /
+        ema70_4
     ) * 100
 
     step_2 = (
-        (ema70_4 - ema70_8)
-        / ema70_8
+        (ema70_4 - ema70_8) /
+        ema70_8
     ) * 100
 
     step_3 = (
-        (ema70_8 - ema70_12)
-        / ema70_12
+        (ema70_8 - ema70_12) /
+        ema70_12
     ) * 100
 
-    total_change = (
-        (ema70_now - ema70_12)
-        / ema70_12
-    ) * 100
-
-    # ========================================================
+    # --------------------------------------------------------
     # STRONG UP TREND
     #
-    # EMA70 current
+    # EMA70 now
     # >
     # EMA70 -4
     # >
@@ -298,23 +216,20 @@ def calculate_trend(
     # >
     # EMA70 -12
     #
-    # And every step has a clear positive difference.
-    # ========================================================
+    # Every step must have clear positive movement.
+    # --------------------------------------------------------
 
     if (
-        step_1 >= EMA70_UP_MIN_STEP_PERCENT
-        and
-        step_2 >= EMA70_UP_MIN_STEP_PERCENT
-        and
+        step_1 >= EMA70_UP_MIN_STEP_PERCENT and
+        step_2 >= EMA70_UP_MIN_STEP_PERCENT and
         step_3 >= EMA70_UP_MIN_STEP_PERCENT
     ):
-
         return "↗️"
 
-    # ========================================================
+    # --------------------------------------------------------
     # STRONG DOWN TREND
     #
-    # EMA70 current
+    # EMA70 now
     # <
     # EMA70 -4
     # <
@@ -322,24 +237,21 @@ def calculate_trend(
     # <
     # EMA70 -12
     #
-    # With very clear negative differences.
-    # ========================================================
+    # Every step must have very clear negative movement.
+    # --------------------------------------------------------
 
     if (
-        step_1 <= -EMA70_DOWN_MIN_STEP_PERCENT
-        and
-        step_2 <= -EMA70_DOWN_MIN_STEP_PERCENT
-        and
+        step_1 <= -EMA70_DOWN_MIN_STEP_PERCENT and
+        step_2 <= -EMA70_DOWN_MIN_STEP_PERCENT and
         step_3 <= -EMA70_DOWN_MIN_STEP_PERCENT
     ):
-
         return "🔻"
 
-    # ========================================================
+    # --------------------------------------------------------
     # SIDEWAYS / FLAT
     #
-    # All EMA70 levels are relatively close.
-    # ========================================================
+    # EMA70 levels are relatively close together.
+    # --------------------------------------------------------
 
     max_ema70 = max(
         ema70_now,
@@ -355,25 +267,18 @@ def calculate_trend(
         ema70_12
     )
 
-    distance_percent = (
-        (max_ema70 - min_ema70)
-        / min_ema70
-    ) * 100
-
-    if (
-        distance_percent
-        <= EMA70_SIDE_MAX_DISTANCE_PERCENT
-    ):
-
+    if min_ema70 <= 0:
         return "🔛"
 
-    # ========================================================
-    # Everything else
-    #
-    # Not clearly bullish and not clearly strongly bearish.
-    # Treat as sideways for safety.
-    # ========================================================
+    distance_percent = (
+        (max_ema70 - min_ema70) /
+        min_ema70
+    ) * 100
 
+    if distance_percent <= EMA70_SIDE_MAX_DISTANCE_PERCENT:
+        return "🔛"
+
+    # Everything else = sideways for safety
     return "🔛"
 
 
@@ -383,34 +288,20 @@ def calculate_trend(
 
 all_dates = set()
 
-
 for symbol, df in prepared_data.items():
-
     if symbol == EGX30_KEY:
-
         continue
 
-    all_dates.update(
-        df.index
-    )
+    all_dates.update(df.index)
 
-
-all_dates = sorted(
-    all_dates
-)
-
+all_dates = sorted(all_dates)
 
 if not all_dates:
-
-    raise ValueError(
-        "❌ No trading dates available."
-    )
-
+    raise ValueError("❌ No trading dates available.")
 
 print(
     f"📅 Backtest period: "
-    f"{all_dates[0].strftime('%Y-%m-%d')} "
-    f"→ "
+    f"{all_dates[0].strftime('%Y-%m-%d')} → "
     f"{all_dates[-1].strftime('%Y-%m-%d')}"
 )
 
@@ -421,21 +312,14 @@ print(
 
 states = {}
 
-
 for symbol in prepared_data:
-
     if symbol == EGX30_KEY:
-
         continue
 
     states[symbol] = {
-
         "in_position": False,
-
         "entry_price": None,
-
         "entry_date": None,
-
         "entry_trend": None
     }
 
@@ -452,11 +336,8 @@ trades = []
 # ============================================================
 
 closed_profit_percent = 0.0
-
 equity_curve = []
-
 peak_equity = 0.0
-
 max_drawdown = 0.0
 
 
@@ -465,11 +346,8 @@ max_drawdown = 0.0
 # ============================================================
 
 trend_days = {
-
     "↗️": 0,
-
     "🔛": 0,
-
     "🔻": 0
 }
 
@@ -480,68 +358,46 @@ trend_days = {
 
 for current_date in all_dates:
 
-    # --------------------------------------------------------
+    # ========================================================
     # EGX30
     #
     # IMPORTANT:
-    # EGX30 DOES NOT CONTROL ANYTHING.
-    # It is intentionally ignored by strategy logic.
-    # --------------------------------------------------------
+    # EGX30 DOES NOT CONTROL THE STRATEGY.
+    # It is completely ignored here.
+    # ========================================================
 
-    # --------------------------------------------------------
+    # ========================================================
     # Process Every Stock
-    # --------------------------------------------------------
+    # ========================================================
 
     for symbol, df in prepared_data.items():
 
         if symbol == EGX30_KEY:
-
             continue
 
         if current_date not in df.index:
-
             continue
 
-        current_index = df.index.get_loc(
-            current_date
-        )
+        current_index = df.index.get_loc(current_date)
 
-        # EMA70 requires 12 candles for trend levels,
-        # but we keep a safer minimum history.
+        # Safety history
         if current_index < 80:
-
             continue
 
-        row = df.iloc[
-            current_index
-        ]
+        row = df.iloc[current_index]
 
-        prev = df.iloc[
-            current_index - 1
-        ]
-
-        close = float(
-            row["Close"]
-        )
+        close = float(row["Close"])
 
         if pd.isna(close):
-
             continue
 
         if pd.isna(row["RSI14"]):
-
             continue
 
         state = states[symbol]
 
-        in_position = state[
-            "in_position"
-        ]
-
-        entry_price = state[
-            "entry_price"
-        ]
-
+        in_position = state["in_position"]
+        entry_price = state["entry_price"]
 
         # ====================================================
         # Calculate EMA70 Trend
@@ -555,124 +411,108 @@ for current_date in all_dates:
         trend_days[trend] += 1
 
         buy_signal = False
-
         sell_signal = False
-
         sell_reason = ""
 
-
-# UP TREND
-#
-# EMA70 clearly rising
-#
-# Entry:
-# EMA70 clearly rising
-# +
-# RSI14 < 48
-#
-# Exit:
-# RSI14 > 77
-#
-# Stop Loss:
-# -7%
-# ====================================================
-
-if trend == "↗️":
-
-    # ------------------------------------------------
-    # BUY
-    # ------------------------------------------------
-
-    if (
-        not in_position
-        and
-        row["RSI14"] < 48
-    ):
-
-        buy_signal = True
-
-    # ------------------------------------------------
-    # SELL
-    # ------------------------------------------------
-
-    elif in_position:
-
-        rsi_sell = (
-            row["RSI14"] > 77
-        )
-
-        stop_loss = (
-            close
-            <
-            entry_price * 0.93
         # ====================================================
         # UP TREND
+        #
+        # EMA70 clearly rising
+        #
+        # Entry:
+        # EMA70 clearly rising
+        # +
+        # RSI14 < 48
+        #
+        # Exit:
+        # RSI14 > 77
+        #
+        # Stop Loss:
+        # -7%
         # ====================================================
 
         if trend == "↗️":
 
-            if (
-                not in_position
-                and
-                bool(row["cross_up"])
-            ):
+            # ------------------------------------------------
+            # BUY
+            # ------------------------------------------------
 
+            if (
+                not in_position and
+                row["RSI14"] < RSI_UP_BUY
+            ):
                 buy_signal = True
 
+            # ------------------------------------------------
+            # SELL
+            # ------------------------------------------------
+
             elif in_position:
+
+                rsi_sell = (
+                    row["RSI14"] > RSI_UP_SELL
+                )
+
+                stop_loss = (
+                    close <
+                    entry_price * (
+                        1 -
+                        STOP_LOSS_PERCENT / 100
+                    )
+                )
+
+                if rsi_sell:
+                    sell_signal = True
+                    sell_reason = "RSI_77"
+
+                elif stop_loss:
+                    sell_signal = True
+                    sell_reason = "STOP_LOSS"
+
+        # ====================================================
+        # SIDEWAYS
+        #
+        # IMPORTANT:
+        # Sideways strategy remains unchanged.
+        #
+        # Buy:
+        # RSI < 28
+        #
+        # Sell:
+        # RSI > 65
+        # ====================================================
+
         elif trend == "🔛":
 
             if (
-                not in_position
-                and
-                row["RSI14"]
-                <
-                RSI_SIDE_BUY
+                not in_position and
+                row["RSI14"] < RSI_SIDE_BUY
             ):
-
                 buy_signal = True
 
             elif in_position:
 
-                if (
-                    row["RSI14"]
-                    >
-                    RSI_SIDE_SELL
-                ):
+                if row["RSI14"] > RSI_SIDE_SELL:
 
                     sell_signal = True
-
-                    sell_reason = (
-                        "SIDE_RSI_TARGET"
-                    )
+                    sell_reason = "SIDE_RSI_TARGET"
 
                 elif (
-                    close
-                    <
-                    entry_price
-                    *
-                    (
-                        1
-                        -
-                        STOP_LOSS_PERCENT
-                        /
-                        100
+                    close <
+                    entry_price * (
+                        1 -
+                        STOP_LOSS_PERCENT / 100
                     )
                 ):
 
                     sell_signal = True
-
-                    sell_reason = (
-                        "STOP_LOSS"
-                    )
-
+                    sell_reason = "STOP_LOSS"
 
         # ====================================================
         # STRONG DOWN TREND
         #
-        # NO NEW TRADES
-        #
-        # CLOSE ANY OPEN POSITION
+        # No new trades.
+        # Close any open position.
         # ====================================================
 
         elif trend == "🔻":
@@ -680,125 +520,63 @@ if trend == "↗️":
             if in_position:
 
                 sell_signal = True
-
-                sell_reason = (
-                    "EMA70_STRONG_DOWN"
-                )
-
+                sell_reason = "EMA70_STRONG_DOWN"
 
         # ====================================================
         # BUY
         # ====================================================
 
-        if (
-            buy_signal
-            and
-            not in_position
-        ):
+        if buy_signal and not in_position:
 
-            state[
-                "in_position"
-            ] = True
-
-            state[
-                "entry_price"
-            ] = close
-
-            state[
-                "entry_date"
-            ] = current_date.strftime(
+            state["in_position"] = True
+            state["entry_price"] = close
+            state["entry_date"] = current_date.strftime(
                 "%Y-%m-%d"
             )
-
-            state[
-                "entry_trend"
-            ] = trend
-
+            state["entry_trend"] = trend
 
         # ====================================================
         # SELL
         # ====================================================
 
-        elif (
-            sell_signal
-            and
-            in_position
-        ):
+        elif sell_signal and in_position:
 
             profit_pct = (
-                (
-                    close
-                    -
-                    entry_price
-                )
-                /
+                (close - entry_price) /
                 entry_price
             ) * 100
 
-
             trade = {
-
                 "symbol": symbol,
-
-                "entry_date": state[
-                    "entry_date"
-                ],
-
+                "entry_date": state["entry_date"],
                 "exit_date": current_date.strftime(
                     "%Y-%m-%d"
                 ),
-
                 "entry_price": round(
                     entry_price,
                     4
                 ),
-
                 "exit_price": round(
                     close,
                     4
                 ),
-
-                "entry_trend": state[
-                    "entry_trend"
-                ],
-
+                "entry_trend": state["entry_trend"],
                 "exit_trend": trend,
-
                 "profit_pct": round(
                     profit_pct,
                     2
                 ),
-
                 "exit_reason": sell_reason
             }
 
+            trades.append(trade)
 
-            trades.append(
-                trade
-            )
+            closed_profit_percent += profit_pct
 
-
-            closed_profit_percent += (
-                profit_pct
-            )
-
-
-            state[
-                "in_position"
-            ] = False
-
-            state[
-                "entry_price"
-            ] = None
-
-            state[
-                "entry_date"
-            ] = None
-
-            state[
-                "entry_trend"
-            ] = None
-
+            state["in_position"] = False
+            state["entry_price"] = None
+            state["entry_date"] = None
+            state["entry_trend"] = None
 
     # ========================================================
     # Equity
@@ -808,67 +586,42 @@ if trend == "↗️":
         closed_profit_percent
     )
 
-
-    if (
-        closed_profit_percent
-        >
-        peak_equity
-    ):
-
-        peak_equity = (
-            closed_profit_percent
-        )
-
+    if closed_profit_percent > peak_equity:
+        peak_equity = closed_profit_percent
 
     drawdown = (
-        peak_equity
-        -
+        peak_equity -
         closed_profit_percent
     )
 
-
     if drawdown > max_drawdown:
-
         max_drawdown = drawdown
 
 
 # ============================================================
-# Close Remaining Open Positions
+# Open Positions
 # ============================================================
 
 open_positions = []
-
 
 for symbol, state in states.items():
 
     if state["in_position"]:
 
-        df = prepared_data[
-            symbol
-        ]
+        df = prepared_data[symbol]
 
         last_date = df.index[-1]
-
         last_price = float(
             df.iloc[-1]["Close"]
         )
 
         open_positions.append({
-
             "symbol": symbol,
-
-            "entry_date": state[
-                "entry_date"
-            ],
-
-            "entry_price": state[
-                "entry_price"
-            ],
-
+            "entry_date": state["entry_date"],
+            "entry_price": state["entry_price"],
             "last_date": last_date.strftime(
                 "%Y-%m-%d"
             ),
-
             "last_price": last_price
         })
 
@@ -877,97 +630,60 @@ for symbol, state in states.items():
 # Statistics
 # ============================================================
 
-total_trades = len(
-    trades
-)
-
+total_trades = len(trades)
 
 winning_trades = [
-
     t for t in trades
-
     if t["profit_pct"] > 0
 ]
 
-
 losing_trades = [
-
     t for t in trades
-
     if t["profit_pct"] <= 0
 ]
 
-
-wins = len(
-    winning_trades
-)
-
-
-losses = len(
-    losing_trades
-)
-
+wins = len(winning_trades)
+losses = len(losing_trades)
 
 win_rate = (
-
     (wins / total_trades) * 100
-
     if total_trades > 0
-
     else 0
 )
 
-
 average_profit = (
-
     np.mean([
         t["profit_pct"]
         for t in winning_trades
     ])
-
     if winning_trades
-
     else 0
 )
 
-
 average_loss = (
-
     np.mean([
         t["profit_pct"]
         for t in losing_trades
     ])
-
     if losing_trades
-
     else 0
 )
 
-
 best_trade = (
-
     max(
         trades,
-        key=lambda x:
-        x["profit_pct"]
+        key=lambda x: x["profit_pct"]
     )
-
     if trades
-
     else None
 )
 
-
 worst_trade = (
-
     min(
         trades,
-        key=lambda x:
-        x["profit_pct"]
+        key=lambda x: x["profit_pct"]
     )
-
     if trades
-
     else None
 )
 
@@ -977,21 +693,16 @@ worst_trade = (
 # ============================================================
 
 results = {
-
     "backtest_period": {
-
         "start": all_dates[0].strftime(
             "%Y-%m-%d"
         ),
-
         "end": all_dates[-1].strftime(
             "%Y-%m-%d"
         )
     },
 
-
     "strategy": {
-
         "primary_indicator": "EMA70",
 
         "ema70_levels": [
@@ -1017,11 +728,11 @@ results = {
         ),
 
         "up_entry": (
-            "EMA12 crosses EMA20 upward"
+            "EMA70 clearly rising + RSI14 < 48"
         ),
 
         "up_exit": (
-            "EMA12 crosses EMA20 downward"
+            "RSI14 > 77"
         ),
 
         "side_entry": (
@@ -1036,71 +747,46 @@ results = {
             "No buy + close open positions"
         ),
 
-        "stop_loss_percent": (
-            STOP_LOSS_PERCENT
+        "stop_loss_percent": STOP_LOSS_PERCENT,
+
+        "egx30_market_filter": "DISABLED"
+    },
+
+    "statistics": {
+        "total_trades": total_trades,
+        "winning_trades": wins,
+        "losing_trades": losses,
+
+        "win_rate_percent": round(
+            win_rate,
+            2
         ),
 
-        "egx30_market_filter": (
-            "DISABLED"
+        "total_profit_percent": round(
+            closed_profit_percent,
+            2
+        ),
+
+        "average_winning_trade_percent": round(
+            float(average_profit),
+            2
+        ),
+
+        "average_losing_trade_percent": round(
+            float(average_loss),
+            2
+        ),
+
+        "maximum_drawdown_percent": round(
+            max_drawdown,
+            2
         )
     },
 
-
-    "statistics": {
-
-        "total_trades":
-            total_trades,
-
-        "winning_trades":
-            wins,
-
-        "losing_trades":
-            losses,
-
-        "win_rate_percent":
-            round(
-                win_rate,
-                2
-            ),
-
-        "total_profit_percent":
-            round(
-                closed_profit_percent,
-                2
-            ),
-
-        "average_winning_trade_percent":
-            round(
-                float(
-                    average_profit
-                ),
-                2
-            ),
-
-        "average_losing_trade_percent":
-            round(
-                float(
-                    average_loss
-                ),
-                2
-            ),
-
-        "maximum_drawdown_percent":
-            round(
-                max_drawdown,
-                2
-            )
-    },
-
-
     "trend_days": trend_days,
-
     "best_trade": best_trade,
-
     "worst_trade": worst_trade,
-
-    "open_positions":
-        open_positions
+    "open_positions": open_positions
 }
 
 
@@ -1120,7 +806,6 @@ with open(
         indent=2,
         ensure_ascii=False
     )
-
 
 with open(
     TRADES_FILE,
@@ -1142,49 +827,31 @@ with open(
 
 stock_summary = {}
 
-
 for trade in trades:
 
     symbol = trade["symbol"]
-
     profit = trade["profit_pct"]
-
 
     if symbol not in stock_summary:
 
         stock_summary[symbol] = {
-
             "symbol": symbol,
-
             "total_trades": 0,
-
             "winning_trades": 0,
-
             "losing_trades": 0,
-
             "win_rate_percent": 0,
-
             "total_profit_percent": 0,
-
             "average_profit_percent": 0,
-
             "average_loss_percent": 0,
-
             "best_trade_percent": None,
-
             "worst_trade_percent": None
         }
 
-
-    stock_summary[symbol][
-        "total_trades"
-    ] += 1
-
+    stock_summary[symbol]["total_trades"] += 1
 
     stock_summary[symbol][
         "total_profit_percent"
     ] += profit
-
 
     if profit > 0:
 
@@ -1205,137 +872,67 @@ for trade in trades:
 
 for symbol, summary in stock_summary.items():
 
-    total = summary[
-        "total_trades"
-    ]
-
-    wins = summary[
-        "winning_trades"
-    ]
-
-    losses = summary[
-        "losing_trades"
-    ]
-
+    total = summary["total_trades"]
+    wins = summary["winning_trades"]
 
     symbol_trades = [
-
         t for t in trades
-
         if t["symbol"] == symbol
     ]
 
-
     winning_profits = [
-
         t["profit_pct"]
-
         for t in symbol_trades
-
         if t["profit_pct"] > 0
     ]
 
-
     losing_profits = [
-
         t["profit_pct"]
-
         for t in symbol_trades
-
         if t["profit_pct"] <= 0
     ]
 
-
-    summary[
-        "win_rate_percent"
-    ] = round(
-
-        (
-            wins
-            /
-            total
-        ) * 100
-
+    summary["win_rate_percent"] = round(
+        (wins / total) * 100
         if total > 0
-
         else 0,
-
         2
     )
 
-
-    summary[
-        "total_profit_percent"
-    ] = round(
-
-        summary[
-            "total_profit_percent"
-        ],
-
+    summary["total_profit_percent"] = round(
+        summary["total_profit_percent"],
         2
     )
 
-
-    summary[
-        "average_profit_percent"
-    ] = round(
-
-        float(
-            np.mean(
-                winning_profits
-            )
-        )
-
+    summary["average_profit_percent"] = round(
+        float(np.mean(winning_profits))
         if winning_profits
-
         else 0,
-
         2
     )
 
-
-    summary[
-        "average_loss_percent"
-    ] = round(
-
-        float(
-            np.mean(
-                losing_profits
-            )
-        )
-
+    summary["average_loss_percent"] = round(
+        float(np.mean(losing_profits))
         if losing_profits
-
         else 0,
-
         2
     )
-
 
     if symbol_trades:
 
-        summary[
-            "best_trade_percent"
-        ] = round(
-
+        summary["best_trade_percent"] = round(
             max(
                 t["profit_pct"]
                 for t in symbol_trades
             ),
-
             2
         )
 
-
-        summary[
-            "worst_trade_percent"
-        ] = round(
-
+        summary["worst_trade_percent"] = round(
             min(
                 t["profit_pct"]
                 for t in symbol_trades
             ),
-
             2
         )
 
@@ -1348,12 +945,8 @@ stock_summary_list = list(
     stock_summary.values()
 )
 
-
 stock_summary_list.sort(
-
-    key=lambda x:
-    x["total_profit_percent"],
-
+    key=lambda x: x["total_profit_percent"],
     reverse=True
 )
 
@@ -1375,7 +968,6 @@ with open(
         ensure_ascii=False
     )
 
-
 print(
     f"📊 Stock summary saved to: "
     f"{STOCK_SUMMARY_FILE}"
@@ -1387,58 +979,31 @@ print(
 # ============================================================
 
 print()
-
 print("=" * 60)
-
-print(
-    "🏆 TOP 10 STOCKS"
-)
-
+print("🏆 TOP 10 STOCKS")
 print("=" * 60)
-
 
 for stock in stock_summary_list[:10]:
 
     print(
-
         f"{stock['symbol']} | "
-
-        f"Trades: "
-        f"{stock['total_trades']} | "
-
-        f"Win Rate: "
-        f"{stock['win_rate_percent']:.2f}% | "
-
-        f"Result: "
-        f"{stock['total_profit_percent']:.2f}%"
+        f"Trades: {stock['total_trades']} | "
+        f"Win Rate: {stock['win_rate_percent']:.2f}% | "
+        f"Result: {stock['total_profit_percent']:.2f}%"
     )
 
-
 print()
-
 print("=" * 60)
-
-print(
-    "💥 WORST 10 STOCKS"
-)
-
+print("💥 WORST 10 STOCKS")
 print("=" * 60)
-
 
 for stock in stock_summary_list[-10:]:
 
     print(
-
         f"{stock['symbol']} | "
-
-        f"Trades: "
-        f"{stock['total_trades']} | "
-
-        f"Win Rate: "
-        f"{stock['win_rate_percent']:.2f}% | "
-
-        f"Result: "
-        f"{stock['total_profit_percent']:.2f}%"
+        f"Trades: {stock['total_trades']} | "
+        f"Win Rate: {stock['win_rate_percent']:.2f}% | "
+        f"Result: {stock['total_profit_percent']:.2f}%"
     )
 
 
@@ -1447,142 +1012,100 @@ for stock in stock_summary_list[-10:]:
 # ============================================================
 
 print()
-
+print("=" * 60)
+print("📊 MULTI-TREND EMA70 LONG-TERM BACKTEST RESULTS")
 print("=" * 60)
 
 print(
-    "📊 MULTI-TREND EMA70 "
-    "LONG-TERM BACKTEST RESULTS"
-)
-
-print("=" * 60)
-
-
-print(
-
     f"📅 Period: "
-
-    f"{results['backtest_period']['start']} "
-
-    f"→ "
-
+    f"{results['backtest_period']['start']} → "
     f"{results['backtest_period']['end']}"
 )
-
 
 print(
     f"📈 Total Trades: "
     f"{total_trades}"
 )
 
-
 print(
     f"🟢 Winning Trades: "
     f"{wins}"
 )
-
 
 print(
     f"🔴 Losing Trades: "
     f"{losses}"
 )
 
-
 print(
     f"🎯 Win Rate: "
     f"{win_rate:.2f}%"
 )
-
 
 print(
     f"💰 Total Profit: "
     f"{closed_profit_percent:.2f}%"
 )
 
-
 print(
     f"📊 Average Win: "
     f"{average_profit:.2f}%"
 )
-
 
 print(
     f"📉 Average Loss: "
     f"{average_loss:.2f}%"
 )
 
-
 print(
     f"⚠️ Maximum Drawdown: "
     f"{max_drawdown:.2f}%"
 )
 
-
 print()
-
-print(
-    "📊 EMA70 Trend Distribution:"
-)
-
+print("📊 EMA70 Trend Distribution:")
 
 print(
     f"↗️ Up Trend Days: "
     f"{trend_days['↗️']}"
 )
 
-
 print(
     f"🔛 Sideways Days: "
     f"{trend_days['🔛']}"
 )
-
 
 print(
     f"🔻 Down Trend Days: "
     f"{trend_days['🔻']}"
 )
 
-
 if best_trade:
 
     print(
-
         f"🏆 Best Trade: "
-
         f"{best_trade['symbol']} "
-
         f"{best_trade['profit_pct']:.2f}%"
     )
-
 
 if worst_trade:
 
     print(
-
         f"💥 Worst Trade: "
-
         f"{worst_trade['symbol']} "
-
         f"{worst_trade['profit_pct']:.2f}%"
     )
-
 
 print(
     f"📂 Results saved to: "
     f"{RESULTS_FILE}"
 )
 
-
 print(
     f"📂 Trades saved to: "
     f"{TRADES_FILE}"
 )
 
-
 print("=" * 60)
-
-print(
-    "🏁 Backtest Complete."
-)
-
+print("🏁 Backtest Complete.")
 print("=" * 60)
