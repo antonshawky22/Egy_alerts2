@@ -42,16 +42,16 @@ RSI_UP_BUY = 62
 
 # Second buy after EMA70 starts moving sideways
 # and price gives a deeper pullback
-RSI_SIDE_BUY_2 = 52
+RSI_SIDE_BUY_2 = 48
 
 # Third buy only at a still lower RSI level
-RSI_SIDE_BUY_3 = 42
+RSI_SIDE_BUY_3 = 11
 
 # Partial profit target
-RSI_PARTIAL_SELL = 68
+RSI_PARTIAL_SELL = 73
 
 # Strong profit target
-RSI_FINAL_SELL = 75
+RSI_FINAL_SELL = 80
 
 # ------------------------------------------------------------
 # STOP LOSS
