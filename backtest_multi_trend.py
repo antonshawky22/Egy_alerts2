@@ -38,20 +38,20 @@ EMA70_DOWN_MIN_STEP_PERCENT = 1.00
 # ------------------------------------------------------------
 
 # First buy while EMA70 is clearly rising
-RSI_UP_BUY = 58
+RSI_UP_BUY = 62
 
 # Second buy after EMA70 starts moving sideways
 # and price gives a deeper pullback
-RSI_SIDE_BUY_2 = 48
+RSI_SIDE_BUY_2 = 52
 
 # Third buy only at a still lower RSI level
-RSI_SIDE_BUY_3 = 38
+RSI_SIDE_BUY_3 = 42
 
 # Partial profit target
-RSI_PARTIAL_SELL = 66
+RSI_PARTIAL_SELL = 68
 
 # Strong profit target
-RSI_FINAL_SELL = 73
+RSI_FINAL_SELL = 75
 
 # ------------------------------------------------------------
 # STOP LOSS
