@@ -1,5 +1,19 @@
 {
-  "OLFI": [],
+  "OLFI": [
+    {
+      "symbol": "OLFI",
+      "cycle": 1,
+      "status": "OPEN",
+      "first_entry": "2026-08-18 with price 24.53",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 24.53,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
+    }
+  ],
   "EMFD": [
     {
       "symbol": "EMFD",
