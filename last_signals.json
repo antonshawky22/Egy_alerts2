@@ -35,7 +35,7 @@
     "entry_price": 74.76
   },
   "OIH": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": false,
     "entry_price": null
   },
@@ -71,8 +71,8 @@
   },
   "ORWE": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 25.98
   },
   "JUFO": {
     "trend": "🔻",
@@ -86,8 +86,8 @@
   },
   "SUGR": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 49.25
+    "in_position": false,
+    "entry_price": null
   },
   "ELSH": {
     "trend": "↗️",
@@ -111,8 +111,8 @@
   },
   "MPCO": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 2.14
   },
   "GBCO": {
     "trend": "🔛",
