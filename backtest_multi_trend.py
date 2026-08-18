@@ -24,7 +24,7 @@ EMA70_SIDE_MAX_DISTANCE_PERCENT = 1.00
 EMA70_DOWN_MIN_STEP_PERCENT = 1.00
 
 # RSI THRESHOLDS (V8 HIGH-CONVICTION)
-RSI_UP_BUY = 65            # دخول مع الزخم القوي فقط
+RSI_UP_BUY = 70            # دخول مع الزخم القوي فقط
 RSI_SIDE_BUY_2 = 45        # شريحة تجميع ثانية عند التصحيح
 RSI_SIDE_BUY_3 = 20        # شريحة أعمق إن وجدت
 
