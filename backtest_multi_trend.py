@@ -57,7 +57,19 @@ RSI_FINAL_SELL = 77
 # STOP LOSS
 # ------------------------------------------------------------
 
-STOP_LOSS_PERCENT = 7.0
+# OLD:
+# STOP_LOSS_PERCENT = 7.0
+#
+# NEW:
+# No fixed percentage stop.
+#
+# Stop is activated only when EMA70 itself starts falling
+# sharply.
+#
+# Current EMA70 must fall by at least 1% compared with
+# EMA70 from 4 candles ago.
+
+EMA70_STOP_MIN_DROP_PERCENT = 1.00
 
 # ============================================================
 # POSITION SIZE
@@ -348,6 +360,58 @@ def calculate_trend(df, index):
 
 
 # ============================================================
+# EMA70 SHARP DECLINE DETECTION
+# ============================================================
+
+def ema70_sharp_decline(df, index):
+
+    """
+    Detect a strong deterioration in EMA70.
+
+    Stop is triggered when the current EMA70 has fallen
+    by at least EMA70_STOP_MIN_DROP_PERCENT compared with
+    EMA70 from 4 candles ago.
+
+    This is intentionally independent from:
+    - RSI
+    - current price percentage loss
+    - EMA70 full downtrend classification
+    """
+
+    if index < 4:
+        return False
+
+    ema70_now = float(
+        df.iloc[index]["EMA70"]
+    )
+
+    ema70_4 = float(
+        df.iloc[index - 4]["EMA70"]
+    )
+
+    if (
+        pd.isna(ema70_now)
+        or
+        pd.isna(ema70_4)
+        or
+        ema70_4 <= 0
+    ):
+        return False
+
+    decline_percent = (
+        (ema70_now - ema70_4)
+        /
+        ema70_4
+    ) * 100
+
+    return (
+        decline_percent
+        <=
+        -EMA70_STOP_MIN_DROP_PERCENT
+    )
+
+
+# ============================================================
 # ALL TRADING DATES
 # ============================================================
 
@@ -622,8 +686,6 @@ for current_date in all_dates:
         buy_signal = False
         buy_level = None
 
-        sell_reason = None
-
         realized_profit = 0.0
         sales = []
 
@@ -801,45 +863,42 @@ for current_date in all_dates:
             sales.extend(final_sales)
 
         # ====================================================
-        # STOP LOSS
+        # EMA70 SHARP DECLINE STOP
         #
-        # Applied to the weighted average position.
+        # NEW STOP LOGIC
         #
-        # IMPORTANT:
-        # It does not use the first entry price only.
+        # We no longer stop simply because price is down 7%.
+        #
+        # Instead, we wait for EMA70 itself to deteriorate
+        # strongly.
+        #
+        # Trigger:
+        #
+        # EMA70 current <= EMA70-4 by at least 1%
+        #
+        # This is designed to tolerate temporary price
+        # corrections while protecting capital when the
+        # underlying trend starts deteriorating seriously.
         # ====================================================
 
-        if state["in_position"]:
+        if (
+            state["in_position"]
+            and
+            ema70_sharp_decline(
+                df,
+                current_index
+            )
+        ):
 
-            avg_price = average_entry_price(
-                state
+            stop_profit, stop_sales = sell_all(
+                state,
+                close,
+                current_date,
+                "EMA70_SHARP_DECLINE"
             )
 
-            if (
-                avg_price is not None
-                and
-                close
-                <
-                avg_price
-                *
-                (
-                    1
-                    -
-                    STOP_LOSS_PERCENT
-                    /
-                    100
-                )
-            ):
-
-                stop_profit, stop_sales = sell_all(
-                    state,
-                    close,
-                    current_date,
-                    "STOP_LOSS"
-                )
-
-                realized_profit += stop_profit
-                sales.extend(stop_sales)
+            realized_profit += stop_profit
+            sales.extend(stop_sales)
 
         # ====================================================
         # BUY EXECUTION
@@ -895,7 +954,6 @@ for current_date in all_dates:
             # create one completed trade cycle.
             if not state["in_position"]:
 
-                total_entry_value = 0.0
                 total_profit = 0.0
 
                 for sale in sales:
@@ -1166,8 +1224,17 @@ results = {
             "No new buy + close all open tranches"
         ),
 
-        "stop_loss_percent": (
-            STOP_LOSS_PERCENT
+        "stop_loss": (
+            "EMA70 sharp decline"
+        ),
+
+        "ema70_stop_min_drop_percent": (
+            EMA70_STOP_MIN_DROP_PERCENT
+        ),
+
+        "ema70_stop_rule": (
+            "EMA70 current falls by at least "
+            "1% versus EMA70-4"
         ),
 
         "egx30_market_filter": (
