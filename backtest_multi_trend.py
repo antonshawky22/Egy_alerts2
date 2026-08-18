@@ -57,19 +57,7 @@ RSI_FINAL_SELL = 77
 # STOP LOSS
 # ------------------------------------------------------------
 
-# OLD:
-# STOP_LOSS_PERCENT = 7.0
-#
-# NEW:
-# No fixed percentage stop.
-#
-# Stop is activated only when EMA70 itself starts falling
-# sharply.
-#
-# Current EMA70 must fall by at least 1% compared with
-# EMA70 from 4 candles ago.
-
-EMA70_STOP_MIN_DROP_PERCENT = 1.00
+STOP_LOSS_PERCENT = 7.0
 
 # ============================================================
 # POSITION SIZE
@@ -360,58 +348,6 @@ def calculate_trend(df, index):
 
 
 # ============================================================
-# EMA70 SHARP DECLINE DETECTION
-# ============================================================
-
-def ema70_sharp_decline(df, index):
-
-    """
-    Detect a strong deterioration in EMA70.
-
-    Stop is triggered when the current EMA70 has fallen
-    by at least EMA70_STOP_MIN_DROP_PERCENT compared with
-    EMA70 from 4 candles ago.
-
-    This is intentionally independent from:
-    - RSI
-    - current price percentage loss
-    - EMA70 full downtrend classification
-    """
-
-    if index < 4:
-        return False
-
-    ema70_now = float(
-        df.iloc[index]["EMA70"]
-    )
-
-    ema70_4 = float(
-        df.iloc[index - 4]["EMA70"]
-    )
-
-    if (
-        pd.isna(ema70_now)
-        or
-        pd.isna(ema70_4)
-        or
-        ema70_4 <= 0
-    ):
-        return False
-
-    decline_percent = (
-        (ema70_now - ema70_4)
-        /
-        ema70_4
-    ) * 100
-
-    return (
-        decline_percent
-        <=
-        -EMA70_STOP_MIN_DROP_PERCENT
-    )
-
-
-# ============================================================
 # ALL TRADING DATES
 # ============================================================
 
@@ -451,11 +387,25 @@ for symbol in prepared_data:
         continue
 
     states[symbol] = {
+
         "in_position": False,
+
         "tranches": [],
+
         "entry_date": None,
+
         "entry_trend": None,
-        "partial_sell_done": False
+
+        "partial_sell_done": False,
+
+        # ====================================================
+        # IMPORTANT ACCOUNTING FIX
+        #
+        # Stores ALL sales belonging to the current
+        # complete trade cycle.
+        # ====================================================
+
+        "cycle_sales": []
     }
 
 
@@ -493,6 +443,7 @@ trend_days = {
 # ============================================================
 
 def position_units(state):
+
     return sum(
         tranche["size"]
         for tranche in state["tranches"]
@@ -523,9 +474,14 @@ def add_tranche(
 ):
 
     state["tranches"].append({
+
         "size": TRANCHE_SIZE,
+
         "price": float(price),
-        "date": date.strftime("%Y-%m-%d")
+
+        "date": date.strftime(
+            "%Y-%m-%d"
+        )
     })
 
     state["in_position"] = True
@@ -551,6 +507,7 @@ def sell_one_tranche(
     tranche = state["tranches"].pop(0)
 
     entry_price = tranche["price"]
+
     size = tranche["size"]
 
     profit_percent = (
@@ -567,34 +524,43 @@ def sell_one_tranche(
     )
 
     sale = {
+
         "entry_date": tranche["date"],
+
         "entry_price": round(
             entry_price,
             4
         ),
+
         "exit_date": current_date.strftime(
             "%Y-%m-%d"
         ),
+
         "exit_price": round(
             close,
             4
         ),
+
         "size": round(
             size,
             4
         ),
+
         "profit_pct_on_tranche": round(
             profit_percent,
             2
         ),
+
         "portfolio_contribution_pct": round(
             contribution,
             2
         ),
+
         "reason": reason
     }
 
     if not state["tranches"]:
+
         state["in_position"] = False
 
     return contribution, sale
@@ -611,6 +577,7 @@ def sell_all(
     """
 
     total_contribution = 0.0
+
     sales = []
 
     while state["tranches"]:
@@ -625,7 +592,10 @@ def sell_all(
         total_contribution += contribution
 
         if sale:
-            sales.append(sale)
+
+            sales.append(
+                sale
+            )
 
     state["in_position"] = False
 
@@ -674,7 +644,9 @@ for current_date in all_dates:
 
         in_position = state["in_position"]
 
-        units = position_units(state)
+        units = position_units(
+            state
+        )
 
         trend = calculate_trend(
             df,
@@ -684,10 +656,10 @@ for current_date in all_dates:
         trend_days[trend] += 1
 
         buy_signal = False
+
         buy_level = None
 
         realized_profit = 0.0
-        sales = []
 
         # ====================================================
         # STRONG UP TREND
@@ -709,6 +681,7 @@ for current_date in all_dates:
             ):
 
                 buy_signal = True
+
                 buy_level = 1
 
             # ------------------------------------------------
@@ -732,8 +705,16 @@ for current_date in all_dates:
                     )
                 )
 
+                # =================================================
+                # ACCOUNTING FIX:
+                # Keep this sale inside the complete trade cycle.
+                # =================================================
+
                 if sale:
-                    sales.append(sale)
+
+                    state["cycle_sales"].append(
+                        sale
+                    )
 
         # ====================================================
         # SIDEWAYS
@@ -762,6 +743,7 @@ for current_date in all_dates:
             ):
 
                 buy_signal = True
+
                 buy_level = 2
 
             # ------------------------------------------------
@@ -787,6 +769,7 @@ for current_date in all_dates:
             ):
 
                 buy_signal = True
+
                 buy_level = 3
 
             # ------------------------------------------------
@@ -810,8 +793,15 @@ for current_date in all_dates:
                     )
                 )
 
+                # =================================================
+                # ACCOUNTING FIX
+                # =================================================
+
                 if sale:
-                    sales.append(sale)
+
+                    state["cycle_sales"].append(
+                        sale
+                    )
 
         # ====================================================
         # STRONG DOWN TREND
@@ -827,12 +817,22 @@ for current_date in all_dates:
 
             if units > 0:
 
-                realized_profit, sales = sell_all(
+                realized_profit, stop_sales = sell_all(
                     state,
                     close,
                     current_date,
                     "EMA70_STRONG_DOWN"
                 )
+
+                # =================================================
+                # ACCOUNTING FIX
+                # =================================================
+
+                for sale in stop_sales:
+
+                    state["cycle_sales"].append(
+                        sale
+                    )
 
         # ====================================================
         # FINAL RSI TARGET
@@ -860,45 +860,66 @@ for current_date in all_dates:
             )
 
             realized_profit += final_profit
-            sales.extend(final_sales)
+
+            # =================================================
+            # ACCOUNTING FIX
+            # =================================================
+
+            for sale in final_sales:
+
+                state["cycle_sales"].append(
+                    sale
+                )
 
         # ====================================================
-        # EMA70 SHARP DECLINE STOP
+        # STOP LOSS
         #
-        # NEW STOP LOGIC
+        # Applied to the weighted average position.
         #
-        # We no longer stop simply because price is down 7%.
-        #
-        # Instead, we wait for EMA70 itself to deteriorate
-        # strongly.
-        #
-        # Trigger:
-        #
-        # EMA70 current <= EMA70-4 by at least 1%
-        #
-        # This is designed to tolerate temporary price
-        # corrections while protecting capital when the
-        # underlying trend starts deteriorating seriously.
+        # IMPORTANT:
+        # It does not use the first entry price only.
         # ====================================================
 
-        if (
-            state["in_position"]
-            and
-            ema70_sharp_decline(
-                df,
-                current_index
-            )
-        ):
+        if state["in_position"]:
 
-            stop_profit, stop_sales = sell_all(
-                state,
-                close,
-                current_date,
-                "EMA70_SHARP_DECLINE"
+            avg_price = average_entry_price(
+                state
             )
 
-            realized_profit += stop_profit
-            sales.extend(stop_sales)
+            if (
+                avg_price is not None
+                and
+                close
+                <
+                avg_price
+                *
+                (
+                    1
+                    -
+                    STOP_LOSS_PERCENT
+                    /
+                    100
+                )
+            ):
+
+                stop_profit, stop_sales = sell_all(
+                    state,
+                    close,
+                    current_date,
+                    "STOP_LOSS"
+                )
+
+                realized_profit += stop_profit
+
+                # =================================================
+                # ACCOUNTING FIX
+                # =================================================
+
+                for sale in stop_sales:
+
+                    state["cycle_sales"].append(
+                        sale
+                    )
 
         # ====================================================
         # BUY EXECUTION
@@ -926,6 +947,12 @@ for current_date in all_dates:
 
             state["entry_trend"] = trend
 
+            # =================================================
+            # New complete trade cycle starts here.
+            # =================================================
+
+            state["cycle_sales"] = []
+
         elif (
             buy_signal
             and
@@ -950,13 +977,22 @@ for current_date in all_dates:
                 realized_profit
             )
 
-            # If position is completely closed,
-            # create one completed trade cycle.
+            # =================================================
+            # COMPLETE TRADE CYCLE
+            # =================================================
+
             if not state["in_position"]:
 
                 total_profit = 0.0
 
-                for sale in sales:
+                # =================================================
+                # IMPORTANT ACCOUNTING FIX:
+                #
+                # Use ALL sales belonging to this complete
+                # position cycle.
+                # =================================================
+
+                for sale in state["cycle_sales"]:
 
                     contribution = sale[
                         "portfolio_contribution_pct"
@@ -965,35 +1001,54 @@ for current_date in all_dates:
                     total_profit += contribution
 
                 trade = {
+
                     "symbol": symbol,
+
                     "entry_date": state["entry_date"],
+
                     "exit_date": current_date.strftime(
                         "%Y-%m-%d"
                     ),
+
                     "entry_trend": state["entry_trend"],
+
                     "exit_trend": trend,
+
                     "profit_pct": round(
                         total_profit,
                         2
                     ),
-                    "exit_reason": sales[-1]["reason"]
-                    if sales
-                    else "UNKNOWN",
-                    "sales": sales
+
+                    "exit_reason":
+                        state["cycle_sales"][-1]["reason"]
+                        if state["cycle_sales"]
+                        else "UNKNOWN",
+
+                    "sales":
+                        state["cycle_sales"].copy()
                 }
 
                 trades.append(
                     trade
                 )
 
+                # =================================================
+                # RESET COMPLETE TRADE STATE
+                # =================================================
+
                 state["entry_date"] = None
+
                 state["entry_trend"] = None
+
                 state["partial_sell_done"] = False
+
+                state["cycle_sales"] = []
 
             else:
 
                 # Partial sale happened.
                 # Keep original cycle open.
+
                 state["partial_sell_done"] = True
 
         # ====================================================
@@ -1021,6 +1076,7 @@ for current_date in all_dates:
     )
 
     if drawdown > max_drawdown:
+
         max_drawdown = drawdown
 
 
@@ -1048,33 +1104,51 @@ for symbol, state in states.items():
     )
 
     open_positions.append({
+
         "symbol": symbol,
+
         "entry_date": state["entry_date"],
-        "average_entry_price": round(
-            avg_price,
-            4
-        ) if avg_price else None,
-        "position_size": round(
-            position_units(state),
-            4
-        ),
-        "last_date": last_date.strftime(
-            "%Y-%m-%d"
-        ),
-        "last_price": last_price,
-        "unrealized_profit_percent": round(
-            (
+
+        "average_entry_price":
+            round(
+                avg_price,
+                4
+            )
+            if avg_price
+            else None,
+
+        "position_size":
+            round(
+                position_units(state),
+                4
+            ),
+
+        "last_date":
+            last_date.strftime(
+                "%Y-%m-%d"
+            ),
+
+        "last_price":
+            last_price,
+
+        "unrealized_profit_percent":
+            round(
                 (
-                    last_price
-                    -
+                    (
+                        last_price
+                        -
+                        avg_price
+                    )
+                    /
                     avg_price
-                )
-                /
-                avg_price
-            ) * 100,
-            2
-        ) if avg_price else None,
-        "tranches": state["tranches"]
+                ) * 100,
+                2
+            )
+            if avg_price
+            else None,
+
+        "tranches":
+            state["tranches"]
     })
 
 
@@ -1082,7 +1156,9 @@ for symbol, state in states.items():
 # STATISTICS
 # ============================================================
 
-total_trades = len(trades)
+total_trades = len(
+    trades
+)
 
 winning_trades = [
     t for t in trades
@@ -1152,22 +1228,31 @@ worst_trade = (
 results = {
 
     "backtest_period": {
-        "start": all_dates[0].strftime(
-            "%Y-%m-%d"
-        ),
-        "end": all_dates[-1].strftime(
-            "%Y-%m-%d"
-        )
+
+        "start":
+            all_dates[0].strftime(
+                "%Y-%m-%d"
+            ),
+
+        "end":
+            all_dates[-1].strftime(
+                "%Y-%m-%d"
+            )
     },
 
     "strategy": {
 
-        "primary_indicator": "EMA70",
+        "primary_indicator":
+            "EMA70",
 
         "ema70_levels": [
+
             "current",
+
             "4_candles_ago",
+
             "8_candles_ago",
+
             "12_candles_ago"
         ],
 
@@ -1190,7 +1275,8 @@ results = {
             "3 equal capital tranches"
         ),
 
-        "tranche_size_percent": 33.33,
+        "tranche_size_percent":
+            33.33,
 
         "first_entry": (
             "EMA70 clearly rising + RSI14 < 48"
@@ -1224,22 +1310,11 @@ results = {
             "No new buy + close all open tranches"
         ),
 
-        "stop_loss": (
-            "EMA70 sharp decline"
-        ),
+        "stop_loss_percent":
+            STOP_LOSS_PERCENT,
 
-        "ema70_stop_min_drop_percent": (
-            EMA70_STOP_MIN_DROP_PERCENT
-        ),
-
-        "ema70_stop_rule": (
-            "EMA70 current falls by at least "
-            "1% versus EMA70-4"
-        ),
-
-        "egx30_market_filter": (
+        "egx30_market_filter":
             "DISABLED"
-        )
     },
 
     "statistics": {
@@ -1342,21 +1417,42 @@ stock_summary = {}
 for trade in trades:
 
     symbol = trade["symbol"]
+
     profit = trade["profit_pct"]
 
     if symbol not in stock_summary:
 
         stock_summary[symbol] = {
-            "symbol": symbol,
-            "total_trades": 0,
-            "winning_trades": 0,
-            "losing_trades": 0,
-            "win_rate_percent": 0,
-            "total_profit_percent": 0,
-            "average_profit_percent": 0,
-            "average_loss_percent": 0,
-            "best_trade_percent": None,
-            "worst_trade_percent": None
+
+            "symbol":
+                symbol,
+
+            "total_trades":
+                0,
+
+            "winning_trades":
+                0,
+
+            "losing_trades":
+                0,
+
+            "win_rate_percent":
+                0,
+
+            "total_profit_percent":
+                0,
+
+            "average_profit_percent":
+                0,
+
+            "average_loss_percent":
+                0,
+
+            "best_trade_percent":
+                None,
+
+            "worst_trade_percent":
+                None
         }
 
     stock_summary[symbol][
@@ -1414,46 +1510,60 @@ for symbol, summary in stock_summary.items():
     summary[
         "win_rate_percent"
     ] = round(
+
         (
             wins / total
         ) * 100
+
         if total > 0
+
         else 0,
+
         2
     )
 
     summary[
         "total_profit_percent"
     ] = round(
+
         summary[
             "total_profit_percent"
         ],
+
         2
     )
 
     summary[
         "average_profit_percent"
     ] = round(
+
         float(
             np.mean(
                 winning_profits
             )
         )
+
         if winning_profits
+
         else 0,
+
         2
     )
 
     summary[
         "average_loss_percent"
     ] = round(
+
         float(
             np.mean(
                 losing_profits
             )
         )
+
         if losing_profits
+
         else 0,
+
         2
     )
 
@@ -1462,20 +1572,24 @@ for symbol, summary in stock_summary.items():
         summary[
             "best_trade_percent"
         ] = round(
+
             max(
                 t["profit_pct"]
                 for t in symbol_trades
             ),
+
             2
         )
 
         summary[
             "worst_trade_percent"
         ] = round(
+
             min(
                 t["profit_pct"]
                 for t in symbol_trades
             ),
+
             2
         )
 
@@ -1568,19 +1682,23 @@ print(
 )
 
 print(
-    f"Total Trades: {total_trades}"
+    f"Total Trades: "
+    f"{total_trades}"
 )
 
 print(
-    f"Winning Trades: {wins}"
+    f"Winning Trades: "
+    f"{wins}"
 )
 
 print(
-    f"Losing Trades: {losses}"
+    f"Losing Trades: "
+    f"{losses}"
 )
 
 print(
-    f"Win Rate: {win_rate:.2f}%"
+    f"Win Rate: "
+    f"{win_rate:.2f}%"
 )
 
 print(
@@ -1604,7 +1722,9 @@ print(
 )
 
 print()
-print("EMA70 Trend Distribution:")
+print(
+    "EMA70 Trend Distribution:"
+)
 
 print(
     f"Up Trend Days: "
@@ -1638,6 +1758,7 @@ if worst_trade:
     )
 
 print()
+
 print(
     f"Results saved to: "
     f"{RESULTS_FILE}"
