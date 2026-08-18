@@ -21,27 +21,6 @@
     ]
   },
   {
-    "symbol": "RMDA",
-    "entry_date": "2026-03-29",
-    "exit_date": "2026-04-22",
-    "entry_trend": "↗️",
-    "exit_trend": "↗️",
-    "profit_pct": 4.2,
-    "exit_reason": "RSI_66",
-    "sales": [
-      {
-        "entry_date": "2026-03-29",
-        "entry_price": 4.13,
-        "exit_date": "2026-04-22",
-        "exit_price": 4.65,
-        "size": 0.3333,
-        "profit_pct_on_tranche": 12.59,
-        "portfolio_contribution_pct": 4.2,
-        "reason": "RSI_66"
-      }
-    ]
-  },
-  {
     "symbol": "RAYA",
     "entry_date": "2026-03-29",
     "exit_date": "2026-04-22",
@@ -84,6 +63,27 @@
     ]
   },
   {
+    "symbol": "ADIB",
+    "entry_date": "2026-04-22",
+    "exit_date": "2026-05-03",
+    "entry_trend": "↗️",
+    "exit_trend": "↗️",
+    "profit_pct": 3.08,
+    "exit_reason": "RSI_66",
+    "sales": [
+      {
+        "entry_date": "2026-04-22",
+        "entry_price": 43.85,
+        "exit_date": "2026-05-03",
+        "exit_price": 47.9,
+        "size": 0.3333,
+        "profit_pct_on_tranche": 9.24,
+        "portfolio_contribution_pct": 3.08,
+        "reason": "RSI_66"
+      }
+    ]
+  },
+  {
     "symbol": "EFIH",
     "entry_date": "2026-04-29",
     "exit_date": "2026-05-06",
@@ -105,127 +105,190 @@
     ]
   },
   {
-    "symbol": "ETEL",
-    "entry_date": "2026-04-30",
-    "exit_date": "2026-05-10",
+    "symbol": "ORHD",
+    "entry_date": "2026-05-04",
+    "exit_date": "2026-05-06",
     "entry_trend": "↗️",
     "exit_trend": "↗️",
-    "profit_pct": 2.14,
+    "profit_pct": 3.28,
     "exit_reason": "RSI_66",
     "sales": [
       {
-        "entry_date": "2026-04-30",
-        "entry_price": 93.5,
+        "entry_date": "2026-05-04",
+        "entry_price": 30.5,
+        "exit_date": "2026-05-06",
+        "exit_price": 33.5,
+        "size": 0.3333,
+        "profit_pct_on_tranche": 9.84,
+        "portfolio_contribution_pct": 3.28,
+        "reason": "RSI_66"
+      }
+    ]
+  },
+  {
+    "symbol": "ETEL",
+    "entry_date": "2026-04-20",
+    "exit_date": "2026-05-10",
+    "entry_trend": "↗️",
+    "exit_trend": "↗️",
+    "profit_pct": 1.95,
+    "exit_reason": "RSI_66",
+    "sales": [
+      {
+        "entry_date": "2026-04-20",
+        "entry_price": 94.0,
         "exit_date": "2026-05-10",
         "exit_price": 99.5,
         "size": 0.3333,
-        "profit_pct_on_tranche": 6.42,
-        "portfolio_contribution_pct": 2.14,
+        "profit_pct_on_tranche": 5.85,
+        "portfolio_contribution_pct": 1.95,
         "reason": "RSI_66"
       }
     ]
   },
   {
     "symbol": "RMDA",
-    "entry_date": "2026-04-30",
+    "entry_date": "2026-03-29",
     "exit_date": "2026-05-10",
     "entry_trend": "↗️",
     "exit_trend": "↗️",
-    "profit_pct": 4.18,
+    "profit_pct": 7.26,
     "exit_reason": "RSI_66",
     "sales": [
       {
-        "entry_date": "2026-04-30",
-        "entry_price": 4.47,
+        "entry_date": "2026-03-29",
+        "entry_price": 4.13,
         "exit_date": "2026-05-10",
         "exit_price": 5.03,
         "size": 0.3333,
-        "profit_pct_on_tranche": 12.53,
-        "portfolio_contribution_pct": 4.18,
+        "profit_pct_on_tranche": 21.79,
+        "portfolio_contribution_pct": 7.26,
+        "reason": "RSI_66"
+      }
+    ]
+  },
+  {
+    "symbol": "RAYA",
+    "entry_date": "2026-05-04",
+    "exit_date": "2026-05-10",
+    "entry_trend": "↗️",
+    "exit_trend": "↗️",
+    "profit_pct": 5.09,
+    "exit_reason": "RSI_66",
+    "sales": [
+      {
+        "entry_date": "2026-05-04",
+        "entry_price": 6.29,
+        "exit_date": "2026-05-10",
+        "exit_price": 7.25,
+        "size": 0.3333,
+        "profit_pct_on_tranche": 15.26,
+        "portfolio_contribution_pct": 5.09,
         "reason": "RSI_66"
       }
     ]
   },
   {
     "symbol": "FWRY",
-    "entry_date": "2026-04-30",
+    "entry_date": "2026-04-26",
     "exit_date": "2026-05-10",
     "entry_trend": "↗️",
     "exit_trend": "↗️",
-    "profit_pct": 3.81,
+    "profit_pct": 2.26,
     "exit_reason": "RSI_66",
     "sales": [
       {
-        "entry_date": "2026-04-30",
-        "entry_price": 19.07,
+        "entry_date": "2026-04-26",
+        "entry_price": 19.9,
         "exit_date": "2026-05-10",
         "exit_price": 21.25,
         "size": 0.3333,
-        "profit_pct_on_tranche": 11.43,
-        "portfolio_contribution_pct": 3.81,
+        "profit_pct_on_tranche": 6.78,
+        "portfolio_contribution_pct": 2.26,
         "reason": "RSI_66"
       }
     ]
   },
   {
     "symbol": "ADIB",
-    "entry_date": "2026-05-06",
-    "exit_date": "2026-05-11",
+    "entry_date": "2026-05-05",
+    "exit_date": "2026-05-13",
     "entry_trend": "↗️",
     "exit_trend": "↗️",
-    "profit_pct": 2.2,
+    "profit_pct": 2.73,
     "exit_reason": "RSI_66",
     "sales": [
       {
-        "entry_date": "2026-05-06",
-        "entry_price": 45.21,
-        "exit_date": "2026-05-11",
-        "exit_price": 48.2,
+        "entry_date": "2026-05-05",
+        "entry_price": 45.85,
+        "exit_date": "2026-05-13",
+        "exit_price": 49.6,
         "size": 0.3333,
-        "profit_pct_on_tranche": 6.61,
-        "portfolio_contribution_pct": 2.2,
+        "profit_pct_on_tranche": 8.18,
+        "portfolio_contribution_pct": 2.73,
         "reason": "RSI_66"
       }
     ]
   },
   {
     "symbol": "EGAL",
-    "entry_date": "2026-04-08",
+    "entry_date": "2026-03-29",
     "exit_date": "2026-05-13",
     "entry_trend": "↗️",
     "exit_trend": "↗️",
-    "profit_pct": 4.79,
+    "profit_pct": 4.35,
     "exit_reason": "RSI_66",
     "sales": [
       {
-        "entry_date": "2026-04-08",
-        "entry_price": 295.5,
+        "entry_date": "2026-03-29",
+        "entry_price": 299.0,
         "exit_date": "2026-05-13",
         "exit_price": 338.0,
         "size": 0.3333,
-        "profit_pct_on_tranche": 14.38,
-        "portfolio_contribution_pct": 4.79,
+        "profit_pct_on_tranche": 13.04,
+        "portfolio_contribution_pct": 4.35,
+        "reason": "RSI_66"
+      }
+    ]
+  },
+  {
+    "symbol": "EEII",
+    "entry_date": "2026-05-11",
+    "exit_date": "2026-05-14",
+    "entry_trend": "↗️",
+    "exit_trend": "↗️",
+    "profit_pct": 1.42,
+    "exit_reason": "RSI_66",
+    "sales": [
+      {
+        "entry_date": "2026-05-11",
+        "entry_price": 2.34,
+        "exit_date": "2026-05-14",
+        "exit_price": 2.44,
+        "size": 0.3333,
+        "profit_pct_on_tranche": 4.27,
+        "portfolio_contribution_pct": 1.42,
         "reason": "RSI_66"
       }
     ]
   },
   {
     "symbol": "EMFD",
-    "entry_date": "2026-05-18",
+    "entry_date": "2026-05-17",
     "exit_date": "2026-06-01",
     "entry_trend": "↗️",
     "exit_trend": "↗️",
-    "profit_pct": 4.39,
+    "profit_pct": 2.96,
     "exit_reason": "RSI_66",
     "sales": [
       {
-        "entry_date": "2026-05-18",
-        "entry_price": 10.41,
+        "entry_date": "2026-05-17",
+        "entry_price": 10.82,
         "exit_date": "2026-06-01",
         "exit_price": 11.78,
         "size": 0.3333,
-        "profit_pct_on_tranche": 13.16,
-        "portfolio_contribution_pct": 4.39,
+        "profit_pct_on_tranche": 8.87,
+        "portfolio_contribution_pct": 2.96,
         "reason": "RSI_66"
       }
     ]
@@ -252,22 +315,43 @@
     ]
   },
   {
-    "symbol": "ISPH",
+    "symbol": "ELSH",
     "entry_date": "2026-05-20",
-    "exit_date": "2026-06-03",
+    "exit_date": "2026-06-01",
     "entry_trend": "↗️",
     "exit_trend": "↗️",
-    "profit_pct": 2.8,
+    "profit_pct": 4.39,
+    "exit_reason": "RSI_66",
+    "sales": [
+      {
+        "entry_date": "2026-05-20",
+        "entry_price": 8.2,
+        "exit_date": "2026-06-01",
+        "exit_price": 9.28,
+        "size": 0.3333,
+        "profit_pct_on_tranche": 13.17,
+        "portfolio_contribution_pct": 4.39,
+        "reason": "RSI_66"
+      }
+    ]
+  },
+  {
+    "symbol": "ISPH",
+    "entry_date": "2026-05-20",
+    "exit_date": "2026-06-04",
+    "entry_trend": "↗️",
+    "exit_trend": "↗️",
+    "profit_pct": 3.87,
     "exit_reason": "RSI_66",
     "sales": [
       {
         "entry_date": "2026-05-20",
         "entry_price": 11.21,
-        "exit_date": "2026-06-03",
-        "exit_price": 12.15,
+        "exit_date": "2026-06-04",
+        "exit_price": 12.51,
         "size": 0.3333,
-        "profit_pct_on_tranche": 8.39,
-        "portfolio_contribution_pct": 2.8,
+        "profit_pct_on_tranche": 11.6,
+        "portfolio_contribution_pct": 3.87,
         "reason": "RSI_66"
       }
     ]
@@ -278,7 +362,7 @@
     "exit_date": "2026-06-04",
     "entry_trend": "↗️",
     "exit_trend": "🔛",
-    "profit_pct": 10.93,
+    "profit_pct": 17.13,
     "exit_reason": "RSI_77",
     "sales": [
       {
@@ -300,47 +384,57 @@
         "profit_pct_on_tranche": 18.59,
         "portfolio_contribution_pct": 6.2,
         "reason": "RSI_77"
+      },
+      {
+        "entry_date": "2026-05-21",
+        "entry_price": 1.56,
+        "exit_date": "2026-06-04",
+        "exit_price": 1.85,
+        "size": 0.3333,
+        "profit_pct_on_tranche": 18.59,
+        "portfolio_contribution_pct": 6.2,
+        "reason": "RSI_77"
       }
     ]
   },
   {
-    "symbol": "JUFO",
-    "entry_date": "2026-05-03",
+    "symbol": "RMDA",
+    "entry_date": "2026-05-25",
     "exit_date": "2026-06-09",
     "entry_trend": "↗️",
-    "exit_trend": "🔛",
-    "profit_pct": 4.25,
-    "exit_reason": "SIDE_RSI_66",
+    "exit_trend": "↗️",
+    "profit_pct": 1.52,
+    "exit_reason": "RSI_66",
     "sales": [
       {
-        "entry_date": "2026-05-20",
-        "entry_price": 27.21,
+        "entry_date": "2026-05-25",
+        "entry_price": 5.06,
         "exit_date": "2026-06-09",
-        "exit_price": 30.68,
+        "exit_price": 5.29,
         "size": 0.3333,
-        "profit_pct_on_tranche": 12.75,
-        "portfolio_contribution_pct": 4.25,
-        "reason": "SIDE_RSI_66"
+        "profit_pct_on_tranche": 4.55,
+        "portfolio_contribution_pct": 1.52,
+        "reason": "RSI_66"
       }
     ]
   },
   {
     "symbol": "PHDC",
-    "entry_date": "2026-06-11",
-    "exit_date": "2026-06-14",
+    "entry_date": "2026-06-10",
+    "exit_date": "2026-06-15",
     "entry_trend": "↗️",
     "exit_trend": "↗️",
-    "profit_pct": 2.78,
+    "profit_pct": 2.97,
     "exit_reason": "RSI_66",
     "sales": [
       {
-        "entry_date": "2026-06-11",
-        "entry_price": 14.5,
-        "exit_date": "2026-06-14",
-        "exit_price": 15.71,
+        "entry_date": "2026-06-10",
+        "entry_price": 14.7,
+        "exit_date": "2026-06-15",
+        "exit_price": 16.01,
         "size": 0.3333,
-        "profit_pct_on_tranche": 8.34,
-        "portfolio_contribution_pct": 2.78,
+        "profit_pct_on_tranche": 8.91,
+        "portfolio_contribution_pct": 2.97,
         "reason": "RSI_66"
       }
     ]
@@ -351,7 +445,7 @@
     "exit_date": "2026-06-16",
     "entry_trend": "↗️",
     "exit_trend": "🔛",
-    "profit_pct": -13.11,
+    "profit_pct": -14.0,
     "exit_reason": "EMA70_SHARP_DECLINE",
     "sales": [
       {
@@ -375,76 +469,55 @@
         "reason": "EMA70_SHARP_DECLINE"
       },
       {
-        "entry_date": "2026-06-10",
-        "entry_price": 79.0,
+        "entry_date": "2026-06-07",
+        "entry_price": 81.41,
         "exit_date": "2026-06-16",
         "exit_price": 71.16,
         "size": 0.3333,
-        "profit_pct_on_tranche": -9.92,
-        "portfolio_contribution_pct": -3.31,
+        "profit_pct_on_tranche": -12.59,
+        "portfolio_contribution_pct": -4.2,
         "reason": "EMA70_SHARP_DECLINE"
       }
     ]
   },
   {
     "symbol": "JUFO",
-    "entry_date": "2026-06-11",
+    "entry_date": "2026-04-28",
     "exit_date": "2026-06-21",
     "entry_trend": "↗️",
     "exit_trend": "↗️",
-    "profit_pct": 2.84,
+    "profit_pct": 5.62,
     "exit_reason": "RSI_66",
     "sales": [
       {
-        "entry_date": "2026-06-11",
-        "entry_price": 29.3,
+        "entry_date": "2026-05-20",
+        "entry_price": 27.21,
         "exit_date": "2026-06-21",
         "exit_price": 31.8,
         "size": 0.3333,
-        "profit_pct_on_tranche": 8.53,
-        "portfolio_contribution_pct": 2.84,
+        "profit_pct_on_tranche": 16.87,
+        "portfolio_contribution_pct": 5.62,
         "reason": "RSI_66"
       }
     ]
   },
   {
     "symbol": "ORHD",
-    "entry_date": "2026-06-11",
+    "entry_date": "2026-06-08",
     "exit_date": "2026-06-21",
     "entry_trend": "↗️",
     "exit_trend": "↗️",
-    "profit_pct": 3.22,
+    "profit_pct": 2.78,
     "exit_reason": "RSI_66",
     "sales": [
       {
-        "entry_date": "2026-06-11",
-        "entry_price": 36.11,
+        "entry_date": "2026-06-08",
+        "entry_price": 36.55,
         "exit_date": "2026-06-21",
         "exit_price": 39.6,
         "size": 0.3333,
-        "profit_pct_on_tranche": 9.66,
-        "portfolio_contribution_pct": 3.22,
-        "reason": "RSI_66"
-      }
-    ]
-  },
-  {
-    "symbol": "MTIE",
-    "entry_date": "2026-05-20",
-    "exit_date": "2026-07-05",
-    "entry_trend": "↗️",
-    "exit_trend": "↗️",
-    "profit_pct": 2.72,
-    "exit_reason": "RSI_66",
-    "sales": [
-      {
-        "entry_date": "2026-05-20",
-        "entry_price": 8.83,
-        "exit_date": "2026-07-05",
-        "exit_price": 9.55,
-        "size": 0.3333,
-        "profit_pct_on_tranche": 8.15,
-        "portfolio_contribution_pct": 2.72,
+        "profit_pct_on_tranche": 8.34,
+        "portfolio_contribution_pct": 2.78,
         "reason": "RSI_66"
       }
     ]
@@ -493,42 +566,42 @@
   },
   {
     "symbol": "RAYA",
-    "entry_date": "2026-06-10",
+    "entry_date": "2026-05-20",
     "exit_date": "2026-07-06",
     "entry_trend": "↗️",
     "exit_trend": "↗️",
-    "profit_pct": 6.44,
+    "profit_pct": 5.49,
     "exit_reason": "RSI_66",
     "sales": [
       {
-        "entry_date": "2026-06-10",
-        "entry_price": 6.94,
+        "entry_date": "2026-05-20",
+        "entry_price": 7.11,
         "exit_date": "2026-07-06",
         "exit_price": 8.28,
         "size": 0.3333,
-        "profit_pct_on_tranche": 19.31,
-        "portfolio_contribution_pct": 6.44,
+        "profit_pct_on_tranche": 16.46,
+        "portfolio_contribution_pct": 5.49,
         "reason": "RSI_66"
       }
     ]
   },
   {
-    "symbol": "JUFO",
-    "entry_date": "2026-06-25",
-    "exit_date": "2026-07-07",
+    "symbol": "ELSH",
+    "entry_date": "2026-07-08",
+    "exit_date": "2026-07-12",
     "entry_trend": "↗️",
     "exit_trend": "↗️",
-    "profit_pct": 1.47,
+    "profit_pct": 3.76,
     "exit_reason": "RSI_66",
     "sales": [
       {
-        "entry_date": "2026-06-25",
-        "entry_price": 30.46,
-        "exit_date": "2026-07-07",
-        "exit_price": 31.8,
+        "entry_date": "2026-07-08",
+        "entry_price": 13.3,
+        "exit_date": "2026-07-12",
+        "exit_price": 14.8,
         "size": 0.3333,
-        "profit_pct_on_tranche": 4.4,
-        "portfolio_contribution_pct": 1.47,
+        "profit_pct_on_tranche": 11.28,
+        "portfolio_contribution_pct": 3.76,
         "reason": "RSI_66"
       }
     ]
@@ -557,167 +630,63 @@
   {
     "symbol": "DSCW",
     "entry_date": "2026-04-30",
-    "exit_date": "2026-07-16",
+    "exit_date": "2026-07-20",
     "entry_trend": "↗️",
     "exit_trend": "🔛",
-    "profit_pct": 5.29,
-    "exit_reason": "RSI_77",
+    "profit_pct": 4.62,
+    "exit_reason": "SIDE_RSI_66",
     "sales": [
-      {
-        "entry_date": "2026-05-18",
-        "entry_price": 1.85,
-        "exit_date": "2026-07-16",
-        "exit_price": 1.93,
-        "size": 0.3333,
-        "profit_pct_on_tranche": 4.32,
-        "portfolio_contribution_pct": 1.44,
-        "reason": "SIDE_RSI_66"
-      },
       {
         "entry_date": "2026-05-20",
         "entry_price": 1.73,
-        "exit_date": "2026-07-16",
-        "exit_price": 1.93,
+        "exit_date": "2026-07-20",
+        "exit_price": 1.97,
         "size": 0.3333,
-        "profit_pct_on_tranche": 11.56,
-        "portfolio_contribution_pct": 3.85,
-        "reason": "RSI_77"
+        "profit_pct_on_tranche": 13.87,
+        "portfolio_contribution_pct": 4.62,
+        "reason": "SIDE_RSI_66"
       }
     ]
   },
   {
-    "symbol": "TMGH",
-    "entry_date": "2026-05-17",
-    "exit_date": "2026-07-16",
+    "symbol": "ETEL",
+    "entry_date": "2026-05-13",
+    "exit_date": "2026-07-26",
     "entry_trend": "↗️",
     "exit_trend": "↗️",
-    "profit_pct": 3.17,
+    "profit_pct": 4.53,
     "exit_reason": "RSI_66",
     "sales": [
       {
-        "entry_date": "2026-06-29",
-        "entry_price": 92.36,
-        "exit_date": "2026-07-16",
-        "exit_price": 101.15,
+        "entry_date": "2026-06-14",
+        "entry_price": 90.69,
+        "exit_date": "2026-07-26",
+        "exit_price": 103.01,
         "size": 0.3333,
-        "profit_pct_on_tranche": 9.52,
-        "portfolio_contribution_pct": 3.17,
+        "profit_pct_on_tranche": 13.58,
+        "portfolio_contribution_pct": 4.53,
         "reason": "RSI_66"
       }
     ]
   },
   {
     "symbol": "SWDY",
-    "entry_date": "2026-06-03",
-    "exit_date": "2026-07-19",
+    "entry_date": "2026-06-02",
+    "exit_date": "2026-07-26",
     "entry_trend": "↗️",
     "exit_trend": "↗️",
-    "profit_pct": 2.92,
+    "profit_pct": 4.45,
     "exit_reason": "RSI_66",
     "sales": [
       {
-        "entry_date": "2026-06-11",
-        "entry_price": 84.41,
-        "exit_date": "2026-07-19",
-        "exit_price": 91.8,
+        "entry_date": "2026-06-29",
+        "entry_price": 85.01,
+        "exit_date": "2026-07-26",
+        "exit_price": 96.35,
         "size": 0.3333,
-        "profit_pct_on_tranche": 8.75,
-        "portfolio_contribution_pct": 2.92,
+        "profit_pct_on_tranche": 13.34,
+        "portfolio_contribution_pct": 4.45,
         "reason": "RSI_66"
-      }
-    ]
-  },
-  {
-    "symbol": "ETEL",
-    "entry_date": "2026-05-17",
-    "exit_date": "2026-07-21",
-    "entry_trend": "↗️",
-    "exit_trend": "↗️",
-    "profit_pct": 9.72,
-    "exit_reason": "RSI_77",
-    "sales": [
-      {
-        "entry_date": "2026-06-11",
-        "entry_price": 90.16,
-        "exit_date": "2026-07-21",
-        "exit_price": 103.61,
-        "size": 0.3333,
-        "profit_pct_on_tranche": 14.92,
-        "portfolio_contribution_pct": 4.97,
-        "reason": "RSI_66"
-      },
-      {
-        "entry_date": "2026-06-14",
-        "entry_price": 90.69,
-        "exit_date": "2026-07-21",
-        "exit_price": 103.61,
-        "size": 0.3333,
-        "profit_pct_on_tranche": 14.25,
-        "portfolio_contribution_pct": 4.75,
-        "reason": "RSI_77"
-      }
-    ]
-  },
-  {
-    "symbol": "OLFI",
-    "entry_date": "2026-07-19",
-    "exit_date": "2026-07-22",
-    "entry_trend": "↗️",
-    "exit_trend": "↗️",
-    "profit_pct": 0.92,
-    "exit_reason": "RSI_66",
-    "sales": [
-      {
-        "entry_date": "2026-07-19",
-        "entry_price": 22.8,
-        "exit_date": "2026-07-22",
-        "exit_price": 23.43,
-        "size": 0.3333,
-        "profit_pct_on_tranche": 2.76,
-        "portfolio_contribution_pct": 0.92,
-        "reason": "RSI_66"
-      }
-    ]
-  },
-  {
-    "symbol": "EFIH",
-    "entry_date": "2026-05-13",
-    "exit_date": "2026-07-22",
-    "entry_trend": "↗️",
-    "exit_trend": "↗️",
-    "profit_pct": 4.85,
-    "exit_reason": "RSI_66",
-    "sales": [
-      {
-        "entry_date": "2026-06-11",
-        "entry_price": 20.42,
-        "exit_date": "2026-07-22",
-        "exit_price": 23.39,
-        "size": 0.3333,
-        "profit_pct_on_tranche": 14.54,
-        "portfolio_contribution_pct": 4.85,
-        "reason": "RSI_66"
-      }
-    ]
-  },
-  {
-    "symbol": "OIH",
-    "entry_date": "2026-05-05",
-    "exit_date": "2026-07-27",
-    "entry_trend": "↗️",
-    "exit_trend": "🔛",
-    "profit_pct": 3.19,
-    "exit_reason": "SIDE_RSI_66",
-    "sales": [
-      {
-        "entry_date": "2026-06-10",
-        "entry_price": 1.36,
-        "exit_date": "2026-07-27",
-        "exit_price": 1.49,
-        "size": 0.3333,
-        "profit_pct_on_tranche": 9.56,
-        "portfolio_contribution_pct": 3.19,
-        "reason": "SIDE_RSI_66"
       }
     ]
   },
@@ -764,12 +733,33 @@
     ]
   },
   {
+    "symbol": "RMDA",
+    "entry_date": "2026-07-28",
+    "exit_date": "2026-08-02",
+    "entry_trend": "↗️",
+    "exit_trend": "↗️",
+    "profit_pct": 2.5,
+    "exit_reason": "RSI_66",
+    "sales": [
+      {
+        "entry_date": "2026-07-28",
+        "entry_price": 5.19,
+        "exit_date": "2026-08-02",
+        "exit_price": 5.58,
+        "size": 0.3333,
+        "profit_pct_on_tranche": 7.51,
+        "portfolio_contribution_pct": 2.5,
+        "reason": "RSI_66"
+      }
+    ]
+  },
+  {
     "symbol": "AMOC",
     "entry_date": "2026-03-29",
     "exit_date": "2026-08-02",
     "entry_trend": "↗️",
     "exit_trend": "↗️",
-    "profit_pct": 14.86,
+    "profit_pct": 15.48,
     "exit_reason": "RSI_77",
     "sales": [
       {
@@ -783,13 +773,13 @@
         "reason": "RSI_66"
       },
       {
-        "entry_date": "2026-06-11",
-        "entry_price": 7.95,
+        "entry_date": "2026-04-22",
+        "entry_price": 7.83,
         "exit_date": "2026-08-02",
         "exit_price": 9.58,
         "size": 0.3333,
-        "profit_pct_on_tranche": 20.5,
-        "portfolio_contribution_pct": 6.83,
+        "profit_pct_on_tranche": 22.35,
+        "portfolio_contribution_pct": 7.45,
         "reason": "RSI_77"
       }
     ]
@@ -800,7 +790,7 @@
     "exit_date": "2026-08-03",
     "entry_trend": "↗️",
     "exit_trend": "🔛",
-    "profit_pct": 13.86,
+    "profit_pct": 21.78,
     "exit_reason": "RSI_77",
     "sales": [
       {
@@ -822,120 +812,120 @@
         "profit_pct_on_tranche": 23.23,
         "portfolio_contribution_pct": 7.74,
         "reason": "RSI_77"
+      },
+      {
+        "entry_date": "2026-07-08",
+        "entry_price": 11.4,
+        "exit_date": "2026-08-03",
+        "exit_price": 14.11,
+        "size": 0.3333,
+        "profit_pct_on_tranche": 23.77,
+        "portfolio_contribution_pct": 7.92,
+        "reason": "RSI_77"
       }
     ]
   },
   {
     "symbol": "OLFI",
-    "entry_date": "2026-07-29",
+    "entry_date": "2026-07-19",
     "exit_date": "2026-08-04",
     "entry_trend": "↗️",
     "exit_trend": "↗️",
-    "profit_pct": 2.07,
+    "profit_pct": 2.49,
     "exit_reason": "RSI_66",
     "sales": [
       {
-        "entry_date": "2026-07-29",
-        "entry_price": 23.07,
+        "entry_date": "2026-07-19",
+        "entry_price": 22.8,
         "exit_date": "2026-08-04",
         "exit_price": 24.5,
         "size": 0.3333,
-        "profit_pct_on_tranche": 6.2,
-        "portfolio_contribution_pct": 2.07,
+        "profit_pct_on_tranche": 7.46,
+        "portfolio_contribution_pct": 2.49,
         "reason": "RSI_66"
       }
     ]
   },
   {
     "symbol": "EFIH",
-    "entry_date": "2026-07-27",
+    "entry_date": "2026-05-13",
     "exit_date": "2026-08-04",
     "entry_trend": "↗️",
     "exit_trend": "↗️",
-    "profit_pct": 2.5,
+    "profit_pct": 6.64,
     "exit_reason": "RSI_66",
     "sales": [
       {
-        "entry_date": "2026-07-27",
-        "entry_price": 22.78,
+        "entry_date": "2026-06-11",
+        "entry_price": 20.42,
         "exit_date": "2026-08-04",
         "exit_price": 24.49,
         "size": 0.3333,
-        "profit_pct_on_tranche": 7.51,
-        "portfolio_contribution_pct": 2.5,
+        "profit_pct_on_tranche": 19.93,
+        "portfolio_contribution_pct": 6.64,
+        "reason": "RSI_66"
+      }
+    ]
+  },
+  {
+    "symbol": "SWDY",
+    "entry_date": "2026-07-30",
+    "exit_date": "2026-08-04",
+    "entry_trend": "↗️",
+    "exit_trend": "↗️",
+    "profit_pct": 5.74,
+    "exit_reason": "RSI_66",
+    "sales": [
+      {
+        "entry_date": "2026-07-30",
+        "entry_price": 93.0,
+        "exit_date": "2026-08-04",
+        "exit_price": 109.02,
+        "size": 0.3333,
+        "profit_pct_on_tranche": 17.23,
+        "portfolio_contribution_pct": 5.74,
         "reason": "RSI_66"
       }
     ]
   },
   {
     "symbol": "MTIE",
-    "entry_date": "2026-07-07",
+    "entry_date": "2026-05-18",
     "exit_date": "2026-08-04",
     "entry_trend": "↗️",
     "exit_trend": "↗️",
-    "profit_pct": 3.39,
+    "profit_pct": 4.44,
     "exit_reason": "RSI_66",
     "sales": [
       {
-        "entry_date": "2026-07-07",
-        "entry_price": 9.35,
+        "entry_date": "2026-05-18",
+        "entry_price": 9.09,
         "exit_date": "2026-08-04",
         "exit_price": 10.3,
         "size": 0.3333,
-        "profit_pct_on_tranche": 10.16,
-        "portfolio_contribution_pct": 3.39,
+        "profit_pct_on_tranche": 13.31,
+        "portfolio_contribution_pct": 4.44,
         "reason": "RSI_66"
       }
     ]
   },
   {
-    "symbol": "JUFO",
-    "entry_date": "2026-07-08",
-    "exit_date": "2026-08-04",
-    "entry_trend": "↗️",
-    "exit_trend": "🔛",
-    "profit_pct": 7.81,
-    "exit_reason": "RSI_77",
-    "sales": [
-      {
-        "entry_date": "2026-07-08",
-        "entry_price": 31.0,
-        "exit_date": "2026-08-04",
-        "exit_price": 33.7,
-        "size": 0.3333,
-        "profit_pct_on_tranche": 8.71,
-        "portfolio_contribution_pct": 2.9,
-        "reason": "SIDE_RSI_66"
-      },
-      {
-        "entry_date": "2026-07-19",
-        "entry_price": 29.37,
-        "exit_date": "2026-08-04",
-        "exit_price": 33.7,
-        "size": 0.3333,
-        "profit_pct_on_tranche": 14.74,
-        "portfolio_contribution_pct": 4.91,
-        "reason": "RSI_77"
-      }
-    ]
-  },
-  {
-    "symbol": "ORHD",
-    "entry_date": "2026-06-28",
+    "symbol": "OIH",
+    "entry_date": "2026-05-04",
     "exit_date": "2026-08-05",
     "entry_trend": "↗️",
     "exit_trend": "↗️",
-    "profit_pct": 3.51,
+    "profit_pct": 4.02,
     "exit_reason": "RSI_66",
     "sales": [
       {
-        "entry_date": "2026-06-28",
-        "entry_price": 38.0,
+        "entry_date": "2026-06-08",
+        "entry_price": 1.41,
         "exit_date": "2026-08-05",
-        "exit_price": 42.0,
+        "exit_price": 1.58,
         "size": 0.3333,
-        "profit_pct_on_tranche": 10.53,
-        "portfolio_contribution_pct": 3.51,
+        "profit_pct_on_tranche": 12.06,
+        "portfolio_contribution_pct": 4.02,
         "reason": "RSI_66"
       }
     ]
@@ -962,116 +952,127 @@
     ]
   },
   {
-    "symbol": "MCQE",
-    "entry_date": "2026-04-26",
+    "symbol": "ORHD",
+    "entry_date": "2026-06-25",
     "exit_date": "2026-08-09",
     "entry_trend": "↗️",
+    "exit_trend": "↗️",
+    "profit_pct": 4.25,
+    "exit_reason": "RSI_66",
+    "sales": [
+      {
+        "entry_date": "2026-06-25",
+        "entry_price": 38.82,
+        "exit_date": "2026-08-09",
+        "exit_price": 43.77,
+        "size": 0.3333,
+        "profit_pct_on_tranche": 12.75,
+        "portfolio_contribution_pct": 4.25,
+        "reason": "RSI_66"
+      }
+    ]
+  },
+  {
+    "symbol": "EEII",
+    "entry_date": "2026-07-14",
+    "exit_date": "2026-08-10",
+    "entry_trend": "↗️",
+    "exit_trend": "↗️",
+    "profit_pct": 3.17,
+    "exit_reason": "RSI_66",
+    "sales": [
+      {
+        "entry_date": "2026-07-14",
+        "entry_price": 2.73,
+        "exit_date": "2026-08-10",
+        "exit_price": 2.99,
+        "size": 0.3333,
+        "profit_pct_on_tranche": 9.52,
+        "portfolio_contribution_pct": 3.17,
+        "reason": "RSI_66"
+      }
+    ]
+  },
+  {
+    "symbol": "MCQE",
+    "entry_date": "2026-04-23",
+    "exit_date": "2026-08-10",
+    "entry_trend": "↗️",
     "exit_trend": "🔛",
-    "profit_pct": 4.55,
+    "profit_pct": 3.76,
     "exit_reason": "SIDE_RSI_66",
     "sales": [
       {
-        "entry_date": "2026-06-11",
-        "entry_price": 174.2,
-        "exit_date": "2026-08-09",
-        "exit_price": 198.0,
+        "entry_date": "2026-07-30",
+        "entry_price": 182.43,
+        "exit_date": "2026-08-10",
+        "exit_price": 203.0,
         "size": 0.3333,
-        "profit_pct_on_tranche": 13.66,
-        "portfolio_contribution_pct": 4.55,
+        "profit_pct_on_tranche": 11.28,
+        "portfolio_contribution_pct": 3.76,
         "reason": "SIDE_RSI_66"
       }
     ]
   },
   {
     "symbol": "ATQA",
-    "entry_date": "2026-05-10",
-    "exit_date": "2026-08-10",
-    "entry_trend": "↗️",
-    "exit_trend": "🔛",
-    "profit_pct": 9.93,
-    "exit_reason": "RSI_77",
-    "sales": [
-      {
-        "entry_date": "2026-05-21",
-        "entry_price": 9.46,
-        "exit_date": "2026-08-10",
-        "exit_price": 10.7,
-        "size": 0.3333,
-        "profit_pct_on_tranche": 13.11,
-        "portfolio_contribution_pct": 4.37,
-        "reason": "SIDE_RSI_66"
-      },
-      {
-        "entry_date": "2026-06-11",
-        "entry_price": 9.17,
-        "exit_date": "2026-08-10",
-        "exit_price": 10.7,
-        "size": 0.3333,
-        "profit_pct_on_tranche": 16.68,
-        "portfolio_contribution_pct": 5.56,
-        "reason": "RSI_77"
-      }
-    ]
-  },
-  {
-    "symbol": "EEII",
-    "entry_date": "2026-07-26",
-    "exit_date": "2026-08-10",
+    "entry_date": "2026-05-06",
+    "exit_date": "2026-08-11",
     "entry_trend": "↗️",
     "exit_trend": "↗️",
-    "profit_pct": 3.31,
+    "profit_pct": 6.54,
     "exit_reason": "RSI_66",
     "sales": [
       {
-        "entry_date": "2026-07-26",
-        "entry_price": 2.72,
-        "exit_date": "2026-08-10",
-        "exit_price": 2.99,
+        "entry_date": "2026-06-11",
+        "entry_price": 9.17,
+        "exit_date": "2026-08-11",
+        "exit_price": 10.97,
         "size": 0.3333,
-        "profit_pct_on_tranche": 9.93,
-        "portfolio_contribution_pct": 3.31,
+        "profit_pct_on_tranche": 19.63,
+        "portfolio_contribution_pct": 6.54,
         "reason": "RSI_66"
       }
     ]
   },
   {
-    "symbol": "EGAL",
-    "entry_date": "2026-05-18",
+    "symbol": "JUFO",
+    "entry_date": "2026-06-23",
     "exit_date": "2026-08-11",
     "entry_trend": "↗️",
     "exit_trend": "🔛",
-    "profit_pct": 7.94,
-    "exit_reason": "RSI_77",
+    "profit_pct": -3.18,
+    "exit_reason": "EMA70_SHARP_DECLINE",
     "sales": [
       {
-        "entry_date": "2026-05-18",
-        "entry_price": 320.0,
+        "entry_date": "2026-07-20",
+        "entry_price": 28.8,
         "exit_date": "2026-08-11",
-        "exit_price": 329.98,
+        "exit_price": 26.6,
         "size": 0.3333,
-        "profit_pct_on_tranche": 3.12,
-        "portfolio_contribution_pct": 1.04,
-        "reason": "SIDE_RSI_66"
+        "profit_pct_on_tranche": -7.64,
+        "portfolio_contribution_pct": -2.55,
+        "reason": "EMA70_SHARP_DECLINE"
       },
       {
-        "entry_date": "2026-06-15",
-        "entry_price": 299.0,
+        "entry_date": "2026-08-06",
+        "entry_price": 26.61,
         "exit_date": "2026-08-11",
-        "exit_price": 329.98,
+        "exit_price": 26.6,
         "size": 0.3333,
-        "profit_pct_on_tranche": 10.36,
-        "portfolio_contribution_pct": 3.45,
-        "reason": "RSI_77"
+        "profit_pct_on_tranche": -0.04,
+        "portfolio_contribution_pct": -0.01,
+        "reason": "EMA70_SHARP_DECLINE"
       },
       {
-        "entry_date": "2026-06-16",
-        "entry_price": 299.0,
+        "entry_date": "2026-08-09",
+        "entry_price": 27.1,
         "exit_date": "2026-08-11",
-        "exit_price": 329.98,
+        "exit_price": 26.6,
         "size": 0.3333,
-        "profit_pct_on_tranche": 10.36,
-        "portfolio_contribution_pct": 3.45,
-        "reason": "RSI_77"
+        "profit_pct_on_tranche": -1.85,
+        "portfolio_contribution_pct": -0.62,
+        "reason": "EMA70_SHARP_DECLINE"
       }
     ]
   },
@@ -1097,22 +1098,74 @@
     ]
   },
   {
+    "symbol": "EGAL",
+    "entry_date": "2026-05-17",
+    "exit_date": "2026-08-12",
+    "entry_trend": "↗️",
+    "exit_trend": "🔛",
+    "profit_pct": 8.16,
+    "exit_reason": "RSI_77",
+    "sales": [
+      {
+        "entry_date": "2026-06-15",
+        "entry_price": 299.0,
+        "exit_date": "2026-08-12",
+        "exit_price": 335.6,
+        "size": 0.3333,
+        "profit_pct_on_tranche": 12.24,
+        "portfolio_contribution_pct": 4.08,
+        "reason": "SIDE_RSI_66"
+      },
+      {
+        "entry_date": "2026-06-16",
+        "entry_price": 299.0,
+        "exit_date": "2026-08-12",
+        "exit_price": 335.6,
+        "size": 0.3333,
+        "profit_pct_on_tranche": 12.24,
+        "portfolio_contribution_pct": 4.08,
+        "reason": "RSI_77"
+      }
+    ]
+  },
+  {
     "symbol": "ETEL",
-    "entry_date": "2026-08-12",
+    "entry_date": "2026-08-03",
     "exit_date": "2026-08-16",
     "entry_trend": "↗️",
     "exit_trend": "↗️",
-    "profit_pct": 3.14,
+    "profit_pct": 3.36,
     "exit_reason": "RSI_66",
     "sales": [
       {
-        "entry_date": "2026-08-12",
-        "entry_price": 107.94,
+        "entry_date": "2026-08-03",
+        "entry_price": 107.3,
         "exit_date": "2026-08-16",
         "exit_price": 118.1,
         "size": 0.3333,
-        "profit_pct_on_tranche": 9.41,
-        "portfolio_contribution_pct": 3.14,
+        "profit_pct_on_tranche": 10.07,
+        "portfolio_contribution_pct": 3.36,
+        "reason": "RSI_66"
+      }
+    ]
+  },
+  {
+    "symbol": "MPCO",
+    "entry_date": "2026-08-17",
+    "exit_date": "2026-08-18",
+    "entry_trend": "↗️",
+    "exit_trend": "↗️",
+    "profit_pct": 2.36,
+    "exit_reason": "RSI_66",
+    "sales": [
+      {
+        "entry_date": "2026-08-17",
+        "entry_price": 2.12,
+        "exit_date": "2026-08-18",
+        "exit_price": 2.27,
+        "size": 0.3333,
+        "profit_pct_on_tranche": 7.08,
+        "portfolio_contribution_pct": 2.36,
         "reason": "RSI_66"
       }
     ]
