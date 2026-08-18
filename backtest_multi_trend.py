@@ -48,10 +48,10 @@ RSI_SIDE_BUY_2 = 43
 RSI_SIDE_BUY_3 = 30
 
 # Partial profit target
-RSI_PARTIAL_SELL = 66
+RSI_PARTIAL_SELL = 70
 
 # Strong profit target
-RSI_FINAL_SELL = 77
+RSI_FINAL_SELL = 80
 
 # ------------------------------------------------------------
 # STOP LOSS
