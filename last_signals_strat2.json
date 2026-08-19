@@ -77,10 +77,10 @@
     "realized_pnl_tracker": []
   },
   "HRHO": {
-    "cycle": 1,
-    "position": 0.33,
-    "avg_price": 26.66,
-    "peak_profit": 0.3000750187546823,
+    "cycle": 2,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
   "ORWE": {
@@ -126,10 +126,10 @@
     "realized_pnl_tracker": []
   },
   "RAYA": {
-    "cycle": 1,
-    "position": 0.66,
-    "avg_price": 7.285,
-    "peak_profit": 1.0295126973232693,
+    "cycle": 2,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
   "EEII": {
