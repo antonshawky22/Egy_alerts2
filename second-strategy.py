@@ -279,6 +279,7 @@ for name, ticker in symbols.items():
 
     if profit > s["peak_profit"]:
         s["peak_profit"] = profit
+
     # ==========================================
     # 🔴 تنفيذ أومـر الـبـيـع وإغلاق الصفقات
     # ==========================================
@@ -302,7 +303,6 @@ for name, ticker in symbols.items():
         if stop_triggered:
             action = "🛑 STOP LOSS"
 
-            
             if trades_history[name] and trades_history[name][-1].get("status") == "OPEN":
                 active_trade = trades_history[name][-1]
                 total_profit = calc_final_pnl(profit, s["position"])
@@ -346,8 +346,7 @@ for name, ticker in symbols.items():
                 active_trade["exits"].append(exit_log)
 
                 if s["position"] == 0.0:
-                    w_sum = sum(w for w, _ in s["realized_pnl_tracker"])
-                    total_profit = sum(p * w for w, p in s["realized_pnl_tracker"]) / w_sum if w_sum > 0 else profit
+                    total_profit = calc_final_pnl(profit, 0.0)
                     active_trade["status"] = "CLOSED"
                     active_trade["exit_price"] = round(price, 2)
                     active_trade["exit_date"] = current_date
@@ -370,8 +369,7 @@ for name, ticker in symbols.items():
                 active_trade["exits"].append(exit_log)
 
                 if s["position"] == 0.0:
-                    w_sum = sum(w for w, _ in s["realized_pnl_tracker"])
-                    total_profit = sum(p * w for w, p in s["realized_pnl_tracker"]) / w_sum if w_sum > 0 else profit
+                    total_profit = calc_final_pnl(profit, 0.0)
                     active_trade["status"] = "CLOSED"
                     active_trade["exit_price"] = round(price, 2)
                     active_trade["exit_date"] = current_date
