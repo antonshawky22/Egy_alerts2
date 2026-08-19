@@ -29,7 +29,7 @@ RSI_SIDE_BUY_2 = 42        # شريحة تجميع ثانية عند التصح�
 RSI_SIDE_BUY_3 = 20        # شريحة أعمق إن وجدت
 
 RSI_PARTIAL_SELL = 66      # رفع هدف البيع الجزئي لتكبير الأرباح
-RSI_FINAL_SELL = 77        # هدف البيع الكلي
+RSI_FINAL_SELL = 80        # هدف البيع الكلي
 
 # STOP LOSS
 EMA70_STOP_MIN_DROP_PERCENT = 1.00
