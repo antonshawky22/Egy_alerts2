@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 # ============================================================
-# BACKTEST - EGX LADDER CYCLE SYSTEM (v3.4 FULLY AUDITED INTEGRATION)
+# BACKTEST - EGX LADDER SYSTEM (FIXED & OPTIMIZED)
 # ============================================================
 
 DB_FILE = "egx_history_database_v2.json"
@@ -12,10 +12,6 @@ RESULTS_FILE = "backtest_results.json"
 TRADES_FILE = "backtest_trades.json"
 
 EGX30_KEY = "EGX30"
-
-# ============================================================
-# RSI - WILDER / EWM
-# ============================================================
 
 def rsi(series, period=14):
     if len(series) < period + 1:
@@ -37,24 +33,13 @@ def update_avg(old_avg, old_pos, new_price, new_pos):
     total_cost = (old_avg * old_pos) + (new_price * added_pos)
     return total_cost / new_pos
 
-# ============================================================
-# LOAD DATABASE
-# ============================================================
-
 if not os.path.exists(DB_FILE):
     raise FileNotFoundError(f"Database file not found: {DB_FILE}")
 
 with open(DB_FILE, "r", encoding="utf-8") as f:
     raw_database = json.load(f)
 
-print("Historical database loaded successfully.")
-
 symbols = list(raw_database.keys())
-
-# ============================================================
-# PREPARE DATA
-# ============================================================
-
 prepared_data = {}
 
 for symbol in symbols:
@@ -77,13 +62,7 @@ for symbol in symbols:
 
         prepared_data[symbol] = df
     except Exception as e:
-        print(f"Failed preparing {symbol}: {e}")
-
-print(f"Prepared {len(prepared_data)} symbols for backtest.")
-
-# ============================================================
-# ALL TRADING DATES
-# ============================================================
+        pass
 
 all_dates = set()
 for symbol, df in prepared_data.items():
@@ -92,15 +71,6 @@ for symbol, df in prepared_data.items():
     all_dates.update(df.index)
 
 all_dates = sorted(all_dates)
-
-if not all_dates:
-    raise ValueError("No trading dates available.")
-
-print(f"Backtest period: {all_dates[0].strftime('%Y-%m-%d')} -> {all_dates[-1].strftime('%Y-%m-%d')}")
-
-# ============================================================
-# STATE & TRACKING
-# ============================================================
 
 states = {}
 for symbol in prepared_data:
@@ -121,10 +91,6 @@ equity_curve = []
 peak_equity = 0.0
 max_drawdown = 0.0
 
-# ============================================================
-# MAIN BACKTEST LOOP
-# ============================================================
-
 for current_date in all_dates:
     for symbol, df in prepared_data.items():
         if symbol == EGX30_KEY or current_date not in df.index:
@@ -134,7 +100,6 @@ for current_date in all_dates:
         if current_index < 40:
             continue
 
-        # حماية الشمعات الفارغة
         if df[["Open", "Close", "EMA75", "RSI14"]].iloc[current_index].isna().any():
             continue
 
@@ -143,16 +108,14 @@ for current_date in all_dates:
         rsi_val = float(row["RSI14"])
 
         s = states[symbol]
-        
         s["position"] = round(float(s["position"]), 2)
+        
         if s["position"] == 0.0:
             s["avg_price"] = 0.0
             s["peak_profit"] = 0.0
             s["realized_pnl_tracker"] = []
 
-        # ----------------------------------------------------
-        # FIlTERS
-        # ----------------------------------------------------
+        # --- FILTERS ---
         lookback = min(current_index + 1, 80)
         lowest_80 = float(df["Low"].iloc[current_index - lookback + 1 : current_index + 1].min())
         highest_80 = float(df["High"].iloc[current_index - lookback + 1 : current_index + 1].max())
@@ -177,22 +140,16 @@ for current_date in all_dates:
             ema75_12 = df["EMA75"].iloc[current_index - 12]
 
             ema_up = (ema75_now >= ema75_4 * 1.003) and (ema75_4 >= ema75_8 * 1.003) and (ema75_8 >= ema75_12 * 1.003)
-            
             ema_vals = [ema75_now, ema75_4, ema75_8, ema75_12]
             ema_sideways = ((max(ema_vals) - min(ema_vals)) / min(ema_vals)) <= 0.01
-
-            ema_down = (ema75_now < ema75_4) and (ema75_4 < ema75_8)
         else:
             ema_up = False
             ema_sideways = True
-            ema_down = False
 
-        # ----------------------------------------------------
-        # STRATEGY CONDITIONS
-        # ----------------------------------------------------
-        buy1 = safe_to_buy and no_gap_down and near_ema and ema_up and rsi_val <= 55
-        buy2 = safe_to_buy and no_gap_down and near_ema and ema_sideways and rsi_val <= 45
-        buy3 = safe_to_buy and no_gap_down and near_ema and ema_sideways and rsi_val <= 38
+        # --- ENTRY CONDITIONS (REFINED) ---
+        buy1 = safe_to_buy and no_gap_down and near_ema and (ema_up or ema_sideways) and rsi_val <= 55
+        buy2 = safe_to_buy and no_gap_down and rsi_val <= 45
+        buy3 = safe_to_buy and no_gap_down and rsi_val <= 38
 
         profit = 0.0
         if s["avg_price"] > 0:
@@ -205,9 +162,7 @@ for current_date in all_dates:
         initial_pos = s["position"]
         date_str = current_date.strftime("%Y-%m-%d")
 
-        # ----------------------------------------------------
-        # 🟢 BUY EXECUTION
-        # ----------------------------------------------------
+        # --- BUYS ---
         if s["position"] == 0 and buy1:
             s["position"] = 0.33
             s["avg_price"] = price
@@ -247,12 +202,11 @@ for current_date in all_dates:
         if profit > s["peak_profit"]:
             s["peak_profit"] = profit
 
-        # ----------------------------------------------------
-        # 🔴 SELL EXECUTION
-        # ----------------------------------------------------
+        # --- SELLS ---
         if initial_pos > 0 and s["position"] > 0:
+            # إصلاح وقف الخسارة: كسر صريح بنسبة 1% من EMA75 أو تراجع أرباح
             drop_from_ema = ((df["EMA75"].iloc[current_index] - price) / df["EMA75"].iloc[current_index]) * 100
-            stop_triggered = (drop_from_ema >= 1.00) or ema_down
+            stop_triggered = (drop_from_ema >= 1.00)
 
             if s["peak_profit"] > 10 and (s["peak_profit"] - profit) >= 4:
                 stop_triggered = True
@@ -265,19 +219,16 @@ for current_date in all_dates:
             close_trade = False
             total_trade_pnl = 0.0
 
-            # 1️⃣ STOP LOSS
             if stop_triggered:
                 total_trade_pnl = calc_final_pnl(profit, s["position"])
                 s["position"] = 0.0
                 close_trade = True
 
-            # 2️⃣ FULL EXIT
             elif sell3:
                 total_trade_pnl = calc_final_pnl(profit, s["position"])
                 s["position"] = 0.0
                 close_trade = True
 
-            # 3️⃣ PARTIAL SELL 2
             elif sell2:
                 sell_amount = min(0.33, s["position"])
                 s["realized_pnl_tracker"].append((sell_amount, profit))
@@ -291,7 +242,6 @@ for current_date in all_dates:
                     total_trade_pnl = calc_final_pnl(profit, 0.0)
                     close_trade = True
 
-            # 4️⃣ PARTIAL SELL 1
             elif sell1:
                 sell_amount = min(0.33, s["position"])
                 s["realized_pnl_tracker"].append((sell_amount, profit))
@@ -305,7 +255,6 @@ for current_date in all_dates:
                     total_trade_pnl = calc_final_pnl(profit, 0.0)
                     close_trade = True
 
-            # CLOSE TRADE LOGIC
             if close_trade and s["active_trade"]:
                 trade_record = s["active_trade"]
                 trade_record["status"] = "CLOSED"
@@ -324,7 +273,6 @@ for current_date in all_dates:
 
             s["position"] = round(s["position"], 2)
 
-    # TRACK EQUITY & DRAWDOWN
     equity_curve.append(closed_profit_percent)
     if closed_profit_percent > peak_equity:
         peak_equity = closed_profit_percent
@@ -332,10 +280,7 @@ for current_date in all_dates:
     if drawdown > max_drawdown:
         max_drawdown = drawdown
 
-# ============================================================
-# RESULTS GENERATION & STATS
-# ============================================================
-
+# --- RESULTS ---
 total_trades = len(trades_history)
 winning_trades = [t for t in trades_history if t["profit_pct"] > 0]
 losing_trades = [t for t in trades_history if t["profit_pct"] <= 0]
@@ -366,7 +311,7 @@ with open(TRADES_FILE, "w", encoding="utf-8") as f:
     json.dump(trades_history, f, indent=2, ensure_ascii=False)
 
 print("\n" + "=" * 60)
-print("EGX LADDER SYSTEM v3.4 - BACKTEST COMPLETE")
+print("FIXED BACKTEST COMPLETE")
 print("=" * 60)
 print(f"Total Trades: {total_trades}")
 print(f"Win Rate: {win_rate:.2f}%")
