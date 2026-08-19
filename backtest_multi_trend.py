@@ -90,7 +90,7 @@ for symbol in symbols:
 
         df["EMA12"] = df["Close"].ewm(span=12, adjust=False).mean()
         df["EMA20"] = df["Close"].ewm(span=20, adjust=False).mean()
-        df["EMA70"] = df["Close"].ewm(span=100, adjust=False).mean()
+        df["EMA70"] = df["Close"].ewm(span=70, adjust=False).mean()
         df["RSI14"] = rsi(df["Close"], 14)
 
         df["cross_up"] = (df["EMA12"] > df["EMA20"]) & (df["EMA12"].shift(1) <= df["EMA20"].shift(1))
