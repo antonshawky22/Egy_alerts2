@@ -187,16 +187,30 @@ for name, ticker in symbols.items():
 
     no_gap_down = (gap1 > -3.0) and (gap2 > -3.0) and (gap3 > -3.0)
 
+    # 1. فلتر قرب السعر من المتوسط (نفس شرطك الأصلي)
+    near_ema = price <= df["EMA75"].iloc[-1] * 1.08
+
+    # 2. تقييم اتجاه EMA75 على فتراتك الأصلية (-1, -5, -9, -13)
     ema_up = (
-        df["EMA75"].iloc[-1] > df["EMA75"].iloc[-5]
-        and df["EMA75"].iloc[-5] > df["EMA75"].iloc[-10]
-        and df["EMA75"].iloc[-1] > df["EMA75"].iloc[-10] * 1.002
-        and price <= df["EMA75"].iloc[-1] * 1.08
+        df["EMA75"].iloc[-1] >= df["EMA75"].iloc[-5] * 1.003
+        and df["EMA75"].iloc[-5] >= df["EMA75"].iloc[-9] * 1.003
+        and df["EMA75"].iloc[-9] >= df["EMA75"].iloc[-13] * 1.003
     )
-    
-    buy1 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 55
-    buy2 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 50
-    buy3 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 42
+
+    # نطاق عرضي: تذبذب ضيق بين أعلى وأقل قيمة لا يتجاوز 1%
+    ema_vals = [df["EMA75"].iloc[-1], df["EMA75"].iloc[-5], df["EMA75"].iloc[-9], df["EMA75"].iloc[-13]]
+    ema_sideways = ((max(ema_vals) - min(ema_vals)) / min(ema_vals)) <= 0.01
+
+    # اتجاه هابط: كسر صريح للمتوسطات
+    ema_down = (
+        df["EMA75"].iloc[-1] < df["EMA75"].iloc[-5]
+        and df["EMA75"].iloc[-5] < df["EMA75"].iloc[-9]
+    )
+
+    # 3. شروط الشراء الشرائح مع تعديل RSI
+    buy1 = safe_to_buy and no_gap_down and near_ema and ema_up and rsi_val <= 55
+    buy2 = safe_to_buy and no_gap_down and near_ema and ema_sideways and rsi_val <= 45
+    buy3 = safe_to_buy and no_gap_down and near_ema and ema_sideways and rsi_val <= 38
 
     # حساب الربح اللحظي الحالي
     profit = 0.0
@@ -265,21 +279,16 @@ for name, ticker in symbols.items():
 
     if profit > s["peak_profit"]:
         s["peak_profit"] = profit
-
     # ==========================================
     # 🔴 تنفيذ أومـر الـبـيـع وإغلاق الصفقات
     # ==========================================
     if initial_pos > 0 and s["position"] > 0:
 
-        stop_triggered = False
+        # الوقف الديناميكي: كسر EMA75 بنسبة 1% أو تحول اتجاه المتوسط لهابط
+        drop_from_ema = ((df["EMA75"].iloc[-1] - price) / df["EMA75"].iloc[-1]) * 100
+        stop_triggered = (drop_from_ema >= 1.00) or ema_down
 
-        if s["position"] <= 0.33 and profit <= -8:
-            stop_triggered = True
-        elif s["position"] <= 0.66 and profit <= -5:
-            stop_triggered = True
-        elif s["position"] == 1.0 and profit <= -4:
-            stop_triggered = True
-
+        # حماية الأرباح عند التراجع من القمة (Trailing Profit Stop)
         if s["peak_profit"] > 10 and (s["peak_profit"] - profit) >= 4:
             stop_triggered = True
 
@@ -292,6 +301,7 @@ for name, ticker in symbols.items():
         # 1️⃣ إغلاق كلي (وقف خسارة)
         if stop_triggered:
             action = "🛑 STOP LOSS"
+
             
             if trades_history[name] and trades_history[name][-1].get("status") == "OPEN":
                 active_trade = trades_history[name][-1]
