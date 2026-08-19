@@ -35,7 +35,21 @@
   "ABUK": [],
   "OIH": [],
   "SWDY": [],
-  "ISPH": [],
+  "ISPH": [
+    {
+      "symbol": "ISPH",
+      "cycle": 1,
+      "status": "OPEN",
+      "first_entry": "2026-08-19 with price 13.00",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 13.0,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
+    }
+  ],
   "ATQA": [],
   "MTIE": [
     {
@@ -75,9 +89,9 @@
       "cycle": 1,
       "status": "OPEN",
       "first_entry": "2026-08-17 with price 2.03",
-      "second_entry": null,
+      "second_entry": "2026-08-19 with price 1.93",
       "third_entry": null,
-      "last_totally_average_price": 2.03,
+      "last_totally_average_price": 1.98,
       "exits": [],
       "exit_price": null,
       "exit_date": null,
