@@ -41,15 +41,15 @@
     {
       "symbol": "MTIE",
       "cycle": 1,
-      "status": "OPEN",
+      "status": "CLOSED",
       "first_entry": "2026-08-18 with price 9.23",
       "second_entry": null,
       "third_entry": null,
       "last_totally_average_price": 9.23,
       "exits": [],
-      "exit_price": null,
-      "exit_date": null,
-      "profit_pct": null
+      "exit_price": 8.72,
+      "exit_date": "2026-08-19",
+      "profit_pct": -5.53
     }
   ],
   "HRHO": [
