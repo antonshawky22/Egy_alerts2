@@ -10,7 +10,7 @@
     "entry_price": 22.9
   },
   "EMFD": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 11.4
   },
@@ -90,7 +90,7 @@
     "entry_price": null
   },
   "ELSH": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -140,7 +140,7 @@
     "entry_price": null
   },
   "COMI": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 136.77
   },
