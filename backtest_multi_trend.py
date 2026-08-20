@@ -121,7 +121,7 @@ for current_date in all_dates:
             continue
 
         idx = df.index.get_loc(current_date)
-        if idx < 79:  # نحتاج 80 شمعة سابقة على الأقل للتحليل
+        if idx < 22:  # نحتاج 80 شمعة سابقة على الأقل للتحليل
             continue
 
         df_slice = df.iloc[: idx + 1]
@@ -149,15 +149,15 @@ for current_date in all_dates:
         
         # نسبة ضغط النطاق العرضي (التجميع)
         consolidation_range = ((high_20 - low_20) / low_20) * 100 if low_20 > 0 else 999.0
-        is_consolidating = consolidation_range <= 10.0  # تجميع ضيق في نطاق 14%
+        is_consolidating = consolidation_range <= 11.0  # تجميع ضيق في نطاق %
 
         # شرط الاختراق لقمة التجميع مع دعم الزخم والمتوسطات
         is_breakout = price > high_20
         trend_support = price > float(last["EMA20"]) and float(last["EMA20"]) > float(last["EMA50"])
 
         # شروط الدخول الثلاثية
-        buy1 = is_consolidating and is_breakout and trend_support and (63.0 <= rsi_val <= 70.0)
-        buy2 = is_breakout and trend_support and (55.0 <= rsi_val <= 62.0)
+        buy1 = is_consolidating and is_breakout and trend_support and (62.0 <= rsi_val <= 70.0)
+        buy2 = is_breakout and trend_support and (54.0 <= rsi_val <= 63.0)
         buy3 = trend_support and (48.0 <= rsi_val <= 55.0)
 
         profit = 0.0
@@ -165,9 +165,9 @@ for current_date in all_dates:
             profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
 
         # أهداف البيع وفق قوة الاندفاع
-        sell1 = (0.00 < s["position"] <= 0.33) and rsi_val >= 76 and profit > 9.0
-        sell2 = (0.33 < s["position"] <= 0.66) and rsi_val >= 80 and profit > 14.0
-        sell3 = (s["position"] > 0.00) and rsi_val >= 84 and profit > 20.0
+        sell1 = (0.00 < s["position"] <= 0.33) and rsi_val >= 78 and profit > 12.0
+        sell2 = (0.33 < s["position"] <= 0.66) and rsi_val >= 82 and profit > 18.0
+        sell3 = (s["position"] > 0.00) and rsi_val >= 85 and profit > 25.0
 
         initial_pos = s["position"]
         action = None
@@ -195,7 +195,7 @@ for current_date in all_dates:
                 "profit_pct": None
             })
 
-        elif 0.32 < s["position"] < 0.5 and buy2 and price < s["avg_price"] * 0.97:
+        elif 0.32 < s["position"] < 0.5 and buy2 and price < s["avg_price"] * 0.985:
             old_pos = s["position"]
             s["position"] = 0.66
             s["avg_price"] = update_avg(s["avg_price"], old_pos, price, s["position"])
@@ -207,7 +207,7 @@ for current_date in all_dates:
                 active[-1]["second_entry"] = f"{date_str} with price {price:.2f}"
                 active[-1]["last_totally_average_price"] = round(s["avg_price"], 2)
 
-        elif 0.65 < s["position"] < 1 and buy3 and price < s["avg_price"] * 0.94:
+        elif 0.65 < s["position"] < 1 and buy3 and price < s["avg_price"] * 0.96:
             old_pos = s["position"]
             s["position"] = 1.0
             s["avg_price"] = update_avg(s["avg_price"], old_pos, price, s["position"])
@@ -235,7 +235,7 @@ for current_date in all_dates:
                 stop_triggered = True
 
             # Trailing Stop لحماية الأرباح بعد تحقيق قمة
-            if s["peak_profit"] > 8.0 and (s["peak_profit"] - profit) >= 3.5:
+            if s["peak_profit"] > 10.0 and (s["peak_profit"] - profit) >= 5:
                 stop_triggered = True
 
             active = [t for t in trades_history if t["symbol"] == name and t["status"] == "OPEN"]
