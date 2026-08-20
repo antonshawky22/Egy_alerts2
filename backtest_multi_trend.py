@@ -23,7 +23,7 @@ symbols = {
 }
 
 # ============================================================
-# HELPER FUNCTIONS (MATCHING LIVE CODE 100%)
+# HELPER FUNCTIONS
 # ============================================================
 
 def rsi(series, period=14):
@@ -122,7 +122,7 @@ for current_date in all_dates:
             continue
 
         idx = df.index.get_loc(current_date)
-        if idx < 79:  # نحتاج 80 شمعة سابقة على الأقل للفلتر
+        if idx < 79:
             continue
 
         df_slice = df.iloc[: idx + 1]
@@ -142,14 +142,14 @@ for current_date in all_dates:
             s["avg_price"] = 0.0
             s["peak_profit"] = 0.0
 
-        # 1. Safe To Buy Filter (80-bars high/low)
+        # 1. Safe To Buy Filter
         lookback = min(len(df_slice), 80)
         lowest_80 = float(df_slice["Low"].tail(lookback).min())
         highest_80 = float(df_slice["High"].tail(lookback).max())
         run_up_percent = ((highest_80 - lowest_80) / lowest_80) * 100 if lowest_80 > 0 else 0.0
         safe_to_buy = run_up_percent <= 60.0
 
-        # 2. No Gap Down Filter (Last 3 candles)
+        # 2. No Gap Down Filter
         gap1 = ((df_slice["Open"].iloc[-1] - df_slice["Close"].iloc[-2]) / df_slice["Close"].iloc[-2]) * 100
         gap2 = ((df_slice["Open"].iloc[-2] - df_slice["Close"].iloc[-3]) / df_slice["Close"].iloc[-3]) * 100
         gap3 = ((df_slice["Open"].iloc[-3] - df_slice["Close"].iloc[-4]) / df_slice["Close"].iloc[-4]) * 100
@@ -171,9 +171,10 @@ for current_date in all_dates:
         if s["avg_price"] > 0:
             profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
 
-        sell1 = 0.00 < s["position"] <= 0.33 and rsi_val >= 68 and profit > 4.0
-        sell2 = 0.33 < s["position"] <= 0.66 and rsi_val >= 72 and profit > 5.0
-        sell3 = s["position"] > 0.66 and rsi_val >= 76 and profit > 6.0
+        # تعديل شروط البيع المنطقية
+        sell1 = (0.00 < s["position"] <= 0.33) and rsi_val >= 68 and profit > 4.0
+        sell2 = (0.33 < s["position"] <= 0.66) and rsi_val >= 72 and profit > 5.0
+        sell3 = (s["position"] > 0.00) and rsi_val >= 76 and profit > 6.0
 
         initial_pos = s["position"]
         action = None
@@ -319,7 +320,6 @@ win_rate = (wins_count / total_count) * 100 if total_count > 0 else 0.0
 avg_win = float(np.mean([t["profit_pct"] for t in winning_trades])) if winning_trades else 0.0
 avg_loss = float(np.mean([t["profit_pct"] for t in losing_trades])) if losing_trades else 0.0
 
-# تجميع ملخص كل سهم
 for t in closed_trades:
     sym = t["symbol"]
     if sym not in stock_summaries:
@@ -347,15 +347,12 @@ results_summary = {
     }
 }
 
-# 1. حفظ ملف النتائج الرئيسية
 with open(RESULTS_FILE, "w", encoding="utf-8") as f:
     json.dump(results_summary, f, indent=2, ensure_ascii=False)
 
-# 2. حفظ سجل الصفقات المفتوحة والمغلقة
 with open(TRADES_FILE, "w", encoding="utf-8") as f:
     json.dump(trades_history, f, indent=2, ensure_ascii=False)
 
-# 3. حفظ الملخص المجمع لكل سهم
 with open(STOCK_SUMMARY_FILE, "w", encoding="utf-8") as f:
     json.dump(stock_summaries, f, indent=2, ensure_ascii=False)
 
@@ -366,6 +363,3 @@ print(f"Total Closed Trades: {total_count}")
 print(f"Win Rate:            {win_rate:.2f}%")
 print(f"Total Profit:        {total_portfolio_profit:.2f}%")
 print("=" * 60)
-print(f" Saved stats to:    '{RESULTS_FILE}'")
-print(f" Saved trades to:   '{TRADES_FILE}'")
-print(f" Saved summary to:  '{STOCK_SUMMARY_FILE}'")
