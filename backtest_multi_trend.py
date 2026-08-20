@@ -90,7 +90,7 @@ for name in symbols:
         df["EMA50"] = close.ewm(span=50, adjust=False).mean()
 
         # حساب هيكل السوق (Pivot Highs & Lows)
-        df = find_pivots(df, window=5)
+        df = find_pivots(df, window=12)
 
         prepared_data[name] = df
     except Exception:
