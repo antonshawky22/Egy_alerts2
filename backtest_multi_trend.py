@@ -149,15 +149,15 @@ for current_date in all_dates:
         
         # نسبة ضغط النطاق العرضي (التجميع)
         consolidation_range = ((high_20 - low_20) / low_20) * 100 if low_20 > 0 else 999.0
-        is_consolidating = consolidation_range <= 14.0  # تجميع ضيق في نطاق 14%
+        is_consolidating = consolidation_range <= 10.0  # تجميع ضيق في نطاق 14%
 
         # شرط الاختراق لقمة التجميع مع دعم الزخم والمتوسطات
         is_breakout = price > high_20
         trend_support = price > float(last["EMA20"]) and float(last["EMA20"]) > float(last["EMA50"])
 
         # شروط الدخول الثلاثية
-        buy1 = is_consolidating and is_breakout and trend_support and (60.0 <= rsi_val <= 72.0)
-        buy2 = is_breakout and trend_support and (53.0 <= rsi_val <= 62.0)
+        buy1 = is_consolidating and is_breakout and trend_support and (63.0 <= rsi_val <= 70.0)
+        buy2 = is_breakout and trend_support and (55.0 <= rsi_val <= 62.0)
         buy3 = trend_support and (48.0 <= rsi_val <= 55.0)
 
         profit = 0.0
@@ -165,9 +165,9 @@ for current_date in all_dates:
             profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
 
         # أهداف البيع وفق قوة الاندفاع
-        sell1 = (0.00 < s["position"] <= 0.33) and rsi_val >= 75 and profit > 8.0
-        sell2 = (0.33 < s["position"] <= 0.66) and rsi_val >= 78 and profit > 12.0
-        sell3 = (s["position"] > 0.00) and rsi_val >= 82 and profit > 18.0
+        sell1 = (0.00 < s["position"] <= 0.33) and rsi_val >= 76 and profit > 9.0
+        sell2 = (0.33 < s["position"] <= 0.66) and rsi_val >= 80 and profit > 14.0
+        sell3 = (s["position"] > 0.00) and rsi_val >= 84 and profit > 20.0
 
         initial_pos = s["position"]
         action = None
