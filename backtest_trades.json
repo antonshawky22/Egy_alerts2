@@ -1,180 +1,18 @@
 [
   {
-    "symbol": "JUFO",
-    "cycle": 1,
-    "status": "CLOSED",
-    "first_entry": "2026-01-06 with price 26.00",
-    "second_entry": null,
-    "third_entry": null,
-    "last_totally_average_price": 26.0,
-    "exits": [],
-    "exit_price": 29.75,
-    "exit_date": "2026-02-11",
-    "profit_pct": 14.42
-  },
-  {
     "symbol": "SWDY",
     "cycle": 1,
-    "status": "CLOSED",
-    "first_entry": "2026-01-08 with price 80.50",
-    "second_entry": null,
-    "third_entry": null,
-    "last_totally_average_price": 80.5,
-    "exits": [],
-    "exit_price": 76.53,
-    "exit_date": "2026-01-15",
-    "profit_pct": -4.93
-  },
-  {
-    "symbol": "OLFI",
-    "cycle": 1,
-    "status": "CLOSED",
-    "first_entry": "2026-01-18 with price 25.49",
-    "second_entry": null,
-    "third_entry": null,
-    "last_totally_average_price": 25.49,
-    "exits": [],
-    "exit_price": 24.12,
-    "exit_date": "2026-01-27",
-    "profit_pct": -5.37
-  },
-  {
-    "symbol": "TMGH",
-    "cycle": 1,
-    "status": "CLOSED",
-    "first_entry": "2026-01-19 with price 82.02",
-    "second_entry": null,
-    "third_entry": null,
-    "last_totally_average_price": 82.02,
-    "exits": [],
-    "exit_price": 91.55,
-    "exit_date": "2026-02-19",
-    "profit_pct": 11.62
-  },
-  {
-    "symbol": "ABUK",
-    "cycle": 1,
-    "status": "CLOSED",
-    "first_entry": "2026-01-21 with price 55.40",
-    "second_entry": null,
-    "third_entry": null,
-    "last_totally_average_price": 55.4,
-    "exits": [
-      "2026-01-27: Sold 33% at price 63.00 (Profit: +13.72%)"
-    ],
-    "exit_price": 63.0,
-    "exit_date": "2026-01-27",
-    "profit_pct": 13.72
-  },
-  {
-    "symbol": "SWDY",
-    "cycle": 2,
-    "status": "CLOSED",
-    "first_entry": "2026-01-21 with price 83.90",
-    "second_entry": null,
-    "third_entry": null,
-    "last_totally_average_price": 83.9,
-    "exits": [],
-    "exit_price": 80.16,
-    "exit_date": "2026-01-26",
-    "profit_pct": -4.46
-  },
-  {
-    "symbol": "FWRY",
-    "cycle": 1,
-    "status": "CLOSED",
-    "first_entry": "2026-01-21 with price 16.58",
-    "second_entry": null,
-    "third_entry": null,
-    "last_totally_average_price": 16.58,
-    "exits": [
-      "2026-02-09: Sold 33% at price 19.75 (Profit: +19.12%)"
-    ],
-    "exit_price": 19.75,
-    "exit_date": "2026-02-09",
-    "profit_pct": 19.12
-  },
-  {
-    "symbol": "OIH",
-    "cycle": 1,
-    "status": "CLOSED",
-    "first_entry": "2026-01-25 with price 1.21",
-    "second_entry": null,
-    "third_entry": null,
-    "last_totally_average_price": 1.21,
-    "exits": [],
-    "exit_price": 1.15,
-    "exit_date": "2026-03-03",
-    "profit_pct": -4.96
-  },
-  {
-    "symbol": "MTIE",
-    "cycle": 1,
-    "status": "CLOSED",
-    "first_entry": "2026-02-04 with price 7.68",
-    "second_entry": null,
-    "third_entry": null,
-    "last_totally_average_price": 7.68,
-    "exits": [],
-    "exit_price": 8.4,
-    "exit_date": "2026-02-19",
-    "profit_pct": 9.38
-  },
-  {
-    "symbol": "PHDC",
-    "cycle": 1,
-    "status": "CLOSED",
-    "first_entry": "2026-02-15 with price 9.30",
-    "second_entry": null,
-    "third_entry": null,
-    "last_totally_average_price": 9.3,
-    "exits": [],
-    "exit_price": 8.9,
-    "exit_date": "2026-03-01",
-    "profit_pct": -4.3
-  },
-  {
-    "symbol": "AMOC",
-    "cycle": 1,
-    "status": "CLOSED",
-    "first_entry": "2026-02-17 with price 7.41",
-    "second_entry": null,
-    "third_entry": null,
-    "last_totally_average_price": 7.41,
-    "exits": [],
-    "exit_price": 7.11,
-    "exit_date": "2026-02-26",
-    "profit_pct": -4.05
-  },
-  {
-    "symbol": "SWDY",
-    "cycle": 3,
     "status": "CLOSED",
     "first_entry": "2026-04-09 with price 81.39",
     "second_entry": null,
     "third_entry": null,
     "last_totally_average_price": 81.39,
     "exits": [
-      "2026-05-10: Sold 33% at price 91.55 (Profit: +12.48%)"
+      "2026-05-06: Sold 33% at price 90.93 (Profit: +11.72%)"
     ],
-    "exit_price": 91.55,
-    "exit_date": "2026-05-10",
-    "profit_pct": 12.48
-  },
-  {
-    "symbol": "ORHD",
-    "cycle": 1,
-    "status": "CLOSED",
-    "first_entry": "2026-04-09 with price 27.15",
-    "second_entry": null,
-    "third_entry": null,
-    "last_totally_average_price": 27.15,
-    "exits": [
-      "2026-04-21: Sold 33% at price 31.90 (Profit: +17.50%)"
-    ],
-    "exit_price": 31.9,
-    "exit_date": "2026-04-21",
-    "profit_pct": 17.5
+    "exit_price": 90.93,
+    "exit_date": "2026-05-06",
+    "profit_pct": 11.72
   },
   {
     "symbol": "EMFD",
@@ -185,22 +23,9 @@
     "third_entry": null,
     "last_totally_average_price": 9.8,
     "exits": [],
-    "exit_price": 10.41,
-    "exit_date": "2026-05-18",
-    "profit_pct": 6.22
-  },
-  {
-    "symbol": "SKPC",
-    "cycle": 1,
-    "status": "CLOSED",
-    "first_entry": "2026-04-27 with price 18.40",
-    "second_entry": null,
-    "third_entry": null,
-    "last_totally_average_price": 18.4,
-    "exits": [],
-    "exit_price": 17.41,
-    "exit_date": "2026-05-05",
-    "profit_pct": -5.38
+    "exit_price": 10.82,
+    "exit_date": "2026-05-17",
+    "profit_pct": 10.41
   },
   {
     "symbol": "EGAL",
@@ -214,19 +39,6 @@
     "exit_price": 323.0,
     "exit_date": "2026-05-17",
     "profit_pct": -4.44
-  },
-  {
-    "symbol": "ORWE",
-    "cycle": 1,
-    "status": "CLOSED",
-    "first_entry": "2026-06-02 with price 24.00",
-    "second_entry": null,
-    "third_entry": null,
-    "last_totally_average_price": 24.0,
-    "exits": [],
-    "exit_price": 22.99,
-    "exit_date": "2026-06-11",
-    "profit_pct": -4.21
   },
   {
     "symbol": "RMDA",
@@ -249,29 +61,16 @@
     "second_entry": null,
     "third_entry": null,
     "last_totally_average_price": 98.5,
-    "exits": [],
-    "exit_price": 107.3,
-    "exit_date": "2026-08-03",
-    "profit_pct": 8.93
-  },
-  {
-    "symbol": "MTIE",
-    "cycle": 2,
-    "status": "CLOSED",
-    "first_entry": "2026-07-13 with price 9.73",
-    "second_entry": null,
-    "third_entry": null,
-    "last_totally_average_price": 9.73,
     "exits": [
-      "2026-08-06: Sold 33% at price 11.00 (Profit: +13.05%)"
+      "2026-08-02: Sold 33% at price 113.11 (Profit: +14.83%)"
     ],
-    "exit_price": 11.0,
-    "exit_date": "2026-08-06",
-    "profit_pct": 13.05
+    "exit_price": 113.11,
+    "exit_date": "2026-08-02",
+    "profit_pct": 14.83
   },
   {
     "symbol": "TMGH",
-    "cycle": 2,
+    "cycle": 1,
     "status": "CLOSED",
     "first_entry": "2026-07-15 with price 101.01",
     "second_entry": null,
@@ -284,7 +83,7 @@
   },
   {
     "symbol": "SWDY",
-    "cycle": 4,
+    "cycle": 2,
     "status": "CLOSED",
     "first_entry": "2026-07-19 with price 91.80",
     "second_entry": null,
@@ -299,7 +98,7 @@
   },
   {
     "symbol": "OIH",
-    "cycle": 2,
+    "cycle": 1,
     "status": "CLOSED",
     "first_entry": "2026-07-20 with price 1.46",
     "second_entry": null,
@@ -328,79 +127,42 @@
   {
     "symbol": "ADIB",
     "cycle": 1,
-    "status": "OPEN",
+    "status": "CLOSED",
     "first_entry": "2026-07-21 with price 49.40",
     "second_entry": null,
     "third_entry": null,
     "last_totally_average_price": 49.4,
     "exits": [],
-    "exit_price": null,
-    "exit_date": null,
-    "profit_pct": null
+    "exit_price": 53.42,
+    "exit_date": "2026-08-20",
+    "profit_pct": 8.14
   },
   {
     "symbol": "ORHD",
-    "cycle": 2,
-    "status": "OPEN",
+    "cycle": 1,
+    "status": "CLOSED",
     "first_entry": "2026-07-22 with price 40.40",
     "second_entry": null,
     "third_entry": null,
     "last_totally_average_price": 40.4,
     "exits": [],
-    "exit_price": null,
-    "exit_date": null,
-    "profit_pct": null
-  },
-  {
-    "symbol": "MPCO",
-    "cycle": 1,
-    "status": "CLOSED",
-    "first_entry": "2026-07-29 with price 1.97",
-    "second_entry": null,
-    "third_entry": null,
-    "last_totally_average_price": 1.97,
-    "exits": [],
-    "exit_price": 2.12,
-    "exit_date": "2026-08-17",
-    "profit_pct": 7.61
+    "exit_price": 42.3,
+    "exit_date": "2026-08-11",
+    "profit_pct": 4.7
   },
   {
     "symbol": "ORWE",
-    "cycle": 2,
+    "cycle": 1,
     "status": "CLOSED",
     "first_entry": "2026-08-04 with price 24.15",
     "second_entry": null,
     "third_entry": null,
     "last_totally_average_price": 24.15,
-    "exits": [],
-    "exit_price": 25.39,
-    "exit_date": "2026-08-19",
-    "profit_pct": 5.13
-  },
-  {
-    "symbol": "PHDC",
-    "cycle": 2,
-    "status": "OPEN",
-    "first_entry": "2026-08-05 with price 15.45",
-    "second_entry": null,
-    "third_entry": null,
-    "last_totally_average_price": 15.45,
-    "exits": [],
-    "exit_price": null,
-    "exit_date": null,
-    "profit_pct": null
-  },
-  {
-    "symbol": "SKPC",
-    "cycle": 2,
-    "status": "OPEN",
-    "first_entry": "2026-08-19 with price 17.70",
-    "second_entry": null,
-    "third_entry": null,
-    "last_totally_average_price": 17.7,
-    "exits": [],
-    "exit_price": null,
-    "exit_date": null,
-    "profit_pct": null
+    "exits": [
+      "2026-08-09: Sold 33% at price 26.80 (Profit: +10.97%)"
+    ],
+    "exit_price": 26.8,
+    "exit_date": "2026-08-09",
+    "profit_pct": 10.97
   }
 ]
