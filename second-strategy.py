@@ -1,4 +1,4 @@
-print("EGX LADDER CYCLE SYSTEM - DATABASE SOURCED (v3.4 Fully Audited)")
+print("EGX LADDER CYCLE SYSTEM - DATABASE SOURCED (v3.5 Radical Stop Corrected)")
 
 import json
 import os
@@ -187,27 +187,27 @@ for name, ticker in symbols.items():
 
     no_gap_down = (gap1 > -3.0) and (gap2 > -3.0) and (gap3 > -3.0)
 
-    # 1. فلتر قرب السعر من المتوسط (نفس شرطك الأصلي)
+    # 1. فلتر قرب السعر من المتوسط
     near_ema = price <= df["EMA75"].iloc[-1] * 1.08
 
-    # 2. تقييم اتجاه EMA75 على فتراتك الأصلية (-1, -5, -9, -13)
+    # 2. تعريف قيم المتوسطات الأربعة بوضوح لاستخدامها في الشراء والستوب لوس
+    ema75_now = df["EMA75"].iloc[-1]
+    ema75_4 = df["EMA75"].iloc[-5]
+    ema75_8 = df["EMA75"].iloc[-9]
+    ema75_12 = df["EMA75"].iloc[-13]
+
+    # اتجاه صاعد: صعود واضح بنسبة 0.3% في كل مرحلة
     ema_up = (
-        df["EMA75"].iloc[-1] >= df["EMA75"].iloc[-5] * 1.003
-        and df["EMA75"].iloc[-5] >= df["EMA75"].iloc[-9] * 1.003
-        and df["EMA75"].iloc[-9] >= df["EMA75"].iloc[-13] * 1.003
+        ema75_now >= ema75_4 * 1.003
+        and ema75_4 >= ema75_8 * 1.003
+        and ema75_8 >= ema75_12 * 1.003
     )
 
     # نطاق عرضي: تذبذب ضيق بين أعلى وأقل قيمة لا يتجاوز 1%
-    ema_vals = [df["EMA75"].iloc[-1], df["EMA75"].iloc[-5], df["EMA75"].iloc[-9], df["EMA75"].iloc[-13]]
+    ema_vals = [ema75_now, ema75_4, ema75_8, ema75_12]
     ema_sideways = ((max(ema_vals) - min(ema_vals)) / min(ema_vals)) <= 0.01
 
-    # اتجاه هابط: كسر صريح للمتوسطات
-    ema_down = (
-        df["EMA75"].iloc[-1] < df["EMA75"].iloc[-5]
-        and df["EMA75"].iloc[-5] < df["EMA75"].iloc[-9]
-    )
-
-    # 3. شروط الشراء الشرائح مع تعديل RSI
+    # 3. شروط الشراء الشرائح
     buy1 = safe_to_buy and no_gap_down and near_ema and ema_up and rsi_val <= 55
     buy2 = safe_to_buy and no_gap_down and near_ema and ema_sideways and rsi_val <= 45
     buy3 = safe_to_buy and no_gap_down and near_ema and ema_sideways and rsi_val <= 38
@@ -285,7 +285,7 @@ for name, ticker in symbols.items():
     # ==========================================
     if initial_pos > 0 and s["position"] > 0:
 
-        # 1. الوقف الجذري: هبوط القيم الأربعة لـ EMA75
+        # 1. الوقف الجذري: هبوط قيم EMA75 الأربعة بنسبة متتالية (عكس الشراء تماماً)
         ema_down_radical = (
             ema75_now <= ema75_4 * 0.997
             and ema75_4 <= ema75_8 * 0.997
