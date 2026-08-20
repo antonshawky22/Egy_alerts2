@@ -1,52 +1,49 @@
-print("EGX LADDER CYCLE SYSTEM - ACCURATE BACKTEST ENGINE (v3.6 Optimized)")
-
 import json
 import os
-import numpy as np
 import pandas as pd
+import numpy as np
+
+# ============================================================
+# BACKTEST - MULTI TREND EMA70 (V8 HIGH-CONVICTION SYSTEM)
+# ============================================================
 
 DB_FILE = "egx_history_database_v2.json"
+RESULTS_FILE = "backtest_results.json"
+TRADES_FILE = "backtest_trades.json"
+STOCK_SUMMARY_FILE = "backtest_summary_by_stock.json"
 
-# قائمة الأسهم
-symbols = [
-    "OLFI", "EMFD", "ETEL", "EAST", "EFIH", "ABUK", "OIH", "SWDY", "ISPH",
-    "ATQA", "MTIE", "HRHO", "ORWE", "JUFO", "DSCW", "SUGR", "ELSH", "RMDA",
-    "RAYA", "EEII", "MPCO", "GBCO", "TMGH", "ORHD", "AMOC", "FWRY", "COMI",
-    "ADIB", "PHDC", "MCQE", "SKPC", "EGAL"
-]
+EGX30_KEY = "EGX30"
 
-# تحميل قاعدة البيانات المحلية
-raw_database = {}
-if os.path.exists(DB_FILE):
-    try:
-        with open(DB_FILE, "r") as f:
-            raw_database = json.load(f)
-    except Exception as e:
-        print(f"⚠️ Failed to load database file: {e}")
-else:
-    print(f"⚠️ Database file '{DB_FILE}' not found!")
+# ============================================================
+# STRATEGY PARAMETERS (V8 OPTIMIZED)
+# ============================================================
 
+# EMA70 TREND
+EMA70_UP_MIN_STEP_PERCENT = 0.30
+EMA70_SIDE_MAX_DISTANCE_PERCENT = 1.00
+EMA70_DOWN_MIN_STEP_PERCENT = 1.00
 
-def fetch_local_data(name):
-    try:
-        if name not in raw_database:
-            return None
-        content = raw_database[name]
-        if "columns" in content and "data" in content:
-            df_temp = pd.DataFrame.from_dict(
-                content["data"], orient="index", columns=content["columns"]
-            )
-            df_temp.index.name = "Date"
-            df_temp.index = pd.to_datetime(df_temp.index)
-            df_temp = df_temp.sort_index(ascending=True)
-            return df_temp
-        return None
-    except Exception as e:
-        return None
+# RSI THRESHOLDS (V8 HIGH-CONVICTION)
+RSI_UP_BUY = 65            # دخول مع الزخم القوي فقط
+RSI_SIDE_BUY_2 = 45        # شريحة تجميع ثانية عند التصحيح
+RSI_SIDE_BUY_3 = 20        # شريحة أعمق إن وجدت
 
+RSI_PARTIAL_SELL = 72      # رفع هدف البيع الجزئي لتكبير الأرباح
+RSI_FINAL_SELL = 78        # هدف البيع الكلي
+
+# STOP LOSS
+EMA70_STOP_MIN_DROP_PERCENT = 1.00
+
+# POSITION SIZING (2 TRANCHES SYSTEM - 50% EACH)
+TRANCHE_SIZE = 0.50        # دخول بـ 50% لكل شريحة لتعظيم التراكمي
+MAX_TRANCHES = 2           # شريحتين كحد أقصى لتكثيف السيولة
+
+# ============================================================
+# RSI - WILDER
+# ============================================================
 
 def rsi(series, period=14):
-    if len(series) < period + 1:
+    if len(series) < period:
         return pd.Series(np.nan, index=series.index)
     delta = series.diff()
     gain = delta.clip(lower=0)
@@ -56,233 +53,377 @@ def rsi(series, period=14):
     rs = avg_gain / avg_loss
     return 100 - (100 / (1 + rs))
 
+# ============================================================
+# LOAD DATABASE
+# ============================================================
 
-def update_avg(old_avg, old_pos, new_price, new_pos):
-    if new_pos == 0:
-        return 0.0
-    added_pos = new_pos - old_pos
-    if added_pos <= 0:
-        return old_avg
-    total_cost = (old_avg * old_pos) + (new_price * added_pos)
-    return total_cost / new_pos
+if not os.path.exists(DB_FILE):
+    raise FileNotFoundError(f"Database file not found: {DB_FILE}")
 
+with open(DB_FILE, "r", encoding="utf-8") as f:
+    raw_database = json.load(f)
 
-all_trades = []
+print("Historical database loaded.")
 
-for name in symbols:
-    df = fetch_local_data(name)
-    if df is None or len(df) < 40:
+symbols = list(raw_database.keys())
+
+if EGX30_KEY not in raw_database:
+    print("⚠️ EGX30 key missing from database, continuing without index benchmark.")
+
+# ============================================================
+# PREPARE DATA
+# ============================================================
+
+prepared_data = {}
+
+for symbol in symbols:
+    content = raw_database.get(symbol, {})
+    if "data" not in content or "columns" not in content:
         continue
+    try:
+        df = pd.DataFrame.from_dict(content["data"], orient="index", columns=content["columns"])
+        df.index = pd.to_datetime(df.index)
+        df = df.sort_index()
 
-    close = df["Close"]
-    df["EMA75"] = close.ewm(span=75, adjust=False).mean()
-    df["RSI"] = rsi(close)
-
-    lookback = 80
-    df["lowest_80"] = df["Low"].rolling(window=lookback, min_periods=40).min()
-    df["highest_80"] = df["High"].rolling(window=lookback, min_periods=40).max()
-    df["run_up"] = ((df["highest_80"] - df["lowest_80"]) / df["lowest_80"]) * 100
-
-    df["gap1"] = ((df["Open"] - df["Close"].shift(1)) / df["Close"].shift(1)) * 100
-    df["gap2"] = ((df["Open"].shift(1) - df["Close"].shift(2)) / df["Close"].shift(2)) * 100
-    df["gap3"] = ((df["Open"].shift(2) - df["Close"].shift(3)) / df["Close"].shift(3)) * 100
-
-    cycle = 1
-    position = 0.0
-    avg_price = 0.0
-    peak_profit = 0.0
-    
-    # تتبع الخروج الجزئي وحساب الربح الموزون للصفقة الحالية
-    realized_exits = []  # قائمة لتخزين (حجم الشريحة المباعة, نسبة ربح الشريحة)
-    current_trade = None
-
-    for i in range(15, len(df)):
-        sub_df = df.iloc[: i + 1]
-        last = sub_df.iloc[-1]
-
-        if sub_df[["Open", "Close", "EMA75", "RSI"]].iloc[-1].isna().any():
+        if len(df) < 80:
             continue
 
-        current_date = str(sub_df.index[-1].strftime("%Y-%m-%d"))
-        price = float(last["Close"])
-        rsi_val = float(last["RSI"])
+        df["EMA12"] = df["Close"].ewm(span=12, adjust=False).mean()
+        df["EMA20"] = df["Close"].ewm(span=20, adjust=False).mean()
+        df["EMA70"] = df["Close"].ewm(span=70, adjust=False).mean()
+        df["RSI14"] = rsi(df["Close"], 14)
 
-        safe_to_buy = float(last["run_up"]) <= 60.0
-        no_gap_down = (float(last["gap1"]) > -3.0) and (float(last["gap2"]) > -3.0) and (float(last["gap3"]) > -3.0)
-        near_ema = price <= float(last["EMA75"]) * 1.08
+        df["cross_up"] = (df["EMA12"] > df["EMA20"]) & (df["EMA12"].shift(1) <= df["EMA20"].shift(1))
+        df["cross_down"] = (df["EMA12"] < df["EMA20"]) & (df["EMA12"].shift(1) >= df["EMA20"].shift(1))
 
-        ema75_now = float(sub_df["EMA75"].iloc[-1])
-        ema75_4 = float(sub_df["EMA75"].iloc[-5])
-        ema75_8 = float(sub_df["EMA75"].iloc[-9])
-        ema75_12 = float(sub_df["EMA75"].iloc[-13])
+        prepared_data[symbol] = df
+    except Exception as e:
+        print(f"Failed preparing {symbol}: {e}")
 
-        ema_up = (
-            ema75_now >= ema75_4 * 1.003
-            and ema75_4 >= ema75_8 * 1.003
-            and ema75_8 >= ema75_12 * 1.003
-        )
+print(f"Prepared {len(prepared_data)} symbols.")
 
-        ema_vals = [ema75_now, ema75_4, ema75_8, ema75_12]
-        ema_sideways = ((max(ema_vals) - min(ema_vals)) / min(ema_vals)) <= 0.01
+# ============================================================
+# EMA70 TREND DETECTION
+# ============================================================
 
-        # 🎯 فلتر دخول محدد ومركز (تم خفض RSI للشريحة الأولى لتقليل الصفقات العشوائية)
-        buy1 = safe_to_buy and no_gap_down and near_ema and ema_up and rsi_val <= 48
-        buy2 = safe_to_buy and no_gap_down and near_ema and ema_sideways and rsi_val <= 45
-        buy3 = safe_to_buy and no_gap_down and near_ema and ema_sideways and rsi_val <= 38
+def calculate_trend(df, index):
+    if index < 12:
+        return "🔛"
 
-        profit = 0.0
-        if avg_price > 0:
-            profit = ((price - avg_price) / avg_price) * 100
+    ema70_now = float(df.iloc[index]["EMA70"])
+    ema70_4 = float(df.iloc[index - 4]["EMA70"])
+    ema70_8 = float(df.iloc[index - 8]["EMA70"])
+    ema70_12 = float(df.iloc[index - 12]["EMA70"])
 
-        sell1 = position > 0.70 and rsi_val >= 68 and profit > 3.0
-        sell2 = 0.30 < position <= 0.70 and rsi_val >= 74 and profit > 5.0
-        sell3 = position > 0.00 and rsi_val >= 80 and profit > 7.0
+    if any(pd.isna(x) for x in [ema70_now, ema70_4, ema70_8, ema70_12]):
+        return "🔛"
 
-        initial_pos = position
+    step_1 = ((ema70_now - ema70_4) / ema70_4) * 100
+    step_2 = ((ema70_4 - ema70_8) / ema70_8) * 100
+    step_3 = ((ema70_8 - ema70_12) / ema70_12) * 100
 
-        # 🟢 تنفيذ أومـر الـشـراء
-        if position == 0 and buy1:
-            position = 0.33
-            avg_price = price
-            peak_profit = 0.0
-            realized_exits = []
+    if step_1 >= EMA70_UP_MIN_STEP_PERCENT and step_2 >= EMA70_UP_MIN_STEP_PERCENT and step_3 >= EMA70_UP_MIN_STEP_PERCENT:
+        return "↗️"
 
-            current_trade = {
-                "symbol": name,
-                "cycle": cycle,
-                "entry_date": current_date,
-                "entry_price": round(price, 2),
-                "max_position": 0.33,
-                "exit_reason": None
-            }
+    if step_1 <= -EMA70_DOWN_MIN_STEP_PERCENT and step_2 <= -EMA70_DOWN_MIN_STEP_PERCENT and step_3 <= -EMA70_DOWN_MIN_STEP_PERCENT:
+        return "🔻"
 
-        elif 0.32 < position < 0.5 and buy2 and price < avg_price * 0.97:
-            old_pos = position
-            position = 0.66
-            avg_price = update_avg(avg_price, old_pos, price, position)
-            profit = ((price - avg_price) / avg_price) * 100
-            if current_trade:
-                current_trade["max_position"] = max(current_trade["max_position"], 0.66)
+    max_ema70 = max(ema70_now, ema70_4, ema70_8, ema70_12)
+    min_ema70 = min(ema70_now, ema70_4, ema70_8, ema70_12)
 
-        elif 0.65 < position < 1 and buy3 and price < avg_price * 0.96:
-            old_pos = position
-            position = 1.0
-            avg_price = update_avg(avg_price, old_pos, price, position)
-            profit = ((price - avg_price) / avg_price) * 100
-            if current_trade:
-                current_trade["max_position"] = 1.0
+    if min_ema70 <= 0:
+        return "🔛"
 
-        if profit > peak_profit:
-            peak_profit = profit
+    distance_percent = ((max_ema70 - min_ema70) / min_ema70) * 100
 
-        # 🔴 تنفيذ أومـر الـبـيـع وإغلاق الصفقات
-        if initial_pos > 0 and position > 0:
+    if distance_percent <= EMA70_SIDE_MAX_DISTANCE_PERCENT:
+        return "🔛"
 
-            # 1. الوقف الجذري: هبوط القيم الأربعة لـ EMA75
-            ema_down_radical = (
-                ema75_now <= ema75_4 * 0.997
-                and ema75_4 <= ema75_8 * 0.997
-                and ema75_8 <= ema75_12 * 0.997
-            )
+    return "🔛"
 
-            # 2. الوقف الديناميكي: حماية الأرباح عند التراجع من القمة
-            trailing_stop = (peak_profit > 10 and (peak_profit - profit) >= 4)
+# ============================================================
+# EMA70 SHARP DECLINE DETECTION
+# ============================================================
 
-            stop_triggered = ema_down_radical or trailing_stop
+def ema70_sharp_decline(df, index):
+    if index < 4:
+        return False
 
-            # دالة حساب الربح الصافي الموزون الحقيقي للصفقة
-            def get_final_weighted_pnl(final_exit_profit, remaining_pos):
-                temp_exits = list(realized_exits)
-                if remaining_pos > 0:
-                    temp_exits.append((remaining_pos, final_exit_profit))
-                
-                total_weight = sum(w for w, _ in temp_exits)
-                if total_weight > 0:
-                    return sum(w * p for w, p in temp_exits) / total_weight
-                return final_exit_profit
+    ema70_now = float(df.iloc[index]["EMA70"])
+    ema70_4 = float(df.iloc[index - 4]["EMA70"])
 
-            # 🛑 1. خروج كلي بسبب الستوب لوس
-            if stop_triggered:
-                final_pnl = get_final_weighted_pnl(profit, position)
-                if current_trade:
-                    current_trade["exit_date"] = current_date
-                    current_trade["exit_price"] = round(price, 2)
-                    current_trade["profit_pct"] = round(final_pnl, 2)
-                    current_trade["exit_reason"] = "STOP_LOSS_RADICAL" if ema_down_radical else "TRAILING_PROFIT_STOP"
-                    all_trades.append(current_trade)
-                    current_trade = None
+    if pd.isna(ema70_now) or pd.isna(ema70_4) or ema70_4 <= 0:
+        return False
 
-                position = 0.0
+    decline_percent = ((ema70_now - ema70_4) / ema70_4) * 100
+    return decline_percent <= -EMA70_STOP_MIN_DROP_PERCENT
 
-            # 🚨 2. خروج كلي لتحقيق الهدف الكامل
-            elif sell3:
-                final_pnl = get_final_weighted_pnl(profit, position)
-                if current_trade:
-                    current_trade["exit_date"] = current_date
-                    current_trade["exit_price"] = round(price, 2)
-                    current_trade["profit_pct"] = round(final_pnl, 2)
-                    current_trade["exit_reason"] = "FULL_TARGET"
-                    all_trades.append(current_trade)
-                    current_trade = None
+# ============================================================
+# ALL TRADING DATES
+# ============================================================
 
-                position = 0.0
+all_dates = set()
+for symbol, df in prepared_data.items():
+    if symbol == EGX30_KEY:
+        continue
+    all_dates.update(df.index)
 
-            # 🔴 3. بيع جزئي L2 أو L1 (تأمين الأرباح)
-            elif sell2 or sell1:
-                sell_amount = min(0.33, position)
-                realized_exits.append((sell_amount, profit))
-                position = round(position - sell_amount, 2)
+all_dates = sorted(all_dates)
 
-                # إذا انتهت الكمية تماماً بعد البيع الجزئي
-                if position == 0.0 and current_trade:
-                    final_pnl = get_final_weighted_pnl(profit, 0.0)
-                    current_trade["exit_date"] = current_date
-                    current_trade["exit_price"] = round(price, 2)
-                    current_trade["profit_pct"] = round(final_pnl, 2)
-                    current_trade["exit_reason"] = "PARTIAL_TARGETS_COMPLETE"
-                    all_trades.append(current_trade)
-                    current_trade = None
+if not all_dates:
+    raise ValueError("No trading dates available.")
 
-            position = round(position, 2)
+print(f"Backtest period: {all_dates[0].strftime('%Y-%m-%d')} -> {all_dates[-1].strftime('%Y-%m-%d')}")
 
-            if position == 0.0:
-                avg_price = 0.0
-                peak_profit = 0.0
-                realized_exits = []
-                cycle += 1
+# ============================================================
+# STATE & TRACKING
+# ============================================================
 
-# ==========================================
-# 📊 طباعة تقرير نتائج الباك تست
-# ==========================================
-if all_trades:
-    trades_df = pd.DataFrame(all_trades)
-    total_trades = len(trades_df)
-    winning_trades = len(trades_df[trades_df["profit_pct"] > 0])
-    losing_trades = len(trades_df[trades_df["profit_pct"] <= 0])
-    win_rate = (winning_trades / total_trades) * 100 if total_trades > 0 else 0
-    
-    avg_trade = trades_df["profit_pct"].mean()
-    avg_win = trades_df[trades_df["profit_pct"] > 0]["profit_pct"].mean() if winning_trades > 0 else 0
-    avg_loss = trades_df[trades_df["profit_pct"] <= 0]["profit_pct"].mean() if losing_trades > 0 else 0
-    total_cum_profit = trades_df["profit_pct"].sum()
+states = {}
+for symbol in prepared_data:
+    if symbol == EGX30_KEY:
+        continue
+    states[symbol] = {
+        "in_position": False,
+        "tranches": [],
+        "entry_date": None,
+        "entry_trend": None,
+        "partial_sell_done": False
+    }
 
-    # حساب التراجع الأقصى Drawdown للصفقة التراكمية
-    trades_df["cum_pnl"] = trades_df["profit_pct"].cumsum()
-    trades_df["peak"] = trades_df["cum_pnl"].cummax()
-    trades_df["drawdown"] = trades_df["cum_pnl"] - trades_df["peak"]
-    max_drawdown = trades_df["drawdown"].min()
+trades = []
+stock_summaries = {}
+closed_profit_percent = 0.0
+equity_curve = []
+peak_equity = 0.0
+max_drawdown = 0.0
 
-    print("\n" + "="*50)
-    print("      📊 ACCURATE BACKTEST REPORT (v3.6)      ")
-    print("="*50)
-    print(f"Total Completed Trades:   {total_trades}")
-    print(f"Winning Trades:           {winning_trades} ({win_rate:.2f}%)")
-    print(f"Losing Trades:            {losing_trades}")
-    print(f"Average Win / Trade:      +{avg_win:.2f}%")
-    print(f"Average Loss / Trade:     {avg_loss:.2f}%")
-    print(f"Average PnL / Trade:      {avg_trade:.2f}%")
-    print(f"Cumulative Profit:        +{total_cum_profit:.2f}%")
-    print(f"Max Cumulative Drawdown:  {max_drawdown:.2f}%")
-    print("="*50)
-else:
-    print("⚠️ No trades were executed in this period.")
+trend_days = {"↗️": 0, "🔛": 0, "🔻": 0}
+
+# ============================================================
+# TRANCHE HELPERS
+# ============================================================
+
+def position_units(state):
+    return sum(tranche["size"] for tranche in state["tranches"])
+
+def add_tranche(state, price, date):
+    state["tranches"].append({
+        "size": TRANCHE_SIZE,
+        "price": float(price),
+        "date": date.strftime("%Y-%m-%d")
+    })
+    state["in_position"] = True
+
+def sell_one_tranche(state, close, current_date, reason):
+    if not state["tranches"]:
+        return 0.0, None
+
+    tranche = state["tranches"].pop(0)
+    entry_price = tranche["price"]
+    size = tranche["size"]
+
+    profit_percent = ((close - entry_price) / entry_price) * 100
+    contribution = profit_percent * size
+
+    sale = {
+        "entry_date": tranche["date"],
+        "entry_price": round(entry_price, 4),
+        "exit_date": current_date.strftime("%Y-%m-%d"),
+        "exit_price": round(close, 4),
+        "size": round(size, 4),
+        "profit_pct_on_tranche": round(profit_percent, 2),
+        "portfolio_contribution_pct": round(contribution, 2),
+        "reason": reason
+    }
+
+    if not state["tranches"]:
+        state["in_position"] = False
+
+    return contribution, sale
+
+def sell_all(state, close, current_date, reason):
+    total_contribution = 0.0
+    sales = []
+
+    while state["tranches"]:
+        contribution, sale = sell_one_tranche(state, close, current_date, reason)
+        total_contribution += contribution
+        if sale:
+            sales.append(sale)
+
+    state["in_position"] = False
+    return total_contribution, sales
+
+# ============================================================
+# MAIN BACKTEST LOOP
+# ============================================================
+
+for current_date in all_dates:
+    for symbol, df in prepared_data.items():
+        if symbol == EGX30_KEY or current_date not in df.index:
+            continue
+
+        current_index = df.index.get_loc(current_date)
+        if current_index < 80:
+            continue
+
+        row = df.iloc[current_index]
+        close = float(row["Close"])
+
+        if pd.isna(close) or pd.isna(row["RSI14"]):
+            continue
+
+        state = states[symbol]
+        units = position_units(state)
+        trend = calculate_trend(df, current_index)
+        trend_days[trend] += 1
+
+        buy_signal = False
+        buy_level = None
+        realized_profit = 0.0
+        sales = []
+
+        # --- UPTREND LOGIC ---
+        if trend == "↗️":
+            if units == 0 and row["RSI14"] < RSI_UP_BUY:
+                buy_signal = True
+                buy_level = 1
+
+            elif units > 0 and row["RSI14"] > RSI_PARTIAL_SELL:
+                realized_profit, sale = sell_one_tranche(
+                    state, close, current_date, f"RSI_{RSI_PARTIAL_SELL}"
+                )
+                if sale:
+                    sales.append(sale)
+
+        # --- SIDEWAYS LOGIC ---
+        elif trend == "🔛":
+            if TRANCHE_SIZE - 0.0001 <= units < (2 * TRANCHE_SIZE - 0.0001) and row["RSI14"] <= RSI_SIDE_BUY_2:
+                buy_signal = True
+                buy_level = 2
+
+            elif units > 0 and row["RSI14"] > RSI_PARTIAL_SELL:
+                realized_profit, sale = sell_one_tranche(
+                    state, close, current_date, f"SIDE_RSI_{RSI_PARTIAL_SELL}"
+                )
+                if sale:
+                    sales.append(sale)
+
+        # --- DOWNTREND LOGIC ---
+        elif trend == "🔻":
+            if units > 0:
+                realized_profit, sales = sell_all(state, close, current_date, "EMA70_STRONG_DOWN")
+
+        # --- FINAL RSI TARGET EXIT ---
+        if state["in_position"] and row["RSI14"] > RSI_FINAL_SELL and trend != "🔻":
+            final_profit, final_sales = sell_all(state, close, current_date, f"RSI_{RSI_FINAL_SELL}")
+            realized_profit += final_profit
+            sales.extend(final_sales)
+
+        # --- STOP LOSS EXIT ---
+        if state["in_position"] and ema70_sharp_decline(df, current_index):
+            stop_profit, stop_sales = sell_all(state, close, current_date, "EMA70_SHARP_DECLINE")
+            realized_profit += stop_profit
+            sales.extend(stop_sales)
+
+        # --- EXECUTE BUYS ---
+        if buy_signal and not state["in_position"] and buy_level == 1:
+            add_tranche(state, close, current_date)
+            state["entry_date"] = current_date.strftime("%Y-%m-%d")
+            state["entry_trend"] = trend
+
+        elif buy_signal and state["in_position"] and buy_level in [2, 3] and len(state["tranches"]) < MAX_TRANCHES:
+            add_tranche(state, close, current_date)
+
+        # --- RECORD TRADES ---
+        if realized_profit != 0.0:
+            closed_profit_percent += realized_profit
+
+            if not state["in_position"]:
+                total_profit = sum(sale["portfolio_contribution_pct"] for sale in sales)
+                trade = {
+                    "symbol": symbol,
+                    "entry_date": state["entry_date"],
+                    "exit_date": current_date.strftime("%Y-%m-%d"),
+                    "entry_trend": state["entry_trend"],
+                    "exit_trend": trend,
+                    "profit_pct": round(total_profit, 2),
+                    "exit_reason": sales[-1]["reason"] if sales else "UNKNOWN",
+                    "sales": sales
+                }
+                trades.append(trade)
+
+                # تحديث التلخيص لكل سهم
+                if symbol not in stock_summaries:
+                    stock_summaries[symbol] = {"total_trades": 0, "winning_trades": 0, "losing_trades": 0, "total_profit_pct": 0.0}
+                stock_summaries[symbol]["total_trades"] += 1
+                if total_profit > 0:
+                    stock_summaries[symbol]["winning_trades"] += 1
+                else:
+                    stock_summaries[symbol]["losing_trades"] += 1
+                stock_summaries[symbol]["total_profit_pct"] = round(stock_summaries[symbol]["total_profit_pct"] + total_profit, 2)
+
+                state["entry_date"] = None
+                state["entry_trend"] = None
+                state["partial_sell_done"] = False
+            else:
+                state["partial_sell_done"] = True
+
+    equity_curve.append(closed_profit_percent)
+    if closed_profit_percent > peak_equity:
+        peak_equity = closed_profit_percent
+    drawdown = peak_equity - closed_profit_percent
+    if drawdown > max_drawdown:
+        max_drawdown = drawdown
+
+# ============================================================
+# RESULTS GENERATION & STATS EXPORT
+# ============================================================
+
+total_trades = len(trades)
+winning_trades = [t for t in trades if t["profit_pct"] > 0]
+losing_trades = [t for t in trades if t["profit_pct"] <= 0]
+
+wins = len(winning_trades)
+losses = len(losing_trades)
+win_rate = (wins / total_trades) * 100 if total_trades > 0 else 0
+average_profit = np.mean([t["profit_pct"] for t in winning_trades]) if winning_trades else 0
+average_loss = np.mean([t["profit_pct"] for t in losing_trades]) if losing_trades else 0
+
+results = {
+    "statistics": {
+        "total_trades": total_trades,
+        "winning_trades": wins,
+        "losing_trades": losses,
+        "win_rate_percent": round(win_rate, 2),
+        "total_profit_percent": round(closed_profit_percent, 2),
+        "average_winning_trade_percent": round(float(average_profit), 2),
+        "average_losing_trade_percent": round(float(average_loss), 2),
+        "maximum_drawdown_percent": round(max_drawdown, 2)
+    }
+}
+
+# 1. حفظ نتائج الإحصائيات العامة
+with open(RESULTS_FILE, "w", encoding="utf-8") as f:
+    json.dump(results, f, indent=2, ensure_ascii=False)
+
+# 2. حفظ سجل الصفقات التفصيلي
+with open(TRADES_FILE, "w", encoding="utf-8") as f:
+    json.dump(trades, f, indent=2, ensure_ascii=False)
+
+# 3. حفظ الملخص المجمع حسب كل سهم
+with open(STOCK_SUMMARY_FILE, "w", encoding="utf-8") as f:
+    json.dump(stock_summaries, f, indent=2, ensure_ascii=False)
+
+print("\n" + "=" * 60)
+print("V8 BACKTEST COMPLETE")
+print("=" * 60)
+print(f"Total Trades:      {total_trades}")
+print(f"Win Rate:          {win_rate:.2f}%")
+print(f"Total Profit:      {closed_profit_percent:.2f}%")
+print(f"Max Drawdown:      {max_drawdown:.2f}%")
+print("=" * 60)
+print(f"✅ Saved results to: '{RESULTS_FILE}'")
+print(f"✅ Saved trades to:  '{TRADES_FILE}'")
+print(f"✅ Saved summary to: '{STOCK_SUMMARY_FILE}'")
