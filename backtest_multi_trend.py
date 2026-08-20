@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 # ============================================================
-# BREAKOUT + VOLUME CONFIRMATION ENGINE (v5.0)
+# MARKET STRUCTURE SHIFT (MSS) ENGINE - FULL BACKTEST (v1.0)
 # ============================================================
 
 DB_FILE = "egx_history_database_v2.json"
@@ -26,17 +26,6 @@ symbols = {
 # HELPER FUNCTIONS
 # ============================================================
 
-def rsi(series, period=14):
-    if len(series) < period + 1:
-        return pd.Series(np.nan, index=series.index)
-    delta = series.diff()
-    gain = delta.clip(lower=0)
-    loss = -delta.clip(upper=0)
-    avg_gain = gain.ewm(com=period - 1, adjust=False).mean()
-    avg_loss = loss.ewm(com=period - 1, adjust=False).mean()
-    rs = avg_gain / avg_loss
-    return 100 - (100 / (1 + rs))
-
 def update_avg(old_avg, old_pos, new_price, new_pos):
     if new_pos == 0:
         return 0.0
@@ -50,6 +39,25 @@ def calc_final_pnl(tracker, current_p, current_w):
     temp_tracker = list(tracker) + [(current_w, current_p)]
     w_sum = sum(w for w, _ in temp_tracker)
     return sum(p * w for w, p in temp_tracker) / w_sum if w_sum > 0 else current_p
+
+def find_pivots(df, window=5):
+    """استخراج القمم والقيعان المحورية للهيكل السعري"""
+    df_copy = df.copy()
+    df_copy['pivot_high'] = np.nan
+    df_copy['pivot_low'] = np.nan
+
+    for i in range(window, len(df_copy) - window):
+        high_range = df_copy['High'].iloc[i - window : i + window + 1]
+        if df_copy['High'].iloc[i] == high_range.max():
+            df_copy.loc[df_copy.index[i], 'pivot_high'] = df_copy['High'].iloc[i]
+
+        low_range = df_copy['Low'].iloc[i - window : i + window + 1]
+        if df_copy['Low'].iloc[i] == low_range.min():
+            df_copy.loc[df_copy.index[i], 'pivot_low'] = df_copy['Low'].iloc[i]
+
+    df_copy['last_pivot_high'] = df_copy['pivot_high'].ffill()
+    df_copy['last_pivot_low'] = df_copy['pivot_low'].ffill()
+    return df_copy
 
 # ============================================================
 # LOAD DATABASE & PREPARE DATA
@@ -80,12 +88,9 @@ for name in symbols:
         close = df["Close"]
         df["EMA20"] = close.ewm(span=20, adjust=False).mean()
         df["EMA50"] = close.ewm(span=50, adjust=False).mean()
-        df["EMA75"] = close.ewm(span=75, adjust=False).mean()
-        df["RSI"] = rsi(close)
 
-        # التأكد من تحويل العمود إلى أرقام
-        if "Volume" in df.columns:
-            df["Volume"] = pd.to_numeric(df["Volume"], errors="coerce").fillna(0)
+        # حساب هيكل السوق (Pivot Highs & Lows)
+        df = find_pivots(df, window=5)
 
         prepared_data[name] = df
     except Exception:
@@ -106,6 +111,7 @@ states = {
         "position": 0.0,
         "avg_price": 0.0,
         "peak_profit": 0.0,
+        "structure_stop": 0.0,
         "realized_pnl_tracker": []
     }
     for name in prepared_data
@@ -125,18 +131,18 @@ for current_date in all_dates:
             continue
 
         idx = df.index.get_loc(current_date)
-        if idx < 79:  # نحتاج 80 شمعة سابقة على الأقل
+        if idx < 60:
             continue
 
         df_slice = df.iloc[: idx + 1]
         last = df_slice.iloc[-1]
 
-        if df_slice[["Open", "Close", "EMA20", "EMA50", "RSI"]].iloc[-1].isna().any():
+        if df_slice[["Open", "Close", "EMA20", "EMA50", "last_pivot_high", "last_pivot_low"]].iloc[-1].isna().any():
             continue
 
         date_str = current_date.strftime("%Y-%m-%d")
         price = float(last["Close"])
-        rsi_val = float(last["RSI"])
+        prev_close = float(df_slice["Close"].iloc[-2])
 
         s = states[name]
         s["position"] = round(float(s["position"]), 2)
@@ -144,38 +150,32 @@ for current_date in all_dates:
         if s["position"] == 0.0:
             s["avg_price"] = 0.0
             s["peak_profit"] = 0.0
+            s["structure_stop"] = 0.0
 
-        # --- 1. حساب نطاق التجميع وحجم التداول والاختراق ---
-        prev_20 = df_slice.iloc[-21:-1]
-        high_20 = float(prev_20["High"].max())
-        low_20 = float(prev_20["Low"].min())
-        
-        # نطاق تجميع ضيق (10%)
-        consolidation_range = ((high_20 - low_20) / low_20) * 100 if low_20 > 0 else 999.0
-        is_consolidating = consolidation_range <= 10.0
+        # --- تحليل هيكل السوق (Market Structure Shift) ---
+        last_ph = float(last["last_pivot_high"])
+        last_pl = float(last["last_pivot_low"])
 
-        # شرط السيولة وحجم التداول (Volume Confirmation)
-        vol_ma20 = float(prev_20["Volume"].mean()) if "Volume" in prev_20.columns else 0.0
-        current_vol = float(last["Volume"]) if "Volume" in last else 0.0
-        volume_confirmed = current_vol > (vol_ma20 * 1.3) if vol_ma20 > 0 else True
+        # كسر القمة المحورية المباشرة (Market Structure Breakout)
+        mss_breakout = (prev_close <= last_ph) and (price > last_ph)
+        trend_aligned = float(last["EMA20"]) > float(last["EMA50"])
 
-        # شرط الاختراق والدعم الفني للمتوسطات
-        is_breakout = price > high_20
-        trend_support = price > float(last["EMA20"]) and float(last["EMA20"]) > float(last["EMA50"])
+        # إعادة اختبار مستوى الهيكل المكسور (Structure Re-Test)
+        retest_support = (price <= last_ph * 1.01) and (price >= last_ph * 0.985)
 
-        # شروط شراء الفلترة الذهبية (المحفز بالحجم)
-        buy1 = is_consolidating and is_breakout and volume_confirmed and trend_support and (63.0 <= rsi_val <= 70.0)
-        buy2 = is_breakout and trend_support and (55.0 <= rsi_val <= 62.0)
-        buy3 = trend_support and (48.0 <= rsi_val <= 55.0)
+        # شروط الشراء الهيكلية
+        buy1 = mss_breakout and trend_aligned
+        buy2 = retest_support and trend_aligned and (price < s["avg_price"] * 0.97)
+        buy3 = trend_support = (price > float(last["EMA50"])) and (price < s["avg_price"] * 0.93)
 
         profit = 0.0
         if s["avg_price"] > 0:
             profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
 
-        # أهداف البيع
-        sell1 = (0.00 < s["position"] <= 0.33) and rsi_val >= 78 and profit > 14.0
-        sell2 = (0.33 < s["position"] <= 0.66) and rsi_val >= 82 and profit > 22.0
-        sell3 = (s["position"] > 0.00) and rsi_val >= 85 and profit > 30.0
+        # أهداف البيع المبنية على امتداد الهيكل السعري
+        sell1 = (0.00 < s["position"] <= 0.33) and profit > 8.0
+        sell2 = (0.33 < s["position"] <= 0.66) and profit > 14.0
+        sell3 = (s["position"] > 0.00) and profit > 22.0
 
         initial_pos = s["position"]
         action = None
@@ -185,9 +185,10 @@ for current_date in all_dates:
             s["position"] = 0.33
             s["avg_price"] = price
             s["peak_profit"] = 0.0
+            s["structure_stop"] = last_pl * 0.99  # وقف خسارة أسفل القاع المحوري السابق
             s["realized_pnl_tracker"] = []
             profit = 0.0
-            action = "BUY L1"
+            action = "BUY L1 (MSS Breakout)"
 
             trades_history.append({
                 "symbol": name,
@@ -203,24 +204,24 @@ for current_date in all_dates:
                 "profit_pct": None
             })
 
-        elif 0.32 < s["position"] < 0.5 and buy2 and price < s["avg_price"] * 0.97:
+        elif 0.32 < s["position"] < 0.5 and buy2:
             old_pos = s["position"]
             s["position"] = 0.66
             s["avg_price"] = update_avg(s["avg_price"], old_pos, price, s["position"])
             profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
-            action = "BUY L2"
+            action = "BUY L2 (Re-Test)"
 
             active = [t for t in trades_history if t["symbol"] == name and t["status"] == "OPEN"]
             if active:
                 active[-1]["second_entry"] = f"{date_str} with price {price:.2f}"
                 active[-1]["last_totally_average_price"] = round(s["avg_price"], 2)
 
-        elif 0.65 < s["position"] < 1 and buy3 and price < s["avg_price"] * 0.93:
+        elif 0.65 < s["position"] < 1 and buy3:
             old_pos = s["position"]
             s["position"] = 1.0
             s["avg_price"] = update_avg(s["avg_price"], old_pos, price, s["position"])
             profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
-            action = "BUY L3"
+            action = "BUY L3 (Discount)"
 
             active = [t for t in trades_history if t["symbol"] == name and t["status"] == "OPEN"]
             if active:
@@ -234,16 +235,12 @@ for current_date in all_dates:
         if initial_pos > 0 and s["position"] > 0:
             stop_triggered = False
 
-            # وقف خسارة حازم لمنع كسر الاختراقات الوهمية
-            if s["position"] <= 0.33 and profit <= -5.0:
-                stop_triggered = True
-            elif s["position"] <= 0.66 and profit <= -4.0:
-                stop_triggered = True
-            elif s["position"] == 1.0 and profit <= -3.0:
+            # وقف الخسارة الهيكلي (أو الوقف النسبي المحكم)
+            if price < s["structure_stop"] or profit <= -5.0:
                 stop_triggered = True
 
-            # Trailing Stop محكم
-            if s["peak_profit"] > 12.0 and (s["peak_profit"] - profit) >= 4.5:
+            # Trailing Stop ديناميكي لحماية الأرباح عند تسجيل قمة جديدة
+            if s["peak_profit"] > 9.0 and (s["peak_profit"] - profit) >= 3.5:
                 stop_triggered = True
 
             active = [t for t in trades_history if t["symbol"] == name and t["status"] == "OPEN"]
@@ -304,6 +301,7 @@ for current_date in all_dates:
         if action and s["position"] == 0.0 and ("SELL" in action or "EXIT" in action or "STOP" in action):
             s["avg_price"] = 0.0
             s["peak_profit"] = 0.0
+            s["structure_stop"] = 0.0
             s["realized_pnl_tracker"] = []
             s["cycle"] += 1
 
@@ -360,7 +358,7 @@ with open(STOCK_SUMMARY_FILE, "w", encoding="utf-8") as f:
     json.dump(stock_summaries, f, indent=2, ensure_ascii=False)
 
 print("\n" + "=" * 60)
-print("EGX BREAKOUT + VOLUME SYSTEM (v5.0) - BACKTEST COMPLETE")
+print("MARKET STRUCTURE SHIFT (MSS) ENGINE - BACKTEST COMPLETE")
 print("=" * 60)
 print(f"Total Closed Trades: {total_count}")
 print(f"Win Rate:            {win_rate:.2f}%")
