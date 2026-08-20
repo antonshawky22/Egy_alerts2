@@ -1,44 +1,164 @@
 {
+  "ABUK": {
+    "total_trades": 3,
+    "winning_trades": 1,
+    "losing_trades": 2,
+    "total_profit_pct": 0.58
+  },
+  "EGAL": {
+    "total_trades": 3,
+    "winning_trades": 1,
+    "losing_trades": 2,
+    "total_profit_pct": 5.76
+  },
+  "AMOC": {
+    "total_trades": 3,
+    "winning_trades": 2,
+    "losing_trades": 1,
+    "total_profit_pct": 26.29
+  },
+  "OIH": {
+    "total_trades": 2,
+    "winning_trades": 2,
+    "losing_trades": 0,
+    "total_profit_pct": 18.3
+  },
+  "ETEL": {
+    "total_trades": 3,
+    "winning_trades": 2,
+    "losing_trades": 1,
+    "total_profit_pct": 10.67
+  },
+  "FWRY": {
+    "total_trades": 1,
+    "winning_trades": 1,
+    "losing_trades": 0,
+    "total_profit_pct": 8.56
+  },
+  "ADIB": {
+    "total_trades": 3,
+    "winning_trades": 2,
+    "losing_trades": 1,
+    "total_profit_pct": 12.63
+  },
   "SWDY": {
     "total_trades": 2,
     "winning_trades": 2,
     "losing_trades": 0,
-    "total_profit_pct": 25.7
+    "total_profit_pct": 32.18
+  },
+  "DSCW": {
+    "total_trades": 2,
+    "winning_trades": 0,
+    "losing_trades": 2,
+    "total_profit_pct": -10.88
+  },
+  "ORHD": {
+    "total_trades": 3,
+    "winning_trades": 3,
+    "losing_trades": 0,
+    "total_profit_pct": 27.27
+  },
+  "COMI": {
+    "total_trades": 1,
+    "winning_trades": 0,
+    "losing_trades": 1,
+    "total_profit_pct": -5.3
   },
   "EMFD": {
     "total_trades": 1,
     "winning_trades": 1,
     "losing_trades": 0,
-    "total_profit_pct": 6.22
+    "total_profit_pct": 8.84
   },
-  "EGAL": {
+  "MCQE": {
+    "total_trades": 2,
+    "winning_trades": 1,
+    "losing_trades": 1,
+    "total_profit_pct": 17.72
+  },
+  "RAYA": {
+    "total_trades": 2,
+    "winning_trades": 2,
+    "losing_trades": 0,
+    "total_profit_pct": 21.37
+  },
+  "MTIE": {
+    "total_trades": 2,
+    "winning_trades": 2,
+    "losing_trades": 0,
+    "total_profit_pct": 29.35
+  },
+  "SKPC": {
     "total_trades": 1,
     "winning_trades": 0,
     "losing_trades": 1,
-    "total_profit_pct": -4.44
+    "total_profit_pct": -5.38
+  },
+  "PHDC": {
+    "total_trades": 1,
+    "winning_trades": 1,
+    "losing_trades": 0,
+    "total_profit_pct": 16.21
+  },
+  "ELSH": {
+    "total_trades": 1,
+    "winning_trades": 1,
+    "losing_trades": 0,
+    "total_profit_pct": 17.47
+  },
+  "EFIH": {
+    "total_trades": 1,
+    "winning_trades": 0,
+    "losing_trades": 1,
+    "total_profit_pct": -5.09
+  },
+  "ORWE": {
+    "total_trades": 2,
+    "winning_trades": 1,
+    "losing_trades": 1,
+    "total_profit_pct": 3.67
   },
   "RMDA": {
+    "total_trades": 2,
+    "winning_trades": 2,
+    "losing_trades": 0,
+    "total_profit_pct": 28.32
+  },
+  "ISPH": {
+    "total_trades": 3,
+    "winning_trades": 0,
+    "losing_trades": 3,
+    "total_profit_pct": -17.74
+  },
+  "GBCO": {
     "total_trades": 1,
     "winning_trades": 0,
     "losing_trades": 1,
-    "total_profit_pct": -4.97
+    "total_profit_pct": -6.14
   },
-  "ETEL": {
+  "MPCO": {
+    "total_trades": 3,
+    "winning_trades": 1,
+    "losing_trades": 2,
+    "total_profit_pct": -3.06
+  },
+  "JUFO": {
     "total_trades": 1,
     "winning_trades": 1,
     "losing_trades": 0,
-    "total_profit_pct": 8.93
+    "total_profit_pct": 11.96
   },
-  "TMGH": {
-    "total_trades": 1,
-    "winning_trades": 0,
-    "losing_trades": 1,
-    "total_profit_pct": -4.46
-  },
-  "OIH": {
+  "EEII": {
     "total_trades": 1,
     "winning_trades": 1,
     "losing_trades": 0,
-    "total_profit_pct": 17.12
+    "total_profit_pct": 9.52
+  },
+  "ATQA": {
+    "total_trades": 1,
+    "winning_trades": 1,
+    "losing_trades": 0,
+    "total_profit_pct": 10.47
   }
 }
