@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 # ============================================================
-# BREAKOUT & CONSOLIDATION EXPANSION ENGINE (v4.0)
+# BREAKOUT + VOLUME CONFIRMATION ENGINE (v5.0)
 # ============================================================
 
 DB_FILE = "egx_history_database_v2.json"
@@ -83,6 +83,10 @@ for name in symbols:
         df["EMA75"] = close.ewm(span=75, adjust=False).mean()
         df["RSI"] = rsi(close)
 
+        # التأكد من تحويل العمود إلى أرقام
+        if "Volume" in df.columns:
+            df["Volume"] = pd.to_numeric(df["Volume"], errors="coerce").fillna(0)
+
         prepared_data[name] = df
     except Exception:
         pass
@@ -121,7 +125,7 @@ for current_date in all_dates:
             continue
 
         idx = df.index.get_loc(current_date)
-        if idx < 22:  # نحتاج 80 شمعة سابقة على الأقل للتحليل
+        if idx < 79:  # نحتاج 80 شمعة سابقة على الأقل
             continue
 
         df_slice = df.iloc[: idx + 1]
@@ -141,33 +145,37 @@ for current_date in all_dates:
             s["avg_price"] = 0.0
             s["peak_profit"] = 0.0
 
-        # --- 1. حساب منطقة التجميع والاختراق (Consolidation & Breakout) ---
-        # حساب نطاق التذبذب في آخر 20 شمعة سابقة (دون الشمعة الحالية)
+        # --- 1. حساب نطاق التجميع وحجم التداول والاختراق ---
         prev_20 = df_slice.iloc[-21:-1]
         high_20 = float(prev_20["High"].max())
         low_20 = float(prev_20["Low"].min())
         
-        # نسبة ضغط النطاق العرضي (التجميع)
+        # نطاق تجميع ضيق (10%)
         consolidation_range = ((high_20 - low_20) / low_20) * 100 if low_20 > 0 else 999.0
-        is_consolidating = consolidation_range <= 11.0  # تجميع ضيق في نطاق %
+        is_consolidating = consolidation_range <= 10.0
 
-        # شرط الاختراق لقمة التجميع مع دعم الزخم والمتوسطات
+        # شرط السيولة وحجم التداول (Volume Confirmation)
+        vol_ma20 = float(prev_20["Volume"].mean()) if "Volume" in prev_20.columns else 0.0
+        current_vol = float(last["Volume"]) if "Volume" in last else 0.0
+        volume_confirmed = current_vol > (vol_ma20 * 1.3) if vol_ma20 > 0 else True
+
+        # شرط الاختراق والدعم الفني للمتوسطات
         is_breakout = price > high_20
         trend_support = price > float(last["EMA20"]) and float(last["EMA20"]) > float(last["EMA50"])
 
-        # شروط الدخول الثلاثية
-        buy1 = is_consolidating and is_breakout and trend_support and (62.0 <= rsi_val <= 70.0)
-        buy2 = is_breakout and trend_support and (54.0 <= rsi_val <= 63.0)
+        # شروط شراء الفلترة الذهبية (المحفز بالحجم)
+        buy1 = is_consolidating and is_breakout and volume_confirmed and trend_support and (63.0 <= rsi_val <= 70.0)
+        buy2 = is_breakout and trend_support and (55.0 <= rsi_val <= 62.0)
         buy3 = trend_support and (48.0 <= rsi_val <= 55.0)
 
         profit = 0.0
         if s["avg_price"] > 0:
             profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
 
-        # أهداف البيع وفق قوة الاندفاع
-        sell1 = (0.00 < s["position"] <= 0.33) and rsi_val >= 78 and profit > 12.0
-        sell2 = (0.33 < s["position"] <= 0.66) and rsi_val >= 82 and profit > 18.0
-        sell3 = (s["position"] > 0.00) and rsi_val >= 85 and profit > 25.0
+        # أهداف البيع
+        sell1 = (0.00 < s["position"] <= 0.33) and rsi_val >= 76 and profit > 10.0
+        sell2 = (0.33 < s["position"] <= 0.66) and rsi_val >= 80 and profit > 16.0
+        sell3 = (s["position"] > 0.00) and rsi_val >= 84 and profit > 22.0
 
         initial_pos = s["position"]
         action = None
@@ -195,7 +203,7 @@ for current_date in all_dates:
                 "profit_pct": None
             })
 
-        elif 0.32 < s["position"] < 0.5 and buy2 and price < s["avg_price"] * 0.985:
+        elif 0.32 < s["position"] < 0.5 and buy2 and price < s["avg_price"] * 0.97:
             old_pos = s["position"]
             s["position"] = 0.66
             s["avg_price"] = update_avg(s["avg_price"], old_pos, price, s["position"])
@@ -207,7 +215,7 @@ for current_date in all_dates:
                 active[-1]["second_entry"] = f"{date_str} with price {price:.2f}"
                 active[-1]["last_totally_average_price"] = round(s["avg_price"], 2)
 
-        elif 0.65 < s["position"] < 1 and buy3 and price < s["avg_price"] * 0.96:
+        elif 0.65 < s["position"] < 1 and buy3 and price < s["avg_price"] * 0.93:
             old_pos = s["position"]
             s["position"] = 1.0
             s["avg_price"] = update_avg(s["avg_price"], old_pos, price, s["position"])
@@ -226,7 +234,7 @@ for current_date in all_dates:
         if initial_pos > 0 and s["position"] > 0:
             stop_triggered = False
 
-            # وقف خسارة حازم لمنع كسر الاختراقات
+            # وقف خسارة حازم لمنع كسر الاختراقات الوهمية
             if s["position"] <= 0.33 and profit <= -5.0:
                 stop_triggered = True
             elif s["position"] <= 0.66 and profit <= -4.0:
@@ -234,8 +242,8 @@ for current_date in all_dates:
             elif s["position"] == 1.0 and profit <= -3.0:
                 stop_triggered = True
 
-            # Trailing Stop لحماية الأرباح بعد تحقيق قمة
-            if s["peak_profit"] > 10.0 and (s["peak_profit"] - profit) >= 5:
+            # Trailing Stop محكم
+            if s["peak_profit"] > 8.0 and (s["peak_profit"] - profit) >= 3.5:
                 stop_triggered = True
 
             active = [t for t in trades_history if t["symbol"] == name and t["status"] == "OPEN"]
@@ -352,7 +360,7 @@ with open(STOCK_SUMMARY_FILE, "w", encoding="utf-8") as f:
     json.dump(stock_summaries, f, indent=2, ensure_ascii=False)
 
 print("\n" + "=" * 60)
-print("EGX BREAKOUT & CONSOLIDATION SYSTEM (v4.0) - BACKTEST COMPLETE")
+print("EGX BREAKOUT + VOLUME SYSTEM (v5.0) - BACKTEST COMPLETE")
 print("=" * 60)
 print(f"Total Closed Trades: {total_count}")
 print(f"Win Rate:            {win_rate:.2f}%")
