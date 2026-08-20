@@ -163,18 +163,18 @@ for current_date in all_dates:
             and price <= df_slice["EMA75"].iloc[-1] * 1.08
         )
 
-        buy1 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 42
-        buy2 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 36
-        buy3 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 30
+        buy1 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 66
+        buy2 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 55
+        buy3 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 50
 
         profit = 0.0
         if s["avg_price"] > 0:
             profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
 
         # تعديل شروط البيع المنطقية
-        sell1 = s["position"] > 0.70 and rsi_val >= 70 and profit > 8.0
-        sell2 = 0.33 < s["position"] <= 0.70 and rsi_val >= 75 and profit > 12.0
-        sell3 = s["position"] > 0.00 and rsi_val >= 78 and profit > 15.0
+        sell1 = s["position"] > 0.70 and rsi_val >= 50 and profit > 2.0
+        sell2 = 0.33 < s["position"] <= 0.70 and rsi_val >= 35 and profit > 2.0
+        sell3 = s["position"] > 0.00 and rsi_val >= 55 and profit > 2.0
 
         initial_pos = s["position"]
         action = None
