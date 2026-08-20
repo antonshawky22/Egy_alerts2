@@ -1,4 +1,4 @@
-print("EGX LADDER CYCLE SYSTEM - DATABASE SOURCED (v3.5 Radical Stop Corrected)")
+print("EGX LADDER CYCLE SYSTEM - DATABASE SOURCED (v3.4 Fully Audited)")
 
 import json
 import os
@@ -187,30 +187,16 @@ for name, ticker in symbols.items():
 
     no_gap_down = (gap1 > -3.0) and (gap2 > -3.0) and (gap3 > -3.0)
 
-    # 1. فلتر قرب السعر من المتوسط
-    near_ema = price <= df["EMA75"].iloc[-1] * 1.08
-
-    # 2. تعريف قيم المتوسطات الأربعة بوضوح لاستخدامها في الشراء والستوب لوس
-    ema75_now = df["EMA75"].iloc[-1]
-    ema75_4 = df["EMA75"].iloc[-5]
-    ema75_8 = df["EMA75"].iloc[-9]
-    ema75_12 = df["EMA75"].iloc[-13]
-
-    # اتجاه صاعد: صعود واضح بنسبة 0.3% في كل مرحلة
     ema_up = (
-        ema75_now >= ema75_4 * 1.003
-        and ema75_4 >= ema75_8 * 1.003
-        and ema75_8 >= ema75_12 * 1.003
+        df["EMA75"].iloc[-1] > df["EMA75"].iloc[-5]
+        and df["EMA75"].iloc[-5] > df["EMA75"].iloc[-10]
+        and df["EMA75"].iloc[-1] > df["EMA75"].iloc[-10] * 1.002
+        and price <= df["EMA75"].iloc[-1] * 1.08
     )
-
-    # نطاق عرضي: تذبذب ضيق بين أعلى وأقل قيمة لا يتجاوز 1%
-    ema_vals = [ema75_now, ema75_4, ema75_8, ema75_12]
-    ema_sideways = ((max(ema_vals) - min(ema_vals)) / min(ema_vals)) <= 0.01
-
-    # 3. شروط الشراء الشرائح
-    buy1 = safe_to_buy and no_gap_down and near_ema and ema_up and rsi_val <= 55
-    buy2 = safe_to_buy and no_gap_down and near_ema and ema_sideways and rsi_val <= 45
-    buy3 = safe_to_buy and no_gap_down and near_ema and ema_sideways and rsi_val <= 38
+    
+    buy1 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 58
+    buy2 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 50
+    buy3 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 42
 
     # حساب الربح اللحظي الحالي
     profit = 0.0
@@ -285,18 +271,17 @@ for name, ticker in symbols.items():
     # ==========================================
     if initial_pos > 0 and s["position"] > 0:
 
-        # 1. الوقف الجذري: هبوط قيم EMA75 الأربعة بنسبة متتالية (عكس الشراء تماماً)
-        ema_down_radical = (
-            ema75_now <= ema75_4 * 0.997
-            and ema75_4 <= ema75_8 * 0.997
-            and ema75_8 <= ema75_12 * 0.997
-        )
+        stop_triggered = False
 
-        # 2. الوقف الديناميكي: حماية الأرباح عند التراجع من القمة
-        trailing_stop = (s["peak_profit"] > 10 and (s["peak_profit"] - profit) >= 4)
+        if s["position"] <= 0.33 and profit <= -8:
+            stop_triggered = True
+        elif s["position"] <= 0.66 and profit <= -5:
+            stop_triggered = True
+        elif s["position"] == 1.0 and profit <= -4:
+            stop_triggered = True
 
-        # دمج السببين لتفعيل وقف الخسارة
-        stop_triggered = ema_down_radical or trailing_stop
+        if s["peak_profit"] > 10 and (s["peak_profit"] - profit) >= 4:
+            stop_triggered = True
 
         # دالة مساعدة لحساب إجمالي الربح الموزون
         def calc_final_pnl(current_p, current_w):
@@ -307,7 +292,7 @@ for name, ticker in symbols.items():
         # 1️⃣ إغلاق كلي (وقف خسارة)
         if stop_triggered:
             action = "🛑 STOP LOSS"
-
+            
             if trades_history[name] and trades_history[name][-1].get("status") == "OPEN":
                 active_trade = trades_history[name][-1]
                 total_profit = calc_final_pnl(profit, s["position"])
@@ -351,7 +336,8 @@ for name, ticker in symbols.items():
                 active_trade["exits"].append(exit_log)
 
                 if s["position"] == 0.0:
-                    total_profit = calc_final_pnl(profit, 0.0)
+                    w_sum = sum(w for w, _ in s["realized_pnl_tracker"])
+                    total_profit = sum(p * w for w, p in s["realized_pnl_tracker"]) / w_sum if w_sum > 0 else profit
                     active_trade["status"] = "CLOSED"
                     active_trade["exit_price"] = round(price, 2)
                     active_trade["exit_date"] = current_date
@@ -374,7 +360,8 @@ for name, ticker in symbols.items():
                 active_trade["exits"].append(exit_log)
 
                 if s["position"] == 0.0:
-                    total_profit = calc_final_pnl(profit, 0.0)
+                    w_sum = sum(w for w, _ in s["realized_pnl_tracker"])
+                    total_profit = sum(p * w for w, p in s["realized_pnl_tracker"]) / w_sum if w_sum > 0 else profit
                     active_trade["status"] = "CLOSED"
                     active_trade["exit_price"] = round(price, 2)
                     active_trade["exit_date"] = current_date
