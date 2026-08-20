@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 # ============================================================
-# MARKET STRUCTURE SHIFT (MSS) ENGINE - FULL BACKTEST (v1.0)
+# HIGH-CONVICTION SYSTEM (V8 - EMA100 GOLDEN ENGINE)
 # ============================================================
 
 DB_FILE = "egx_history_database_v2.json"
@@ -23,8 +23,41 @@ symbols = {
 }
 
 # ============================================================
+# STRATEGY PARAMETERS (V8 EMA100 CONFIG)
+# ============================================================
+
+EMA_PERIOD = 100
+
+# Trend Thresholds
+EMA_UP_MIN_STEP_PERCENT = 0.30
+EMA_SIDE_MAX_DISTANCE_PERCENT = 1.00
+EMA_DOWN_MIN_STEP_PERCENT = 1.00
+
+# Entry & Exit RSI Thresholds
+RSI_UP_BUY = 55            # دخول محكم عند التراجع الصحي
+RSI_SIDE_BUY_2 = 45        # شريحة تجميع ثانية
+RSI_PARTIAL_SELL = 72      # بيع جزئي
+RSI_FINAL_SELL = 78        # بيع نهائي
+
+# Stop Loss & Position Sizing
+EMA_STOP_MIN_DROP_PERCENT = 1.00
+TRANCHE_SIZE = 0.50        # شريحتان (50% لكل شريحة)
+MAX_TRANCHES = 2
+
+# ============================================================
 # HELPER FUNCTIONS
 # ============================================================
+
+def rsi(series, period=14):
+    if len(series) < period + 1:
+        return pd.Series(np.nan, index=series.index)
+    delta = series.diff()
+    gain = delta.clip(lower=0)
+    loss = -delta.clip(upper=0)
+    avg_gain = gain.ewm(com=period - 1, adjust=False).mean()
+    avg_loss = loss.ewm(com=period - 1, adjust=False).mean()
+    rs = avg_gain / avg_loss
+    return 100 - (100 / (1 + rs))
 
 def update_avg(old_avg, old_pos, new_price, new_pos):
     if new_pos == 0:
@@ -39,25 +72,6 @@ def calc_final_pnl(tracker, current_p, current_w):
     temp_tracker = list(tracker) + [(current_w, current_p)]
     w_sum = sum(w for w, _ in temp_tracker)
     return sum(p * w for w, p in temp_tracker) / w_sum if w_sum > 0 else current_p
-
-def find_pivots(df, window=5):
-    """استخراج القمم والقيعان المحورية للهيكل السعري"""
-    df_copy = df.copy()
-    df_copy['pivot_high'] = np.nan
-    df_copy['pivot_low'] = np.nan
-
-    for i in range(window, len(df_copy) - window):
-        high_range = df_copy['High'].iloc[i - window : i + window + 1]
-        if df_copy['High'].iloc[i] == high_range.max():
-            df_copy.loc[df_copy.index[i], 'pivot_high'] = df_copy['High'].iloc[i]
-
-        low_range = df_copy['Low'].iloc[i - window : i + window + 1]
-        if df_copy['Low'].iloc[i] == low_range.min():
-            df_copy.loc[df_copy.index[i], 'pivot_low'] = df_copy['Low'].iloc[i]
-
-    df_copy['last_pivot_high'] = df_copy['pivot_high'].ffill()
-    df_copy['last_pivot_low'] = df_copy['pivot_low'].ffill()
-    return df_copy
 
 # ============================================================
 # LOAD DATABASE & PREPARE DATA
@@ -82,15 +96,12 @@ for name in symbols:
         df.index = pd.to_datetime(df.index)
         df = df.sort_index(ascending=True)
 
-        if len(df) < 80:
+        if len(df) < EMA_PERIOD + 20:
             continue
 
         close = df["Close"]
-        df["EMA20"] = close.ewm(span=20, adjust=False).mean()
-        df["EMA50"] = close.ewm(span=50, adjust=False).mean()
-
-        # حساب هيكل السوق (Pivot Highs & Lows)
-        df = find_pivots(df, window=22)
+        df["EMA_TREND"] = close.ewm(span=EMA_PERIOD, adjust=False).mean()
+        df["RSI"] = rsi(close)
 
         prepared_data[name] = df
     except Exception:
@@ -111,7 +122,6 @@ states = {
         "position": 0.0,
         "avg_price": 0.0,
         "peak_profit": 0.0,
-        "structure_stop": 0.0,
         "realized_pnl_tracker": []
     }
     for name in prepared_data
@@ -120,6 +130,7 @@ states = {
 trades_history = []
 stock_summaries = {}
 total_portfolio_profit = 0.0
+portfolio_equity_curve = []
 
 # ============================================================
 # BACKTEST LOOP
@@ -131,18 +142,18 @@ for current_date in all_dates:
             continue
 
         idx = df.index.get_loc(current_date)
-        if idx < 60:
+        if idx < EMA_PERIOD + 15:
             continue
 
         df_slice = df.iloc[: idx + 1]
         last = df_slice.iloc[-1]
 
-        if df_slice[["Open", "Close", "EMA20", "EMA50", "last_pivot_high", "last_pivot_low"]].iloc[-1].isna().any():
+        if df_slice[["Open", "Close", "EMA_TREND", "RSI"]].iloc[-1].isna().any():
             continue
 
         date_str = current_date.strftime("%Y-%m-%d")
         price = float(last["Close"])
-        prev_close = float(df_slice["Close"].iloc[-2])
+        rsi_val = float(last["RSI"])
 
         s = states[name]
         s["position"] = round(float(s["position"]), 2)
@@ -150,45 +161,55 @@ for current_date in all_dates:
         if s["position"] == 0.0:
             s["avg_price"] = 0.0
             s["peak_profit"] = 0.0
-            s["structure_stop"] = 0.0
 
-        # --- تحليل هيكل السوق (Market Structure Shift) ---
-        last_ph = float(last["last_pivot_high"])
-        last_pl = float(last["last_pivot_low"])
+        # --- 1. ENGINE DETECT TREND (EMA100 MESH) ---
+        ema_curr = float(df_slice["EMA_TREND"].iloc[-1])
+        ema_4 = float(df_slice["EMA_TREND"].iloc[-5])
+        ema_8 = float(df_slice["EMA_TREND"].iloc[-9])
+        ema_12 = float(df_slice["EMA_TREND"].iloc[-13])
 
-        # كسر القمة المحورية المباشرة (Market Structure Breakout)
-        mss_breakout = (prev_close <= last_ph) and (price > last_ph)
-        trend_aligned = float(last["EMA20"]) > float(last["EMA50"])
+        # حساب التغيرات النسبية
+        step1 = ((ema_8 - ema_12) / ema_12) * 100
+        step2 = ((ema_4 - ema_8) / ema_8) * 100
+        step3 = ((ema_curr - ema_4) / ema_4) * 100
 
-        # إعادة اختبار مستوى الهيكل المكسور (Structure Re-Test)
-        retest_support = (price <= last_ph * 1.01) and (price >= last_ph * 0.985)
+        is_uptrend = (step1 >= EMA_UP_MIN_STEP_PERCENT) and (step2 >= EMA_UP_MIN_STEP_PERCENT) and (step3 >= EMA_UP_MIN_STEP_PERCENT)
+        
+        max_ema = max(ema_curr, ema_4, ema_8, ema_12)
+        min_ema = min(ema_curr, ema_4, ema_8, ema_12)
+        dist_percent = ((max_ema - min_ema) / min_ema) * 100
+        is_sideways = dist_percent <= EMA_SIDE_MAX_DISTANCE_PERCENT
 
-        # شروط الشراء الهيكلية
-        buy1 = mss_breakout and trend_aligned
-        buy2 = retest_support and trend_aligned and (price < s["avg_price"] * 0.97)
-        buy3 = trend_support = (price > float(last["EMA50"])) and (price < s["avg_price"] * 0.93)
+        is_sharp_downtrend = (step1 <= -EMA_DOWN_MIN_STEP_PERCENT) and (step2 <= -EMA_DOWN_MIN_STEP_PERCENT) and (step3 <= -EMA_DOWN_MIN_STEP_PERCENT)
+        
+        # وقف الخسارة السريع للهيكل
+        drop_from_4 = ((ema_curr - ema_4) / ema_4) * 100
+        is_sharp_drop = drop_from_4 <= -EMA_STOP_MIN_DROP_PERCENT
+
+        # --- 2. ENTRY LOGIC ---
+        buy1 = (s["position"] == 0.0) and is_uptrend and (rsi_val < RSI_UP_BUY)
+        buy2 = (s["position"] == TRANCHE_SIZE) and is_sideways and (rsi_val <= RSI_SIDE_BUY_2) and (price < s["avg_price"])
 
         profit = 0.0
         if s["avg_price"] > 0:
             profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
 
-        # أهداف البيع المبنية على امتداد الهيكل السعري
-        sell1 = (0.00 < s["position"] <= 0.33) and profit > 8.0
-        sell2 = (0.33 < s["position"] <= 0.66) and profit > 14.0
-        sell3 = (s["position"] > 0.00) and profit > 22.0
+        # --- 3. EXIT LOGIC ---
+        sell_partial = (s["position"] == 1.0) and (rsi_val >= RSI_PARTIAL_SELL)
+        sell_final = (s["position"] > 0.0) and (rsi_val >= RSI_FINAL_SELL)
+        emergency_exit = (s["position"] > 0.0) and (is_sharp_downtrend or is_sharp_drop)
 
         initial_pos = s["position"]
         action = None
 
         # --- EXECUTE BUYS ---
-        if s["position"] == 0 and buy1:
-            s["position"] = 0.33
+        if buy1:
+            s["position"] = TRANCHE_SIZE
             s["avg_price"] = price
             s["peak_profit"] = 0.0
-            s["structure_stop"] = last_pl * 0.99  # وقف خسارة أسفل القاع المحوري السابق
             s["realized_pnl_tracker"] = []
             profit = 0.0
-            action = "BUY L1 (MSS Breakout)"
+            action = "BUY TRANCHE 1"
 
             trades_history.append({
                 "symbol": name,
@@ -204,28 +225,16 @@ for current_date in all_dates:
                 "profit_pct": None
             })
 
-        elif 0.32 < s["position"] < 0.5 and buy2:
-            old_pos = s["position"]
-            s["position"] = 0.66
-            s["avg_price"] = update_avg(s["avg_price"], old_pos, price, s["position"])
-            profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
-            action = "BUY L2 (Re-Test)"
-
-            active = [t for t in trades_history if t["symbol"] == name and t["status"] == "OPEN"]
-            if active:
-                active[-1]["second_entry"] = f"{date_str} with price {price:.2f}"
-                active[-1]["last_totally_average_price"] = round(s["avg_price"], 2)
-
-        elif 0.65 < s["position"] < 1 and buy3:
+        elif buy2:
             old_pos = s["position"]
             s["position"] = 1.0
             s["avg_price"] = update_avg(s["avg_price"], old_pos, price, s["position"])
             profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
-            action = "BUY L3 (Discount)"
+            action = "BUY TRANCHE 2"
 
             active = [t for t in trades_history if t["symbol"] == name and t["status"] == "OPEN"]
             if active:
-                active[-1]["third_entry"] = f"{date_str} with price {price:.2f}"
+                active[-1]["second_entry"] = f"{date_str} with price {price:.2f}"
                 active[-1]["last_totally_average_price"] = round(s["avg_price"], 2)
 
         if profit > s["peak_profit"]:
@@ -233,20 +242,10 @@ for current_date in all_dates:
 
         # --- EXECUTE SELLS / STOPS ---
         if initial_pos > 0 and s["position"] > 0:
-            stop_triggered = False
-
-            # وقف الخسارة الهيكلي (أو الوقف النسبي المحكم)
-            if price < s["structure_stop"] or profit <= -5.0:
-                stop_triggered = True
-
-            # Trailing Stop ديناميكي لحماية الأرباح عند تسجيل قمة جديدة
-            if s["peak_profit"] > 9.0 and (s["peak_profit"] - profit) >= 3.5:
-                stop_triggered = True
-
             active = [t for t in trades_history if t["symbol"] == name and t["status"] == "OPEN"]
 
-            if stop_triggered or sell3:
-                action = "STOP LOSS" if stop_triggered else "EXIT FULL"
+            if emergency_exit or sell_final:
+                action = "EMERGENCY STOP" if emergency_exit else "EXIT FULL"
                 total_profit = calc_final_pnl(s["realized_pnl_tracker"], profit, s["position"])
 
                 if active:
@@ -258,33 +257,14 @@ for current_date in all_dates:
                 total_portfolio_profit += total_profit
                 s["position"] = 0.0
 
-            elif sell2:
-                sell_amount = min(0.33, s["position"])
+            elif sell_partial:
+                sell_amount = TRANCHE_SIZE
                 s["realized_pnl_tracker"].append((sell_amount, profit))
                 s["position"] = round(s["position"] - sell_amount, 2)
-                action = "SELL L2"
+                action = "SELL PARTIAL"
 
                 if active:
-                    exit_log = f"{date_str}: Sold {sell_amount*100:.0f}% at price {price:.2f} (Profit: {profit:+.2f}%)"
-                    active[-1]["exits"].append(exit_log)
-
-                    if s["position"] == 0.0:
-                        w_sum = sum(w for w, _ in s["realized_pnl_tracker"])
-                        total_profit = sum(p * w for w, p in s["realized_pnl_tracker"]) / w_sum if w_sum > 0 else profit
-                        active[-1]["status"] = "CLOSED"
-                        active[-1]["exit_price"] = round(price, 2)
-                        active[-1]["exit_date"] = date_str
-                        active[-1]["profit_pct"] = round(total_profit, 2)
-                        total_portfolio_profit += total_profit
-
-            elif sell1:
-                sell_amount = min(0.33, s["position"])
-                s["realized_pnl_tracker"].append((sell_amount, profit))
-                s["position"] = round(s["position"] - sell_amount, 2)
-                action = "SELL L1"
-
-                if active:
-                    exit_log = f"{date_str}: Sold {sell_amount*100:.0f}% at price {price:.2f} (Profit: {profit:+.2f}%)"
+                    exit_log = f"{date_str}: Sold 50% at price {price:.2f} (Profit: {profit:+.2f}%)"
                     active[-1]["exits"].append(exit_log)
 
                     if s["position"] == 0.0:
@@ -301,12 +281,13 @@ for current_date in all_dates:
         if action and s["position"] == 0.0 and ("SELL" in action or "EXIT" in action or "STOP" in action):
             s["avg_price"] = 0.0
             s["peak_profit"] = 0.0
-            s["structure_stop"] = 0.0
             s["realized_pnl_tracker"] = []
             s["cycle"] += 1
 
+    portfolio_equity_curve.append(total_portfolio_profit)
+
 # ============================================================
-# COMPUTE STATISTICS & SAVE FILES
+# COMPUTE STATISTICS & DRAWDOWN
 # ============================================================
 
 closed_trades = [t for t in trades_history if t["status"] == "CLOSED"]
@@ -320,6 +301,12 @@ win_rate = (wins_count / total_count) * 100 if total_count > 0 else 0.0
 
 avg_win = float(np.mean([t["profit_pct"] for t in winning_trades])) if winning_trades else 0.0
 avg_loss = float(np.mean([t["profit_pct"] for t in losing_trades])) if losing_trades else 0.0
+
+# حساب أقصى تراجع للمحفظة (Maximum Drawdown)
+equity = np.array(portfolio_equity_curve) + 100.0  # افتراض رأس مال ابتدائي 100
+peak = np.maximum.accumulate(equity)
+drawdown = (peak - equity) / peak * 100.0
+max_drawdown = float(np.max(drawdown)) if len(drawdown) > 0 else 0.0
 
 for t in closed_trades:
     sym = t["symbol"]
@@ -344,7 +331,8 @@ results_summary = {
         "win_rate_percent": round(win_rate, 2),
         "total_profit_percent": round(total_portfolio_profit, 2),
         "average_winning_trade_percent": round(avg_win, 2),
-        "average_losing_trade_percent": round(avg_loss, 2)
+        "average_losing_trade_percent": round(avg_loss, 2),
+        "maximum_drawdown_percent": round(max_drawdown, 2)
     }
 }
 
@@ -358,9 +346,10 @@ with open(STOCK_SUMMARY_FILE, "w", encoding="utf-8") as f:
     json.dump(stock_summaries, f, indent=2, ensure_ascii=False)
 
 print("\n" + "=" * 60)
-print("MARKET STRUCTURE SHIFT (MSS) ENGINE - BACKTEST COMPLETE")
+print("HIGH-CONVICTION SYSTEM (V8 EMA100) - BACKTEST COMPLETE")
 print("=" * 60)
 print(f"Total Closed Trades: {total_count}")
 print(f"Win Rate:            {win_rate:.2f}%")
 print(f"Total Profit:        {total_portfolio_profit:.2f}%")
+print(f"Max Drawdown:        {max_drawdown:.2f}%")
 print("=" * 60)
