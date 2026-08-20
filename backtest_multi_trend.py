@@ -74,7 +74,7 @@ for name in symbols:
         df.index = pd.to_datetime(df.index)
         df = df.sort_index(ascending=True)
 
-        if len(df) < 80:
+        if len(df) < 20:
             continue
 
         close = df["Close"]
@@ -147,7 +147,7 @@ for current_date in all_dates:
         lowest_80 = float(df_slice["Low"].tail(lookback).min())
         highest_80 = float(df_slice["High"].tail(lookback).max())
         run_up_percent = ((highest_80 - lowest_80) / lowest_80) * 100 if lowest_80 > 0 else 0.0
-        safe_to_buy = run_up_percent <= 60.0
+        safe_to_buy = run_up_percent <= 120.0
 
         # 2. No Gap Down Filter
         gap1 = ((df_slice["Open"].iloc[-1] - df_slice["Close"].iloc[-2]) / df_slice["Close"].iloc[-2]) * 100
@@ -159,13 +159,14 @@ for current_date in all_dates:
         ema_up = (
             df_slice["EMA75"].iloc[-1] > df_slice["EMA75"].iloc[-5]
             and df_slice["EMA75"].iloc[-5] > df_slice["EMA75"].iloc[-10]
-            and df_slice["EMA75"].iloc[-1] > df_slice["EMA75"].iloc[-10] * 1.002
-            and price <= df_slice["EMA75"].iloc[-1] * 1.08
+            and df_slice["EMA75"].iloc[-1] > df_slice["EMA75"].iloc[-10] * 1.008
+            and price >= df_slice["EMA75"].iloc[-1] * 1.02
+            and price <= df_slice["EMA75"].iloc[-1] * 1.25
         )
 
-        buy1 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 44
-        buy2 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 38
-        buy3 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 28
+        buy1 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 68
+        buy2 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 65
+        buy3 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 60
 
         profit = 0.0
         if s["avg_price"] > 0:
@@ -173,8 +174,8 @@ for current_date in all_dates:
 
         # تعديل شروط البيع المنطقية
         sell1 = s["position"] > 0.70 and rsi_val >= 77 and profit > 8.0
-        sell2 = 0.33 < s["position"] <= 0.70 and rsi_val >= 66 and profit > 5.0
-        sell3 = s["position"] > 0.00 and rsi_val >= 60 and profit > 5.0
+        sell2 = 0.33 < s["position"] <= 0.70 and rsi_val >= 78 and profit > 10.0
+        sell3 = s["position"] > 0.00 and rsi_val >= 82 and profit > 12.0
 
         initial_pos = s["position"]
         action = None
@@ -202,7 +203,7 @@ for current_date in all_dates:
                 "profit_pct": None
             })
 
-        elif 0.32 < s["position"] < 0.5 and buy2 and price < s["avg_price"] * 0.94:
+        elif 0.32 < s["position"] < 0.5 and buy2 and price < s["avg_price"] * 0.97:
             old_pos = s["position"]
             s["position"] = 0.66
             s["avg_price"] = update_avg(s["avg_price"], old_pos, price, s["position"])
@@ -214,7 +215,7 @@ for current_date in all_dates:
                 active[-1]["second_entry"] = f"{date_str} with price {price:.2f}"
                 active[-1]["last_totally_average_price"] = round(s["avg_price"], 2)
 
-        elif 0.65 < s["position"] < 1 and buy3 and price < s["avg_price"] * 0.90:
+        elif 0.65 < s["position"] < 1 and buy3 and price < s["avg_price"] * 0.94:
             old_pos = s["position"]
             s["position"] = 1.0
             s["avg_price"] = update_avg(s["avg_price"], old_pos, price, s["position"])
@@ -233,14 +234,14 @@ for current_date in all_dates:
         if initial_pos > 0 and s["position"] > 0:
             stop_triggered = False
 
-            if s["position"] <= 0.33 and profit <= -10:
+            if s["position"] <= 0.33 and profit <= -6:
                 stop_triggered = True
-            elif s["position"] <= 0.66 and profit <= -5:
+            elif s["position"] <= 0.66 and profit <= -4:
                 stop_triggered = True
-            elif s["position"] == 1.0 and profit <= -4:
+            elif s["position"] == 1.0 and profit <= -3:
                 stop_triggered = True
 
-            if s["peak_profit"] > 12 and (s["peak_profit"] - profit) >= 5:
+            if s["peak_profit"] > 6 and (s["peak_profit"] - profit) >= 3:
                 stop_triggered = True
 
             active = [t for t in trades_history if t["symbol"] == name and t["status"] == "OPEN"]
