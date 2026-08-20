@@ -163,9 +163,9 @@ for current_date in all_dates:
             and price <= df_slice["EMA75"].iloc[-1] * 1.08
         )
 
-        buy1 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 58
-        buy2 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 50
-        buy3 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 42
+        buy1 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 52
+        buy2 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 48
+        buy3 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 35
 
         profit = 0.0
         if s["avg_price"] > 0:
@@ -201,7 +201,7 @@ for current_date in all_dates:
                 "profit_pct": None
             })
 
-        elif 0.32 < s["position"] < 0.5 and buy2 and price < s["avg_price"] * 0.97:
+        elif 0.32 < s["position"] < 0.5 and buy2 and price < s["avg_price"] * 0.95:
             old_pos = s["position"]
             s["position"] = 0.66
             s["avg_price"] = update_avg(s["avg_price"], old_pos, price, s["position"])
@@ -213,7 +213,7 @@ for current_date in all_dates:
                 active[-1]["second_entry"] = f"{date_str} with price {price:.2f}"
                 active[-1]["last_totally_average_price"] = round(s["avg_price"], 2)
 
-        elif 0.65 < s["position"] < 1 and buy3 and price < s["avg_price"] * 0.96:
+        elif 0.65 < s["position"] < 1 and buy3 and price < s["avg_price"] * 0.92:
             old_pos = s["position"]
             s["position"] = 1.0
             s["avg_price"] = update_avg(s["avg_price"], old_pos, price, s["position"])
@@ -232,11 +232,11 @@ for current_date in all_dates:
         if initial_pos > 0 and s["position"] > 0:
             stop_triggered = False
 
-            if s["position"] <= 0.33 and profit <= -8:
+            if s["position"] <= 0.33 and profit <= -12:
                 stop_triggered = True
-            elif s["position"] <= 0.66 and profit <= -5:
+            elif s["position"] <= 0.66 and profit <= -8:
                 stop_triggered = True
-            elif s["position"] == 1.0 and profit <= -4:
+            elif s["position"] == 1.0 and profit <= -5:
                 stop_triggered = True
 
             if s["peak_profit"] > 10 and (s["peak_profit"] - profit) >= 4:
