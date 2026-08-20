@@ -1,4 +1,4 @@
-print("EGX LADDER CYCLE SYSTEM - BACKTEST ENGINE (v3.5 Radical Stop Synchronized)")
+print("EGX LADDER CYCLE SYSTEM - ACCURATE BACKTEST ENGINE (v3.6 Optimized)")
 
 import json
 import os
@@ -78,7 +78,6 @@ for name in symbols:
     df["EMA75"] = close.ewm(span=75, adjust=False).mean()
     df["RSI"] = rsi(close)
 
-    # حساب مؤشرات الفلاتر
     lookback = 80
     df["lowest_80"] = df["Low"].rolling(window=lookback, min_periods=40).min()
     df["highest_80"] = df["High"].rolling(window=lookback, min_periods=40).max()
@@ -88,12 +87,13 @@ for name in symbols:
     df["gap2"] = ((df["Open"].shift(1) - df["Close"].shift(2)) / df["Close"].shift(2)) * 100
     df["gap3"] = ((df["Open"].shift(2) - df["Close"].shift(3)) / df["Close"].shift(3)) * 100
 
-    # حالات السهم في الباك تست
     cycle = 1
     position = 0.0
     avg_price = 0.0
     peak_profit = 0.0
-    realized_pnl_tracker = []
+    
+    # تتبع الخروج الجزئي وحساب الربح الموزون للصفقة الحالية
+    realized_exits = []  # قائمة لتخزين (حجم الشريحة المباعة, نسبة ربح الشريحة)
     current_trade = None
 
     for i in range(15, len(df)):
@@ -125,7 +125,8 @@ for name in symbols:
         ema_vals = [ema75_now, ema75_4, ema75_8, ema75_12]
         ema_sideways = ((max(ema_vals) - min(ema_vals)) / min(ema_vals)) <= 0.01
 
-        buy1 = safe_to_buy and no_gap_down and near_ema and ema_up and rsi_val <= 55
+        # 🎯 فلتر دخول محدد ومركز (تم خفض RSI للشريحة الأولى لتقليل الصفقات العشوائية)
+        buy1 = safe_to_buy and no_gap_down and near_ema and ema_up and rsi_val <= 48
         buy2 = safe_to_buy and no_gap_down and near_ema and ema_sideways and rsi_val <= 45
         buy3 = safe_to_buy and no_gap_down and near_ema and ema_sideways and rsi_val <= 38
 
@@ -144,20 +145,15 @@ for name in symbols:
             position = 0.33
             avg_price = price
             peak_profit = 0.0
-            realized_pnl_tracker = []
-            profit = 0.0
+            realized_exits = []
 
             current_trade = {
                 "symbol": name,
                 "cycle": cycle,
-                "status": "OPEN",
                 "entry_date": current_date,
                 "entry_price": round(price, 2),
-                "exits": [],
-                "exit_price": None,
-                "exit_date": None,
-                "profit_pct": None,
-                "type": "NORMAL"
+                "max_position": 0.33,
+                "exit_reason": None
             }
 
         elif 0.32 < position < 0.5 and buy2 and price < avg_price * 0.97:
@@ -165,12 +161,16 @@ for name in symbols:
             position = 0.66
             avg_price = update_avg(avg_price, old_pos, price, position)
             profit = ((price - avg_price) / avg_price) * 100
+            if current_trade:
+                current_trade["max_position"] = max(current_trade["max_position"], 0.66)
 
         elif 0.65 < position < 1 and buy3 and price < avg_price * 0.96:
             old_pos = position
             position = 1.0
             avg_price = update_avg(avg_price, old_pos, price, position)
             profit = ((price - avg_price) / avg_price) * 100
+            if current_trade:
+                current_trade["max_position"] = 1.0
 
         if profit > peak_profit:
             peak_profit = profit
@@ -190,49 +190,56 @@ for name in symbols:
 
             stop_triggered = ema_down_radical or trailing_stop
 
-            def calc_final_pnl(current_p, current_w):
-                temp_tracker = list(realized_pnl_tracker) + [(current_w, current_p)]
-                w_sum = sum(w for w, _ in temp_tracker)
-                return sum(p * w for w, p in temp_tracker) / w_sum if w_sum > 0 else current_p
+            # دالة حساب الربح الصافي الموزون الحقيقي للصفقة
+            def get_final_weighted_pnl(final_exit_profit, remaining_pos):
+                temp_exits = list(realized_exits)
+                if remaining_pos > 0:
+                    temp_exits.append((remaining_pos, final_exit_profit))
+                
+                total_weight = sum(w for w, _ in temp_exits)
+                if total_weight > 0:
+                    return sum(w * p for w, p in temp_exits) / total_weight
+                return final_exit_profit
 
+            # 🛑 1. خروج كلي بسبب الستوب لوس
             if stop_triggered:
+                final_pnl = get_final_weighted_pnl(profit, position)
                 if current_trade:
-                    total_profit = calc_final_pnl(profit, position)
-                    current_trade["status"] = "CLOSED"
-                    current_trade["exit_price"] = round(price, 2)
                     current_trade["exit_date"] = current_date
-                    current_trade["profit_pct"] = round(total_profit, 2)
-                    current_trade["type"] = "STOP_LOSS" if ema_down_radical else "TRAILING_STOP"
+                    current_trade["exit_price"] = round(price, 2)
+                    current_trade["profit_pct"] = round(final_pnl, 2)
+                    current_trade["exit_reason"] = "STOP_LOSS_RADICAL" if ema_down_radical else "TRAILING_PROFIT_STOP"
                     all_trades.append(current_trade)
                     current_trade = None
 
                 position = 0.0
 
+            # 🚨 2. خروج كلي لتحقيق الهدف الكامل
             elif sell3:
+                final_pnl = get_final_weighted_pnl(profit, position)
                 if current_trade:
-                    total_profit = calc_final_pnl(profit, position)
-                    current_trade["status"] = "CLOSED"
-                    current_trade["exit_price"] = round(price, 2)
                     current_trade["exit_date"] = current_date
-                    current_trade["profit_pct"] = round(total_profit, 2)
-                    current_trade["type"] = "FULL_TARGET"
+                    current_trade["exit_price"] = round(price, 2)
+                    current_trade["profit_pct"] = round(final_pnl, 2)
+                    current_trade["exit_reason"] = "FULL_TARGET"
                     all_trades.append(current_trade)
                     current_trade = None
 
                 position = 0.0
 
+            # 🔴 3. بيع جزئي L2 أو L1 (تأمين الأرباح)
             elif sell2 or sell1:
                 sell_amount = min(0.33, position)
-                realized_pnl_tracker.append((sell_amount, profit))
+                realized_exits.append((sell_amount, profit))
                 position = round(position - sell_amount, 2)
 
+                # إذا انتهت الكمية تماماً بعد البيع الجزئي
                 if position == 0.0 and current_trade:
-                    total_profit = calc_final_pnl(profit, 0.0)
-                    current_trade["status"] = "CLOSED"
-                    current_trade["exit_price"] = round(price, 2)
+                    final_pnl = get_final_weighted_pnl(profit, 0.0)
                     current_trade["exit_date"] = current_date
-                    current_trade["profit_pct"] = round(total_profit, 2)
-                    current_trade["type"] = "PARTIAL_TARGET"
+                    current_trade["exit_price"] = round(price, 2)
+                    current_trade["profit_pct"] = round(final_pnl, 2)
+                    current_trade["exit_reason"] = "PARTIAL_TARGETS_COMPLETE"
                     all_trades.append(current_trade)
                     current_trade = None
 
@@ -241,7 +248,7 @@ for name in symbols:
             if position == 0.0:
                 avg_price = 0.0
                 peak_profit = 0.0
-                realized_pnl_tracker = []
+                realized_exits = []
                 cycle += 1
 
 # ==========================================
@@ -253,17 +260,29 @@ if all_trades:
     winning_trades = len(trades_df[trades_df["profit_pct"] > 0])
     losing_trades = len(trades_df[trades_df["profit_pct"] <= 0])
     win_rate = (winning_trades / total_trades) * 100 if total_trades > 0 else 0
-    avg_profit = trades_df["profit_pct"].mean()
+    
+    avg_trade = trades_df["profit_pct"].mean()
+    avg_win = trades_df[trades_df["profit_pct"] > 0]["profit_pct"].mean() if winning_trades > 0 else 0
+    avg_loss = trades_df[trades_df["profit_pct"] <= 0]["profit_pct"].mean() if losing_trades > 0 else 0
     total_cum_profit = trades_df["profit_pct"].sum()
 
-    print("\n" + "="*45)
-    print("      📊 BACKTEST RESULTS REPORT (v3.5)      ")
-    print("="*45)
-    print(f"Total Trades Executed:  {total_trades}")
-    print(f"Winning Trades:         {winning_trades} ({win_rate:.1f}%)")
-    print(f"Losing Trades:          {losing_trades}")
-    print(f"Average Profit/Trade:   {avg_profit:.2f}%")
-    print(f"Cumulative Return:      {total_cum_profit:.2f}%")
-    print("="*45)
+    # حساب التراجع الأقصى Drawdown للصفقة التراكمية
+    trades_df["cum_pnl"] = trades_df["profit_pct"].cumsum()
+    trades_df["peak"] = trades_df["cum_pnl"].cummax()
+    trades_df["drawdown"] = trades_df["cum_pnl"] - trades_df["peak"]
+    max_drawdown = trades_df["drawdown"].min()
+
+    print("\n" + "="*50)
+    print("      📊 ACCURATE BACKTEST REPORT (v3.6)      ")
+    print("="*50)
+    print(f"Total Completed Trades:   {total_trades}")
+    print(f"Winning Trades:           {winning_trades} ({win_rate:.2f}%)")
+    print(f"Losing Trades:            {losing_trades}")
+    print(f"Average Win / Trade:      +{avg_win:.2f}%")
+    print(f"Average Loss / Trade:     {avg_loss:.2f}%")
+    print(f"Average PnL / Trade:      {avg_trade:.2f}%")
+    print(f"Cumulative Profit:        +{total_cum_profit:.2f}%")
+    print(f"Max Cumulative Drawdown:  {max_drawdown:.2f}%")
+    print("="*50)
 else:
     print("⚠️ No trades were executed in this period.")
