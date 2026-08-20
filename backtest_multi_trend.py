@@ -174,7 +174,7 @@ for current_date in all_dates:
         # تعديل شروط البيع المنطقية
         sell1 = s["position"] > 0.70 and rsi_val >= 70 and profit > 8.0
         sell2 = 0.33 < s["position"] <= 0.70 and rsi_val >= 75 and profit > 12.0
-        sell3 = s["position"] > 0.00) and rsi_val >= 78 and profit > 15.0
+        sell3 = s["position"] > 0.00 and rsi_val >= 78 and profit > 15.0
 
         initial_pos = s["position"]
         action = None
