@@ -173,9 +173,9 @@ for current_date in all_dates:
             profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
 
         # أهداف البيع
-        sell1 = (0.00 < s["position"] <= 0.33) and rsi_val >= 76 and profit > 10.0
-        sell2 = (0.33 < s["position"] <= 0.66) and rsi_val >= 80 and profit > 16.0
-        sell3 = (s["position"] > 0.00) and rsi_val >= 84 and profit > 22.0
+        sell1 = (0.00 < s["position"] <= 0.33) and rsi_val >= 78 and profit > 14.0
+        sell2 = (0.33 < s["position"] <= 0.66) and rsi_val >= 82 and profit > 22.0
+        sell3 = (s["position"] > 0.00) and rsi_val >= 85 and profit > 30.0
 
         initial_pos = s["position"]
         action = None
@@ -243,7 +243,7 @@ for current_date in all_dates:
                 stop_triggered = True
 
             # Trailing Stop محكم
-            if s["peak_profit"] > 8.0 and (s["peak_profit"] - profit) >= 3.5:
+            if s["peak_profit"] > 12.0 and (s["peak_profit"] - profit) >= 4.5:
                 stop_triggered = True
 
             active = [t for t in trades_history if t["symbol"] == name and t["status"] == "OPEN"]
