@@ -171,9 +171,9 @@ for current_date in all_dates:
         if s["avg_price"] > 0:
             profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
 
-        sell1 = s["position"] > 0.70 and rsi_val >= 68 and profit > 4.0
-        sell2 = 0.30 < s["position"] <= 0.70 and rsi_val >= 74 and profit > 5.0
-        sell3 = s["position"] > 0.00 and rsi_val >= 80 and profit > 7.0
+        sell1 = 0.00 < s["position"] <= 0.33 and rsi_val >= 68 and profit > 4.0
+        sell2 = 0.33 < s["position"] <= 0.66 and rsi_val >= 72 and profit > 5.0
+        sell3 = s["position"] > 0.66 and rsi_val >= 76 and profit > 6.0
 
         initial_pos = s["position"]
         action = None
