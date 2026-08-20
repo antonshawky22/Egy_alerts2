@@ -277,5 +277,17 @@
     "entry_trend": "↗️",
     "entry_price": 224.52,
     "entry_date": "2026-08-19"
+  },
+  {
+    "symbol": "SWDY",
+    "entry_trend": "↗️",
+    "entry_price": 118.19,
+    "entry_date": "2026-08-20"
+  },
+  {
+    "symbol": "EGAL",
+    "entry_trend": "↗️",
+    "entry_price": 334.9,
+    "entry_date": "2026-08-20"
   }
 ]
