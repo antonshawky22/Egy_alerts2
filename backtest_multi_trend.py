@@ -163,9 +163,9 @@ for current_date in all_dates:
             and price <= df_slice["EMA75"].iloc[-1] * 1.08
         )
 
-        buy1 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 66
-        buy2 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 55
-        buy3 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 50
+        buy1 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 33
+        buy2 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 22
+        buy3 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 22
 
         profit = 0.0
         if s["avg_price"] > 0:
