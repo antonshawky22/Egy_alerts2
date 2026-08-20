@@ -164,14 +164,14 @@ for current_date in all_dates:
         )
 
         buy1 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 52
-        buy2 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 48
+        buy2 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 40
         buy3 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 35
 
         profit = 0.0
         if s["avg_price"] > 0:
             profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
 
-        sell1 = s["position"] > 0.70 and rsi_val >= 68 and profit > 3.0
+        sell1 = s["position"] > 0.70 and rsi_val >= 68 and profit > 4.0
         sell2 = 0.30 < s["position"] <= 0.70 and rsi_val >= 74 and profit > 5.0
         sell3 = s["position"] > 0.00 and rsi_val >= 80 and profit > 7.0
 
@@ -232,7 +232,7 @@ for current_date in all_dates:
         if initial_pos > 0 and s["position"] > 0:
             stop_triggered = False
 
-            if s["position"] <= 0.33 and profit <= -8:
+            if s["position"] <= 0.33 and profit <= -10:
                 stop_triggered = True
             elif s["position"] <= 0.66 and profit <= -5:
                 stop_triggered = True
