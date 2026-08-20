@@ -285,13 +285,18 @@ for name, ticker in symbols.items():
     # ==========================================
     if initial_pos > 0 and s["position"] > 0:
 
-        # الوقف الديناميكي: كسر EMA75 بنسبة 1% أو تحول اتجاه المتوسط لهابط
-        drop_from_ema = ((df["EMA75"].iloc[-1] - price) / df["EMA75"].iloc[-1]) * 100
-        stop_triggered = (drop_from_ema >= 1.00) or ema_down
+        # 1. الوقف الجذري: هبوط القيم الأربعة لـ EMA75
+        ema_down_radical = (
+            ema75_now <= ema75_4 * 0.997
+            and ema75_4 <= ema75_8 * 0.997
+            and ema75_8 <= ema75_12 * 0.997
+        )
 
-        # حماية الأرباح عند التراجع من القمة (Trailing Profit Stop)
-        if s["peak_profit"] > 10 and (s["peak_profit"] - profit) >= 4:
-            stop_triggered = True
+        # 2. الوقف الديناميكي: حماية الأرباح عند التراجع من القمة
+        trailing_stop = (s["peak_profit"] > 10 and (s["peak_profit"] - profit) >= 4)
+
+        # دمج السببين لتفعيل وقف الخسارة
+        stop_triggered = ema_down_radical or trailing_stop
 
         # دالة مساعدة لحساب إجمالي الربح الموزون
         def calc_final_pnl(current_p, current_w):
