@@ -59,7 +59,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 13.0,
-    "peak_profit": 0.0,
+    "peak_profit": 1.307692307692307,
     "realized_pnl_tracker": []
   },
   "ATQA": {
@@ -162,8 +162,8 @@
   },
   "ORHD": {
     "cycle": 1,
-    "position": 0.0,
-    "avg_price": 0.0,
+    "position": 0.33,
+    "avg_price": 40.9,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
