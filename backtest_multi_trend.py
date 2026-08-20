@@ -232,11 +232,11 @@ for current_date in all_dates:
         if initial_pos > 0 and s["position"] > 0:
             stop_triggered = False
 
-            if s["position"] <= 0.33 and profit <= -12:
+            if s["position"] <= 0.33 and profit <= -8:
                 stop_triggered = True
-            elif s["position"] <= 0.66 and profit <= -8:
+            elif s["position"] <= 0.66 and profit <= -5:
                 stop_triggered = True
-            elif s["position"] == 1.0 and profit <= -5:
+            elif s["position"] == 1.0 and profit <= -4:
                 stop_triggered = True
 
             if s["peak_profit"] > 10 and (s["peak_profit"] - profit) >= 4:
