@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 # ============================================================
-# LADDER SYSTEM V3.4 - STANDALONE BACKTEST ENGINE
+# BREAKOUT & CONSOLIDATION EXPANSION ENGINE (v4.0)
 # ============================================================
 
 DB_FILE = "egx_history_database_v2.json"
@@ -74,12 +74,11 @@ for name in symbols:
         df.index = pd.to_datetime(df.index)
         df = df.sort_index(ascending=True)
 
-        if len(df) < 20:
+        if len(df) < 80:
             continue
 
         close = df["Close"]
         df["EMA20"] = close.ewm(span=20, adjust=False).mean()
-        df["EMA30"] = close.ewm(span=30, adjust=False).mean()
         df["EMA50"] = close.ewm(span=50, adjust=False).mean()
         df["EMA75"] = close.ewm(span=75, adjust=False).mean()
         df["RSI"] = rsi(close)
@@ -122,13 +121,13 @@ for current_date in all_dates:
             continue
 
         idx = df.index.get_loc(current_date)
-        if idx < 79:
+        if idx < 79:  # نحتاج 80 شمعة سابقة على الأقل للتحليل
             continue
 
         df_slice = df.iloc[: idx + 1]
         last = df_slice.iloc[-1]
 
-        if df_slice[["Open", "Close", "EMA75", "RSI"]].iloc[-1].isna().any():
+        if df_slice[["Open", "Close", "EMA20", "EMA50", "RSI"]].iloc[-1].isna().any():
             continue
 
         date_str = current_date.strftime("%Y-%m-%d")
@@ -142,39 +141,33 @@ for current_date in all_dates:
             s["avg_price"] = 0.0
             s["peak_profit"] = 0.0
 
-        # 1. Safe To Buy Filter
-        lookback = min(len(df_slice), 80)
-        lowest_80 = float(df_slice["Low"].tail(lookback).min())
-        highest_80 = float(df_slice["High"].tail(lookback).max())
-        run_up_percent = ((highest_80 - lowest_80) / lowest_80) * 100 if lowest_80 > 0 else 0.0
-        safe_to_buy = run_up_percent <= 180.0
+        # --- 1. حساب منطقة التجميع والاختراق (Consolidation & Breakout) ---
+        # حساب نطاق التذبذب في آخر 20 شمعة سابقة (دون الشمعة الحالية)
+        prev_20 = df_slice.iloc[-21:-1]
+        high_20 = float(prev_20["High"].max())
+        low_20 = float(prev_20["Low"].min())
+        
+        # نسبة ضغط النطاق العرضي (التجميع)
+        consolidation_range = ((high_20 - low_20) / low_20) * 100 if low_20 > 0 else 999.0
+        is_consolidating = consolidation_range <= 14.0  # تجميع ضيق في نطاق 14%
 
-        # 2. No Gap Down Filter
-        gap1 = ((df_slice["Open"].iloc[-1] - df_slice["Close"].iloc[-2]) / df_slice["Close"].iloc[-2]) * 100
-        gap2 = ((df_slice["Open"].iloc[-2] - df_slice["Close"].iloc[-3]) / df_slice["Close"].iloc[-3]) * 100
-        gap3 = ((df_slice["Open"].iloc[-3] - df_slice["Close"].iloc[-4]) / df_slice["Close"].iloc[-4]) * 100
-        no_gap_down = (gap1 > -2.0) and (gap2 > -2.0) and (gap3 > -2.0)
+        # شرط الاختراق لقمة التجميع مع دعم الزخم والمتوسطات
+        is_breakout = price > high_20
+        trend_support = price > float(last["EMA20"]) and float(last["EMA20"]) > float(last["EMA50"])
 
-        # 3. EMA75 Uptrend Condition
-        ema_up = (
-            df_slice["EMA75"].iloc[-1] > df_slice["EMA75"].iloc[-5]
-            and df_slice["EMA75"].iloc[-5] > df_slice["EMA75"].iloc[-10]
-            and df_slice["EMA75"].iloc[-1] > df_slice["EMA75"].iloc[-10] * 1.02
-            and price >= df_slice["EMA75"].iloc[-1] * 1.12
-            and price <= df_slice["EMA75"].iloc[-1] * 1.35
-        )
+        # شروط الدخول الثلاثية
+        buy1 = is_consolidating and is_breakout and trend_support and (60.0 <= rsi_val <= 72.0)
+        buy2 = is_breakout and trend_support and (53.0 <= rsi_val <= 62.0)
+        buy3 = trend_support and (48.0 <= rsi_val <= 55.0)
 
-        buy1 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 70
-        buy2 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 66
-        buy3 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 55
         profit = 0.0
         if s["avg_price"] > 0:
             profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
 
-        # تعديل شروط البيع المنطقية
-        sell1 = s["position"] > 0.70 and rsi_val >= 77 and profit > 8.0
-        sell2 = 0.33 < s["position"] <= 0.70 and rsi_val >= 80 and profit > 12.0
-        sell3 = s["position"] > 0.00 and rsi_val >= 82 and profit > 15.0
+        # أهداف البيع وفق قوة الاندفاع
+        sell1 = (0.00 < s["position"] <= 0.33) and rsi_val >= 75 and profit > 8.0
+        sell2 = (0.33 < s["position"] <= 0.66) and rsi_val >= 78 and profit > 12.0
+        sell3 = (s["position"] > 0.00) and rsi_val >= 82 and profit > 18.0
 
         initial_pos = s["position"]
         action = None
@@ -202,7 +195,7 @@ for current_date in all_dates:
                 "profit_pct": None
             })
 
-        elif 0.32 < s["position"] < 0.5 and buy2 and price < s["avg_price"] * 0.95:
+        elif 0.32 < s["position"] < 0.5 and buy2 and price < s["avg_price"] * 0.97:
             old_pos = s["position"]
             s["position"] = 0.66
             s["avg_price"] = update_avg(s["avg_price"], old_pos, price, s["position"])
@@ -214,7 +207,7 @@ for current_date in all_dates:
                 active[-1]["second_entry"] = f"{date_str} with price {price:.2f}"
                 active[-1]["last_totally_average_price"] = round(s["avg_price"], 2)
 
-        elif 0.65 < s["position"] < 1 and buy3 and price < s["avg_price"] * 0.93:
+        elif 0.65 < s["position"] < 1 and buy3 and price < s["avg_price"] * 0.94:
             old_pos = s["position"]
             s["position"] = 1.0
             s["avg_price"] = update_avg(s["avg_price"], old_pos, price, s["position"])
@@ -233,14 +226,16 @@ for current_date in all_dates:
         if initial_pos > 0 and s["position"] > 0:
             stop_triggered = False
 
-            if s["position"] <= 0.33 and profit <= -6:
+            # وقف خسارة حازم لمنع كسر الاختراقات
+            if s["position"] <= 0.33 and profit <= -5.0:
                 stop_triggered = True
-            elif s["position"] <= 0.66 and profit <= -4:
+            elif s["position"] <= 0.66 and profit <= -4.0:
                 stop_triggered = True
-            elif s["position"] == 1.0 and profit <= -3:
+            elif s["position"] == 1.0 and profit <= -3.0:
                 stop_triggered = True
 
-            if s["peak_profit"] > 7 and (s["peak_profit"] - profit) >= 3:
+            # Trailing Stop لحماية الأرباح بعد تحقيق قمة
+            if s["peak_profit"] > 8.0 and (s["peak_profit"] - profit) >= 3.5:
                 stop_triggered = True
 
             active = [t for t in trades_history if t["symbol"] == name and t["status"] == "OPEN"]
@@ -357,7 +352,7 @@ with open(STOCK_SUMMARY_FILE, "w", encoding="utf-8") as f:
     json.dump(stock_summaries, f, indent=2, ensure_ascii=False)
 
 print("\n" + "=" * 60)
-print("EGX LADDER SYSTEM (v3.4) - BACKTEST COMPLETE")
+print("EGX BREAKOUT & CONSOLIDATION SYSTEM (v4.0) - BACKTEST COMPLETE")
 print("=" * 60)
 print(f"Total Closed Trades: {total_count}")
 print(f"Win Rate:            {win_rate:.2f}%")
