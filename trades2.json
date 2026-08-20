@@ -32,7 +32,21 @@
   "ETEL": [],
   "EAST": [],
   "EFIH": [],
-  "ABUK": [],
+  "ABUK": [
+    {
+      "symbol": "ABUK",
+      "cycle": 1,
+      "status": "OPEN",
+      "first_entry": "2026-08-20 with price 75.52",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 75.52,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
+    }
+  ],
   "OIH": [],
   "SWDY": [],
   "ISPH": [
@@ -81,7 +95,21 @@
       "profit_pct": -2.44
     }
   ],
-  "ORWE": [],
+  "ORWE": [
+    {
+      "symbol": "ORWE",
+      "cycle": 1,
+      "status": "OPEN",
+      "first_entry": "2026-08-20 with price 25.36",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 25.36,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
+    }
+  ],
   "JUFO": [],
   "DSCW": [
     {
@@ -125,8 +153,8 @@
       "status": "OPEN",
       "first_entry": "2026-08-13 with price 31.50",
       "second_entry": "2026-08-16 with price 30.16",
-      "third_entry": null,
-      "last_totally_average_price": 30.83,
+      "third_entry": "2026-08-20 with price 29.32",
+      "last_totally_average_price": 30.32,
       "exits": [],
       "exit_price": null,
       "exit_date": null,

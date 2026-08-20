@@ -10,7 +10,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 11.74,
-    "peak_profit": 0.0,
+    "peak_profit": 0.5962521294718933,
     "realized_pnl_tracker": []
   },
   "ETEL": {
@@ -36,8 +36,8 @@
   },
   "ABUK": {
     "cycle": 1,
-    "position": 0.0,
-    "avg_price": 0.0,
+    "position": 0.33,
+    "avg_price": 75.52,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
@@ -85,8 +85,8 @@
   },
   "ORWE": {
     "cycle": 1,
-    "position": 0.0,
-    "avg_price": 0.0,
+    "position": 0.33,
+    "avg_price": 25.36,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
@@ -148,8 +148,8 @@
   },
   "GBCO": {
     "cycle": 1,
-    "position": 0.66,
-    "avg_price": 30.83,
+    "position": 1.0,
+    "avg_price": 30.3166,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
@@ -164,7 +164,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 40.9,
-    "peak_profit": 0.0,
+    "peak_profit": 0.17114914425427943,
     "realized_pnl_tracker": []
   },
   "AMOC": {
