@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 # ============================================================
-# HIGH-CONVICTION SYSTEM (V8 - EMA100 GOLDEN ENGINE)
+# HIGH-CONVICTION SYSTEM (V8.3 - EMA75 3-TRANCHE ENGINE)
 # ============================================================
 
 DB_FILE = "egx_history_database_v2.json"
@@ -23,26 +23,30 @@ symbols = {
 }
 
 # ============================================================
-# STRATEGY PARAMETERS (V8 EMA100 CONFIG)
+# STRATEGY PARAMETERS (EMA75 & 3-TRANCHES CONFIG)
 # ============================================================
 
-EMA_PERIOD = 100
+EMA_PERIOD = 75
 
 # Trend Thresholds
 EMA_UP_MIN_STEP_PERCENT = 0.30
 EMA_SIDE_MAX_DISTANCE_PERCENT = 1.00
 EMA_DOWN_MIN_STEP_PERCENT = 1.00
 
-# Entry & Exit RSI Thresholds
-RSI_UP_BUY = 55            # دخول محكم عند التراجع الصحي
-RSI_SIDE_BUY_2 = 45        # شريحة تجميع ثانية
-RSI_PARTIAL_SELL = 72      # بيع جزئي
-RSI_FINAL_SELL = 78        # بيع نهائي
+# Entry RSI Thresholds (3 Buys)
+RSI_BUY_1 = 55.0            # L1: دخول أول عند التراجع الصحي
+RSI_BUY_2 = 48.0            # L2: دخول ثانٍ عند استمرار التهدئة
+RSI_BUY_3 = 42.0            # L3: دخول ثالث عند التجميع القوي
+
+# Exit RSI Thresholds (3 Sells)
+RSI_SELL_1 = 70.0           # S1: جني أرباح أولي
+RSI_SELL_2 = 75.0           # S2: جني أرباح متوسط
+RSI_SELL_3 = 80.0           # S3: تصفية نهائية عند التشبع
 
 # Stop Loss & Position Sizing
 EMA_STOP_MIN_DROP_PERCENT = 1.00
-TRANCHE_SIZE = 0.50        # شريحتان (50% لكل شريحة)
-MAX_TRANCHES = 2
+TRANCHE_SIZE = 0.3333       # 3 شرائح متساوية
+MAX_TRANCHES = 3
 
 # ============================================================
 # HELPER FUNCTIONS
@@ -156,19 +160,18 @@ for current_date in all_dates:
         rsi_val = float(last["RSI"])
 
         s = states[name]
-        s["position"] = round(float(s["position"]), 2)
+        s["position"] = round(float(s["position"]), 4)
 
         if s["position"] == 0.0:
             s["avg_price"] = 0.0
             s["peak_profit"] = 0.0
 
-        # --- 1. ENGINE DETECT TREND (EMA100 MESH) ---
+        # --- 1. ENGINE DETECT TREND (EMA75 MESH) ---
         ema_curr = float(df_slice["EMA_TREND"].iloc[-1])
         ema_4 = float(df_slice["EMA_TREND"].iloc[-5])
         ema_8 = float(df_slice["EMA_TREND"].iloc[-9])
         ema_12 = float(df_slice["EMA_TREND"].iloc[-13])
 
-        # حساب التغيرات النسبية
         step1 = ((ema_8 - ema_12) / ema_12) * 100
         step2 = ((ema_4 - ema_8) / ema_8) * 100
         step3 = ((ema_curr - ema_4) / ema_4) * 100
@@ -182,21 +185,22 @@ for current_date in all_dates:
 
         is_sharp_downtrend = (step1 <= -EMA_DOWN_MIN_STEP_PERCENT) and (step2 <= -EMA_DOWN_MIN_STEP_PERCENT) and (step3 <= -EMA_DOWN_MIN_STEP_PERCENT)
         
-        # وقف الخسارة السريع للهيكل
         drop_from_4 = ((ema_curr - ema_4) / ema_4) * 100
         is_sharp_drop = drop_from_4 <= -EMA_STOP_MIN_DROP_PERCENT
 
-        # --- 2. ENTRY LOGIC ---
-        buy1 = (s["position"] == 0.0) and is_uptrend and (rsi_val < RSI_UP_BUY)
-        buy2 = (s["position"] == TRANCHE_SIZE) and is_sideways and (rsi_val <= RSI_SIDE_BUY_2) and (price < s["avg_price"])
+        # --- 2. ENTRY LOGIC (3 BUY TRANCHES) ---
+        buy1 = (s["position"] == 0.0) and is_uptrend and (rsi_val < RSI_BUY_1)
+        buy2 = (0.30 <= s["position"] < 0.40) and (is_uptrend or is_sideways) and (rsi_val <= RSI_BUY_2) and (price < s["avg_price"])
+        buy3 = (0.60 <= s["position"] < 0.70) and (is_uptrend or is_sideways) and (rsi_val <= RSI_BUY_3) and (price < s["avg_price"])
 
         profit = 0.0
         if s["avg_price"] > 0:
             profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
 
-        # --- 3. EXIT LOGIC ---
-        sell_partial = (s["position"] == 1.0) and (rsi_val >= RSI_PARTIAL_SELL)
-        sell_final = (s["position"] > 0.0) and (rsi_val >= RSI_FINAL_SELL)
+        # --- 3. EXIT LOGIC (3 SELL TRANCHES) ---
+        sell1 = (s["position"] > 0.60) and (rsi_val >= RSI_SELL_1) and (profit > 0)
+        sell2 = (s["position"] > 0.30) and (rsi_val >= RSI_SELL_2) and (profit > 0)
+        sell3 = (s["position"] > 0.00) and (rsi_val >= RSI_SELL_3)
         emergency_exit = (s["position"] > 0.0) and (is_sharp_downtrend or is_sharp_drop)
 
         initial_pos = s["position"]
@@ -209,7 +213,7 @@ for current_date in all_dates:
             s["peak_profit"] = 0.0
             s["realized_pnl_tracker"] = []
             profit = 0.0
-            action = "BUY TRANCHE 1"
+            action = "BUY L1"
 
             trades_history.append({
                 "symbol": name,
@@ -227,14 +231,26 @@ for current_date in all_dates:
 
         elif buy2:
             old_pos = s["position"]
-            s["position"] = 1.0
+            s["position"] = 0.6666
             s["avg_price"] = update_avg(s["avg_price"], old_pos, price, s["position"])
             profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
-            action = "BUY TRANCHE 2"
+            action = "BUY L2"
 
             active = [t for t in trades_history if t["symbol"] == name and t["status"] == "OPEN"]
             if active:
                 active[-1]["second_entry"] = f"{date_str} with price {price:.2f}"
+                active[-1]["last_totally_average_price"] = round(s["avg_price"], 2)
+
+        elif buy3:
+            old_pos = s["position"]
+            s["position"] = 1.0
+            s["avg_price"] = update_avg(s["avg_price"], old_pos, price, s["position"])
+            profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
+            action = "BUY L3"
+
+            active = [t for t in trades_history if t["symbol"] == name and t["status"] == "OPEN"]
+            if active:
+                active[-1]["third_entry"] = f"{date_str} with price {price:.2f}"
                 active[-1]["last_totally_average_price"] = round(s["avg_price"], 2)
 
         if profit > s["peak_profit"]:
@@ -244,8 +260,8 @@ for current_date in all_dates:
         if initial_pos > 0 and s["position"] > 0:
             active = [t for t in trades_history if t["symbol"] == name and t["status"] == "OPEN"]
 
-            if emergency_exit or sell_final:
-                action = "EMERGENCY STOP" if emergency_exit else "EXIT FULL"
+            if emergency_exit or sell3:
+                action = "EMERGENCY STOP" if emergency_exit else "EXIT FULL (S3)"
                 total_profit = calc_final_pnl(s["realized_pnl_tracker"], profit, s["position"])
 
                 if active:
@@ -257,17 +273,17 @@ for current_date in all_dates:
                 total_portfolio_profit += total_profit
                 s["position"] = 0.0
 
-            elif sell_partial:
+            elif sell2:
                 sell_amount = TRANCHE_SIZE
                 s["realized_pnl_tracker"].append((sell_amount, profit))
-                s["position"] = round(s["position"] - sell_amount, 2)
-                action = "SELL PARTIAL"
+                s["position"] = round(s["position"] - sell_amount, 4)
+                action = "SELL S2"
 
                 if active:
-                    exit_log = f"{date_str}: Sold 50% at price {price:.2f} (Profit: {profit:+.2f}%)"
+                    exit_log = f"{date_str}: Sold 33.3% at price {price:.2f} (Profit: {profit:+.2f}%)"
                     active[-1]["exits"].append(exit_log)
 
-                    if s["position"] == 0.0:
+                    if s["position"] <= 0.05:
                         w_sum = sum(w for w, _ in s["realized_pnl_tracker"])
                         total_profit = sum(p * w for w, p in s["realized_pnl_tracker"]) / w_sum if w_sum > 0 else profit
                         active[-1]["status"] = "CLOSED"
@@ -275,8 +291,29 @@ for current_date in all_dates:
                         active[-1]["exit_date"] = date_str
                         active[-1]["profit_pct"] = round(total_profit, 2)
                         total_portfolio_profit += total_profit
+                        s["position"] = 0.0
 
-            s["position"] = round(s["position"], 2)
+            elif sell1:
+                sell_amount = TRANCHE_SIZE
+                s["realized_pnl_tracker"].append((sell_amount, profit))
+                s["position"] = round(s["position"] - sell_amount, 4)
+                action = "SELL S1"
+
+                if active:
+                    exit_log = f"{date_str}: Sold 33.3% at price {price:.2f} (Profit: {profit:+.2f}%)"
+                    active[-1]["exits"].append(exit_log)
+
+                    if s["position"] <= 0.05:
+                        w_sum = sum(w for w, _ in s["realized_pnl_tracker"])
+                        total_profit = sum(p * w for w, p in s["realized_pnl_tracker"]) / w_sum if w_sum > 0 else profit
+                        active[-1]["status"] = "CLOSED"
+                        active[-1]["exit_price"] = round(price, 2)
+                        active[-1]["exit_date"] = date_str
+                        active[-1]["profit_pct"] = round(total_profit, 2)
+                        total_portfolio_profit += total_profit
+                        s["position"] = 0.0
+
+            s["position"] = round(s["position"], 4)
 
         if action and s["position"] == 0.0 and ("SELL" in action or "EXIT" in action or "STOP" in action):
             s["avg_price"] = 0.0
@@ -302,8 +339,7 @@ win_rate = (wins_count / total_count) * 100 if total_count > 0 else 0.0
 avg_win = float(np.mean([t["profit_pct"] for t in winning_trades])) if winning_trades else 0.0
 avg_loss = float(np.mean([t["profit_pct"] for t in losing_trades])) if losing_trades else 0.0
 
-# حساب أقصى تراجع للمحفظة (Maximum Drawdown)
-equity = np.array(portfolio_equity_curve) + 100.0  # افتراض رأس مال ابتدائي 100
+equity = np.array(portfolio_equity_curve) + 100.0
 peak = np.maximum.accumulate(equity)
 drawdown = (peak - equity) / peak * 100.0
 max_drawdown = float(np.max(drawdown)) if len(drawdown) > 0 else 0.0
@@ -346,7 +382,7 @@ with open(STOCK_SUMMARY_FILE, "w", encoding="utf-8") as f:
     json.dump(stock_summaries, f, indent=2, ensure_ascii=False)
 
 print("\n" + "=" * 60)
-print("HIGH-CONVICTION SYSTEM (V8 EMA100) - BACKTEST COMPLETE")
+print("EMA75 3-TRANCHE ENGINE - BACKTEST COMPLETE")
 print("=" * 60)
 print(f"Total Closed Trades: {total_count}")
 print(f"Win Rate:            {win_rate:.2f}%")
