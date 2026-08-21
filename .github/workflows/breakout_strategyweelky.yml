@@ -1,17 +1,15 @@
 name: weekly_database_update
 
 on:
-  workflow_dispatch: # للتشغيل اليدوي في أي وقت للتحقق والاختبار
+  workflow_dispatch:
 
   schedule:
-    # تشغيل تلقائي كل يوم جمعة الساعة 6:00 مساءً بتوقيت مصر (15:00 UTC) بعد إغلاق الأسبوع
+    # تشغيل تلقائي كل يوم جمعة الساعة 6:00 مساءً بتوقيت مصر
     - cron: '0 15 * * 5'
 
-# 🔒 منح صلاحيات الكتابة للبوت لحفظ الملفات
 permissions:
   contents: write
 
-# 🔒 حماية لمنع التعارض إذا اشتغل الوركفلو مرتين في نفس الوقت
 concurrency:
   group: weekly-strategy-group
   cancel-in-progress: false
@@ -21,57 +19,144 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+      # ==========================================
+      # 1️⃣ Checkout Repository
+      # ==========================================
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
           persist-credentials: true
           fetch-depth: 0
 
+      # ==========================================
+      # 2️⃣ Python
+      # ==========================================
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
+      # ==========================================
+      # 3️⃣ Dependencies
+      # ==========================================
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install yfinance tradingview-ta requests pandas curl_cffi
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      # 1️⃣ تشغيل سكريبت تحديث الأسعار الأسبوعية
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          fi
+
+      # ==========================================
+      # 4️⃣ تحديث قاعدة الأسعار الأسبوعية
+      # ==========================================
       - name: Update Weekly Price Database
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python update_database_weekly.py
+        run: |
+          python update_database_weekly.py
 
-      # 2️⃣ تشغيل سكريبت الاستراتيجية (معطل مؤقتاً لحين ربط كود الاستراتيجية)
-      # - name: Run Weekly Trading Strategy 
+      # ==========================================
+      # 5️⃣ الاستراتيجية الأسبوعية
+      #    معطلة حاليًا
+      # ==========================================
+      # - name: Run Weekly Trading Strategy
       #   env:
       #     TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
       #     TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-      #   run: python weekly_strategy.py
+      #   run: |
+      #     python weekly_strategy.py
 
-      # 3️⃣ الحفظ التلقائي لقاعدة البيانات الأسبوعية في GitHub
-      - name: Commit Weekly Database
+      # ==========================================
+      # 6️⃣ Commit + Pull + Push
+      # ==========================================
+      - name: Commit and Push Weekly Database
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          echo "📦 Staging weekly database..."
+
+          git add egx_weekly_database_v1.json
+
+          # ==========================================
+          # لا توجد تغييرات
+          # ==========================================
+          if git diff --cached --quiet; then
+            echo "ℹ️ No changes detected in weekly database."
+            echo "GITHUB_PUSH_DONE=false" >> "$GITHUB_ENV"
+            exit 0
+          fi
+
+          # ==========================================
+          # إنشاء Commit
+          # ==========================================
+          echo "💾 Creating weekly database commit..."
+
+          git commit -m "Auto-update: Weekly Database v1 [skip ci]"
+
+          # ==========================================
+          # مزامنة آخر نسخة من GitHub
+          # ==========================================
+          echo "🔄 Syncing with latest remote Main..."
+
+          git pull --rebase origin Main
+
+          # ==========================================
+          # Push
+          # ==========================================
+          echo "🚀 Pushing weekly database to GitHub..."
+
+          git push origin HEAD:Main
+
+          # ==========================================
+          # تسجيل نجاح Push فعلي
+          # ==========================================
+          echo "GITHUB_PUSH_DONE=true" >> "$GITHUB_ENV"
+
+          echo "✅ Weekly database successfully pushed to GitHub."
+
+      # ==========================================
+      # 7️⃣ Telegram Confirmation
+      #    تصل فقط بعد Push ناجح فعليًا
+      # ==========================================
+      - name: Send GitHub Save Confirmation
+        if: success() && env.GITHUB_PUSH_DONE == 'true'
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          python - <<'PY'
+          import os
+          import requests
 
-          # سحب أي تعديلات قديمة لتجنب التعارض
-          git pull origin HEAD --rebase || true
+          token = os.environ.get("TELEGRAM_TOKEN")
+          chat_id = os.environ.get("TELEGRAM_CHAT_ID")
 
-          # إضافة ملف قاعدة البيانات الأسبوعية الجديد
-          git add egx_weekly_database_v1.json
-          
-          # التحقق من وجود تغييرات ثم رفعها
-          if ! git diff --cached --quiet; then
-            git commit -m "Auto-update: Weekly Database v1 [skip ci]"
-            git push origin HEAD
-            echo "✅ Weekly Database successfully saved to GitHub!"
-          else
-            echo "ℹ️ No changes detected in weekly database to commit."
-          fi
+          if not token or not chat_id:
+              print("⚠️ Telegram credentials are missing.")
+              raise SystemExit(1)
+
+          message = (
+              "✅ تم تحديث أسعار البورصة الأسبوعية بنجاح\n"
+              "💾 تم حفظ قاعدة البيانات الأسبوعية بنجاح في GitHub"
+          )
+
+          url = f"https://api.telegram.org/bot{token}/sendMessage"
+
+          response = requests.post(
+              url,
+              json={
+                  "chat_id": chat_id,
+                  "text": message
+              },
+              timeout=10
+          )
+
+          response.raise_for_status()
+
+          print("✅ Final GitHub confirmation sent to Telegram.")
+          PY
