@@ -19,8 +19,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
       # ==========================================
-      # Checkout Repository
+      # 1️⃣ Checkout Repository
       # ==========================================
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -29,7 +30,7 @@ jobs:
           fetch-depth: 0
 
       # ==========================================
-      # Python
+      # 2️⃣ Python
       # ==========================================
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -37,7 +38,7 @@ jobs:
           python-version: "3.11"
 
       # ==========================================
-      # Dependencies
+      # 3️⃣ Dependencies
       # ==========================================
       - name: Install dependencies
         run: |
@@ -49,7 +50,7 @@ jobs:
           fi
 
       # ==========================================
-      # 1️⃣ تحديث قاعدة الأسعار
+      # 4️⃣ تحديث قاعدة الأسعار
       # ==========================================
       - name: Update Price Database
         env:
@@ -59,9 +60,9 @@ jobs:
           python update_database.py
 
       # ==========================================
-      # 2️⃣ تشغيل استراتيجية السلم
+      # 5️⃣ تشغيل استراتيجية Ladder
       # ==========================================
-      - name: Run Trading Strategies
+      - name: Run Ladder Strategy
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -69,9 +70,9 @@ jobs:
           python second-strategy.py
 
       # ==========================================
-      # 3️⃣ حفظ الملفات المحدثة في GitHub
+      # 6️⃣ Commit + Pull + Push
       # ==========================================
-      - name: Commit database and strategy state
+      - name: Commit and Push Updates
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -84,15 +85,16 @@ jobs:
             trades2.json
 
           # ==========================================
-          # التحقق من وجود تغييرات
+          # لا توجد تغييرات
           # ==========================================
           if git diff --cached --quiet; then
             echo "ℹ️ No changes detected."
+            echo "GITHUB_PUSH_DONE=false" >> "$GITHUB_ENV"
             exit 0
           fi
 
           # ==========================================
-          # إنشاء Commit محلي
+          # إنشاء Commit
           # ==========================================
           echo "💾 Creating commit..."
 
@@ -106,10 +108,57 @@ jobs:
           git pull --rebase origin Main
 
           # ==========================================
-          # رفع التحديثات
+          # Push
           # ==========================================
-          echo "🚀 Pushing changes..."
+          echo "🚀 Pushing updates to GitHub..."
 
           git push origin HEAD:Main
 
-          echo "✅ Successfully saved all generated files!"
+          # ==========================================
+          # تسجيل نجاح Push فعلي
+          # ==========================================
+          echo "GITHUB_PUSH_DONE=true" >> "$GITHUB_ENV"
+
+          echo "✅ GitHub push completed successfully."
+
+      # ==========================================
+      # 7️⃣ Telegram Confirmation
+      #    فقط بعد Git Push فعلي
+      # ==========================================
+      - name: Send GitHub Save Confirmation
+        if: success() && env.GITHUB_PUSH_DONE == 'true'
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          python - <<'PY'
+          import os
+          import requests
+
+          token = os.environ.get("TELEGRAM_TOKEN")
+          chat_id = os.environ.get("TELEGRAM_CHAT_ID")
+
+          if not token or not chat_id:
+              print("⚠️ Telegram credentials are missing.")
+              raise SystemExit(1)
+
+          message = (
+              "✅ تم تحديث أسعار البورصة بنجاح\n"
+              "💾 تم حفظ قاعدة الأسعار وملفات استراتيجية Ladder بنجاح في GitHub"
+          )
+
+          url = f"https://api.telegram.org/bot{token}/sendMessage"
+
+          response = requests.post(
+              url,
+              json={
+                  "chat_id": chat_id,
+                  "text": message
+              },
+              timeout=10
+          )
+
+          response.raise_for_status()
+
+          print("✅ Final GitHub confirmation sent to Telegram.")
+          PY
