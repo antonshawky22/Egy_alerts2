@@ -7,7 +7,7 @@ import numpy as np
 # HIGH-CONVICTION SYSTEM (V8.3 - EMA75 3-TRANCHE ENGINE)
 # ============================================================
 
-DB_FILE = "egx_history_database_v2.json"
+DB_FILE = "egx_weekly_database_v1.json"
 RESULTS_FILE = "backtest_results.json"
 TRADES_FILE = "backtest_trades.json"
 STOCK_SUMMARY_FILE = "backtest_summary_by_stock.json"
