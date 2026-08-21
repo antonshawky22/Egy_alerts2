@@ -38,7 +38,7 @@ symbols = {
     "RAYA": "RAYA", "EEII": "EEII", "MPCO": "MPCO", "GBCO": "GBCO", "TMGH": "TMGH",
     "ORHD": "ORHD", "AMOC": "AMOC", "FWRY": "FWRY", "COMI": "COMI", "ADIB": "ADIB",
     "PHDC": "PHDC", "MCQE": "MCQE", "SKPC": "SKPC", "EGAL": "EGAL", "HELI": "HELI",
-    "HDBK": "HDBK", "FAIT": "FAIT", "SAUD": "SAUD", "CCAP": "CCAP", "EKHO": "EKHO",
+    "HDBK": "HDBK", "FAIT": "FAIT", "SAUD": "SAUD", "CCAP": "CCAP",
     "EGTS": "EGTS", "SDTI": "SDTI", "ARAB": "ARAB", "KABO": "KABO", "SPIN": "SPIN",
     "MBSC": "MBSC", "EFIC": "EFIC", "DAPH": "DAPH", "ACGC": "ACGC", "ASCM": "ASCM",
     "BTFH": "BTFH", "CNFN": "CNFN", "MOIN": "MOIN", "INFI": "INFI", "POUL": "POUL",
