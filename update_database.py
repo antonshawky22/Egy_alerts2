@@ -220,12 +220,11 @@ if database:
 
     # 🎯 الإرسال الذكي: تليجرام يصلك فقط لو كانت هناك أسعار حديثة وتغيرت بالفعل
     if updated_count > 0 and has_real_price_changes:
-        success_msg = f"✅ **تم تحديث أسعار البورصة بنجاح!**\n📅 التاريخ: `{check_date}`\n📊 الأسهم المحدثة: {updated_count}/{len(symbols)}"
-        if failed_tickers:
-            success_msg += f"\n⚠️ أسهم لم يتم تحديثها: {', '.join(failed_tickers)}"
-        send_telegram(success_msg)
+        print(
+        f"✅ Price database updated successfully. "
+        f"Date: {check_date}, "
+        f"Updated: {updated_count}/{len(symbols)}")
     else:
         print("ℹ️ No new price changes detected. Telegram notification skipped to avoid noise.")
-
 else:
     send_telegram("⚠️ **تحذير:** محاولة حفظ قاعدة بيانات فارغة! تم إيقاف الحفظ لحماية البيانات القديمة.")
