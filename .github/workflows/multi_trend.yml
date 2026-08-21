@@ -7,51 +7,162 @@ on:
     - cron: '30 08 * * 0-4'  # 12
     - cron: '40 11 * * 0-4'  # 13
 
+permissions:
+  contents: write
+
+concurrency:
+  group: multi-trend-group
+  cancel-in-progress: false
+
 jobs:
   run:
     runs-on: ubuntu-latest
 
     steps:
+
+      # ==========================================
+      # 1️⃣ Checkout Repository
+      # ==========================================
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
           persist-credentials: true
+          fetch-depth: 0
 
+      # ==========================================
+      # 2️⃣ Python
+      # ==========================================
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
+      # ==========================================
+      # 3️⃣ Dependencies
+      # ==========================================
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          # 🟢 تم إضافة مكتبة curl_cffi هنا ليتوافق مع تحديث ياهو فاينانس الأخير
           pip install yfinance tradingview-ta requests pandas curl_cffi
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      # 1️⃣ تشغيل سكريبت تحديث الأسعار أولاً وبناء ملف الـ json
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          fi
+
+      # ==========================================
+      # 4️⃣ تحديث قاعدة الأسعار
+      # ==========================================
       - name: Update Price Database
-        run: python update_database.py
-
-      # 2️⃣ تشغيل سكريبت الاستراتيجية وإرسال التليجرام بناءً على الملف الجاهز
-      - name: Run Trading Strategies 
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python multi-trend.py
-
-      # 3️⃣ حفظ قاعدة البيانات الجديدة وملف الإشارات وملف سجل الصفقات داخل الريبو
-      - name: Commit database and last signals
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
+          python update_database.py
 
-          # تتبع ملفات الإشارات وقاعدة البيانات الأساسية
-          git add last_signals.json egx_history_database_v2.json
-          
-          # 🛡️ تأمين تتبع ملف الصفقات فقط في حال وجوده لمنع خطأ fatal: pathspec
-          if [ -f trades.json ]; then git add trades.json; fi
-          
-          git diff --cached --quiet || git commit -m "Update database v2, signals and trades log [auto]"
-          git push
+      # ==========================================
+      # 5️⃣ تشغيل استراتيجية Multi Trend
+      # ==========================================
+      - name: Run Trading Strategies
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          python multi-trend.py
 
+      # ==========================================
+      # 6️⃣ Commit + Pull + Push
+      # ==========================================
+      - name: Commit and Push Updates
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          echo "📦 Staging generated files..."
+
+          git add \
+            last_signals.json \
+            egx_history_database_v2.json
+
+          # إضافة trades.json فقط إذا كان موجودًا
+          if [ -f trades.json ]; then
+            git add trades.json
+          fi
+
+          # ==========================================
+          # لا توجد تغييرات
+          # ==========================================
+          if git diff --cached --quiet; then
+            echo "ℹ️ No changes detected."
+            echo "GITHUB_PUSH_DONE=false" >> "$GITHUB_ENV"
+            exit 0
+          fi
+
+          # ==========================================
+          # إنشاء Commit
+          # ==========================================
+          echo "💾 Creating commit..."
+
+          git commit -m "Update database v2, signals and trades log [auto]"
+
+          # ==========================================
+          # مزامنة آخر نسخة من GitHub
+          # ==========================================
+          echo "🔄 Syncing with latest remote Main..."
+
+          git pull --rebase origin Main
+
+          # ==========================================
+          # Push
+          # ==========================================
+          echo "🚀 Pushing updates to GitHub..."
+
+          git push origin HEAD:Main
+
+          # ==========================================
+          # تسجيل أن Push نجح فعليًا
+          # ==========================================
+          echo "GITHUB_PUSH_DONE=true" >> "$GITHUB_ENV"
+
+          echo "✅ GitHub push completed successfully."
+
+      # ==========================================
+      # 7️⃣ Telegram Confirmation
+      #    يتم الإرسال فقط بعد Git Push فعلي
+      # ==========================================
+      - name: Send GitHub Save Confirmation
+        if: success() && env.GITHUB_PUSH_DONE == 'true'
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          python - <<'PY'
+          import os
+          import requests
+
+          token = os.environ.get("TELEGRAM_TOKEN")
+          chat_id = os.environ.get("TELEGRAM_CHAT_ID")
+
+          if not token or not chat_id:
+              print("⚠️ Telegram credentials are missing.")
+              raise SystemExit(1)
+
+          message = (
+              "✅ تم تحديث أسعار البورصة بنجاح\n"
+              "💾 تم حفظ قاعدة الأسعار وملفات استراتيجية Multi Trend بنجاح في GitHub"
+          )
+
+          url = f"https://api.telegram.org/bot{token}/sendMessage"
+
+          response = requests.post(
+              url,
+              json={
+                  "chat_id": chat_id,
+                  "text": message
+              },
+              timeout=10
+          )
+
+          response.raise_for_status()
+
+          print("✅ Final GitHub confirmation sent to Telegram.")
+          PY
