@@ -129,7 +129,21 @@
   "SUGR": [],
   "ELSH": [],
   "RMDA": [],
-  "RAYA": [],
+  "RAYA": [ 
+    {
+      "symbol": "RAYA",
+      "cycle": 1,
+      "status": "open",
+      "first_entry": "2026-08-05 with price 7.50",
+      "second_entry": "2026-08-13 with price 7.07",
+      "third_entry": null,
+      "last_totally_average_price": 7.29,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
+    }
+  ],
   "EEII": [],
   "MPCO": [],
   "GBCO": [
