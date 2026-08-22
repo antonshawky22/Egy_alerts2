@@ -1,5 +1,5 @@
 {
-  "strategy": "Weekly RSI 33/60/70",
+  "strategy": "Weekly RSI 33/60/70 + Break-Even",
   "parameters": {
     "rsi_period": 14,
     "rsi_buy": 33,
@@ -7,38 +7,1735 @@
     "rsi_sell_2": 70,
     "first_sell_percent": 50,
     "second_sell_percent": 50,
-    "hard_stop_percent": 5.0
+    "hard_stop_percent": 5.0,
+    "break_even_after_first_sell": true
   },
   "statistics": {
-    "total_trades": 27,
-    "winning_trades": 14,
-    "losing_trades": 13,
-    "win_rate_percent": 51.85,
-    "total_profit_percent": 778.8,
-    "average_winning_trade_percent": 64.62,
-    "average_losing_trade_percent": -9.68,
-    "maximum_drawdown_percent": 59.25
+    "total_trades": 70,
+    "winning_trades": 30,
+    "losing_trades": 40,
+    "win_rate_percent": 42.86,
+    "compound_portfolio_return_percent": 1438263.5,
+    "average_winning_trade_percent": 56.44,
+    "average_losing_trade_percent": -8.26,
+    "maximum_drawdown_percent": 41.1
   },
-  "entry_rsi_analysis": {
-    "rsi_below_30": {
-      "trades": 10,
-      "winning": 5,
-      "losing": 5,
-      "win_rate_percent": 50.0,
-      "average_profit_percent": 22.15
+  "trades": [
+    {
+      "symbol": "ARAB",
+      "status": "CLOSED",
+      "entry_date": "2022-11-21",
+      "entry_price": 0.37,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2023-05-15",
+          "price": 0.53,
+          "position_sold": 0.5,
+          "profit_pct": 43.24,
+          "reason": "RSI_60"
+        },
+        {
+          "date": "2023-06-05",
+          "price": 0.63,
+          "position_sold": 0.5,
+          "profit_pct": 70.27,
+          "reason": "RSI_70"
+        }
+      ],
+      "exit_date": "2023-06-05",
+      "exit_price": 0.63,
+      "profit_pct": 56.75,
+      "exit_reason": "RSI_70"
     },
-    "rsi_30_to_33": {
-      "trades": 17,
-      "winning": 9,
-      "losing": 8,
-      "win_rate_percent": 52.94,
-      "average_profit_percent": 32.78
+    {
+      "symbol": "EFIH",
+      "status": "CLOSED",
+      "entry_date": "2022-11-21",
+      "entry_price": 14.07,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2023-03-06",
+          "price": 12.85,
+          "position_sold": 1.0,
+          "profit_pct": -8.67,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2023-03-06",
+      "exit_price": 12.85,
+      "profit_pct": -8.67,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "EGAS",
+      "status": "CLOSED",
+      "entry_date": "2022-11-21",
+      "entry_price": 30.23,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2023-10-02",
+          "price": 28.35,
+          "position_sold": 1.0,
+          "profit_pct": -6.22,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2023-10-02",
+      "exit_price": 28.35,
+      "profit_pct": -6.22,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "MOIN",
+      "status": "CLOSED",
+      "entry_date": "2022-11-21",
+      "entry_price": 8.46,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2022-12-12",
+          "price": 10.52,
+          "position_sold": 0.5,
+          "profit_pct": 24.35,
+          "reason": "RSI_60"
+        },
+        {
+          "date": "2023-01-02",
+          "price": 11.75,
+          "position_sold": 0.5,
+          "profit_pct": 38.89,
+          "reason": "RSI_70"
+        }
+      ],
+      "exit_date": "2023-01-02",
+      "exit_price": 11.75,
+      "profit_pct": 31.62,
+      "exit_reason": "RSI_70"
+    },
+    {
+      "symbol": "MPCO",
+      "status": "CLOSED",
+      "entry_date": "2022-11-21",
+      "entry_price": 1.06,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2023-01-09",
+          "price": 0.97,
+          "position_sold": 1.0,
+          "profit_pct": -8.49,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2023-01-09",
+      "exit_price": 0.97,
+      "profit_pct": -8.49,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "EPPK",
+      "status": "CLOSED",
+      "entry_date": "2022-12-05",
+      "entry_price": 6.77,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2023-02-06",
+          "price": 7.89,
+          "position_sold": 0.5,
+          "profit_pct": 16.54,
+          "reason": "RSI_60"
+        },
+        {
+          "date": "2023-10-23",
+          "price": 6.49,
+          "position_sold": 0.5,
+          "profit_pct": 0.0,
+          "reason": "BREAK_EVEN_STOP"
+        }
+      ],
+      "exit_date": "2023-10-23",
+      "exit_price": 6.49,
+      "profit_pct": 8.27,
+      "exit_reason": "BREAK_EVEN_STOP"
+    },
+    {
+      "symbol": "DAPH",
+      "status": "CLOSED",
+      "entry_date": "2022-12-19",
+      "entry_price": 19.04,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2023-03-06",
+          "price": 24.97,
+          "position_sold": 0.5,
+          "profit_pct": 31.14,
+          "reason": "RSI_60"
+        },
+        {
+          "date": "2023-11-06",
+          "price": 36.34,
+          "position_sold": 0.5,
+          "profit_pct": 90.86,
+          "reason": "RSI_70"
+        }
+      ],
+      "exit_date": "2023-11-06",
+      "exit_price": 36.34,
+      "profit_pct": 61.0,
+      "exit_reason": "RSI_70"
+    },
+    {
+      "symbol": "NEDA",
+      "status": "CLOSED",
+      "entry_date": "2023-01-09",
+      "entry_price": 1.82,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2023-01-30",
+          "price": 1.59,
+          "position_sold": 1.0,
+          "profit_pct": -12.64,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2023-01-30",
+      "exit_price": 1.59,
+      "profit_pct": -12.64,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "MPCO",
+      "status": "CLOSED",
+      "entry_date": "2023-01-16",
+      "entry_price": 1.01,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2023-01-30",
+          "price": 0.85,
+          "position_sold": 1.0,
+          "profit_pct": -15.84,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2023-01-30",
+      "exit_price": 0.85,
+      "profit_pct": -15.84,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "MPCO",
+      "status": "CLOSED",
+      "entry_date": "2023-02-06",
+      "entry_price": 0.89,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2023-03-13",
+          "price": 0.72,
+          "position_sold": 1.0,
+          "profit_pct": -19.1,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2023-03-13",
+      "exit_price": 0.72,
+      "profit_pct": -19.1,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "EEII",
+      "status": "CLOSED",
+      "entry_date": "2023-03-13",
+      "entry_price": 0.81,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2023-05-22",
+          "price": 1.25,
+          "position_sold": 0.5,
+          "profit_pct": 54.32,
+          "reason": "RSI_60"
+        },
+        {
+          "date": "2023-11-20",
+          "price": 1.52,
+          "position_sold": 0.5,
+          "profit_pct": 87.65,
+          "reason": "RSI_70"
+        }
+      ],
+      "exit_date": "2023-11-20",
+      "exit_price": 1.52,
+      "profit_pct": 70.98,
+      "exit_reason": "RSI_70"
+    },
+    {
+      "symbol": "EFIH",
+      "status": "CLOSED",
+      "entry_date": "2023-03-13",
+      "entry_price": 11.74,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2024-02-26",
+          "price": 19.37,
+          "position_sold": 0.5,
+          "profit_pct": 64.99,
+          "reason": "RSI_60"
+        },
+        {
+          "date": "2024-03-04",
+          "price": 21.96,
+          "position_sold": 0.5,
+          "profit_pct": 87.05,
+          "reason": "RSI_70"
+        }
+      ],
+      "exit_date": "2024-03-04",
+      "exit_price": 21.96,
+      "profit_pct": 76.02,
+      "exit_reason": "RSI_70"
+    },
+    {
+      "symbol": "ISPH",
+      "status": "CLOSED",
+      "entry_date": "2023-03-13",
+      "entry_price": 1.24,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2023-05-08",
+          "price": 2.0,
+          "position_sold": 0.5,
+          "profit_pct": 61.29,
+          "reason": "RSI_60"
+        },
+        {
+          "date": "2023-06-05",
+          "price": 2.58,
+          "position_sold": 0.5,
+          "profit_pct": 108.06,
+          "reason": "RSI_70"
+        }
+      ],
+      "exit_date": "2023-06-05",
+      "exit_price": 2.58,
+      "profit_pct": 84.67,
+      "exit_reason": "RSI_70"
+    },
+    {
+      "symbol": "NEDA",
+      "status": "CLOSED",
+      "entry_date": "2023-03-13",
+      "entry_price": 1.43,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2023-11-06",
+          "price": 1.94,
+          "position_sold": 0.5,
+          "profit_pct": 35.66,
+          "reason": "RSI_60"
+        },
+        {
+          "date": "2023-11-20",
+          "price": 2.68,
+          "position_sold": 0.5,
+          "profit_pct": 87.41,
+          "reason": "RSI_70"
+        }
+      ],
+      "exit_date": "2023-11-20",
+      "exit_price": 2.68,
+      "profit_pct": 61.53,
+      "exit_reason": "RSI_70"
+    },
+    {
+      "symbol": "RAYA",
+      "status": "CLOSED",
+      "entry_date": "2023-03-13",
+      "entry_price": 2.06,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2023-11-20",
+          "price": 2.68,
+          "position_sold": 0.5,
+          "profit_pct": 30.1,
+          "reason": "RSI_60"
+        },
+        {
+          "date": "2024-01-08",
+          "price": 4.14,
+          "position_sold": 0.5,
+          "profit_pct": 100.97,
+          "reason": "RSI_70"
+        }
+      ],
+      "exit_date": "2024-01-08",
+      "exit_price": 4.14,
+      "profit_pct": 65.53,
+      "exit_reason": "RSI_70"
+    },
+    {
+      "symbol": "RMDA",
+      "status": "CLOSED",
+      "entry_date": "2023-03-13",
+      "entry_price": 1.3,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2023-11-27",
+          "price": 1.78,
+          "position_sold": 0.5,
+          "profit_pct": 36.92,
+          "reason": "RSI_60"
+        },
+        {
+          "date": "2024-01-29",
+          "price": 2.37,
+          "position_sold": 0.5,
+          "profit_pct": 82.31,
+          "reason": "RSI_70"
+        }
+      ],
+      "exit_date": "2024-01-29",
+      "exit_price": 2.37,
+      "profit_pct": 59.62,
+      "exit_reason": "RSI_70"
+    },
+    {
+      "symbol": "MPCO",
+      "status": "CLOSED",
+      "entry_date": "2023-03-20",
+      "entry_price": 0.78,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2024-01-08",
+          "price": 1.06,
+          "position_sold": 0.5,
+          "profit_pct": 35.9,
+          "reason": "RSI_60"
+        },
+        {
+          "date": "2024-01-29",
+          "price": 1.15,
+          "position_sold": 0.5,
+          "profit_pct": 47.44,
+          "reason": "RSI_70"
+        }
+      ],
+      "exit_date": "2024-01-29",
+      "exit_price": 1.15,
+      "profit_pct": 41.67,
+      "exit_reason": "RSI_70"
+    },
+    {
+      "symbol": "OLFI",
+      "status": "CLOSED",
+      "entry_date": "2023-08-21",
+      "entry_price": 8.14,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2023-10-30",
+          "price": 10.24,
+          "position_sold": 0.5,
+          "profit_pct": 25.8,
+          "reason": "RSI_60"
+        },
+        {
+          "date": "2024-02-19",
+          "price": 14.19,
+          "position_sold": 0.5,
+          "profit_pct": 74.32,
+          "reason": "RSI_70"
+        }
+      ],
+      "exit_date": "2024-02-19",
+      "exit_price": 14.19,
+      "profit_pct": 50.06,
+      "exit_reason": "RSI_70"
+    },
+    {
+      "symbol": "FWRY",
+      "status": "CLOSED",
+      "entry_date": "2023-10-02",
+      "entry_price": 4.45,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2024-02-26",
+          "price": 7.55,
+          "position_sold": 0.5,
+          "profit_pct": 69.66,
+          "reason": "RSI_60"
+        },
+        {
+          "date": "2024-03-04",
+          "price": 8.4,
+          "position_sold": 0.5,
+          "profit_pct": 88.76,
+          "reason": "RSI_70"
+        }
+      ],
+      "exit_date": "2024-03-04",
+      "exit_price": 8.4,
+      "profit_pct": 79.21,
+      "exit_reason": "RSI_70"
+    },
+    {
+      "symbol": "ELSH",
+      "status": "CLOSED",
+      "entry_date": "2024-03-25",
+      "entry_price": 6.08,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2024-05-06",
+          "price": 5.61,
+          "position_sold": 1.0,
+          "profit_pct": -7.73,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2024-05-06",
+      "exit_price": 5.61,
+      "profit_pct": -7.73,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "ARAB",
+      "status": "CLOSED",
+      "entry_date": "2024-04-29",
+      "entry_price": 0.37,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2024-05-06",
+          "price": 0.35,
+          "position_sold": 1.0,
+          "profit_pct": -5.41,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2024-05-06",
+      "exit_price": 0.35,
+      "profit_pct": -5.41,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "EGAS",
+      "status": "CLOSED",
+      "entry_date": "2024-05-06",
+      "entry_price": 23.4,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2024-09-16",
+          "price": 33.95,
+          "position_sold": 0.5,
+          "profit_pct": 45.09,
+          "reason": "RSI_60"
+        },
+        {
+          "date": "2024-09-23",
+          "price": 46.99,
+          "position_sold": 0.5,
+          "profit_pct": 100.81,
+          "reason": "RSI_70"
+        }
+      ],
+      "exit_date": "2024-09-23",
+      "exit_price": 46.99,
+      "profit_pct": 72.95,
+      "exit_reason": "RSI_70"
+    },
+    {
+      "symbol": "ARAB",
+      "status": "CLOSED",
+      "entry_date": "2024-05-13",
+      "entry_price": 0.35,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2024-10-07",
+          "price": 0.33,
+          "position_sold": 1.0,
+          "profit_pct": -5.71,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2024-10-07",
+      "exit_price": 0.33,
+      "profit_pct": -5.71,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "PRMH",
+      "status": "CLOSED",
+      "entry_date": "2024-05-13",
+      "entry_price": 0.58,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2024-12-09",
+          "price": 0.68,
+          "position_sold": 0.5,
+          "profit_pct": 17.24,
+          "reason": "RSI_60"
+        },
+        {
+          "date": "2025-02-17",
+          "price": 0.74,
+          "position_sold": 0.5,
+          "profit_pct": 27.59,
+          "reason": "RSI_70"
+        }
+      ],
+      "exit_date": "2025-02-17",
+      "exit_price": 0.74,
+      "profit_pct": 22.41,
+      "exit_reason": "RSI_70"
+    },
+    {
+      "symbol": "EAST",
+      "status": "CLOSED",
+      "entry_date": "2024-05-27",
+      "entry_price": 19.33,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2024-06-10",
+          "price": 17.05,
+          "position_sold": 1.0,
+          "profit_pct": -11.8,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2024-06-10",
+      "exit_price": 17.05,
+      "profit_pct": -11.8,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "EAST",
+      "status": "CLOSED",
+      "entry_date": "2024-06-17",
+      "entry_price": 17.77,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2024-10-14",
+          "price": 27.54,
+          "position_sold": 0.5,
+          "profit_pct": 54.98,
+          "reason": "RSI_60"
+        },
+        {
+          "date": "2025-08-04",
+          "price": 38.97,
+          "position_sold": 0.5,
+          "profit_pct": 119.3,
+          "reason": "RSI_70"
+        }
+      ],
+      "exit_date": "2025-08-04",
+      "exit_price": 38.97,
+      "profit_pct": 87.14,
+      "exit_reason": "RSI_70"
+    },
+    {
+      "symbol": "RAYA",
+      "status": "CLOSED",
+      "entry_date": "2024-06-17",
+      "entry_price": 1.96,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2025-06-30",
+          "price": 3.18,
+          "position_sold": 0.5,
+          "profit_pct": 62.24,
+          "reason": "RSI_60"
+        },
+        {
+          "date": "2025-12-29",
+          "price": 3.6,
+          "position_sold": 0.5,
+          "profit_pct": 83.67,
+          "reason": "RSI_70"
+        }
+      ],
+      "exit_date": "2025-12-29",
+      "exit_price": 3.6,
+      "profit_pct": 72.95,
+      "exit_reason": "RSI_70"
+    },
+    {
+      "symbol": "EPPK",
+      "status": "CLOSED",
+      "entry_date": "2024-07-29",
+      "entry_price": 6.91,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2024-08-26",
+          "price": 8.34,
+          "position_sold": 0.5,
+          "profit_pct": 20.69,
+          "reason": "RSI_60"
+        },
+        {
+          "date": "2025-01-06",
+          "price": 12.64,
+          "position_sold": 0.5,
+          "profit_pct": 82.92,
+          "reason": "RSI_70"
+        }
+      ],
+      "exit_date": "2025-01-06",
+      "exit_price": 12.64,
+      "profit_pct": 51.8,
+      "exit_reason": "RSI_70"
+    },
+    {
+      "symbol": "MHOT",
+      "status": "CLOSED",
+      "entry_date": "2024-07-29",
+      "entry_price": 25.03,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2024-09-30",
+          "price": 23.58,
+          "position_sold": 1.0,
+          "profit_pct": -5.79,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2024-09-30",
+      "exit_price": 23.58,
+      "profit_pct": -5.79,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "ICFC",
+      "status": "CLOSED",
+      "entry_date": "2024-08-05",
+      "entry_price": 12.0,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2024-08-12",
+          "price": 10.96,
+          "position_sold": 1.0,
+          "profit_pct": -8.67,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2024-08-12",
+      "exit_price": 10.96,
+      "profit_pct": -8.67,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "ICFC",
+      "status": "CLOSED",
+      "entry_date": "2024-08-19",
+      "entry_price": 9.98,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2024-09-02",
+          "price": 9.15,
+          "position_sold": 1.0,
+          "profit_pct": -8.32,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2024-09-02",
+      "exit_price": 9.15,
+      "profit_pct": -8.32,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "ICFC",
+      "status": "CLOSED",
+      "entry_date": "2024-09-09",
+      "entry_price": 11.14,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2024-09-30",
+          "price": 10.22,
+          "position_sold": 1.0,
+          "profit_pct": -8.26,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2024-09-30",
+      "exit_price": 10.22,
+      "profit_pct": -8.26,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "ICFC",
+      "status": "CLOSED",
+      "entry_date": "2024-10-07",
+      "entry_price": 9.67,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2025-03-03",
+          "price": 15.89,
+          "position_sold": 0.5,
+          "profit_pct": 64.32,
+          "reason": "RSI_60"
+        },
+        {
+          "date": "2025-03-17",
+          "price": 20.6,
+          "position_sold": 0.5,
+          "profit_pct": 113.03,
+          "reason": "RSI_70"
+        }
+      ],
+      "exit_date": "2025-03-17",
+      "exit_price": 20.6,
+      "profit_pct": 88.67,
+      "exit_reason": "RSI_70"
+    },
+    {
+      "symbol": "MHOT",
+      "status": "CLOSED",
+      "entry_date": "2024-10-07",
+      "entry_price": 23.23,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2026-04-27",
+          "price": 27.85,
+          "position_sold": 0.5,
+          "profit_pct": 19.89,
+          "reason": "RSI_60"
+        },
+        {
+          "date": "2026-05-18",
+          "price": 32.23,
+          "position_sold": 0.5,
+          "profit_pct": 38.74,
+          "reason": "RSI_70"
+        }
+      ],
+      "exit_date": "2026-05-18",
+      "exit_price": 32.23,
+      "profit_pct": 29.32,
+      "exit_reason": "RSI_70"
+    },
+    {
+      "symbol": "ARAB",
+      "status": "CLOSED",
+      "entry_date": "2024-10-14",
+      "entry_price": 0.32,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2025-03-03",
+          "price": 0.27,
+          "position_sold": 1.0,
+          "profit_pct": -15.62,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2025-03-03",
+      "exit_price": 0.27,
+      "profit_pct": -15.62,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "NCCW",
+      "status": "CLOSED",
+      "entry_date": "2024-10-14",
+      "entry_price": 3.75,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2025-04-28",
+          "price": 4.39,
+          "position_sold": 0.5,
+          "profit_pct": 17.07,
+          "reason": "RSI_60"
+        },
+        {
+          "date": "2025-05-05",
+          "price": 4.66,
+          "position_sold": 0.5,
+          "profit_pct": 24.27,
+          "reason": "RSI_70"
+        }
+      ],
+      "exit_date": "2025-05-05",
+      "exit_price": 4.66,
+      "profit_pct": 20.67,
+      "exit_reason": "RSI_70"
+    },
+    {
+      "symbol": "SKPC",
+      "status": "CLOSED",
+      "entry_date": "2024-12-16",
+      "entry_price": 19.59,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2024-12-23",
+          "price": 18.2,
+          "position_sold": 1.0,
+          "profit_pct": -7.1,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2024-12-23",
+      "exit_price": 18.2,
+      "profit_pct": -7.1,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "SUGR",
+      "status": "CLOSED",
+      "entry_date": "2024-12-23",
+      "entry_price": 49.3,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2025-06-16",
+          "price": 46.38,
+          "position_sold": 1.0,
+          "profit_pct": -5.92,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2025-06-16",
+      "exit_price": 46.38,
+      "profit_pct": -5.92,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "BTFH",
+      "status": "CLOSED",
+      "entry_date": "2025-01-06",
+      "entry_price": 2.39,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2025-02-17",
+          "price": 2.24,
+          "position_sold": 1.0,
+          "profit_pct": -6.28,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2025-02-17",
+      "exit_price": 2.24,
+      "profit_pct": -6.28,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "ROTO",
+      "status": "CLOSED",
+      "entry_date": "2025-01-20",
+      "entry_price": 27.62,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2025-02-03",
+          "price": 24.93,
+          "position_sold": 1.0,
+          "profit_pct": -9.74,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2025-02-03",
+      "exit_price": 24.93,
+      "profit_pct": -9.74,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "ROTO",
+      "status": "CLOSED",
+      "entry_date": "2025-02-10",
+      "entry_price": 26.17,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2025-03-17",
+          "price": 24.52,
+          "position_sold": 1.0,
+          "profit_pct": -6.3,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2025-03-17",
+      "exit_price": 24.52,
+      "profit_pct": -6.3,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "ARAB",
+      "status": "CLOSED",
+      "entry_date": "2025-03-10",
+      "entry_price": 0.23,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2025-06-16",
+          "price": 0.21,
+          "position_sold": 1.0,
+          "profit_pct": -8.7,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2025-06-16",
+      "exit_price": 0.21,
+      "profit_pct": -8.7,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "BTFH",
+      "status": "CLOSED",
+      "entry_date": "2025-03-17",
+      "entry_price": 2.18,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2025-03-31",
+          "price": 2.03,
+          "position_sold": 1.0,
+          "profit_pct": -6.88,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2025-03-31",
+      "exit_price": 2.03,
+      "profit_pct": -6.88,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "BTFH",
+      "status": "CLOSED",
+      "entry_date": "2025-04-07",
+      "entry_price": 2.04,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2025-05-19",
+          "price": 2.94,
+          "position_sold": 0.5,
+          "profit_pct": 44.12,
+          "reason": "RSI_60"
+        },
+        {
+          "date": "2025-06-16",
+          "price": 3.23,
+          "position_sold": 0.5,
+          "profit_pct": 58.33,
+          "reason": "RSI_70"
+        }
+      ],
+      "exit_date": "2025-06-16",
+      "exit_price": 3.23,
+      "profit_pct": 51.22,
+      "exit_reason": "RSI_70"
+    },
+    {
+      "symbol": "EFIH",
+      "status": "CLOSED",
+      "entry_date": "2025-05-19",
+      "entry_price": 13.18,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2025-06-09",
+          "price": 11.59,
+          "position_sold": 1.0,
+          "profit_pct": -12.06,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2025-06-09",
+      "exit_price": 11.59,
+      "profit_pct": -12.06,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "FAIT",
+      "status": "CLOSED",
+      "entry_date": "2025-05-19",
+      "entry_price": 31.24,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2025-08-25",
+          "price": 29.35,
+          "position_sold": 1.0,
+          "profit_pct": -6.05,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2025-08-25",
+      "exit_price": 29.35,
+      "profit_pct": -6.05,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "ADIB",
+      "status": "CLOSED",
+      "entry_date": "2025-05-26",
+      "entry_price": 21.86,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2025-08-25",
+          "price": 20.73,
+          "position_sold": 1.0,
+          "profit_pct": -5.17,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2025-08-25",
+      "exit_price": 20.73,
+      "profit_pct": -5.17,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "EGSA",
+      "status": "CLOSED",
+      "entry_date": "2025-06-09",
+      "entry_price": 6.45,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2025-09-08",
+          "price": 6.95,
+          "position_sold": 0.5,
+          "profit_pct": 7.75,
+          "reason": "RSI_60"
+        },
+        {
+          "date": "2026-03-16",
+          "price": 7.47,
+          "position_sold": 0.5,
+          "profit_pct": 15.81,
+          "reason": "RSI_70"
+        }
+      ],
+      "exit_date": "2026-03-16",
+      "exit_price": 7.47,
+      "profit_pct": 11.78,
+      "exit_reason": "RSI_70"
+    },
+    {
+      "symbol": "EFIH",
+      "status": "CLOSED",
+      "entry_date": "2025-06-16",
+      "entry_price": 11.3,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2025-11-10",
+          "price": 16.59,
+          "position_sold": 0.5,
+          "profit_pct": 46.81,
+          "reason": "RSI_60"
+        },
+        {
+          "date": "2025-12-08",
+          "price": 18.6,
+          "position_sold": 0.5,
+          "profit_pct": 64.6,
+          "reason": "RSI_70"
+        }
+      ],
+      "exit_date": "2025-12-08",
+      "exit_price": 18.6,
+      "profit_pct": 55.7,
+      "exit_reason": "RSI_70"
+    },
+    {
+      "symbol": "ARAB",
+      "status": "CLOSED",
+      "entry_date": "2025-07-14",
+      "entry_price": 0.2,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2025-07-28",
+          "price": 0.19,
+          "position_sold": 1.0,
+          "profit_pct": -5.0,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2025-07-28",
+      "exit_price": 0.19,
+      "profit_pct": -5.0,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "ARAB",
+      "status": "CLOSED",
+      "entry_date": "2025-08-04",
+      "entry_price": 0.19,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2025-09-15",
+          "price": 0.18,
+          "position_sold": 1.0,
+          "profit_pct": -5.26,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2025-09-15",
+      "exit_price": 0.18,
+      "profit_pct": -5.26,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "OCDI",
+      "status": "CLOSED",
+      "entry_date": "2025-08-11",
+      "entry_price": 16.0,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2025-08-25",
+          "price": 14.79,
+          "position_sold": 1.0,
+          "profit_pct": -7.56,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2025-08-25",
+      "exit_price": 14.79,
+      "profit_pct": -7.56,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "ADIB",
+      "status": "CLOSED",
+      "entry_date": "2025-09-01",
+      "entry_price": 20.61,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2025-12-22",
+          "price": 29.4,
+          "position_sold": 0.5,
+          "profit_pct": 42.65,
+          "reason": "RSI_60"
+        },
+        {
+          "date": "2026-01-19",
+          "price": 36.25,
+          "position_sold": 0.5,
+          "profit_pct": 75.89,
+          "reason": "RSI_70"
+        }
+      ],
+      "exit_date": "2026-01-19",
+      "exit_price": 36.25,
+      "profit_pct": 59.27,
+      "exit_reason": "RSI_70"
+    },
+    {
+      "symbol": "OCDI",
+      "status": "CLOSED",
+      "entry_date": "2025-09-01",
+      "entry_price": 15.5,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2026-06-22",
+          "price": 24.39,
+          "position_sold": 0.5,
+          "profit_pct": 57.35,
+          "reason": "RSI_60"
+        },
+        {
+          "date": "2026-07-13",
+          "price": 28.0,
+          "position_sold": 0.5,
+          "profit_pct": 80.65,
+          "reason": "RSI_70"
+        }
+      ],
+      "exit_date": "2026-07-13",
+      "exit_price": 28.0,
+      "profit_pct": 69.0,
+      "exit_reason": "RSI_70"
+    },
+    {
+      "symbol": "FAIT",
+      "status": "CLOSED",
+      "entry_date": "2025-09-08",
+      "entry_price": 27.93,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2025-10-27",
+          "price": 32.5,
+          "position_sold": 0.5,
+          "profit_pct": 16.36,
+          "reason": "RSI_60"
+        },
+        {
+          "date": "2026-08-10",
+          "price": 40.81,
+          "position_sold": 0.5,
+          "profit_pct": 46.12,
+          "reason": "RSI_70"
+        }
+      ],
+      "exit_date": "2026-08-10",
+      "exit_price": 40.81,
+      "profit_pct": 31.24,
+      "exit_reason": "RSI_70"
+    },
+    {
+      "symbol": "HELI",
+      "status": "CLOSED",
+      "entry_date": "2025-09-15",
+      "entry_price": 3.31,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2025-10-06",
+          "price": 3.14,
+          "position_sold": 1.0,
+          "profit_pct": -5.14,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2025-10-06",
+      "exit_price": 3.14,
+      "profit_pct": -5.14,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "MTIE",
+      "status": "CLOSED",
+      "entry_date": "2025-09-15",
+      "entry_price": 6.11,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2026-02-09",
+          "price": 8.57,
+          "position_sold": 0.5,
+          "profit_pct": 40.26,
+          "reason": "RSI_60"
+        },
+        {
+          "date": "2026-04-27",
+          "price": 9.85,
+          "position_sold": 0.5,
+          "profit_pct": 61.21,
+          "reason": "RSI_70"
+        }
+      ],
+      "exit_date": "2026-04-27",
+      "exit_price": 9.85,
+      "profit_pct": 50.73,
+      "exit_reason": "RSI_70"
+    },
+    {
+      "symbol": "ARAB",
+      "status": "CLOSED",
+      "entry_date": "2025-09-22",
+      "entry_price": 0.18,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2025-11-03",
+          "price": 0.17,
+          "position_sold": 1.0,
+          "profit_pct": -5.56,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2025-11-03",
+      "exit_price": 0.17,
+      "profit_pct": -5.56,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "GDWA",
+      "status": "CLOSED",
+      "entry_date": "2025-09-29",
+      "entry_price": 1.37,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2025-10-13",
+          "price": 1.3,
+          "position_sold": 1.0,
+          "profit_pct": -5.11,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2025-10-13",
+      "exit_price": 1.3,
+      "profit_pct": -5.11,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "HELI",
+      "status": "CLOSED",
+      "entry_date": "2025-10-13",
+      "entry_price": 3.25,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2026-04-27",
+          "price": 6.86,
+          "position_sold": 0.5,
+          "profit_pct": 111.08,
+          "reason": "RSI_60"
+        },
+        {
+          "date": "2026-07-06",
+          "price": 7.46,
+          "position_sold": 0.5,
+          "profit_pct": 129.54,
+          "reason": "RSI_70"
+        }
+      ],
+      "exit_date": "2026-07-06",
+      "exit_price": 7.46,
+      "profit_pct": 120.31,
+      "exit_reason": "RSI_70"
+    },
+    {
+      "symbol": "GDWA",
+      "status": "CLOSED",
+      "entry_date": "2025-10-20",
+      "entry_price": 1.17,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2025-11-03",
+          "price": 1.03,
+          "position_sold": 1.0,
+          "profit_pct": -11.97,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2025-11-03",
+      "exit_price": 1.03,
+      "profit_pct": -11.97,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "DSCW",
+      "status": "CLOSED",
+      "entry_date": "2025-10-27",
+      "entry_price": 1.89,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2025-11-17",
+          "price": 1.75,
+          "position_sold": 1.0,
+          "profit_pct": -7.41,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2025-11-17",
+      "exit_price": 1.75,
+      "profit_pct": -7.41,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "GDWA",
+      "status": "CLOSED",
+      "entry_date": "2025-11-10",
+      "entry_price": 1.0,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2025-11-24",
+          "price": 0.95,
+          "position_sold": 1.0,
+          "profit_pct": -5.0,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2025-11-24",
+      "exit_price": 0.95,
+      "profit_pct": -5.0,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "DSCW",
+      "status": "CLOSED",
+      "entry_date": "2025-11-24",
+      "entry_price": 1.73,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2026-02-23",
+          "price": 1.58,
+          "position_sold": 1.0,
+          "profit_pct": -8.67,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2026-02-23",
+      "exit_price": 1.58,
+      "profit_pct": -8.67,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "RMDA",
+      "status": "CLOSED",
+      "entry_date": "2025-11-24",
+      "entry_price": 3.13,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2026-02-23",
+          "price": 4.43,
+          "position_sold": 0.5,
+          "profit_pct": 41.53,
+          "reason": "RSI_60"
+        },
+        {
+          "date": "2026-05-04",
+          "price": 5.03,
+          "position_sold": 0.5,
+          "profit_pct": 60.7,
+          "reason": "RSI_70"
+        }
+      ],
+      "exit_date": "2026-05-04",
+      "exit_price": 5.03,
+      "profit_pct": 51.12,
+      "exit_reason": "RSI_70"
+    },
+    {
+      "symbol": "GDWA",
+      "status": "CLOSED",
+      "entry_date": "2025-12-01",
+      "entry_price": 1.02,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2026-01-12",
+          "price": 0.92,
+          "position_sold": 1.0,
+          "profit_pct": -9.8,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2026-01-12",
+      "exit_price": 0.92,
+      "profit_pct": -9.8,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "SKPC",
+      "status": "CLOSED",
+      "entry_date": "2025-12-29",
+      "entry_price": 15.64,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2026-01-12",
+          "price": 14.4,
+          "position_sold": 1.0,
+          "profit_pct": -7.93,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2026-01-12",
+      "exit_price": 14.4,
+      "profit_pct": -7.93,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "GDWA",
+      "status": "CLOSED",
+      "entry_date": "2026-01-19",
+      "entry_price": 0.9,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2026-01-26",
+          "price": 0.84,
+          "position_sold": 1.0,
+          "profit_pct": -6.67,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2026-01-26",
+      "exit_price": 0.84,
+      "profit_pct": -6.67,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "GDWA",
+      "status": "CLOSED",
+      "entry_date": "2026-02-02",
+      "entry_price": 0.86,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2026-02-23",
+          "price": 0.76,
+          "position_sold": 1.0,
+          "profit_pct": -11.63,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2026-02-23",
+      "exit_price": 0.76,
+      "profit_pct": -11.63,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "NCCW",
+      "status": "OPEN",
+      "entry_date": "2026-02-23",
+      "entry_price": 4.39,
+      "position": 0.5,
+      "sales": [
+        {
+          "date": "2026-06-01",
+          "price": 6.15,
+          "position_sold": 0.5,
+          "profit_pct": 40.09,
+          "reason": "RSI_60"
+        }
+      ],
+      "exit_date": null,
+      "exit_price": null,
+      "profit_pct": null
+    },
+    {
+      "symbol": "GDWA",
+      "status": "OPEN",
+      "entry_date": "2026-03-02",
+      "entry_price": 0.76,
+      "position": 1.0,
+      "sales": [],
+      "exit_date": null,
+      "exit_price": null,
+      "profit_pct": null
+    },
+    {
+      "symbol": "MHOT",
+      "status": "CLOSED",
+      "entry_date": "2026-06-29",
+      "entry_price": 17.4,
+      "position": 1.0,
+      "sales": [
+        {
+          "date": "2026-07-06",
+          "price": 16.5,
+          "position_sold": 1.0,
+          "profit_pct": -5.17,
+          "reason": "HARD_STOP"
+        }
+      ],
+      "exit_date": "2026-07-06",
+      "exit_price": 16.5,
+      "profit_pct": -5.17,
+      "exit_reason": "HARD_STOP"
+    },
+    {
+      "symbol": "HDBK",
+      "status": "OPEN",
+      "entry_date": "2026-07-06",
+      "entry_price": 78.5,
+      "position": 1.0,
+      "sales": [],
+      "exit_date": null,
+      "exit_price": null,
+      "profit_pct": null
+    },
+    {
+      "symbol": "MHOT",
+      "status": "OPEN",
+      "entry_date": "2026-07-13",
+      "entry_price": 16.25,
+      "position": 1.0,
+      "sales": [],
+      "exit_date": null,
+      "exit_price": null,
+      "profit_pct": null
     }
-  },
-  "exit_analysis": {
-    "hard_stop_losses": 13,
-    "rsi_60_winners": 14,
-    "rsi_70_final_exits": 14
-  },
-  "open_positions": []
+  ],
+  "open_positions": [
+    {
+      "symbol": "NCCW",
+      "status": "OPEN",
+      "entry_date": "2026-02-23",
+      "entry_price": 4.39,
+      "position": 0.5,
+      "sales": [
+        {
+          "date": "2026-06-01",
+          "price": 6.15,
+          "position_sold": 0.5,
+          "profit_pct": 40.09,
+          "reason": "RSI_60"
+        }
+      ],
+      "exit_date": null,
+      "exit_price": null,
+      "profit_pct": null
+    },
+    {
+      "symbol": "GDWA",
+      "status": "OPEN",
+      "entry_date": "2026-03-02",
+      "entry_price": 0.76,
+      "position": 1.0,
+      "sales": [],
+      "exit_date": null,
+      "exit_price": null,
+      "profit_pct": null
+    },
+    {
+      "symbol": "HDBK",
+      "status": "OPEN",
+      "entry_date": "2026-07-06",
+      "entry_price": 78.5,
+      "position": 1.0,
+      "sales": [],
+      "exit_date": null,
+      "exit_price": null,
+      "profit_pct": null
+    },
+    {
+      "symbol": "MHOT",
+      "status": "OPEN",
+      "entry_date": "2026-07-13",
+      "entry_price": 16.25,
+      "position": 1.0,
+      "sales": [],
+      "exit_date": null,
+      "exit_price": null,
+      "profit_pct": null
+    }
+  ]
 }
