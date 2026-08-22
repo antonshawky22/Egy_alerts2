@@ -135,27 +135,11 @@ for name, ticker in symbols.items():
         if df.empty or len(df) < 10:
             print(f"📥 Downloading base weekly history for {name} from Yahoo...")
             yf_ticker = "^CASE30" if name == "EGX30" else f"{ticker}.CA"
-            yf_df = yf.download(
-                yf_ticker,
-                period="4y",
-                interval="1wk",
-                auto_adjust=False,
-                progress=False
-            )
-
-            print(f"🔎 {name} Yahoo rows: {len(yf_df)}")
-
+            yf_df = yf.download(yf_ticker, period="2y", interval="1wk", auto_adjust=False, progress=False)
             if not yf_df.empty:
-                print(f"🔎 {name} Yahoo first date: {yf_df.index.min()}")
-                print(f"🔎 {name} Yahoo last date: {yf_df.index.max()}")
-
                 if isinstance(yf_df.columns, pd.MultiIndex):
                     yf_df.columns = yf_df.columns.get_level_values(0)
-
-                df = yf_df.dropna(subset=["Close"])[
-                    ["Open", "High", "Low", "Close", "Volume"]
-                ].copy()
-
+                df = yf_df.dropna(subset=["Close"])[["Open", "High", "Low", "Close", "Volume"]].copy()
                 df.index = pd.to_datetime(df.index).strftime('%Y-%m-%d')
                 df.index.name = "Date"
 
