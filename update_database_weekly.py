@@ -136,6 +136,10 @@ for name, ticker in symbols.items():
             print(f"📥 Downloading base weekly history for {name} from Yahoo...")
             yf_ticker = "^CASE30" if name == "EGX30" else f"{ticker}.CA"
             yf_df = yf.download(yf_ticker, period="4y", interval="1wk", auto_adjust=False, progress=False)
+            print(f"🔎 {name} Yahoo rows: {len(yf_df)}")
+            if not yf_df.empty:
+            print(f"🔎 {name} Yahoo first date: {yf_df.index.min()}")
+            print(f"🔎 {name} Yahoo last date: {yf_df.index.max()}")
             if not yf_df.empty:
                 if isinstance(yf_df.columns, pd.MultiIndex):
                     yf_df.columns = yf_df.columns.get_level_values(0)
