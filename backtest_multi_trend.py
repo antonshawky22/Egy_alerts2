@@ -48,8 +48,8 @@ for name in symbols:
             continue
 
         close = df["Close"]
-        df["EMA10"] = close.ewm(span=10, adjust=False).mean()
-        df["EMA20"] = close.ewm(span=20, adjust=False).mean()
+        df["EMA10"] = close.ewm(span=50, adjust=False).mean()
+        df["EMA20"] = close.ewm(span=100, adjust=False).mean()
 
         prepared_data[name] = df
     except Exception:
