@@ -6,10 +6,10 @@ import numpy as np
 # ============================================================
 # SIMPLE EMA CROSSOVER SYSTEM (EMA10 / EMA20)
 # ============================================================
-
 DB_FILE = "egx_history_database_v2.json"
-RESULTS_FILE = "backtest_ema_cross_results.json"
-TRADES_FILE = "backtest_ema_cross_trades.json"
+RESULTS_FILE = "backtest_results.json"
+TRADES_FILE = "backtest_trades.json"
+
 
 symbols = {
     "OLFI": "OLFI", "EMFD": "EMFD", "ETEL": "ETEL", "EAST": "EAST",
