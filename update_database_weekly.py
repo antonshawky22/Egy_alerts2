@@ -135,7 +135,7 @@ for name, ticker in symbols.items():
         if df.empty or len(df) < 10:
             print(f"📥 Downloading base weekly history for {name} from Yahoo...")
             yf_ticker = "^CASE30" if name == "EGX30" else f"{ticker}.CA"
-            yf_df = yf.download(yf_ticker, period="4y", interval="1wk", auto_adjust=False, progress=False)
+            yf_df = yf.download(yf_ticker, period="8y", interval="1wk", auto_adjust=False, progress=False)
             if not yf_df.empty:
                 if isinstance(yf_df.columns, pd.MultiIndex):
                     yf_df.columns = yf_df.columns.get_level_values(0)
