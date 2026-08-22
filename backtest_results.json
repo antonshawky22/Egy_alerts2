@@ -14,9 +14,31 @@
     "winning_trades": 14,
     "losing_trades": 13,
     "win_rate_percent": 51.85,
-    "compound_portfolio_return_percent": 27693.34,
+    "total_profit_percent": 778.8,
     "average_winning_trade_percent": 64.62,
-    "average_losing_trade_percent": -9.45,
-    "maximum_drawdown_percent": 41.18
-  }
+    "average_losing_trade_percent": -9.68,
+    "maximum_drawdown_percent": 59.25
+  },
+  "entry_rsi_analysis": {
+    "rsi_below_30": {
+      "trades": 10,
+      "winning": 5,
+      "losing": 5,
+      "win_rate_percent": 50.0,
+      "average_profit_percent": 22.15
+    },
+    "rsi_30_to_33": {
+      "trades": 17,
+      "winning": 9,
+      "losing": 8,
+      "win_rate_percent": 52.94,
+      "average_profit_percent": 32.78
+    }
+  },
+  "exit_analysis": {
+    "hard_stop_losses": 13,
+    "rsi_60_winners": 14,
+    "rsi_70_final_exits": 14
+  },
+  "open_positions": []
 }
