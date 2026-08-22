@@ -7,14 +7,14 @@
     "rsi_sell_2": 70,
     "first_sell_percent": 50,
     "second_sell_percent": 50,
-    "ema20_direction_filter": "EMA20 > previous EMA20",
+    "ema20_direction_filter": "EMA20 > EMA20 from 3 weeks ago",
     "hard_stop_percent": 5.0
   },
   "statistics": {
     "total_trades": 0,
     "winning_trades": 0,
     "losing_trades": 0,
-    "win_rate_percent": 0,
+    "win_rate_percent": 0.0,
     "compound_portfolio_return_percent": 0.0,
     "average_winning_trade_percent": 0.0,
     "average_losing_trade_percent": 0.0,
