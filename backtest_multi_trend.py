@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 # ============================================================
-# OPTIMIZED GOLDEN CROSS SYSTEM (FOR 8-MONTH HISTORICAL DATA)
+# HIGH-PRECISION TREND CROSSOVER SYSTEM (EMA20/50 + VOL + RSI)
 # ============================================================
 
 DB_FILE = "egx_history_database_v2.json"
@@ -55,15 +55,14 @@ for name in symbols:
         df.index = pd.to_datetime(df.index)
         df = df.sort_index(ascending=True)
 
-        if len(df) < 50: # تعديل الحد الأدنى ليتناسب مع 8 أشهر
+        if len(df) < 50:
             continue
 
         close = df["Close"]
         volume = df["Volume"] if "Volume" in df.columns else pd.Series(1, index=df.index)
 
-        df["EMA10"] = close.ewm(span=10, adjust=False).mean()
         df["EMA20"] = close.ewm(span=20, adjust=False).mean()
-        df["EMA50"] = close.ewm(span=50, adjust=False).mean() # استبدال EMA200 بـ EMA50
+        df["EMA50"] = close.ewm(span=50, adjust=False).mean()
         df["RSI"] = rsi(close)
         df["VOL_MA20"] = volume.rolling(window=20).mean()
 
@@ -71,23 +70,13 @@ for name in symbols:
     except Exception:
         pass
 
-all_dates = set()
-for df in prepared_data.values():
-    all_dates.update(df.index)
-all_dates = sorted(all_dates)
+all_dates = sorted(set().union(*[df.index for df in prepared_data.values()]))
 
 # ============================================================
 # STATE TRACKING & BACKTEST LOOP
 # ============================================================
 
-states = {
-    name: {
-        "position": 0.0,
-        "entry_price": 0.0,
-        "peak_price": 0.0
-    } for name in prepared_data
-}
-
+states = {name: {"position": 0.0, "entry_price": 0.0, "peak_price": 0.0} for name in prepared_data}
 trades_history = []
 total_portfolio_profit = 0.0
 portfolio_equity_curve = []
@@ -103,7 +92,7 @@ for current_date in all_dates:
 
         df_slice = df.iloc[: idx + 1]
         
-        if df_slice[["Close", "EMA10", "EMA20", "EMA50", "RSI"]].iloc[-1].isna().any():
+        if df_slice[["Close", "EMA20", "EMA50", "RSI"]].iloc[-1].isna().any():
             continue
 
         date_str = current_date.strftime("%Y-%m-%d")
@@ -112,20 +101,19 @@ for current_date in all_dates:
         volume_curr = float(df_slice["Volume"].iloc[-1]) if "Volume" in df_slice.columns else 1.0
         vol_ma = float(df_slice["VOL_MA20"].iloc[-1]) if "VOL_MA20" in df_slice.columns else 1.0
         
-        ema10_curr = float(df_slice["EMA10"].iloc[-1])
         ema20_curr = float(df_slice["EMA20"].iloc[-1])
         ema50_curr = float(df_slice["EMA50"].iloc[-1])
         
-        ema10_prev = float(df_slice["EMA10"].iloc[-2])
         ema20_prev = float(df_slice["EMA20"].iloc[-2])
+        ema50_prev = float(df_slice["EMA50"].iloc[-2])
 
-        # شروط التقاطع والفلترة
-        golden_cross = (ema10_prev <= ema20_prev) and (ema10_curr > ema20_curr)
-        death_cross = (ema10_prev >= ema20_prev) and (ema10_curr < ema20_curr)
+        # 🎯 شروط فلترة صارمة جداً لتقليل الصفقات
+        golden_cross = (ema20_prev <= ema50_prev) and (ema20_curr > ema50_curr)
+        death_cross = (ema20_prev >= ema50_prev) and (ema20_curr < ema50_curr)
         
-        above_mid_trend = price > ema50_curr
-        rsi_valid_buy = rsi_val <= 68.0
-        volume_confirmed = volume_curr >= (vol_ma * 1.05) if not np.isnan(vol_ma) else True
+        not_overextended = price <= (ema50_curr * 1.05)       # السعر غير مبتعد عن المتوسط بأكثر من 5%
+        strict_rsi_buy = 38.0 <= rsi_val <= 58.0              # شراء فقط في بداية الزخم
+        high_volume = volume_curr >= (vol_ma * 1.3)          # شرط سيولة قوي (أعلى بـ 30%)
 
         s = states[name]
 
@@ -135,8 +123,8 @@ for current_date in all_dates:
             if price > s["peak_price"]:
                 s["peak_price"] = price
 
-        # 🟢 دخول (Golden Cross)
-        if s["position"] == 0.0 and golden_cross and above_mid_trend and rsi_valid_buy and volume_confirmed:
+        # 🟢 دخول بحجم صفقات أقل وبأعلى دقة
+        if s["position"] == 0.0 and golden_cross and not_overextended and strict_rsi_buy and high_volume:
             s["position"] = 1.0
             s["entry_price"] = price
             s["peak_price"] = price
@@ -151,13 +139,13 @@ for current_date in all_dates:
                 "profit_pct": None
             })
 
-        # 🔴 خروج
+        # 🔴 خروج احترافي (الاستفادة من أقصى ربح + حماية من الارتداد)
         elif s["position"] == 1.0:
             peak_profit = ((s["peak_price"] - s["entry_price"]) / s["entry_price"]) * 100
             
-            hard_stop = profit <= -5.0
-            trailing_stop = (peak_profit >= 8.0) and ((s["peak_price"] - price) / s["peak_price"] * 100 >= 3.5)
-            rsi_target = rsi_val >= 72.0
+            hard_stop = profit <= -4.5
+            trailing_stop = (peak_profit >= 10.0) and ((s["peak_price"] - price) / s["peak_price"] * 100 >= 4.0)
+            rsi_target = (rsi_val >= 75.0) and (profit >= 6.0)
             
             exit_triggered = death_cross or hard_stop or trailing_stop or rsi_target
 
@@ -217,7 +205,7 @@ with open(TRADES_FILE, "w", encoding="utf-8") as f:
     json.dump(trades_history, f, indent=2, ensure_ascii=False)
 
 print("\n" + "=" * 60)
-print("FILTERED GOLDEN CROSS SYSTEM (8-MONTH OPTIMIZED) COMPLETE")
+print("HIGH-PRECISION CROSSOVER SYSTEM COMPLETE")
 print("=" * 60)
 print(f"Total Closed Trades: {total_count}")
 print(f"Win Rate:            {win_rate:.2f}%")
