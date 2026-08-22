@@ -1,5 +1,5 @@
 {
-  "strategy": "Weekly RSI 33/60/70 + EMA20 Direction",
+  "strategy": "Weekly RSI 33/60/70",
   "parameters": {
     "rsi_period": 14,
     "rsi_buy": 33,
@@ -7,17 +7,16 @@
     "rsi_sell_2": 70,
     "first_sell_percent": 50,
     "second_sell_percent": 50,
-    "ema20_direction_filter": "EMA20 > EMA20 from 3 weeks ago",
     "hard_stop_percent": 5.0
   },
   "statistics": {
-    "total_trades": 0,
-    "winning_trades": 0,
-    "losing_trades": 0,
-    "win_rate_percent": 0.0,
-    "compound_portfolio_return_percent": 0.0,
-    "average_winning_trade_percent": 0.0,
-    "average_losing_trade_percent": 0.0,
-    "maximum_drawdown_percent": 0.0
+    "total_trades": 27,
+    "winning_trades": 14,
+    "losing_trades": 13,
+    "win_rate_percent": 51.85,
+    "compound_portfolio_return_percent": 27693.34,
+    "average_winning_trade_percent": 64.62,
+    "average_losing_trade_percent": -9.45,
+    "maximum_drawdown_percent": 41.18
   }
 }
