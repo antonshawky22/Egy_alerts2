@@ -1,805 +1,682 @@
 import json
 import os
-import numpy as np
 import pandas as pd
-
-# ============================================================
-# WEEKLY RSI 33/60/70 BACKTEST
-# ============================================================
+import numpy as np
 
 DB_FILE = "egx_weekly_database_v1.json"
-RESULTS_FILE = "backtest_results.json"
-TRADES_FILE = "backtest_trades.json"
+OUTPUT_FILE = "backtest_results.json"
 
 RSI_PERIOD = 14
 RSI_BUY = 33
 RSI_SELL_1 = 60
 RSI_SELL_2 = 70
 
-FIRST_SELL_PERCENT = 0.50
-SECOND_SELL_PERCENT = 0.50
+FIRST_SELL = 0.50
+SECOND_SELL = 0.50
 
-HARD_STOP_PERCENT = 5.0
+HARD_STOP = 0.05
+BREAK_EVEN_AFTER_FIRST_SELL = True
 
-symbols = {
-    "OLFI": "OLFI",
-    "EMFD": "EMFD",
-    "ETEL": "ETEL",
-    "EAST": "EAST",
-    "EFIH": "EFIH",
-    "ABUK": "ABUK",
-    "OIH": "OIH",
-    "SWDY": "SWDY",
-    "ISPH": "ISPH",
-    "ATQA": "ATQA",
-    "MTIE": "MTIE",
-    "HRHO": "HRHO",
-    "ORWE": "ORWE",
-    "JUFO": "JUFO",
-    "DSCW": "DSCW",
-    "SUGR": "SUGR",
-    "ELSH": "ELSH",
-    "RMDA": "RMDA",
-    "RAYA": "RAYA",
-    "EEII": "EEII",
-    "MPCO": "MPCO",
-    "GBCO": "GBCO",
-    "TMGH": "TMGH",
-    "ORHD": "ORHD",
-    "AMOC": "AMOC",
-    "FWRY": "FWRY",
-    "COMI": "COMI",
-    "ADIB": "ADIB",
-    "PHDC": "PHDC",
-    "MCQE": "MCQE",
-    "SKPC": "SKPC",
-    "EGAL": "EGAL"
-}
-
-# ============================================================
-# RSI
-# ============================================================
 
 def calculate_rsi(series, period=14):
     delta = series.diff()
-
     gain = delta.clip(lower=0)
     loss = -delta.clip(upper=0)
 
     avg_gain = gain.ewm(
         alpha=1 / period,
-        adjust=False,
-        min_periods=period
+        min_periods=period,
+        adjust=False
     ).mean()
 
     avg_loss = loss.ewm(
         alpha=1 / period,
-        adjust=False,
-        min_periods=period
+        min_periods=period,
+        adjust=False
     ).mean()
 
     rs = avg_gain / avg_loss.replace(0, np.nan)
-
     rsi = 100 - (100 / (1 + rs))
 
-    rsi = rsi.where(
-        avg_loss != 0,
-        100
-    )
+    return rsi.fillna(50)
 
-    return rsi
 
-# ============================================================
-# LOAD DATABASE
-# ============================================================
-
-if not os.path.exists(DB_FILE):
-    raise FileNotFoundError(
-        f"Database file not found: {DB_FILE}"
-    )
-
-with open(DB_FILE, "r", encoding="utf-8") as f:
-    raw_database = json.load(f)
-
-prepared_data = {}
-
-for name in symbols:
-    if name not in raw_database:
-        continue
-
-    content = raw_database[name]
-
-    if "data" not in content or "columns" not in content:
-        continue
-
-    try:
-        df = pd.DataFrame.from_dict(
-            content["data"],
-            orient="index",
-            columns=content["columns"]
+def load_database():
+    if not os.path.exists(DB_FILE):
+        raise FileNotFoundError(
+            f"Database not found: {DB_FILE}"
         )
 
-        df.index = pd.to_datetime(df.index)
-        df = df.sort_index()
+    with open(DB_FILE, "r", encoding="utf-8") as f:
+        return json.load(f)
 
-        if len(df) < RSI_PERIOD + 5:
+
+def database_to_dataframe(raw):
+    rows = []
+
+    if not isinstance(raw, dict):
+        return pd.DataFrame()
+
+    for symbol, value in raw.items():
+
+        if symbol == "EGX30":
             continue
 
-        df["Close"] = pd.to_numeric(
-            df["Close"],
+        if isinstance(value, dict):
+
+            data = value.get("data")
+
+            if isinstance(data, dict):
+                for date, prices in data.items():
+                    if isinstance(prices, dict):
+                        row = {
+                            "Date": date,
+                            "Open": prices.get("Open"),
+                            "High": prices.get("High"),
+                            "Low": prices.get("Low"),
+                            "Close": prices.get("Close"),
+                            "Volume": prices.get("Volume"),
+                            "Symbol": symbol
+                        }
+                        rows.append(row)
+
+            elif isinstance(value.get("rows"), list):
+                for item in value["rows"]:
+                    if not isinstance(item, dict):
+                        continue
+
+                    row = dict(item)
+                    row["Symbol"] = symbol
+                    rows.append(row)
+
+        elif isinstance(value, list):
+            for item in value:
+                if not isinstance(item, dict):
+                    continue
+
+                row = dict(item)
+                row["Symbol"] = symbol
+                rows.append(row)
+
+    return pd.DataFrame(rows)
+
+
+def prepare_dataframe(df):
+    if df.empty:
+        return df
+
+    df = df.copy()
+
+    date_col = None
+
+    for col in ["Date", "date", "Datetime", "datetime"]:
+        if col in df.columns:
+            date_col = col
+            break
+
+    if date_col is None:
+        return pd.DataFrame()
+
+    df["Date"] = pd.to_datetime(
+        df[date_col],
+        errors="coerce"
+    )
+
+    rename = {}
+
+    for col in df.columns:
+        low = str(col).lower()
+
+        if low == "open":
+            rename[col] = "Open"
+        elif low == "high":
+            rename[col] = "High"
+        elif low == "low":
+            rename[col] = "Low"
+        elif low == "close":
+            rename[col] = "Close"
+        elif low == "volume":
+            rename[col] = "Volume"
+
+    df = df.rename(columns=rename)
+
+    required = ["Date", "Close"]
+
+    if any(x not in df.columns for x in required):
+        return pd.DataFrame()
+
+    df["Close"] = pd.to_numeric(
+        df["Close"],
+        errors="coerce"
+    )
+
+    if "Low" in df.columns:
+        df["Low"] = pd.to_numeric(
+            df["Low"],
             errors="coerce"
         )
 
-        df = df.dropna(subset=["Close"])
+    df = df.dropna(
+        subset=["Date", "Close"]
+    )
 
-        df["RSI14"] = calculate_rsi(
-            df["Close"],
-            RSI_PERIOD
+    df = df[df["Close"] > 0]
+
+    df = df.sort_values("Date")
+
+    df = df.drop_duplicates(
+        subset=["Date"],
+        keep="last"
+    )
+
+    df["RSI14"] = calculate_rsi(
+        df["Close"],
+        RSI_PERIOD
+    )
+
+    return df.reset_index(drop=True)
+
+
+def weighted_profit(sales):
+    total = 0.0
+
+    for sale in sales:
+        total += (
+            sale["profit_pct"] *
+            sale["position_sold"]
         )
 
-        prepared_data[name] = df
+    return total
 
-    except Exception as e:
-        print(f"Skipping {name}: {e}")
 
-if not prepared_data:
-    raise RuntimeError("No valid stock data found.")
+def backtest_symbol(symbol, df):
 
-all_dates = sorted(
-    set().union(
-        *[df.index for df in prepared_data.values()]
-    )
-)
+    if len(df) < RSI_PERIOD + 5:
+        return []
 
-# ============================================================
-# STATE
-# ============================================================
+    trades = []
 
-states = {}
+    in_position = False
+    entry_price = 0.0
+    entry_date = None
 
-for name in prepared_data:
-    states[name] = {
-        "position": 0.0,
-        "entry_price": 0.0,
-        "entry_date": None,
-        "entry_rsi": None,
-        "sales": [],
-        "last_exit_date": None
-    }
+    position = 0.0
+    first_sold = False
 
-trades_history = []
+    sales = []
 
-# ============================================================
-# PORTFOLIO TRACKING
-# ============================================================
+    for i in range(RSI_PERIOD, len(df)):
 
-portfolio_returns = []
-realized_profit = 0.0
+        row = df.iloc[i]
 
-# كل سهم يعامل كصفقة مستقلة.
-# هذا يمنع تضخيم العائد بسبب تركيب أرباح صفقات متداخلة.
-
-# ============================================================
-# BACKTEST
-# ============================================================
-
-for current_date in all_dates:
-
-    for name, df in prepared_data.items():
-
-        if current_date not in df.index:
-            continue
-
-        idx = df.index.get_loc(current_date)
-
-        if idx < RSI_PERIOD:
-            continue
-
-        row = df.iloc[idx]
-
-        price = float(row["Close"])
+        date = row["Date"]
+        close = float(row["Close"])
         rsi = float(row["RSI14"])
 
-        if np.isnan(rsi) or price <= 0:
+        if np.isnan(rsi):
             continue
 
-        date_str = current_date.strftime("%Y-%m-%d")
+        # =========================
+        # ENTRY
+        # =========================
 
-        s = states[name]
+        if not in_position:
 
-        # ====================================================
-        # POSITION OPEN
-        # ====================================================
+            if rsi < RSI_BUY:
 
-        if s["position"] > 0:
+                in_position = True
+                entry_price = close
+                entry_date = date
+                position = 1.0
+                first_sold = False
+                sales = []
 
-            entry_price = s["entry_price"]
+            continue
 
-            profit_pct = (
-                (price - entry_price)
-                / entry_price
-            ) * 100
+        # =========================
+        # STOP LOSS
+        # =========================
 
-            # =================================================
-            # HARD STOP
-            # =================================================
+        stop_price = entry_price * (1 - HARD_STOP)
 
-            hard_stop = (
-                price <=
-                entry_price *
-                (1 - HARD_STOP_PERCENT / 100)
-            )
+        if not first_sold:
 
-            if hard_stop:
+            if close <= stop_price:
 
-                remaining_position = s["position"]
+                profit = (
+                    (close - entry_price) /
+                    entry_price
+                ) * 100
 
-                sale_profit = profit_pct
-
-                s["sales"].append({
-                    "date": date_str,
-                    "price": round(price, 2),
-                    "position_sold": round(
-                        remaining_position,
-                        2
-                    ),
-                    "profit_pct": round(
-                        sale_profit,
-                        2
-                    ),
+                sales.append({
+                    "date": date.strftime("%Y-%m-%d"),
+                    "price": round(close, 4),
+                    "position_sold": 1.0,
+                    "profit_pct": round(profit, 2),
                     "reason": "HARD_STOP"
                 })
 
-                total_profit = 0.0
-
-                for sale in s["sales"]:
-
-                    sale_weight = sale["position_sold"]
-
-                    total_profit += (
-                        sale["profit_pct"]
-                        * sale_weight
-                    )
-
-                trades_history.append({
-                    "symbol": name,
+                trades.append({
+                    "symbol": symbol,
                     "status": "CLOSED",
-                    "entry_date": s["entry_date"],
+                    "entry_date": entry_date.strftime(
+                        "%Y-%m-%d"
+                    ),
                     "entry_price": round(
-                        s["entry_price"],
-                        2
+                        entry_price, 4
                     ),
-                    "entry_rsi": round(
-                        s["entry_rsi"],
-                        2
+                    "position": 1.0,
+                    "sales": sales,
+                    "exit_date": date.strftime(
+                        "%Y-%m-%d"
                     ),
-                    "sales": s["sales"].copy(),
-                    "exit_date": date_str,
-                    "exit_price": round(price, 2),
+                    "exit_price": round(
+                        close, 4
+                    ),
                     "profit_pct": round(
-                        total_profit,
-                        2
+                        profit, 2
                     ),
                     "exit_reason": "HARD_STOP"
                 })
 
-                realized_profit += total_profit
-
-                s["position"] = 0.0
-                s["entry_price"] = 0.0
-                s["entry_date"] = None
-                s["entry_rsi"] = None
-                s["sales"] = []
-                s["last_exit_date"] = current_date
+                in_position = False
+                position = 0.0
+                sales = []
 
                 continue
 
-            # =================================================
-            # FIRST SELL 50% AT RSI 60
-            # =================================================
+        # =========================
+        # FIRST SELL 50%
+        # =========================
 
-            if (
-                s["position"] == 1.0
-                and rsi >= RSI_SELL_1
-            ):
+        if not first_sold and rsi >= RSI_SELL_1:
 
-                sell_position = FIRST_SELL_PERCENT
+            profit = (
+                (close - entry_price) /
+                entry_price
+            ) * 100
 
-                sale_profit = profit_pct
+            sold = FIRST_SELL
 
-                s["sales"].append({
-                    "date": date_str,
-                    "price": round(price, 2),
-                    "position_sold": sell_position,
-                    "profit_pct": round(
-                        sale_profit,
-                        2
-                    ),
-                    "reason": "RSI_60"
-                })
+            sales.append({
+                "date": date.strftime("%Y-%m-%d"),
+                "price": round(close, 4),
+                "position_sold": sold,
+                "profit_pct": round(profit, 2),
+                "reason": "RSI_60"
+            })
 
-                s["position"] = 0.5
+            position -= sold
+            first_sold = True
 
-                continue
+            continue
 
-            # =================================================
-            # SECOND SELL 50% AT RSI 70
-            # =================================================
+        # =========================
+        # BREAK EVEN STOP
+        # =========================
 
-            if (
-                s["position"] == 0.5
-                and rsi >= RSI_SELL_2
-            ):
+        if (
+            first_sold
+            and BREAK_EVEN_AFTER_FIRST_SELL
+            and close <= entry_price
+        ):
 
-                sell_position = SECOND_SELL_PERCENT
+            sold = position
 
-                sale_profit = profit_pct
+            profit = 0.0
 
-                s["sales"].append({
-                    "date": date_str,
-                    "price": round(price, 2),
-                    "position_sold": sell_position,
-                    "profit_pct": round(
-                        sale_profit,
-                        2
-                    ),
-                    "reason": "RSI_70"
-                })
+            sales.append({
+                "date": date.strftime("%Y-%m-%d"),
+                "price": round(close, 4),
+                "position_sold": sold,
+                "profit_pct": round(profit, 2),
+                "reason": "BREAK_EVEN_STOP"
+            })
 
-                total_profit = 0.0
+            total_profit = weighted_profit(sales)
 
-                for sale in s["sales"]:
+            trades.append({
+                "symbol": symbol,
+                "status": "CLOSED",
+                "entry_date": entry_date.strftime(
+                    "%Y-%m-%d"
+                ),
+                "entry_price": round(
+                    entry_price, 4
+                ),
+                "position": 1.0,
+                "sales": sales,
+                "exit_date": date.strftime(
+                    "%Y-%m-%d"
+                ),
+                "exit_price": round(
+                    close, 4
+                ),
+                "profit_pct": round(
+                    total_profit, 2
+                ),
+                "exit_reason": "BREAK_EVEN_STOP"
+            })
 
-                    total_profit += (
-                        sale["profit_pct"]
-                        * sale["position_sold"]
-                    )
+            in_position = False
+            position = 0.0
+            sales = []
 
-                trades_history.append({
-                    "symbol": name,
-                    "status": "CLOSED",
-                    "entry_date": s["entry_date"],
-                    "entry_price": round(
-                        s["entry_price"],
-                        2
-                    ),
-                    "entry_rsi": round(
-                        s["entry_rsi"],
-                        2
-                    ),
-                    "sales": s["sales"].copy(),
-                    "exit_date": date_str,
-                    "exit_price": round(price, 2),
-                    "profit_pct": round(
-                        total_profit,
-                        2
-                    ),
-                    "exit_reason": "RSI_70"
-                })
+            continue
 
-                realized_profit += total_profit
+        # =========================
+        # SECOND SELL 50%
+        # =========================
 
-                s["position"] = 0.0
-                s["entry_price"] = 0.0
-                s["entry_date"] = None
-                s["entry_rsi"] = None
-                s["sales"] = []
-                s["last_exit_date"] = current_date
+        if first_sold and rsi >= RSI_SELL_2:
 
-                continue
+            sold = position
 
-        # ====================================================
-        # NEW ENTRY
-        # ====================================================
+            profit = (
+                (close - entry_price) /
+                entry_price
+            ) * 100
 
-        if s["position"] == 0.0:
+            sales.append({
+                "date": date.strftime("%Y-%m-%d"),
+                "price": round(close, 4),
+                "position_sold": sold,
+                "profit_pct": round(profit, 2),
+                "reason": "RSI_70"
+            })
 
-            # منع الدخول في نفس تاريخ الخروج
-            if s["last_exit_date"] == current_date:
-                continue
+            total_profit = weighted_profit(sales)
 
-            if rsi < RSI_BUY:
+            trades.append({
+                "symbol": symbol,
+                "status": "CLOSED",
+                "entry_date": entry_date.strftime(
+                    "%Y-%m-%d"
+                ),
+                "entry_price": round(
+                    entry_price, 4
+                ),
+                "position": 1.0,
+                "sales": sales,
+                "exit_date": date.strftime(
+                    "%Y-%m-%d"
+                ),
+                "exit_price": round(
+                    close, 4
+                ),
+                "profit_pct": round(
+                    total_profit, 2
+                ),
+                "exit_reason": "RSI_70"
+            })
 
-                s["position"] = 1.0
-                s["entry_price"] = price
-                s["entry_date"] = date_str
-                s["entry_rsi"] = rsi
-                s["sales"] = []
+            in_position = False
+            position = 0.0
+            sales = []
 
-    # ========================================================
-    # EQUITY TRACKING
-    # ========================================================
+            continue
 
-    current_equity = 0.0
+    # =========================
+    # OPEN POSITION
+    # =========================
 
-    for name, df in prepared_data.items():
+    if in_position:
 
-        s = states[name]
+        last = df.iloc[-1]
 
-        if s["position"] > 0:
-
-            if current_date in df.index:
-
-                current_price = float(
-                    df.loc[current_date, "Close"]
-                )
-
-                if s["entry_price"] > 0:
-
-                    unrealized = (
-                        (current_price - s["entry_price"])
-                        / s["entry_price"]
-                    ) * s["position"] * 100
-
-                    current_equity += unrealized
-
-    portfolio_returns.append(
-        realized_profit + current_equity
-    )
-
-# ============================================================
-# CLOSE REMAINING OPEN POSITIONS FOR REPORT ONLY
-# ============================================================
-
-open_positions = []
-
-for name, s in states.items():
-
-    if s["position"] > 0:
-
-        df = prepared_data[name]
-
-        last_date = df.index[-1]
-        last_price = float(
-            df["Close"].iloc[-1]
-        )
-
-        open_positions.append({
-            "symbol": name,
+        trades.append({
+            "symbol": symbol,
             "status": "OPEN",
-            "entry_date": s["entry_date"],
-            "entry_price": round(
-                s["entry_price"],
-                2
-            ),
-            "entry_rsi": round(
-                s["entry_rsi"],
-                2
-            ),
-            "current_date": last_date.strftime(
+            "entry_date": entry_date.strftime(
                 "%Y-%m-%d"
             ),
-            "current_price": round(
-                last_price,
-                2
+            "entry_price": round(
+                entry_price, 4
             ),
-            "current_profit_pct": round(
-                (
-                    (last_price - s["entry_price"])
-                    / s["entry_price"]
-                ) * 100,
-                2
+            "position": round(
+                position, 2
             ),
-            "remaining_position": s["position"]
+            "sales": sales,
+            "exit_date": None,
+            "exit_price": None,
+            "profit_pct": None
         })
 
-# ============================================================
-# STATISTICS
-# ============================================================
+    return trades
 
-closed_trades = [
-    t for t in trades_history
-    if t["status"] == "CLOSED"
-]
 
-winning_trades = [
-    t for t in closed_trades
-    if t["profit_pct"] > 0
-]
+def calculate_statistics(trades):
 
-losing_trades = [
-    t for t in closed_trades
-    if t["profit_pct"] <= 0
-]
+    closed = [
+        t for t in trades
+        if t["status"] == "CLOSED"
+    ]
 
-total_count = len(closed_trades)
-wins_count = len(winning_trades)
-losses_count = len(losing_trades)
-
-win_rate = (
-    wins_count / total_count * 100
-    if total_count > 0
-    else 0.0
-)
-
-avg_win = (
-    float(
-        np.mean([
-            t["profit_pct"]
-            for t in winning_trades
-        ])
-    )
-    if winning_trades
-    else 0.0
-)
-
-avg_loss = (
-    float(
-        np.mean([
-            t["profit_pct"]
-            for t in losing_trades
-        ])
-    )
-    if losing_trades
-    else 0.0
-)
-
-# ============================================================
-# MAX DRAWDOWN
-# ============================================================
-
-if portfolio_returns:
-
-    equity = np.array(
-        portfolio_returns,
-        dtype=float
-    )
-
-    equity_curve = 100 + equity
-
-    peak = np.maximum.accumulate(
-        equity_curve
-    )
-
-    drawdown = (
-        (peak - equity_curve)
-        / peak
-    ) * 100
-
-    max_drawdown = float(
-        np.max(drawdown)
-    )
-
-else:
-    max_drawdown = 0.0
-
-# ============================================================
-# ENTRY RSI ANALYSIS
-# ============================================================
-
-rsi_under_30 = [
-    t for t in closed_trades
-    if t["entry_rsi"] < 30
-]
-
-rsi_30_to_33 = [
-    t for t in closed_trades
-    if 30 <= t["entry_rsi"] < 33
-]
-
-rsi_under_30_wins = [
-    t for t in rsi_under_30
-    if t["profit_pct"] > 0
-]
-
-rsi_30_to_33_wins = [
-    t for t in rsi_30_to_33
-    if t["profit_pct"] > 0
-]
-
-def group_stats(group):
-
-    count = len(group)
-
-    wins = len([
-        t for t in group
+    wins = [
+        t for t in closed
         if t["profit_pct"] > 0
-    ])
+    ]
 
-    losses = count - wins
+    losses = [
+        t for t in closed
+        if t["profit_pct"] <= 0
+    ]
 
-    avg_profit = (
-        float(
-            np.mean([
-                t["profit_pct"]
-                for t in group
-            ])
-        )
-        if group
-        else 0.0
+    total = len(closed)
+
+    win_rate = (
+        len(wins) / total * 100
+        if total else 0
     )
 
-    win_rate_group = (
-        wins / count * 100
-        if count > 0
-        else 0.0
+    avg_win = (
+        np.mean([
+            t["profit_pct"]
+            for t in wins
+        ])
+        if wins else 0
     )
+
+    avg_loss = (
+        np.mean([
+            t["profit_pct"]
+            for t in losses
+        ])
+        if losses else 0
+    )
+
+    # ==================================
+    # Compound portfolio return
+    # ==================================
+
+    capital = 1.0
+    equity_curve = [capital]
+
+    for trade in closed:
+
+        ret = trade["profit_pct"] / 100
+
+        capital *= (1 + ret)
+
+        equity_curve.append(capital)
+
+    compound_return = (
+        (capital - 1) * 100
+    )
+
+    # ==================================
+    # Maximum drawdown
+    # ==================================
+
+    peak = equity_curve[0]
+    max_dd = 0.0
+
+    for equity in equity_curve:
+
+        if equity > peak:
+            peak = equity
+
+        if peak > 0:
+
+            dd = (
+                (peak - equity) /
+                peak
+            ) * 100
+
+            max_dd = max(
+                max_dd,
+                dd
+            )
 
     return {
-        "trades": count,
-        "winning": wins,
-        "losing": losses,
+        "total_trades": total,
+        "winning_trades": len(wins),
+        "losing_trades": len(losses),
         "win_rate_percent": round(
-            win_rate_group,
-            2
+            win_rate, 2
         ),
-        "average_profit_percent": round(
-            avg_profit,
-            2
-        )
+        "compound_portfolio_return_percent":
+            round(
+                compound_return,
+                2
+            ),
+        "average_winning_trade_percent":
+            round(avg_win, 2),
+        "average_losing_trade_percent":
+            round(avg_loss, 2),
+        "maximum_drawdown_percent":
+            round(max_dd, 2)
     }
 
-# ============================================================
-# LOSS ANALYSIS
-# ============================================================
 
-hard_stop_losses = [
-    t for t in losing_trades
-    if t["exit_reason"] == "HARD_STOP"
-]
-
-rsi60_winners = [
-    t for t in winning_trades
-    if any(
-        s["reason"] == "RSI_60"
-        for s in t["sales"]
-    )
-]
-
-rsi70_winners = [
-    t for t in winning_trades
-    if t["exit_reason"] == "RSI_70"
-]
-
-# ============================================================
-# RESULTS
-# ============================================================
-
-results_summary = {
-    "strategy": "Weekly RSI 33/60/70",
-    "parameters": {
-        "rsi_period": RSI_PERIOD,
-        "rsi_buy": RSI_BUY,
-        "rsi_sell_1": RSI_SELL_1,
-        "rsi_sell_2": RSI_SELL_2,
-        "first_sell_percent": 50,
-        "second_sell_percent": 50,
-        "hard_stop_percent": HARD_STOP_PERCENT
-    },
-    "statistics": {
-        "total_trades": total_count,
-        "winning_trades": wins_count,
-        "losing_trades": losses_count,
-        "win_rate_percent": round(
-            win_rate,
-            2
-        ),
-        "total_profit_percent": round(
-            realized_profit,
-            2
-        ),
-        "average_winning_trade_percent": round(
-            avg_win,
-            2
-        ),
-        "average_losing_trade_percent": round(
-            avg_loss,
-            2
-        ),
-        "maximum_drawdown_percent": round(
-            max_drawdown,
-            2
-        )
-    },
-    "entry_rsi_analysis": {
-        "rsi_below_30": group_stats(
-            rsi_under_30
-        ),
-        "rsi_30_to_33": group_stats(
-            rsi_30_to_33
-        )
-    },
-    "exit_analysis": {
-        "hard_stop_losses": len(
-            hard_stop_losses
-        ),
-        "rsi_60_winners": len(
-            rsi60_winners
-        ),
-        "rsi_70_final_exits": len(
-            rsi70_winners
-        )
-    },
-    "open_positions": open_positions
-}
-
-# ============================================================
-# SAVE
-# ============================================================
-
-with open(
-    RESULTS_FILE,
-    "w",
-    encoding="utf-8"
-) as f:
-
-    json.dump(
-        results_summary,
-        f,
-        indent=2,
-        ensure_ascii=False
-    )
-
-with open(
-    TRADES_FILE,
-    "w",
-    encoding="utf-8"
-) as f:
-
-    json.dump(
-        trades_history,
-        f,
-        indent=2,
-        ensure_ascii=False
-    )
-
-# ============================================================
-# CONSOLE OUTPUT
-# ============================================================
-
-print("\n" + "=" * 55)
-print("WEEKLY RSI 33/60/70 BACKTEST")
-print("=" * 55)
-
-print(f"Total Trades:       {total_count}")
-print(f"Winning Trades:     {wins_count}")
-print(f"Losing Trades:      {losses_count}")
-print(f"Win Rate:           {win_rate:.2f}%")
-print(f"Total Profit:       {realized_profit:.2f}%")
-print(f"Average Win:        {avg_win:.2f}%")
-print(f"Average Loss:       {avg_loss:.2f}%")
-print(f"Max Drawdown:       {max_drawdown:.2f}%")
-
-print("\n--- ENTRY RSI ANALYSIS ---")
-
-print(
-    f"RSI < 30:           "
-    f"{len(rsi_under_30)} trades | "
-    f"{len(rsi_under_30_wins)} wins"
-)
-
-print(
-    f"RSI 30-33:          "
-    f"{len(rsi_30_to_33)} trades | "
-    f"{len(rsi_30_to_33_wins)} wins"
-)
-
-print("\n--- EXIT ANALYSIS ---")
-
-print(
-    f"Hard Stop Losses:   "
-    f"{len(hard_stop_losses)}"
-)
-
-print(
-    f"RSI 60 Winners:     "
-    f"{len(rsi60_winners)}"
-)
-
-print(
-    f"RSI 70 Final Exits: "
-    f"{len(rsi70_winners)}"
-)
-
-print("\n--- OPEN POSITIONS ---")
-
-for p in open_positions:
+def main():
 
     print(
-        f"{p['symbol']} | "
-        f"Entry {p['entry_price']} | "
-        f"RSI {p['entry_rsi']} | "
-        f"P/L {p['current_profit_pct']}%"
+        "EGX WEEKLY RSI 33/60/70 "
+        "BACKTEST"
     )
 
-print("=" * 55)
+    raw = load_database()
+
+    df_all = database_to_dataframe(raw)
+
+    if df_all.empty:
+        print("No database data found.")
+        return
+
+    all_trades = []
+
+    symbols = sorted(
+        df_all["Symbol"]
+        .dropna()
+        .unique()
+    )
+
+    print(
+        f"Symbols prepared: {len(symbols)}"
+    )
+
+    for symbol in symbols:
+
+        symbol_df = df_all[
+            df_all["Symbol"] == symbol
+        ].copy()
+
+        symbol_df = prepare_dataframe(
+            symbol_df
+        )
+
+        if symbol_df.empty:
+            continue
+
+        trades = backtest_symbol(
+            symbol,
+            symbol_df
+        )
+
+        all_trades.extend(trades)
+
+    all_trades.sort(
+        key=lambda x: (
+            x["entry_date"],
+            x["symbol"]
+        )
+    )
+
+    closed = [
+        t for t in all_trades
+        if t["status"] == "CLOSED"
+    ]
+
+    open_positions = [
+        t for t in all_trades
+        if t["status"] == "OPEN"
+    ]
+
+    statistics = calculate_statistics(
+        all_trades
+    )
+
+    result = {
+        "strategy":
+            "Weekly RSI 33/60/70 + Break-Even",
+        "parameters": {
+            "rsi_period": RSI_PERIOD,
+            "rsi_buy": RSI_BUY,
+            "rsi_sell_1": RSI_SELL_1,
+            "rsi_sell_2": RSI_SELL_2,
+            "first_sell_percent": 50,
+            "second_sell_percent": 50,
+            "hard_stop_percent": 5.0,
+            "break_even_after_first_sell":
+                BREAK_EVEN_AFTER_FIRST_SELL
+        },
+        "statistics": statistics,
+        "trades": all_trades,
+        "open_positions": open_positions
+    }
+
+    with open(
+        OUTPUT_FILE,
+        "w",
+        encoding="utf-8"
+    ) as f:
+
+        json.dump(
+            result,
+            f,
+            ensure_ascii=False,
+            indent=2
+        )
+
+    print(
+        f"Closed trades: {len(closed)}"
+    )
+
+    print(
+        f"Open positions: "
+        f"{len(open_positions)}"
+    )
+
+    print(
+        f"Win rate: "
+        f"{statistics['win_rate_percent']}%"
+    )
+
+    print(
+        f"Compound return: "
+        f"{statistics['compound_portfolio_return_percent']}%"
+    )
+
+    print(
+        f"Max drawdown: "
+        f"{statistics['maximum_drawdown_percent']}%"
+    )
+
+    print(
+        f"Results saved to {OUTPUT_FILE}"
+    )
+
+
+if __name__ == "__main__":
+    main()
