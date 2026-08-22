@@ -132,7 +132,7 @@ def rsi(series, period=14):
 # =====================
 # Parameters
 # =====================
-SIDE_CLOSE_PERCENT = 0.03
+SIDE_CLOSE_PERCENT = 0.02
 RSI_SELL = 79
 EGX30_KEY = "EGX30"
 
@@ -234,7 +234,7 @@ for name in symbols_keys:
     if egx_trend == "🔻":
         trend = "🔻"
     else:
-        if cross_count >= 7:
+        if cross_count >= 4:
             trend = "🔛"
         elif last_close > last["EMA40"] and last["EMA40"] > (prev_5["EMA40"] * 0.985 ):
             trend = "↗️"
@@ -247,7 +247,7 @@ for name in symbols_keys:
 
     # 🟢 UP TREND
     if trend == "↗️":
-        if not in_position and last["RSI14"] < 68 and last_close >= last["EMA30"] and last_close > prev["Close"]:
+        if not in_position and last["RSI14"] < 62 and last_close >= last["EMA30"] and last_close > prev["Close"]:
             buy_signal = True
             up_signal = "🟢"
             in_position = True
@@ -277,7 +277,7 @@ for name in symbols_keys:
         from_high = (high - last_close) / high
         from_low = (last_close - low) / low
 
-        if not in_position and (from_low <= SIDE_CLOSE_PERCENT or last["RSI14"] < 38):
+        if not in_position and (from_low <= SIDE_CLOSE_PERCENT or last["RSI14"] < 35):
             buy_signal = True
             side_signal = "🟢"
             percent_side = from_low * 100
@@ -285,7 +285,7 @@ for name in symbols_keys:
             entry_price = last_close
 
         elif in_position:
-            if from_high <= SIDE_CLOSE_PERCENT or last["RSI14"] > 66:
+            if from_high <= SIDE_CLOSE_PERCENT or last["RSI14"] > 63:
                 sell_signal = True
                 side_signal = "🔴"
                 percent_side = from_high * 100
