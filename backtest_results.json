@@ -1,12 +1,12 @@
 {
   "statistics": {
-    "total_trades": 32,
-    "winning_trades": 9,
-    "losing_trades": 23,
-    "win_rate_percent": 28.12,
-    "total_profit_percent": 45.82,
-    "average_winning_trade_percent": 20.4,
-    "average_losing_trade_percent": -5.99,
-    "maximum_drawdown_percent": 27.2
+    "total_trades": 100,
+    "winning_trades": 25,
+    "losing_trades": 75,
+    "win_rate_percent": 25.0,
+    "total_profit_percent": 109.43,
+    "average_winning_trade_percent": 11.78,
+    "average_losing_trade_percent": -2.47,
+    "maximum_drawdown_percent": 42.07
   }
 }
