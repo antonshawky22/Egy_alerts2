@@ -1,65 +1,272 @@
 [
   {
-    "symbol": "SWDY",
+    "symbol": "MPCO",
     "status": "CLOSED",
-    "entry_date": "2026-04-01",
-    "entry_price": 79.01,
-    "exit_date": "2026-04-27",
-    "exit_price": 86.01,
-    "profit_pct": 8.86
+    "entry_date": "2026-02-12",
+    "entry_price": 1.65,
+    "exit_date": "2026-02-23",
+    "exit_price": 1.59,
+    "profit_pct": -3.64
+  },
+  {
+    "symbol": "SUGR",
+    "status": "CLOSED",
+    "entry_date": "2026-03-10",
+    "entry_price": 48.69,
+    "exit_date": "2026-04-06",
+    "exit_price": 47.38,
+    "profit_pct": -2.69
+  },
+  {
+    "symbol": "ORHD",
+    "status": "CLOSED",
+    "entry_date": "2026-03-12",
+    "entry_price": 25.69,
+    "exit_date": "2026-03-16",
+    "exit_price": 24.55,
+    "profit_pct": -4.44
+  },
+  {
+    "symbol": "ORHD",
+    "status": "CLOSED",
+    "entry_date": "2026-03-25",
+    "entry_price": 25.85,
+    "exit_date": "2026-03-29",
+    "exit_price": 24.62,
+    "profit_pct": -4.76
+  },
+  {
+    "symbol": "EEII",
+    "status": "CLOSED",
+    "entry_date": "2026-04-05",
+    "entry_price": 1.94,
+    "exit_date": "2026-04-14",
+    "exit_price": 2.16,
+    "profit_pct": 11.34
+  },
+  {
+    "symbol": "RMDA",
+    "status": "CLOSED",
+    "entry_date": "2026-04-07",
+    "entry_price": 4.3,
+    "exit_date": "2026-06-10",
+    "exit_price": 5.08,
+    "profit_pct": 18.14
+  },
+  {
+    "symbol": "EMFD",
+    "status": "CLOSED",
+    "entry_date": "2026-04-08",
+    "entry_price": 9.34,
+    "exit_date": "2026-04-23",
+    "exit_price": 10.34,
+    "profit_pct": 10.71
+  },
+  {
+    "symbol": "ORHD",
+    "status": "CLOSED",
+    "entry_date": "2026-04-08",
+    "entry_price": 26.1,
+    "exit_date": "2026-04-19",
+    "exit_price": 29.85,
+    "profit_pct": 14.37
   },
   {
     "symbol": "FWRY",
     "status": "CLOSED",
-    "entry_date": "2026-04-06",
-    "entry_price": 18.0,
-    "exit_date": "2026-04-30",
-    "exit_price": 19.07,
-    "profit_pct": 5.94
-  },
-  {
-    "symbol": "COMI",
-    "status": "CLOSED",
     "entry_date": "2026-04-08",
-    "entry_price": 127.75,
-    "exit_date": "2026-04-22",
-    "exit_price": 136.28,
-    "profit_pct": 6.68
+    "entry_price": 18.7,
+    "exit_date": "2026-05-14",
+    "exit_price": 20.26,
+    "profit_pct": 8.34
   },
   {
-    "symbol": "ORWE",
+    "symbol": "ATQA",
     "status": "CLOSED",
-    "entry_date": "2026-04-22",
-    "entry_price": 22.73,
-    "exit_date": "2026-05-20",
-    "exit_price": 21.62,
-    "profit_pct": -4.88
+    "entry_date": "2026-04-09",
+    "entry_price": 9.06,
+    "exit_date": "2026-04-21",
+    "exit_price": 10.3,
+    "profit_pct": 13.69
   },
   {
-    "symbol": "SKPC",
+    "symbol": "ELSH",
     "status": "CLOSED",
-    "entry_date": "2026-04-26",
-    "entry_price": 17.5,
-    "exit_date": "2026-05-28",
-    "exit_price": 17.1,
-    "profit_pct": -2.29
+    "entry_date": "2026-04-15",
+    "entry_price": 7.25,
+    "exit_date": "2026-04-21",
+    "exit_price": 7.73,
+    "profit_pct": 6.62
   },
   {
-    "symbol": "ORWE",
+    "symbol": "MPCO",
     "status": "CLOSED",
-    "entry_date": "2026-07-21",
-    "entry_price": 23.0,
-    "exit_date": "2026-08-05",
-    "exit_price": 26.35,
-    "profit_pct": 14.57
+    "entry_date": "2026-04-15",
+    "entry_price": 1.57,
+    "exit_date": "2026-05-17",
+    "exit_price": 1.65,
+    "profit_pct": 5.1
   },
   {
     "symbol": "JUFO",
     "status": "CLOSED",
-    "entry_date": "2026-08-03",
-    "entry_price": 30.0,
-    "exit_date": "2026-08-06",
-    "exit_price": 26.61,
-    "profit_pct": -11.3
+    "entry_date": "2026-04-16",
+    "entry_price": 27.5,
+    "exit_date": "2026-04-26",
+    "exit_price": 29.58,
+    "profit_pct": 7.56
+  },
+  {
+    "symbol": "ISPH",
+    "status": "CLOSED",
+    "entry_date": "2026-04-21",
+    "entry_price": 11.09,
+    "exit_date": "2026-06-07",
+    "exit_price": 12.69,
+    "profit_pct": 14.43
+  },
+  {
+    "symbol": "OLFI",
+    "status": "CLOSED",
+    "entry_date": "2026-04-27",
+    "entry_price": 22.2,
+    "exit_date": "2026-05-20",
+    "exit_price": 21.02,
+    "profit_pct": -5.32
+  },
+  {
+    "symbol": "AMOC",
+    "status": "CLOSED",
+    "entry_date": "2026-04-30",
+    "entry_price": 8.6,
+    "exit_date": "2026-05-27",
+    "exit_price": 8.26,
+    "profit_pct": -3.95
+  },
+  {
+    "symbol": "ATQA",
+    "status": "CLOSED",
+    "entry_date": "2026-06-03",
+    "entry_price": 10.1,
+    "exit_date": "2026-06-10",
+    "exit_price": 9.55,
+    "profit_pct": -5.45
+  },
+  {
+    "symbol": "GBCO",
+    "status": "CLOSED",
+    "entry_date": "2026-06-10",
+    "entry_price": 27.69,
+    "exit_date": "2026-06-23",
+    "exit_price": 31.25,
+    "profit_pct": 12.86
+  },
+  {
+    "symbol": "OLFI",
+    "status": "CLOSED",
+    "entry_date": "2026-06-11",
+    "entry_price": 22.1,
+    "exit_date": "2026-08-05",
+    "exit_price": 24.77,
+    "profit_pct": 12.08
+  },
+  {
+    "symbol": "ADIB",
+    "status": "CLOSED",
+    "entry_date": "2026-06-15",
+    "entry_price": 47.3,
+    "exit_date": "2026-06-25",
+    "exit_price": 44.65,
+    "profit_pct": -5.6
+  },
+  {
+    "symbol": "SWDY",
+    "status": "CLOSED",
+    "entry_date": "2026-06-23",
+    "entry_price": 88.22,
+    "exit_date": "2026-06-28",
+    "exit_price": 85.54,
+    "profit_pct": -3.04
+  },
+  {
+    "symbol": "ADIB",
+    "status": "CLOSED",
+    "entry_date": "2026-06-30",
+    "entry_price": 48.49,
+    "exit_date": "2026-07-30",
+    "exit_price": 52.85,
+    "profit_pct": 8.99
+  },
+  {
+    "symbol": "TMGH",
+    "status": "CLOSED",
+    "entry_date": "2026-07-06",
+    "entry_price": 97.99,
+    "exit_date": "2026-08-17",
+    "exit_price": 96.5,
+    "profit_pct": -1.52
+  },
+  {
+    "symbol": "ORWE",
+    "status": "CLOSED",
+    "entry_date": "2026-07-19",
+    "entry_price": 23.15,
+    "exit_date": "2026-08-05",
+    "exit_price": 26.35,
+    "profit_pct": 13.82
+  },
+  {
+    "symbol": "RMDA",
+    "status": "CLOSED",
+    "entry_date": "2026-07-26",
+    "entry_price": 5.11,
+    "exit_date": "2026-08-02",
+    "exit_price": 5.58,
+    "profit_pct": 9.2
+  },
+  {
+    "symbol": "PHDC",
+    "status": "OPEN",
+    "entry_date": "2026-08-04",
+    "entry_price": 15.28,
+    "exit_date": null,
+    "exit_price": null,
+    "profit_pct": null
+  },
+  {
+    "symbol": "EMFD",
+    "status": "OPEN",
+    "entry_date": "2026-08-06",
+    "entry_price": 11.89,
+    "exit_date": null,
+    "exit_price": null,
+    "profit_pct": null
+  },
+  {
+    "symbol": "SUGR",
+    "status": "CLOSED",
+    "entry_date": "2026-08-09",
+    "entry_price": 48.24,
+    "exit_date": "2026-08-16",
+    "exit_price": 50.7,
+    "profit_pct": 5.1
+  },
+  {
+    "symbol": "SKPC",
+    "status": "OPEN",
+    "entry_date": "2026-08-09",
+    "entry_price": 16.65,
+    "exit_date": null,
+    "exit_price": null,
+    "profit_pct": null
+  },
+  {
+    "symbol": "EGAL",
+    "status": "CLOSED",
+    "entry_date": "2026-08-09",
+    "entry_price": 303.55,
+    "exit_date": "2026-08-11",
+    "exit_price": 329.98,
+    "profit_pct": 8.71
   }
 ]
