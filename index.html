@@ -61,7 +61,7 @@
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 15px;
             margin-bottom: 25px;
         }
@@ -81,7 +81,7 @@
         }
 
         .card .value {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: bold;
         }
 
@@ -174,6 +174,7 @@
 
     <!-- الشاشة الشاملة -->
     <div id="combined" class="tab-content active">
+        <!-- الشبكة الإحصائية الموسعة -->
         <div class="stats-grid">
             <div class="card">
                 <h3>إجمالي الصفقات</h3>
@@ -190,6 +191,19 @@
             <div class="card">
                 <h3>الصفقات المفتوحة حالياً</h3>
                 <div class="value" id="c-open-count">-</div>
+            </div>
+            <!-- المربعات الجديدة -->
+            <div class="card">
+                <h3>متوسط ربح الصفقات المفتوحة</h3>
+                <div class="value" id="c-open-avg-pnl">-</div>
+            </div>
+            <div class="card">
+                <h3>أفضل صفقة منتهية 🚀</h3>
+                <div class="value positive" id="c-best-trade">-</div>
+            </div>
+            <div class="card">
+                <h3>أسوأ صفقة منتهية 🔻</h3>
+                <div class="value negative" id="c-worst-trade">-</div>
             </div>
         </div>
 
@@ -462,13 +476,11 @@
     }
 
     function processDashboardData() {
-        // --- 1. استخراج الصفقات المنتهية والمفتوحة من trades1 ---
+        // --- 1. استراتيجية trades1 ---
         let s1Closed = trades1Data.filter(t => t.profit_pct !== undefined && t.profit_pct !== null);
         let s1Open = trades1Data.filter(t => t.profit_pct === undefined || t.profit_pct === null);
         
         let s1WinRate = s1Closed.length > 0 ? (s1Closed.filter(t => Number(t.profit_pct) > 0).length / s1Closed.length * 100).toFixed(1) : 0;
-        
-        // حساب متوسط الربح للاستراتيجية الأولى
         let s1SumPnL = s1Closed.reduce((acc, t) => acc + Number(t.profit_pct), 0);
         let s1AvgPnL = s1Closed.length > 0 ? (s1SumPnL / s1Closed.length) : 0;
 
@@ -493,7 +505,7 @@
             `;
         }).join('') || '<tr><td colspan="5" style="text-align:center;">لا توجد صفقات</td></tr>';
 
-        // --- 2. استخراج الصفقات المنتهية والمفتوحة من trades2 ---
+        // --- 2. استراتيجية trades2 ---
         let s2All = [];
         let s2Closed = [];
         let s2Open = [];
@@ -513,8 +525,6 @@
         });
 
         let s2WinRate = s2Closed.length > 0 ? (s2Closed.filter(t => Number(t.profit_pct) > 0).length / s2Closed.length * 100).toFixed(1) : 0;
-        
-        // حساب متوسط الربح للاستراتيجية الثانية
         let s2SumPnL = s2Closed.reduce((acc, t) => acc + Number(t.profit_pct), 0);
         let s2AvgPnL = s2Closed.length > 0 ? (s2SumPnL / s2Closed.length) : 0;
 
@@ -540,16 +550,25 @@
             `;
         }).join('') || '<tr><td colspan="6" style="text-align:center;">لا توجد صفقات</td></tr>';
 
-        // --- 3. الحساب الشامل والدقيق لكل الصفقات المنتهية ---
+        // --- 3. الحساب الشامل للدش بورد الرئيسي ---
         const totalTrades = trades1Data.length + s2All.length;
         const totalClosed = s1Closed.length + s2Closed.length;
         const totalWins = s1Closed.filter(t => Number(t.profit_pct) > 0).length + s2Closed.filter(t => Number(t.profit_pct) > 0).length;
         
         const combinedWinRate = totalClosed > 0 ? ((totalWins / totalClosed) * 100).toFixed(1) : 0;
-        
-        // الجمع الكلي وقسمته مباشرة على عدد الصفقات المنتهية للحصول على المتوسط
         const totalClosedPnLSum = s1SumPnL + s2SumPnL;
         const combinedAvgPnL = totalClosed > 0 ? (totalClosedPnLSum / totalClosed) : 0;
+
+        // حساب أفضل وأسوأ صفقة منتهية
+        const allClosedTrades = [...s1Closed, ...s2Closed];
+        let bestTrade = 0;
+        let worstTrade = 0;
+        
+        if (allClosedTrades.length > 0) {
+            const pnlArray = allClosedTrades.map(t => Number(t.profit_pct));
+            bestTrade = Math.max(...pnlArray);
+            worstTrade = Math.min(...pnlArray);
+        }
 
         document.getElementById('c-total-trades').innerText = totalTrades;
         document.getElementById('c-win-rate').innerText = `${combinedWinRate}%`;
@@ -559,10 +578,13 @@
         combinedAvgEl.className = `value ${combinedAvgPnL >= 0 ? 'positive' : 'negative'}`;
 
         document.getElementById('c-open-count').innerText = s1Open.length + s2Open.length;
+        document.getElementById('c-best-trade').innerText = `+${bestTrade.toFixed(2)}%`;
+        document.getElementById('c-worst-trade').innerText = `${worstTrade.toFixed(2)}%`;
 
-        // جدول الصفقات المفتوحة
+        // حساب الصفقات المفتوحة والربح الحي
         const openTable = document.getElementById('open-positions-table');
         let openHTML = '';
+        let openPnlArray = [];
 
         s1Open.forEach(t => {
             const currentClose = getLatestClosePrice(t.symbol);
@@ -571,6 +593,7 @@
 
             if (currentClose && t.entry_price) {
                 const diff = ((currentClose - t.entry_price) / t.entry_price) * 100;
+                openPnlArray.push(diff);
                 unrealized = `${diff >= 0 ? '+' : ''}${diff.toFixed(2)}%`;
                 colorClass = diff >= 0 ? 'positive' : 'negative';
             }
@@ -594,6 +617,7 @@
             const entryPrice = t.last_totally_average_price;
             if (currentClose && entryPrice) {
                 const diff = ((currentClose - entryPrice) / entryPrice) * 100;
+                openPnlArray.push(diff);
                 unrealized = `${diff >= 0 ? '+' : ''}${diff.toFixed(2)}%`;
                 colorClass = diff >= 0 ? 'positive' : 'negative';
             }
@@ -608,6 +632,16 @@
                 </tr>
             `;
         });
+
+        // متوسط الصفقات المفتوحة
+        const openAvgEl = document.getElementById('c-open-avg-pnl');
+        if (openPnlArray.length > 0) {
+            const openAvg = openPnlArray.reduce((a, b) => a + b, 0) / openPnlArray.length;
+            openAvgEl.innerText = `${openAvg >= 0 ? '+' : ''}${openAvg.toFixed(2)}%`;
+            openAvgEl.className = `value ${openAvg >= 0 ? 'positive' : 'negative'}`;
+        } else {
+            openAvgEl.innerText = '0.00%';
+        }
 
         openTable.innerHTML = openHTML || '<tr><td colspan="5" style="text-align:center;">لا توجد صفقات مفتوحة حالياً</td></tr>';
 
