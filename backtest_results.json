@@ -1,12 +1,23 @@
 {
+  "strategy": "EMA10/20 Sideways Breakout Weekly",
+  "parameters": {
+    "sideways_lookback": 15,
+    "ema10_slope_limit": 3.0,
+    "ema20_slope_limit": 3.0,
+    "ema_gap_limit": 3.0,
+    "minimum_crosses": 2,
+    "hard_stop_percent": 5.0,
+    "trailing_activation_profit": 10.0,
+    "trailing_retracement": 4.5
+  },
   "statistics": {
-    "total_trades": 100,
-    "winning_trades": 25,
-    "losing_trades": 75,
-    "win_rate_percent": 25.0,
-    "total_profit_percent": 109.43,
-    "average_winning_trade_percent": 11.78,
-    "average_losing_trade_percent": -2.47,
-    "maximum_drawdown_percent": 42.07
+    "total_trades": 27,
+    "winning_trades": 12,
+    "losing_trades": 15,
+    "win_rate_percent": 44.44,
+    "total_profit_percent": 190.01,
+    "average_winning_trade_percent": 22.89,
+    "average_losing_trade_percent": -5.64,
+    "maximum_drawdown_percent": 12.96
   }
 }
