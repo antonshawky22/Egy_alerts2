@@ -4,10 +4,10 @@ import pandas as pd
 import numpy as np
 
 # ============================================================
-# BALANCED GOLDEN CROSS SYSTEM (EMA10/30 OPTIMIZED)
+# WEEKLY TREND FOLLOWING SYSTEM (EMA10/20 + ANTI-SIDEWAYS FILTER)
 # ============================================================
 
-DB_FILE = "egx_history_database_v2.json"
+DB_FILE = "egx_weekly_database_v1.json"
 RESULTS_FILE = "backtest_results.json"
 TRADES_FILE = "backtest_trades.json"
 
@@ -21,19 +21,34 @@ symbols = {
     "PHDC": "PHDC", "MCQE": "MCQE", "SKPC": "SKPC", "EGAL": "EGAL"
 }
 
-def rsi(series, period=14):
-    if len(series) < period + 1:
-        return pd.Series(np.nan, index=series.index)
-    delta = series.diff()
-    gain = delta.clip(lower=0)
-    loss = -delta.clip(upper=0)
-    avg_gain = gain.ewm(com=period - 1, adjust=False).mean()
-    avg_loss = loss.ewm(com=period - 1, adjust=False).mean()
-    rs = avg_gain / avg_loss
-    return 100 - (100 / (1 + rs))
+def calculate_adx(df, period=14):
+    """حساب مؤشر ADX لقياس قوة الاتجاه وتجنب النطاق العرضي"""
+    high = df["High"] if "High" in df.columns else df["Close"]
+    low = df["Low"] if "Low" in df.columns else df["Close"]
+    close = df["Close"]
+
+    up_move = high.diff()
+    down_move = -low.diff()
+
+    plus_dm = np.where((up_move > down_move) & (up_move > 0), up_move, 0.0)
+    minus_dm = np.where((down_move > up_move) & (down_move > 0), down_move, 0.0)
+
+    tr1 = high - low
+    tr2 = (high - close.shift(1)).abs()
+    tr3 = (low - close.shift(1)).abs()
+    tr = pd.concat([tr1, tr2, tr3], axis=1).max(axis=1)
+
+    atr = tr.ewm(alpha=1/period, adjust=False).mean()
+
+    plus_di = 100 * (pd.Series(plus_dm, index=df.index).ewm(alpha=1/period, adjust=False).mean() / atr)
+    minus_di = 100 * (pd.Series(minus_dm, index=df.index).ewm(alpha=1/period, adjust=False).mean() / atr)
+
+    dx = (abs(plus_di - minus_di) / (plus_di + minus_di)) * 100
+    adx = dx.ewm(alpha=1/period, adjust=False).mean()
+    return adx
 
 # ============================================================
-# LOAD DATABASE & PREPARE DATA
+# LOAD DATABASE & PREPARE WEEKLY DATA
 # ============================================================
 
 if not os.path.exists(DB_FILE):
@@ -55,17 +70,15 @@ for name in symbols:
         df.index = pd.to_datetime(df.index)
         df = df.sort_index(ascending=True)
 
-        if len(df) < 50:
+        if len(df) < 25:
             continue
 
         close = df["Close"]
-        volume = df["Volume"] if "Volume" in df.columns else pd.Series(1, index=df.index)
 
+        # حساب المتوسطات ومؤشر ADX للفريم الأسبوعي
         df["EMA10"] = close.ewm(span=10, adjust=False).mean()
-        df["EMA30"] = close.ewm(span=30, adjust=False).mean()
-        df["EMA50"] = close.ewm(span=50, adjust=False).mean()
-        df["RSI"] = rsi(close)
-        df["VOL_MA20"] = volume.rolling(window=20).mean()
+        df["EMA20"] = close.ewm(span=20, adjust=False).mean()
+        df["ADX"] = calculate_adx(df, period=14)
 
         prepared_data[name] = df
     except Exception:
@@ -88,35 +101,30 @@ for current_date in all_dates:
             continue
 
         idx = df.index.get_loc(current_date)
-        if idx < 50:
+        if idx < 20:
             continue
 
         df_slice = df.iloc[: idx + 1]
         
-        if df_slice[["Close", "EMA10", "EMA30", "EMA50", "RSI"]].iloc[-1].isna().any():
+        if df_slice[["Close", "EMA10", "EMA20", "ADX"]].iloc[-1].isna().any():
             continue
 
         date_str = current_date.strftime("%Y-%m-%d")
         price = float(df_slice["Close"].iloc[-1])
-        rsi_val = float(df_slice["RSI"].iloc[-1])
-        volume_curr = float(df_slice["Volume"].iloc[-1]) if "Volume" in df_slice.columns else 1.0
-        vol_ma = float(df_slice["VOL_MA20"].iloc[-1]) if "VOL_MA20" in df_slice.columns else 1.0
+        adx_val = float(df_slice["ADX"].iloc[-1])
         
         ema10_curr = float(df_slice["EMA10"].iloc[-1])
-        ema30_curr = float(df_slice["EMA30"].iloc[-1])
-        ema50_curr = float(df_slice["EMA50"].iloc[-1])
+        ema20_curr = float(df_slice["EMA20"].iloc[-1])
         
         ema10_prev = float(df_slice["EMA10"].iloc[-2])
-        ema30_prev = float(df_slice["EMA30"].iloc[-2])
+        ema20_prev = float(df_slice["EMA20"].iloc[-2])
 
-        # ⚖️ شروط فلترة متوازنة وعملية
-        golden_cross = (ema10_prev <= ema30_prev) and (ema10_curr > ema30_curr)
-        death_cross = (ema10_prev >= ema30_prev) and (ema10_curr < ema30_curr)
+        # 🎯 إشارات التقاط الفريم الأسبوعي
+        golden_cross = (ema10_prev <= ema20_prev) and (ema10_curr > ema20_curr)
+        death_cross = (ema10_prev >= ema20_prev) and (ema10_curr < ema20_curr)
         
-        above_trend = price > ema50_curr
-        not_overextended = price <= (ema30_curr * 1.06)
-        valid_rsi_buy = rsi_val <= 63.0
-        balanced_volume = volume_curr >= (vol_ma * 1.1) if not np.isnan(vol_ma) else True
+        # 🚫 شرط منع الاتجاه العرضي: السهم ليس في اتجاه عرضي إذا كان ADX >= 20 ومتوسط EMA10 أسرع صعوداً
+        trending_market = adx_val >= 20.0
 
         s = states[name]
 
@@ -126,8 +134,8 @@ for current_date in all_dates:
             if price > s["peak_price"]:
                 s["peak_price"] = price
 
-        # 🟢 دخول متوازن
-        if s["position"] == 0.0 and golden_cross and above_trend and not_overextended and valid_rsi_buy and balanced_volume:
+        # 🟢 دخول أسبوعي (تقاطع 10/20 + اتجاه غير عرضي)
+        if s["position"] == 0.0 and golden_cross and trending_market:
             s["position"] = 1.0
             s["entry_price"] = price
             s["peak_price"] = price
@@ -142,15 +150,15 @@ for current_date in all_dates:
                 "profit_pct": None
             })
 
-        # 🔴 خروج ديناميكي
+        # 🔴 خروج عند تقاطع الموت الأسبوعي أو وقف الخسارة
         elif s["position"] == 1.0:
             peak_profit = ((s["peak_price"] - s["entry_price"]) / s["entry_price"]) * 100
             
-            hard_stop = profit <= -5.0
-            trailing_stop = (peak_profit >= 9.0) and ((s["peak_price"] - price) / s["peak_price"] * 100 >= 3.5)
-            rsi_target = (rsi_val >= 73.0) and (profit >= 4.0)
+            # وقف خسارة أسبوعي أوسع لحماية الصفقة من التذبذب السعري
+            hard_stop = profit <= -6.0
+            trailing_stop = (peak_profit >= 12.0) and ((s["peak_price"] - price) / s["peak_price"] * 100 >= 5.0)
             
-            exit_triggered = death_cross or hard_stop or trailing_stop or rsi_target
+            exit_triggered = death_cross or hard_stop or trailing_stop
 
             if exit_triggered:
                 active = [t for t in trades_history if t["symbol"] == name and t["status"] == "OPEN"]
@@ -208,7 +216,7 @@ with open(TRADES_FILE, "w", encoding="utf-8") as f:
     json.dump(trades_history, f, indent=2, ensure_ascii=False)
 
 print("\n" + "=" * 60)
-print("BALANCED CROSSOVER SYSTEM COMPLETE")
+print("WEEKLY EMA 10/20 BACKTEST COMPLETE")
 print("=" * 60)
 print(f"Total Closed Trades: {total_count}")
 print(f"Win Rate:            {win_rate:.2f}%")
