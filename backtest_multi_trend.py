@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 # ============================================================
-# INSTITUTIONAL GOLDEN CROSS SYSTEM (EMA10/20 + EMA200 + VOL)
+# OPTIMIZED GOLDEN CROSS SYSTEM (FOR 8-MONTH HISTORICAL DATA)
 # ============================================================
 
 DB_FILE = "egx_history_database_v2.json"
@@ -55,7 +55,7 @@ for name in symbols:
         df.index = pd.to_datetime(df.index)
         df = df.sort_index(ascending=True)
 
-        if len(df) < 200: # يتطلب 200 شمعة لحساب EMA200
+        if len(df) < 50: # تعديل الحد الأدنى ليتناسب مع 8 أشهر
             continue
 
         close = df["Close"]
@@ -63,7 +63,7 @@ for name in symbols:
 
         df["EMA10"] = close.ewm(span=10, adjust=False).mean()
         df["EMA20"] = close.ewm(span=20, adjust=False).mean()
-        df["EMA200"] = close.ewm(span=200, adjust=False).mean()
+        df["EMA50"] = close.ewm(span=50, adjust=False).mean() # استبدال EMA200 بـ EMA50
         df["RSI"] = rsi(close)
         df["VOL_MA20"] = volume.rolling(window=20).mean()
 
@@ -98,12 +98,12 @@ for current_date in all_dates:
             continue
 
         idx = df.index.get_loc(current_date)
-        if idx < 200:
+        if idx < 50:
             continue
 
         df_slice = df.iloc[: idx + 1]
         
-        if df_slice[["Close", "EMA10", "EMA20", "EMA200", "RSI"]].iloc[-1].isna().any():
+        if df_slice[["Close", "EMA10", "EMA20", "EMA50", "RSI"]].iloc[-1].isna().any():
             continue
 
         date_str = current_date.strftime("%Y-%m-%d")
@@ -114,30 +114,29 @@ for current_date in all_dates:
         
         ema10_curr = float(df_slice["EMA10"].iloc[-1])
         ema20_curr = float(df_slice["EMA20"].iloc[-1])
-        ema200_curr = float(df_slice["EMA200"].iloc[-1])
+        ema50_curr = float(df_slice["EMA50"].iloc[-1])
         
         ema10_prev = float(df_slice["EMA10"].iloc[-2])
         ema20_prev = float(df_slice["EMA20"].iloc[-2])
 
-        # 1. شروط التقاطع والفلترة الاحترافية
+        # شروط التقاطع والفلترة
         golden_cross = (ema10_prev <= ema20_prev) and (ema10_curr > ema20_curr)
         death_cross = (ema10_prev >= ema20_prev) and (ema10_curr < ema20_curr)
         
-        above_macro_trend = price > ema200_curr
-        rsi_valid_buy = rsi_val <= 65.0
-        volume_confirmed = volume_curr >= (vol_ma * 1.1)
+        above_mid_trend = price > ema50_curr
+        rsi_valid_buy = rsi_val <= 68.0
+        volume_confirmed = volume_curr >= (vol_ma * 1.05) if not np.isnan(vol_ma) else True
 
         s = states[name]
 
-        # حساب الربح الحالي في حالة فتح الصفقة
         profit = 0.0
         if s["entry_price"] > 0:
             profit = ((price - s["entry_price"]) / s["entry_price"]) * 100
             if price > s["peak_price"]:
                 s["peak_price"] = price
 
-        # 🟢 دخول كامل (Golden Cross Filtered)
-        if s["position"] == 0.0 and golden_cross and above_macro_trend and rsi_valid_buy and volume_confirmed:
+        # 🟢 دخول (Golden Cross)
+        if s["position"] == 0.0 and golden_cross and above_mid_trend and rsi_valid_buy and volume_confirmed:
             s["position"] = 1.0
             s["entry_price"] = price
             s["peak_price"] = price
@@ -152,14 +151,13 @@ for current_date in all_dates:
                 "profit_pct": None
             })
 
-        # 🔴 شروط الخروج المتقدمة (Death Cross / Hard Stop / Trailing Stop / RSI Exit)
+        # 🔴 خروج
         elif s["position"] == 1.0:
             peak_profit = ((s["peak_price"] - s["entry_price"]) / s["entry_price"]) * 100
             
-            # أسباب الخروج
-            hard_stop = profit <= -5.0                                    # وقف خسارة حتمي عند -5%
-            trailing_stop = (peak_profit >= 8.0) and ((s["peak_price"] - price) / s["peak_price"] * 100 >= 3.5) # حماية الأرباح
-            rsi_target = rsi_val >= 72.0                                 # هدف تشبع شرائي
+            hard_stop = profit <= -5.0
+            trailing_stop = (peak_profit >= 8.0) and ((s["peak_price"] - price) / s["peak_price"] * 100 >= 3.5)
+            rsi_target = rsi_val >= 72.0
             
             exit_triggered = death_cross or hard_stop or trailing_stop or rsi_target
 
@@ -179,7 +177,7 @@ for current_date in all_dates:
     portfolio_equity_curve.append(total_portfolio_profit)
 
 # ============================================================
-# COMPUTE STATISTICS & SAVE TO ORIGINAL FILES
+# COMPUTE STATISTICS & SAVE TO FILES
 # ============================================================
 
 closed_trades = [t for t in trades_history if t["status"] == "CLOSED"]
@@ -219,7 +217,7 @@ with open(TRADES_FILE, "w", encoding="utf-8") as f:
     json.dump(trades_history, f, indent=2, ensure_ascii=False)
 
 print("\n" + "=" * 60)
-print("FILTERED GOLDEN CROSS SYSTEM - BACKTEST COMPLETE")
+print("FILTERED GOLDEN CROSS SYSTEM (8-MONTH OPTIMIZED) COMPLETE")
 print("=" * 60)
 print(f"Total Closed Trades: {total_count}")
 print(f"Win Rate:            {win_rate:.2f}%")
