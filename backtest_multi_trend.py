@@ -18,20 +18,11 @@ symbols={
 "PHDC":"PHDC","MCQE":"MCQE","SKPC":"SKPC","EGAL":"EGAL"
 }
 
-SIDEWAYS_LOOKBACK=15
-MIN_CROSSES=3
-EMA10_SLOPE_LIMIT=3.0
-EMA20_SLOPE_LIMIT=3.0
-AVG_GAP_LIMIT=3.0
-MAX_GAP_LIMIT=5.0
-MIN_SIDEWAYS_SCORE=4
-
+RSI_PERIOD=14
 RSI_BUY=33
-RSI_SELL=63
-
+RSI_SELL_1=60
+RSI_SELL_2=70
 HARD_STOP_PERCENT=5.0
-TRAILING_ACTIVATION_PROFIT=10.0
-TRAILING_RETRACEMENT=4.5
 
 if not os.path.exists(DB_FILE):
     raise FileNotFoundError(f"Database file not found: {DB_FILE}")
@@ -60,10 +51,7 @@ for name in symbols:
         df.index=pd.to_datetime(df.index)
         df=df.sort_index()
 
-        if len(df)<30:
-            continue
-
-        if "Close" not in df.columns:
+        if len(df)<RSI_PERIOD+2:
             continue
 
         df["Close"]=pd.to_numeric(
@@ -73,30 +61,18 @@ for name in symbols:
 
         df=df.dropna(subset=["Close"])
 
-        close=df["Close"]
-
-        df["EMA10"]=close.ewm(
-            span=10,
-            adjust=False
-        ).mean()
-
-        df["EMA20"]=close.ewm(
-            span=20,
-            adjust=False
-        ).mean()
-
-        delta=close.diff()
+        delta=df["Close"].diff()
 
         gain=delta.clip(lower=0)
         loss=-delta.clip(upper=0)
 
         avg_gain=gain.ewm(
-            alpha=1/14,
+            alpha=1/RSI_PERIOD,
             adjust=False
         ).mean()
 
         avg_loss=loss.ewm(
-            alpha=1/14,
+            alpha=1/RSI_PERIOD,
             adjust=False
         ).mean()
 
@@ -121,94 +97,11 @@ all_dates=sorted(
     )
 )
 
-def detect_sideways(df):
-
-    if len(df)<SIDEWAYS_LOOKBACK+1:
-        return False
-
-    r=df.iloc[
-        -(SIDEWAYS_LOOKBACK+1):-1
-    ]
-
-    e10=r["EMA10"].values
-    e20=r["EMA20"].values
-
-    if np.isnan(e10).any() or np.isnan(e20).any():
-        return False
-
-    cross_count=0
-
-    for i in range(1,len(r)):
-
-        golden=(
-            e10[i-1]<=e20[i-1]
-            and
-            e10[i]>e20[i]
-        )
-
-        death=(
-            e10[i-1]>=e20[i-1]
-            and
-            e10[i]<e20[i]
-        )
-
-        if golden or death:
-            cross_count+=1
-
-    e10_start=e10[0]
-    e10_end=e10[-1]
-
-    e20_start=e20[0]
-    e20_end=e20[-1]
-
-    if e10_start<=0 or e20_start<=0:
-        return False
-
-    slope10=abs(
-        (e10_end-e10_start)
-        /e10_start
-        *100
-    )
-
-    slope20=abs(
-        (e20_end-e20_start)
-        /e20_start
-        *100
-    )
-
-    gaps=np.abs(
-        (e10-e20)/e20
-    )*100
-
-    avg_gap=float(np.mean(gaps))
-    max_gap=float(np.max(gaps))
-
-    score=0
-
-    if cross_count>=MIN_CROSSES:
-        score+=1
-
-    if slope10<=EMA10_SLOPE_LIMIT:
-        score+=1
-
-    if slope20<=EMA20_SLOPE_LIMIT:
-        score+=1
-
-    if (
-        avg_gap<=AVG_GAP_LIMIT
-        and
-        max_gap<=MAX_GAP_LIMIT
-    ):
-        score+=1
-
-    return score>=MIN_SIDEWAYS_SCORE
-
-
 states={
     name:{
         "position":0.0,
         "entry_price":0.0,
-        "peak_price":0.0
+        "first_sell_done":False
     }
     for name in prepared_data
 }
@@ -226,15 +119,12 @@ for current_date in all_dates:
 
         idx=df.index.get_loc(current_date)
 
-        if idx<SIDEWAYS_LOOKBACK+20:
+        if idx<RSI_PERIOD+1:
             continue
 
-        d=df.iloc[:idx+1]
-        row=d.iloc[-1]
+        row=df.iloc[idx]
 
-        if row[
-            ["Close","EMA10","EMA20","RSI14"]
-        ].isna().any():
+        if pd.isna(row["RSI14"]) or pd.isna(row["Close"]):
             continue
 
         price=float(row["Close"])
@@ -242,116 +132,161 @@ for current_date in all_dates:
 
         date_str=current_date.strftime("%Y-%m-%d")
 
-        is_sideways=detect_sideways(d)
-
         s=states[name]
 
-        profit=0.0
+        # ==========================================
+        # BUY - RSI < 33
+        # ==========================================
 
-        if s["entry_price"]>0:
-
-            profit=(
-                (price-s["entry_price"])
-                /s["entry_price"]
-            )*100
-
-            if price>s["peak_price"]:
-                s["peak_price"]=price
-
-        # =========================
-        # BUY
-        # =========================
-
-        if (
-            s["position"]==0.0
-            and
-            is_sideways
-            and
-            rsi<RSI_BUY
-        ):
+        if s["position"]==0.0 and rsi<RSI_BUY:
 
             s["position"]=1.0
             s["entry_price"]=price
-            s["peak_price"]=price
+            s["first_sell_done"]=False
 
             trades_history.append({
                 "symbol":name,
                 "status":"OPEN",
                 "entry_date":date_str,
                 "entry_price":round(price,2),
-                "exit_date":None,
-                "exit_price":None,
-                "profit_pct":None
+                "position":1.0,
+                "sales":[]
             })
 
-        # =========================
-        # EXIT
-        # =========================
+        # ==========================================
+        # MANAGE OPEN POSITION
+        # ==========================================
 
-        elif s["position"]==1.0:
+        elif s["position"]>0.0:
 
-            peak_profit=(
-                (s["peak_price"]-s["entry_price"])
+            profit=(
+                (price-s["entry_price"])
                 /s["entry_price"]
             )*100
 
-            hard_stop=(
-                profit<=-HARD_STOP_PERCENT
-            )
+            active=[
+                t for t in trades_history
+                if (
+                    t["symbol"]==name
+                    and
+                    t["status"]=="OPEN"
+                )
+            ]
 
-            retracement=(
-                (s["peak_price"]-price)
-                /s["peak_price"]
-            )*100
+            if not active:
+                continue
 
-            trailing_stop=(
-                peak_profit>=TRAILING_ACTIVATION_PROFIT
-                and
-                retracement>=TRAILING_RETRACEMENT
-            )
+            trade=active[-1]
 
-            rsi_exit=rsi>RSI_SELL
+            # ======================================
+            # HARD STOP
+            # ======================================
 
-            if hard_stop:
-                exit_reason="HARD_STOP"
+            if profit<=-HARD_STOP_PERCENT:
 
-            elif trailing_stop:
-                exit_reason="TRAILING_STOP"
+                sold_position=s["position"]
 
-            elif rsi_exit:
-                exit_reason="RSI_63"
+                trade["sales"].append({
+                    "date":date_str,
+                    "price":round(price,2),
+                    "position_sold":sold_position,
+                    "profit_pct":round(profit,2),
+                    "reason":"HARD_STOP"
+                })
 
-            else:
-                exit_reason=None
+                trade["status"]="CLOSED"
+                trade["exit_date"]=date_str
+                trade["exit_price"]=round(price,2)
+                trade["profit_pct"]=round(profit,2)
+                trade["exit_reason"]="HARD_STOP"
 
-            if exit_reason:
-
-                active=[
-                    t for t in trades_history
-                    if (
-                        t["symbol"]==name
-                        and
-                        t["status"]=="OPEN"
-                    )
-                ]
-
-                if active:
-
-                    active[-1]["status"]="CLOSED"
-                    active[-1]["exit_date"]=date_str
-                    active[-1]["exit_price"]=round(price,2)
-                    active[-1]["profit_pct"]=round(profit,2)
-                    active[-1]["exit_reason"]=exit_reason
-
-                total_portfolio_profit+=profit
+                total_portfolio_profit+=profit*sold_position
 
                 s["position"]=0.0
                 s["entry_price"]=0.0
-                s["peak_price"]=0.0
+                s["first_sell_done"]=False
+
+                continue
+
+            # ======================================
+            # FIRST SELL - RSI >= 60
+            # SELL 50%
+            # ======================================
+
+            if (
+                not s["first_sell_done"]
+                and
+                rsi>=RSI_SELL_1
+            ):
+
+                sold=0.5
+                sale_profit=profit
+
+                trade["sales"].append({
+                    "date":date_str,
+                    "price":round(price,2),
+                    "position_sold":sold,
+                    "profit_pct":round(sale_profit,2),
+                    "reason":"RSI_60"
+                })
+
+                total_portfolio_profit+=(
+                    sale_profit*sold
+                )
+
+                s["position"]=0.5
+                s["first_sell_done"]=True
+
+            # ======================================
+            # SECOND SELL - RSI >= 70
+            # SELL REMAINING 50%
+            # ======================================
+
+            elif (
+                s["first_sell_done"]
+                and
+                rsi>=RSI_SELL_2
+            ):
+
+                sold=0.5
+                sale_profit=profit
+
+                trade["sales"].append({
+                    "date":date_str,
+                    "price":round(price,2),
+                    "position_sold":sold,
+                    "profit_pct":round(sale_profit,2),
+                    "reason":"RSI_70"
+                })
+
+                total_portfolio_profit+=(
+                    sale_profit*sold
+                )
+
+                trade["status"]="CLOSED"
+                trade["exit_date"]=date_str
+                trade["exit_price"]=round(price,2)
+                trade["profit_pct"]=round(
+                    (
+                        trade["sales"][0]["profit_pct"]*0.5
+                        +
+                        sale_profit*0.5
+                    ),
+                    2
+                )
+                trade["exit_reason"]="RSI_70"
+
+                s["position"]=0.0
+                s["entry_price"]=0.0
+                s["first_sell_done"]=False
 
     portfolio_equity_curve.append(
         total_portfolio_profit
     )
+
+# ============================================================
+# STATISTICS
+# ============================================================
 
 closed_trades=[
     t for t in trades_history
@@ -416,19 +351,15 @@ else:
     max_drawdown=0.0
 
 results_summary={
+    "strategy":"Weekly RSI 33/60/70 Partial Exit",
     "parameters":{
-        "sideways_lookback":SIDEWAYS_LOOKBACK,
-        "minimum_crosses":MIN_CROSSES,
-        "ema10_slope_limit":EMA10_SLOPE_LIMIT,
-        "ema20_slope_limit":EMA20_SLOPE_LIMIT,
-        "average_gap_limit":AVG_GAP_LIMIT,
-        "maximum_gap_limit":MAX_GAP_LIMIT,
-        "minimum_sideways_score":MIN_SIDEWAYS_SCORE,
+        "rsi_period":RSI_PERIOD,
         "rsi_buy":RSI_BUY,
-        "rsi_sell":RSI_SELL,
-        "hard_stop_percent":HARD_STOP_PERCENT,
-        "trailing_activation_profit":TRAILING_ACTIVATION_PROFIT,
-        "trailing_retracement":TRAILING_RETRACEMENT
+        "rsi_sell_1":RSI_SELL_1,
+        "rsi_sell_2":RSI_SELL_2,
+        "first_sell_percent":50,
+        "second_sell_percent":50,
+        "hard_stop_percent":HARD_STOP_PERCENT
     },
     "statistics":{
         "total_trades":total_count,
@@ -481,20 +412,19 @@ with open(
     )
 
 print("="*55)
-print("WEEKLY SIDEWAYS + RSI BACKTEST")
+print("WEEKLY RSI 33/60/70 BACKTEST")
 print("="*55)
-print(f"Sideways Lookback : {SIDEWAYS_LOOKBACK}")
-print(f"Minimum Crosses   : {MIN_CROSSES}")
-print(f"Sideways Score    : {MIN_SIDEWAYS_SCORE}/4")
-print(f"RSI Buy           : < {RSI_BUY}")
-print(f"RSI Sell          : > {RSI_SELL}")
+print(f"RSI Buy       : < {RSI_BUY}")
+print(f"RSI Sell 1    : >= {RSI_SELL_1} (50%)")
+print(f"RSI Sell 2    : >= {RSI_SELL_2} (50%)")
+print(f"Hard Stop     : {HARD_STOP_PERCENT}%")
 print("-"*55)
-print(f"Total Trades      : {total_count}")
-print(f"Winning Trades    : {wins_count}")
-print(f"Losing Trades     : {losses_count}")
-print(f"Win Rate          : {win_rate:.2f}%")
-print(f"Total Profit      : {total_portfolio_profit:.2f}%")
-print(f"Average Win       : {avg_win:.2f}%")
-print(f"Average Loss      : {avg_loss:.2f}%")
-print(f"Max Drawdown      : {max_drawdown:.2f}%")
+print(f"Total Trades  : {total_count}")
+print(f"Winning       : {wins_count}")
+print(f"Losing        : {losses_count}")
+print(f"Win Rate      : {win_rate:.2f}%")
+print(f"Total Profit  : {total_portfolio_profit:.2f}%")
+print(f"Average Win   : {avg_win:.2f}%")
+print(f"Average Loss  : {avg_loss:.2f}%")
+print(f"Max Drawdown  : {max_drawdown:.2f}%")
 print("="*55)
