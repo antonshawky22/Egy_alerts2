@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 # ============================================================
-# WEEKLY RSI 33/60/70 + EMA20 DIRECTION
+# WEEKLY RSI 33 / 60 / 70
 # ============================================================
 
 DB_FILE = "egx_weekly_database_v1.json"
@@ -80,9 +80,7 @@ def calculate_rsi(series, period=14):
 
     rs = avg_gain / avg_loss.replace(0, np.nan)
 
-    rsi = 100 - (100 / (1 + rs))
-
-    return rsi
+    return 100 - (100 / (1 + rs))
 
 # ============================================================
 # LOAD DATABASE
@@ -126,11 +124,6 @@ for name in symbols:
             errors="coerce"
         )
 
-        df["EMA20"] = df["Close"].ewm(
-            span=20,
-            adjust=False
-        ).mean()
-
         df["RSI14"] = calculate_rsi(
             df["Close"],
             RSI_PERIOD
@@ -145,7 +138,7 @@ if not prepared_data:
     raise RuntimeError("No valid stock data found.")
 
 # ============================================================
-# ALL DATES
+# DATES
 # ============================================================
 
 all_dates = sorted(
@@ -155,12 +148,13 @@ all_dates = sorted(
 )
 
 # ============================================================
-# STATE
+# STATES
 # ============================================================
 
 states = {}
 
 for name in prepared_data:
+
     states[name] = {
         "position": 0.0,
         "entry_price": 0.0,
@@ -169,10 +163,6 @@ for name in prepared_data:
     }
 
 trades_history = []
-
-# Compound portfolio
-portfolio_value = 100.0
-portfolio_curve = []
 
 # ============================================================
 # BACKTEST
@@ -187,46 +177,28 @@ for current_date in all_dates:
 
         idx = df.index.get_loc(current_date)
 
-        # Need enough history for RSI and EMA20 - 3 weeks
-        if idx < 25:
+        if idx < RSI_PERIOD + 2:
             continue
 
         row = df.iloc[idx]
 
-        if pd.isna(row["RSI14"]) or pd.isna(row["EMA20"]):
+        if pd.isna(row["RSI14"]):
             continue
 
         price = float(row["Close"])
         rsi = float(row["RSI14"])
-        ema20 = float(row["EMA20"])
-
-        # ====================================================
-        # EMA20 DIRECTION
-        # Current EMA20 > EMA20 from 3 weeks ago
-        # ====================================================
-
-        ema20_3w_ago = float(
-            df["EMA20"].iloc[idx - 3]
-        )
-
-        ema20_direction = ema20 > ema20_3w_ago
 
         date_str = current_date.strftime("%Y-%m-%d")
 
         s = states[name]
 
         # ====================================================
-        # NO POSITION -> BUY
+        # BUY
         # ====================================================
 
         if s["position"] == 0.0:
 
-            buy_signal = (
-                rsi < RSI_BUY
-                and ema20_direction
-            )
-
-            if buy_signal:
+            if rsi < RSI_BUY:
 
                 s["position"] = 1.0
                 s["entry_price"] = price
@@ -247,10 +219,10 @@ for current_date in all_dates:
                 })
 
         # ====================================================
-        # POSITION MANAGEMENT
+        # MANAGE POSITION
         # ====================================================
 
-        elif s["position"] > 0:
+        else:
 
             entry_price = s["entry_price"]
 
@@ -259,15 +231,13 @@ for current_date in all_dates:
                 / entry_price
             ) * 100
 
-            # -----------------------------------------------
+            # =================================================
             # HARD STOP
-            # -----------------------------------------------
+            # =================================================
 
             if profit <= -HARD_STOP_PERCENT:
 
                 sold_position = s["position"]
-
-                sales_profit = profit
 
                 s["sales"].append({
                     "date": date_str,
@@ -277,7 +247,7 @@ for current_date in all_dates:
                         2
                     ),
                     "profit_pct": round(
-                        sales_profit,
+                        profit,
                         2
                     ),
                     "reason": "HARD_STOP"
@@ -315,27 +285,24 @@ for current_date in all_dates:
 
                 continue
 
-            # -----------------------------------------------
-            # SELL 50% AT RSI 60
-            # -----------------------------------------------
+            # =================================================
+            # FIRST SALE - 50% AT RSI 60
+            # =================================================
 
             if (
                 s["position"] == 1.0
                 and rsi >= RSI_SELL_1
             ):
 
-                sold = FIRST_SELL_PERCENT
-
                 sale_profit = profit
 
                 s["sales"].append({
                     "date": date_str,
                     "price": round(price, 2),
-                    "position_sold": sold,
-                    "profit_pct": round(
-                        sale_profit,
-                        2
-                    ),
+                    "position_sold":
+                        FIRST_SELL_PERCENT,
+                    "profit_pct":
+                        round(sale_profit, 2),
                     "reason": "RSI_60"
                 })
 
@@ -352,27 +319,24 @@ for current_date in all_dates:
                 if active:
                     active[-1]["sales"] = s["sales"]
 
-            # -----------------------------------------------
-            # SELL REMAINING 50% AT RSI 70
-            # -----------------------------------------------
+            # =================================================
+            # SECOND SALE - REMAINING 50% AT RSI 70
+            # =================================================
 
             elif (
                 s["position"] == 0.5
                 and rsi >= RSI_SELL_2
             ):
 
-                sold = SECOND_SELL_PERCENT
-
                 sale_profit = profit
 
                 s["sales"].append({
                     "date": date_str,
                     "price": round(price, 2),
-                    "position_sold": sold,
-                    "profit_pct": round(
-                        sale_profit,
-                        2
-                    ),
+                    "position_sold":
+                        SECOND_SELL_PERCENT,
+                    "profit_pct":
+                        round(sale_profit, 2),
                     "reason": "RSI_70"
                 })
 
@@ -396,7 +360,6 @@ for current_date in all_dates:
                         2
                     )
 
-                    # Weighted average profit
                     weighted_profit = (
                         s["sales"][0]["profit_pct"]
                         * FIRST_SELL_PERCENT
@@ -417,33 +380,8 @@ for current_date in all_dates:
                 s["entry_date"] = None
                 s["sales"] = []
 
-    # ========================================================
-    # PORTFOLIO CURVE
-    # ========================================================
-
-    closed_today = [
-        t for t in trades_history
-        if (
-            t["status"] == "CLOSED"
-            and t["exit_date"] == current_date.strftime(
-                "%Y-%m-%d"
-            )
-        )
-    ]
-
-    for trade in closed_today:
-
-        if trade["profit_pct"] is not None:
-
-            # Each completed trade is compounded
-            portfolio_value *= (
-                1 + trade["profit_pct"] / 100
-            )
-
-    portfolio_curve.append(portfolio_value)
-
 # ============================================================
-# CLOSE OPEN TRADES FOR REPORT ONLY
+# STATISTICS
 # ============================================================
 
 closed_trades = [
@@ -463,12 +401,7 @@ losing_trades = [
     and t["profit_pct"] <= 0
 ]
 
-# ============================================================
-# STATISTICS
-# ============================================================
-
 total_count = len(closed_trades)
-
 wins_count = len(winning_trades)
 losses_count = len(losing_trades)
 
@@ -480,12 +413,10 @@ win_rate = (
 
 avg_win = (
     float(
-        np.mean(
-            [
-                t["profit_pct"]
-                for t in winning_trades
-            ]
-        )
+        np.mean([
+            t["profit_pct"]
+            for t in winning_trades
+        ])
     )
     if winning_trades
     else 0.0
@@ -493,32 +424,48 @@ avg_win = (
 
 avg_loss = (
     float(
-        np.mean(
-            [
-                t["profit_pct"]
-                for t in losing_trades
-            ]
-        )
+        np.mean([
+            t["profit_pct"]
+            for t in losing_trades
+        ])
     )
     if losing_trades
     else 0.0
 )
 
 # ============================================================
-# MAX DRAWDOWN
+# SIMPLE TRADE EQUITY CURVE
 # ============================================================
 
-if portfolio_curve:
+equity = 100.0
+equity_curve = [equity]
 
-    equity = np.array(
-        portfolio_curve,
+for trade in closed_trades:
+
+    profit = trade["profit_pct"]
+
+    if profit is None:
+        continue
+
+    equity *= (
+        1 + profit / 100
+    )
+
+    equity_curve.append(equity)
+
+if equity_curve:
+
+    equity_array = np.array(
+        equity_curve,
         dtype=float
     )
 
-    peak = np.maximum.accumulate(equity)
+    peak = np.maximum.accumulate(
+        equity_array
+    )
 
     drawdown = (
-        (peak - equity)
+        (peak - equity_array)
         / peak
         * 100
     )
@@ -532,8 +479,8 @@ else:
     max_drawdown = 0.0
 
 compound_return = (
-    (portfolio_value - 100.0)
-    / 100.0
+    (equity - 100)
+    / 100
 ) * 100
 
 # ============================================================
@@ -541,63 +488,42 @@ compound_return = (
 # ============================================================
 
 results_summary = {
-
     "strategy":
-        "Weekly RSI 33/60/70 + EMA20 Direction",
+        "Weekly RSI 33/60/70",
 
     "parameters": {
-
-        "rsi_period":
-            RSI_PERIOD,
-
-        "rsi_buy":
-            RSI_BUY,
-
-        "rsi_sell_1":
-            RSI_SELL_1,
-
-        "rsi_sell_2":
-            RSI_SELL_2,
-
-        "first_sell_percent":
-            50,
-
-        "second_sell_percent":
-            50,
-
-        "ema20_direction_filter":
-            "EMA20 > EMA20 from 3 weeks ago",
-
-        "hard_stop_percent":
-            HARD_STOP_PERCENT
+        "rsi_period": RSI_PERIOD,
+        "rsi_buy": RSI_BUY,
+        "rsi_sell_1": RSI_SELL_1,
+        "rsi_sell_2": RSI_SELL_2,
+        "first_sell_percent": 50,
+        "second_sell_percent": 50,
+        "hard_stop_percent": HARD_STOP_PERCENT
     },
 
     "statistics": {
-
-        "total_trades":
-            total_count,
-
-        "winning_trades":
-            wins_count,
-
-        "losing_trades":
-            losses_count,
-
-        "win_rate_percent":
-            round(win_rate, 2),
-
+        "total_trades": total_count,
+        "winning_trades": wins_count,
+        "losing_trades": losses_count,
+        "win_rate_percent": round(
+            win_rate,
+            2
+        ),
         "compound_portfolio_return_percent":
             round(
                 compound_return,
                 2
             ),
-
         "average_winning_trade_percent":
-            round(avg_win, 2),
-
+            round(
+                avg_win,
+                2
+            ),
         "average_losing_trade_percent":
-            round(avg_loss, 2),
-
+            round(
+                avg_loss,
+                2
+            ),
         "maximum_drawdown_percent":
             round(
                 max_drawdown,
@@ -607,7 +533,7 @@ results_summary = {
 }
 
 # ============================================================
-# SAVE
+# SAVE RESULTS
 # ============================================================
 
 with open(
@@ -639,7 +565,7 @@ with open(
 print("=" * 50)
 print("WEEKLY RSI 33/60/70 BACKTEST")
 print("=" * 50)
-print(f"Trades:       {total_count}")
+print(f"Total Trades: {total_count}")
 print(f"Win Rate:     {win_rate:.2f}%")
 print(f"Compound:     {compound_return:.2f}%")
 print(f"Max Drawdown: {max_drawdown:.2f}%")
