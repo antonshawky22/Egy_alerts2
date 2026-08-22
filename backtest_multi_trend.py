@@ -6,10 +6,10 @@ import numpy as np
 # ============================================================
 # SIMPLE EMA CROSSOVER SYSTEM (EMA10 / EMA20)
 # ============================================================
+
 DB_FILE = "egx_history_database_v2.json"
 RESULTS_FILE = "backtest_results.json"
 TRADES_FILE = "backtest_trades.json"
-
 
 symbols = {
     "OLFI": "OLFI", "EMFD": "EMFD", "ETEL": "ETEL", "EAST": "EAST",
@@ -179,80 +179,3 @@ print(f"Win Rate:            {win_rate:.2f}%")
 print(f"Total Profit:        {total_portfolio_profit:.2f}%")
 print(f"Max Drawdown:        {max_drawdown:.2f}%")
 print("=" * 60)
-￼Enter json
-import os
-import pandas as pd
-import numpy as np
-
-# ============================================================
-# SIMPLE EMA CROSSOVER SYSTEM (EMA10 / EMA20)
-# ============================================================
-
-DB_FILE = "egx_history_database_v2.json"
-RESULTS_FILE = "backtest_ema_cross_results.json"
-TRADES_FILE = "backtest_ema_cross_trades.json"
-
-symbols = {
-    "OLFI": "OLFI", "EMFD": "EMFD", "ETEL": "ETEL", "EAST": "EAST",
-    "EFIH": "EFIH", "ABUK": "ABUK", "OIH": "OIH", "SWDY": "SWDY", "ISPH": "ISPH",
-    "ATQA": "ATQA", "MTIE": "MTIE", "HRHO": "HRHO", "ORWE": "ORWE",
-    "JUFO": "JUFO", "DSCW": "DSCW", "SUGR": "SUGR", "ELSH": "ELSH", "RMDA": "RMDA",
-    "RAYA": "RAYA", "EEII": "EEII", "MPCO": "MPCO", "GBCO": "GBCO", "TMGH": "TMGH",
-    "ORHD": "ORHD", "AMOC": "AMOC", "FWRY": "FWRY", "COMI": "COMI", "ADIB": "ADIB",
-    "PHDC": "PHDC", "MCQE": "MCQE", "SKPC": "SKPC", "EGAL": "EGAL"
-}
-
-# ============================================================
-# LOAD DATABASE & PREPARE DATA
-# ============================================================
-
-if not os.path.exists(DB_FILE):
-    raise FileNotFoundError(f"Database file not found: {DB_FILE}")
-
-with open(DB_FILE, "r", encoding="utf-8") as f:
-    raw_database = json.load(f)
-
-prepared_data = {}
-
-for name in symbols:
-    if name not in raw_database:
-        continue
-    content = raw_database[name]
-    if "data" not in content or "columns" not in content:
-        continue
-    try:
-        df = pd.DataFrame.from_dict(content["data"], orient="index", columns=content["columns"])
-        df.index = pd.to_datetime(df.index)
-        df = df.sort_index(ascending=True)
-
-        if len(df) < 30:
-            continue
-
-        close = df["Close"]
-        df["EMA10"] = close.ewm(span=10, adjust=False).mean()
-        df["EMA20"] = close.ewm(span=20, adjust=False).mean()
-
-        prepared_data[name] = df
-    except Exception:
-        pass
-
-all_dates = set()
-for df in prepared_data.values():
-    all_dates.update(df.index)
-all_dates = sorted(all_dates)
-
-# ============================================================
-# STATE TRACKING & BACKTEST LOOP
-# ============================================================
-
-states = {name: {"position": 0.0, "entry_price": 0.0} for name in prepared_data}
-trades_history = []
-total_portfolio_profit = 0.0
-portfolio_equity_curve = []
-
-for current_date in all_dates:
-    for name, df in prepared_data.items():
-        if current_date not in df.index:
-            continue
-
-        idx = df.index.get_loc(current_date)
