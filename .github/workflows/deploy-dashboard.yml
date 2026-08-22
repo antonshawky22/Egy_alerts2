@@ -1,0 +1,42 @@
+name: Deploy Dashboard Only
+
+on:
+  push:
+    paths:
+      # تشغيل التحديث فقط إذا تتغيرت إحدى هذه الملفات تحديداً
+      - 'index.html'
+      - 'trades.json'
+      - 'trades2.json'
+      - 'egx_history_database_v2.json'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
