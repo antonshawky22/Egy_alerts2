@@ -138,7 +138,10 @@
     "symbol": "EMFD",
     "entry_trend": "🔛",
     "entry_price": 11.4,
-    "entry_date": "2026-08-02"
+    "entry_date": "2026-08-02",
+    "exit_price": 12.07,
+    "exit_date": "2026-08-23",
+    "profit_pct": 5.88
   },
   {
     "symbol": "ATQA",

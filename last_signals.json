@@ -10,9 +10,9 @@
     "entry_price": 22.9
   },
   "EMFD": {
-    "trend": "↗️",
-    "in_position": true,
-    "entry_price": 11.4
+    "trend": "🔛",
+    "in_position": false,
+    "entry_price": null
   },
   "ETEL": {
     "trend": "↗️",
@@ -30,12 +30,12 @@
     "entry_price": 22.33
   },
   "ABUK": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 74.76
   },
   "OIH": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -70,12 +70,12 @@
     "entry_price": 27.55
   },
   "ORWE": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 25.98
   },
   "JUFO": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -95,7 +95,7 @@
     "entry_price": null
   },
   "RMDA": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 6.51
   },
@@ -120,7 +120,7 @@
     "entry_price": 30.89
   },
   "TMGH": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -140,7 +140,7 @@
     "entry_price": null
   },
   "COMI": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": true,
     "entry_price": 136.77
   },
@@ -165,7 +165,7 @@
     "entry_price": 16.96
   },
   "EGAL": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 334.9
   }
