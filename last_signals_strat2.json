@@ -10,7 +10,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 11.74,
-    "peak_profit": 0.5962521294718933,
+    "peak_profit": 3.0664395229982917,
     "realized_pnl_tracker": []
   },
   "ETEL": {
@@ -38,7 +38,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 75.52,
-    "peak_profit": 0.0,
+    "peak_profit": 1.575741525423726,
     "realized_pnl_tracker": []
   },
   "OIH": {
@@ -59,7 +59,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 13.0,
-    "peak_profit": 1.307692307692307,
+    "peak_profit": 3.6923076923076956,
     "realized_pnl_tracker": []
   },
   "ATQA": {
@@ -87,7 +87,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 25.36,
-    "peak_profit": 0.0,
+    "peak_profit": 0.9069400630914843,
     "realized_pnl_tracker": []
   },
   "JUFO": {
@@ -164,7 +164,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 40.9,
-    "peak_profit": 0.17114914425427943,
+    "peak_profit": 0.9046454767726272,
     "realized_pnl_tracker": []
   },
   "AMOC": {
