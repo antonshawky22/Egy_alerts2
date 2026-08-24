@@ -35,7 +35,7 @@
     "entry_price": 74.76
   },
   "OIH": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": false,
     "entry_price": null
   },
@@ -71,8 +71,8 @@
   },
   "ORWE": {
     "trend": "🔛",
-    "in_position": true,
-    "entry_price": 25.98
+    "in_position": false,
+    "entry_price": null
   },
   "JUFO": {
     "trend": "🔛",
@@ -86,8 +86,8 @@
   },
   "SUGR": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 50.93
+    "in_position": false,
+    "entry_price": null
   },
   "ELSH": {
     "trend": "🔛",
@@ -120,7 +120,7 @@
     "entry_price": 30.89
   },
   "TMGH": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -150,7 +150,7 @@
     "entry_price": 51.9
   },
   "PHDC": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 14.6
   },
@@ -166,7 +166,7 @@
   },
   "EGAL": {
     "trend": "🔛",
-    "in_position": true,
-    "entry_price": 334.9
+    "in_position": false,
+    "entry_price": null
   }
 }

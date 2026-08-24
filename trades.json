@@ -261,7 +261,10 @@
     "symbol": "ORWE",
     "entry_trend": "↗️",
     "entry_price": 25.98,
-    "entry_date": "2026-08-18"
+    "entry_date": "2026-08-18",
+    "exit_price": 26.57,
+    "exit_date": "2026-08-24",
+    "profit_pct": 2.27
   },
   {
     "symbol": "MPCO",
@@ -291,12 +294,18 @@
     "symbol": "EGAL",
     "entry_trend": "↗️",
     "entry_price": 334.9,
-    "entry_date": "2026-08-20"
+    "entry_date": "2026-08-20",
+    "exit_price": 339.0,
+    "exit_date": "2026-08-24",
+    "profit_pct": 1.22
   },
   {
     "symbol": "SUGR",
     "entry_trend": "↗️",
     "entry_price": 50.93,
-    "entry_date": "2026-08-20"
+    "entry_date": "2026-08-20",
+    "exit_price": 55.4,
+    "exit_date": "2026-08-24",
+    "profit_pct": 8.78
   }
 ]
