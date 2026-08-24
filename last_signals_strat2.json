@@ -1,8 +1,8 @@
 {
   "OLFI": {
     "cycle": 1,
-    "position": 0.33,
-    "avg_price": 24.53,
+    "position": 0.66,
+    "avg_price": 24.065000000000005,
     "peak_profit": 1.1822258459029724,
     "realized_pnl_tracker": []
   },
@@ -87,7 +87,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 25.36,
-    "peak_profit": 3.706624605678239,
+    "peak_profit": 4.692429022082024,
     "realized_pnl_tracker": []
   },
   "JUFO": {
@@ -99,8 +99,8 @@
   },
   "DSCW": {
     "cycle": 1,
-    "position": 0.66,
-    "avg_price": 1.9799999999999998,
+    "position": 1.0,
+    "avg_price": 1.9426,
     "peak_profit": 0.4926108374384351,
     "realized_pnl_tracker": []
   },
@@ -197,8 +197,8 @@
   },
   "PHDC": {
     "cycle": 1,
-    "position": 0.33,
-    "avg_price": 15.27,
+    "position": 0.66,
+    "avg_price": 15.02,
     "peak_profit": 3.077930582842179,
     "realized_pnl_tracker": []
   },
