@@ -29,8 +29,8 @@
   },
   "EFIH": {
     "cycle": 1,
-    "position": 0.0,
-    "avg_price": 0.0,
+    "position": 0.33,
+    "avg_price": 24.26,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
@@ -38,7 +38,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 75.52,
-    "peak_profit": 1.575741525423726,
+    "peak_profit": 1.9729872881356054,
     "realized_pnl_tracker": []
   },
   "OIH": {
@@ -87,7 +87,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 25.36,
-    "peak_profit": 2.5236593059936934,
+    "peak_profit": 3.706624605678239,
     "realized_pnl_tracker": []
   },
   "JUFO": {
@@ -164,7 +164,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 40.9,
-    "peak_profit": 3.300733496332522,
+    "peak_profit": 3.422982885085571,
     "realized_pnl_tracker": []
   },
   "AMOC": {

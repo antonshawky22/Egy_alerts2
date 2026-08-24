@@ -31,7 +31,21 @@
   ],
   "ETEL": [],
   "EAST": [],
-  "EFIH": [],
+  "EFIH": [
+    {
+      "symbol": "EFIH",
+      "cycle": 1,
+      "status": "OPEN",
+      "first_entry": "2026-08-24 with price 24.26",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 24.26,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
+    }
+  ],
   "ABUK": [
     {
       "symbol": "ABUK",
