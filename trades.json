@@ -307,5 +307,11 @@
     "exit_price": 55.4,
     "exit_date": "2026-08-24",
     "profit_pct": 8.78
+  },
+  {
+    "symbol": "TMGH",
+    "entry_trend": "↗️",
+    "entry_price": 98.0,
+    "entry_date": "2026-08-24"
   }
 ]
