@@ -5,7 +5,7 @@
     "entry_price": null
   },
   "OLFI": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 22.9
   },
@@ -116,11 +116,11 @@
   },
   "GBCO": {
     "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 28.4
   },
   "TMGH": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": true,
     "entry_price": 98.0
   },

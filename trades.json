@@ -313,5 +313,11 @@
     "entry_trend": "↗️",
     "entry_price": 98.0,
     "entry_date": "2026-08-24"
+  },
+  {
+    "symbol": "GBCO",
+    "entry_trend": "🔛",
+    "entry_price": 28.4,
+    "entry_date": "2026-08-25"
   }
 ]
