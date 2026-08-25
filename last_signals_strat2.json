@@ -98,10 +98,10 @@
     "realized_pnl_tracker": []
   },
   "DSCW": {
-    "cycle": 1,
-    "position": 1.0,
-    "avg_price": 1.9426,
-    "peak_profit": 0.4926108374384351,
+    "cycle": 2,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
   "SUGR": {
@@ -157,7 +157,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 97.8,
-    "peak_profit": 0.4089979550102308,
+    "peak_profit": 0.7157464212678966,
     "realized_pnl_tracker": []
   },
   "ORHD": {
@@ -185,7 +185,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 139.27,
-    "peak_profit": 0.9334386443598642,
+    "peak_profit": 1.2134702376678377,
     "realized_pnl_tracker": []
   },
   "ADIB": {
