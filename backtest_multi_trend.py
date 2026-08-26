@@ -1,5 +1,5 @@
 print("=" * 68)
-print("EGX WEEKLY SIMPLE PULLBACK BACKTEST v6.0")
+print("EGX WEEKLY SIMPLE PULLBACK BACKTEST v6.1")
 print("SIMPLE ENTRY + SIMPLE EXIT + PROFIT PROTECTION")
 print("=" * 68)
 
@@ -27,19 +27,33 @@ MAX_POSITIONS = 8
 POSITION_SIZE = 1.0 / MAX_POSITIONS
 
 
+# ==============================================================
+# STRATEGY PARAMETERS
+# ==============================================================
+
 RSI_PERIOD = 14
 
-RSI_ENTRY = 34
-RSI_EXIT = 74
+# Deeper weekly pullback
+RSI_ENTRY = 32
 
-EMA_FAST = 48
-EMA_MID = 50
-EMA_LONG = 52
+# Simple exit
+RSI_EXIT = 72
 
+
+# Stronger long-term trend structure
+EMA_FAST = 50
+EMA_MID = 70
+EMA_LONG = 100
+
+
+# Initial protection
 STOP_LOSS_PERCENT = 7.0
 
+
+# Profit protection
 TRAIL_START_PERCENT = 8.0
 TRAIL_DISTANCE_PERCENT = 5.0
+
 
 MIN_BARS = 100
 
@@ -51,9 +65,11 @@ MIN_BARS = 100
 print("\nLoading database...")
 
 if not os.path.exists(DB_FILE):
+
     raise FileNotFoundError(
         f"Database file not found: {DB_FILE}"
     )
+
 
 with open(
     DB_FILE,
@@ -62,6 +78,7 @@ with open(
 ) as f:
 
     database = json.load(f)
+
 
 print(
     f"Database loaded: {len(database)} symbols"
@@ -140,6 +157,7 @@ def database_to_dataframe(data):
                 if len(values) != len(
                     data["columns"]
                 ):
+
                     continue
 
                 row = dict(
@@ -155,6 +173,7 @@ def database_to_dataframe(data):
 
         df = pd.DataFrame(rows)
 
+
     # ----------------------------------------------------------
     # Simple list format
     # ----------------------------------------------------------
@@ -163,12 +182,16 @@ def database_to_dataframe(data):
 
         df = pd.DataFrame(data)
 
+
     else:
 
         return None
 
+
     if df.empty:
+
         return None
+
 
     # ----------------------------------------------------------
     # Normalize column names
@@ -179,6 +202,7 @@ def database_to_dataframe(data):
         for c in df.columns
     ]
 
+
     required = [
         "Date",
         "Open",
@@ -187,12 +211,14 @@ def database_to_dataframe(data):
         "Close"
     ]
 
+
     if not all(
         c in df.columns
         for c in required
     ):
 
         return None
+
 
     # ----------------------------------------------------------
     # Convert data
@@ -203,12 +229,14 @@ def database_to_dataframe(data):
         errors="coerce"
     )
 
+
     for column in required[1:]:
 
         df[column] = pd.to_numeric(
             df[column],
             errors="coerce"
         )
+
 
     # ----------------------------------------------------------
     # Clean
@@ -218,14 +246,17 @@ def database_to_dataframe(data):
         subset=required
     )
 
+
     df = df.sort_values(
         "Date"
     )
+
 
     df = df.drop_duplicates(
         "Date",
         keep="last"
     )
+
 
     return df.reset_index(
         drop=True
@@ -240,6 +271,7 @@ def prepare_dataframe(df):
 
     df = df.copy()
 
+
     # ----------------------------------------------------------
     # RSI
     # ----------------------------------------------------------
@@ -249,36 +281,51 @@ def prepare_dataframe(df):
         RSI_PERIOD
     )
 
+
     # ----------------------------------------------------------
     # EMAs
+    #
+    # Actual values:
+    #
+    # EMA50
+    # EMA70
+    # EMA100
     # ----------------------------------------------------------
 
-    df["EMA20"] = df["Close"].ewm(
+    df["EMA_FAST"] = df["Close"].ewm(
         span=EMA_FAST,
         adjust=False
     ).mean()
 
-    df["EMA40"] = df["Close"].ewm(
+
+    df["EMA_MID"] = df["Close"].ewm(
         span=EMA_MID,
         adjust=False
     ).mean()
 
-    df["EMA80"] = df["Close"].ewm(
+
+    df["EMA_LONG"] = df["Close"].ewm(
         span=EMA_LONG,
         adjust=False
     ).mean()
 
+
     # ----------------------------------------------------------
     # SIMPLE UPTREND
     #
-    # EMA20 > EMA40 > EMA80
+    # EMA50 > EMA70 > EMA100
     # ----------------------------------------------------------
 
     df["UPTREND"] = (
-        (df["EMA20"] > df["EMA40"])
+
+        (df["EMA_FAST"] > df["EMA_MID"])
+
         &
-        (df["EMA40"] > df["EMA80"])
+
+        (df["EMA_MID"] > df["EMA_LONG"])
+
     )
+
 
     return df
 
@@ -291,9 +338,11 @@ def calculate_trade_profit(trade):
 
     total = 0.0
 
+
     for sale in trade["sales"]:
 
         total += sale["capital_return"]
+
 
     return round(
         total,
@@ -311,33 +360,42 @@ def backtest_symbol(symbol, df):
 
     position = None
 
+
     for i in range(len(df)):
 
         row = df.iloc[i]
+
 
         date = row["Date"].strftime(
             "%Y-%m-%d"
         )
 
+
         close = float(
             row["Close"]
         )
+
 
         high = float(
             row["High"]
         )
 
+
         low = float(
             row["Low"]
         )
 
+
         rsi = row["RSI"]
+
 
         if pd.isna(rsi):
 
             continue
 
+
         rsi = float(rsi)
+
 
         uptrend = bool(
             row["UPTREND"]
@@ -351,9 +409,13 @@ def backtest_symbol(symbol, df):
         if position is None:
 
             if (
+
                 uptrend
+
                 and
+
                 rsi <= RSI_ENTRY
+
             ):
 
                 position = {
@@ -392,6 +454,7 @@ def backtest_symbol(symbol, df):
                         False
                 }
 
+
                 continue
 
 
@@ -406,8 +469,6 @@ def backtest_symbol(symbol, df):
 
         # ======================================================
         # PREVIOUS HIGH
-        #
-        # Important:
         #
         # Current candle high is NOT used to create a trailing
         # stop for the same candle.
@@ -427,9 +488,12 @@ def backtest_symbol(symbol, df):
                 position["highest_price"]
             )
 
+
         previous_highest = max(
+
             position["highest_price"],
             previous_high
+
         )
 
 
@@ -447,12 +511,16 @@ def backtest_symbol(symbol, df):
         # ======================================================
 
         initial_stop = (
+
             avg_price *
+
             (
                 1 -
                 STOP_LOSS_PERCENT / 100
             )
+
         )
+
 
         stop_price = initial_stop
 
@@ -460,9 +528,9 @@ def backtest_symbol(symbol, df):
         # ======================================================
         # PROFIT PROTECTION
         #
-        # Activate after +6%.
+        # Activate after +8%.
         #
-        # Then protect 5% below the highest price.
+        # Protect 5% below the highest known price.
         # ======================================================
 
         previous_profit = (
@@ -481,17 +549,24 @@ def backtest_symbol(symbol, df):
 
             position["trail_active"] = True
 
+
             trailing_stop = (
+
                 previous_highest *
+
                 (
                     1 -
                     TRAIL_DISTANCE_PERCENT / 100
                 )
+
             )
 
+
             stop_price = max(
+
                 stop_price,
                 trailing_stop
+
             )
 
 
@@ -502,13 +577,13 @@ def backtest_symbol(symbol, df):
         if low <= stop_price:
 
             # --------------------------------------------------
-            # Keep the same accounting convention as the
-            # previous backtest:
+            # Keep the same accounting convention:
             #
             # Exit is recorded at weekly CLOSE.
             # --------------------------------------------------
 
             exit_price = close
+
 
             profit_pct = (
 
@@ -521,11 +596,16 @@ def backtest_symbol(symbol, df):
 
             ) * 100
 
+
             weight = position["weight"]
 
+
             capital_return = (
+
                 profit_pct / 100
+
             ) * weight
+
 
             if position["trail_active"]:
 
@@ -561,30 +641,41 @@ def backtest_symbol(symbol, df):
 
                 "reason":
                     reason
+
             })
 
 
             position["weight"] = 0.0
 
+
             position["status"] = "CLOSED"
+
 
             position["exit_date"] = date
 
+
             position["exit_price"] = exit_price
+
 
             position["exit_reason"] = reason
 
+
             position["profit_pct"] = (
+
                 calculate_trade_profit(
                     position
                 )
+
             )
+
 
             trades.append(
                 position
             )
 
+
             position = None
+
 
             continue
 
@@ -597,6 +688,7 @@ def backtest_symbol(symbol, df):
 
             exit_price = close
 
+
             profit_pct = (
 
                 (
@@ -608,10 +700,14 @@ def backtest_symbol(symbol, df):
 
             ) * 100
 
+
             weight = position["weight"]
 
+
             capital_return = (
+
                 profit_pct / 100
+
             ) * weight
 
 
@@ -640,32 +736,43 @@ def backtest_symbol(symbol, df):
 
                 "reason":
                     "RSI_EXIT"
+
             })
 
 
             position["weight"] = 0.0
 
+
             position["status"] = "CLOSED"
+
 
             position["exit_date"] = date
 
+
             position["exit_price"] = exit_price
+
 
             position["exit_reason"] = (
                 "RSI_EXIT"
             )
 
+
             position["profit_pct"] = (
+
                 calculate_trade_profit(
                     position
                 )
+
             )
+
 
             trades.append(
                 position
             )
 
+
             position = None
+
 
             continue
 
@@ -677,8 +784,10 @@ def backtest_symbol(symbol, df):
         # ======================================================
 
         position["highest_price"] = max(
+
             position["highest_price"],
             high
+
         )
 
 
@@ -692,29 +801,37 @@ def backtest_symbol(symbol, df):
             df.iloc[-1]["Close"]
         )
 
+
         position["status"] = "OPEN"
+
 
         position["last_price"] = (
             last_price
         )
 
+
         position["unrealized_pct"] = round(
 
             (
+
                 (
                     last_price -
                     position["avg_price"]
                 )
                 /
                 position["avg_price"]
+
             ) * 100,
 
             2
+
         )
+
 
         trades.append(
             position
         )
+
 
     return trades
 
@@ -724,6 +841,7 @@ def backtest_symbol(symbol, df):
 # ==============================================================
 
 all_trades = []
+
 
 print("\nStarting backtest...\n")
 
@@ -762,8 +880,10 @@ for symbol, data in database.items():
     if len(df) < MIN_BARS:
 
         print(
+
             f"⚠️ {symbol}: "
             f"{len(df)} bars"
+
         )
 
         continue
@@ -795,8 +915,10 @@ for symbol, data in database.items():
 
 
     print(
+
         f"{symbol:8} | "
         f"Closed Trades: {closed:3}"
+
     )
 
 
@@ -805,8 +927,10 @@ for symbol, data in database.items():
 # ==============================================================
 
 all_trades.sort(
+
     key=lambda x:
     x["entry_date"]
+
 )
 
 
@@ -911,18 +1035,18 @@ average_loss = (
 #
 # Every closed trade receives 1/8 of portfolio.
 #
-# This means:
-#
 # +10% trade
-#
-# = +1.25% portfolio impact
+# =
+# +1.25% portfolio impact
 #
 # before compounding.
 # ==============================================================
 
 portfolio = INITIAL_CAPITAL
 
+
 equity_curve = []
+
 
 portfolio_trades = []
 
@@ -930,21 +1054,27 @@ portfolio_trades = []
 for trade in closed_trades:
 
     trade_return = (
+
         trade["profit_pct"]
         /
         100
+
     )
 
 
     weighted_return = (
+
         trade_return *
         POSITION_SIZE
+
     )
 
 
     portfolio *= (
+
         1 +
         weighted_return
+
     )
 
 
@@ -978,6 +1108,7 @@ for trade in closed_trades:
                 portfolio,
                 2
             )
+
     })
 
 
@@ -997,6 +1128,7 @@ compound_return = (
 # ==============================================================
 
 peak = INITIAL_CAPITAL
+
 
 max_drawdown = 0.0
 
@@ -1021,8 +1153,10 @@ for value in equity_curve:
 
 
     max_drawdown = max(
+
         max_drawdown,
         drawdown
+
     )
 
 
@@ -1036,8 +1170,10 @@ exit_analysis = {}
 for trade in closed_trades:
 
     reason = trade.get(
+
         "exit_reason",
         "UNKNOWN"
+
     )
 
 
@@ -1060,9 +1196,12 @@ for trade in closed_trades:
 best_trade = (
 
     max(
+
         closed_trades,
+
         key=lambda x:
         x["profit_pct"]
+
     )
 
     if closed_trades
@@ -1079,9 +1218,12 @@ best_trade = (
 worst_trade = (
 
     min(
+
         closed_trades,
+
         key=lambda x:
         x["profit_pct"]
+
     )
 
     if closed_trades
@@ -1098,7 +1240,7 @@ worst_trade = (
 result = {
 
     "strategy":
-        "Weekly Simple Pullback v6.0",
+        "Weekly Simple Pullback v6.1",
 
     "description":
         "Simple Entry + Simple Exit + Profit Protection",
@@ -1137,6 +1279,7 @@ result = {
 
         "position_size_percent":
             POSITION_SIZE * 100
+
     },
 
 
@@ -1189,6 +1332,7 @@ result = {
 
         "open_positions":
             len(open_positions)
+
     },
 
 
@@ -1214,6 +1358,7 @@ result = {
 
     "trades":
         all_trades
+
 }
 
 
@@ -1222,16 +1367,25 @@ result = {
 # ==============================================================
 
 with open(
+
     RESULT_FILE,
+
     "w",
+
     encoding="utf-8"
+
 ) as f:
 
     json.dump(
+
         result,
+
         f,
+
         ensure_ascii=False,
+
         indent=2
+
     )
 
 
@@ -1240,16 +1394,25 @@ with open(
 # ==============================================================
 
 with open(
+
     TRADES_FILE,
+
     "w",
+
     encoding="utf-8"
+
 ) as f:
 
     json.dump(
+
         all_trades,
+
         f,
+
         ensure_ascii=False,
+
         indent=2
+
     )
 
 
@@ -1259,68 +1422,89 @@ with open(
 
 print("\n")
 
+
 print("=" * 68)
 print("FINAL BACKTEST RESULTS")
 print("=" * 68)
 
 
 print(
+
     f"Total Trades              : "
     f"{total_trades}"
+
 )
 
 
 print(
+
     f"Winning Trades            : "
     f"{len(winning)}"
+
 )
 
 
 print(
+
     f"Losing Trades             : "
     f"{len(losing)}"
+
 )
 
 
 print(
+
     f"Win Rate                  : "
     f"{win_rate:.2f}%"
+
 )
 
 
 print(
+
     f"Sum Trade Profit          : "
     f"{sum_profit:.2f}%"
+
 )
 
 
 print(
+
     f"REALISTIC COMPOUND RETURN : "
     f"{compound_return:.2f}%"
+
 )
 
 
 print(
+
     f"Average Win               : "
     f"{average_win:.2f}%"
+
 )
 
 
 print(
+
     f"Average Loss              : "
     f"{average_loss:.2f}%"
+
 )
 
 
 print(
+
     f"Maximum Drawdown          : "
     f"{max_drawdown:.2f}%"
+
 )
 
 
 print(
+
     f"Open Positions            : "
     f"{len(open_positions)}"
+
 )
 
 
@@ -1335,7 +1519,9 @@ print("-" * 68)
 for reason, count in exit_analysis.items():
 
     print(
+
         f"{reason:25} : {count}"
+
     )
 
 
@@ -1346,6 +1532,7 @@ for reason, count in exit_analysis.items():
 if best_trade:
 
     print("\nBEST TRADE")
+
 
     print(
 
@@ -1365,6 +1552,7 @@ if worst_trade:
 
     print("\nWORST TRADE")
 
+
     print(
 
         f"{worst_trade['symbol']} | "
@@ -1381,9 +1569,11 @@ if worst_trade:
 
 print("\nFILES SAVED")
 
+
 print(
     f"  {RESULT_FILE}"
 )
+
 
 print(
     f"  {TRADES_FILE}"
