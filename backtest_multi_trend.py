@@ -34,10 +34,10 @@ POSITION_SIZE = 1.0 / MAX_POSITIONS
 RSI_PERIOD = 14
 
 # Deeper weekly pullback
-RSI_ENTRY = 32
+RSI_ENTRY = 30
 
 # Simple exit
-RSI_EXIT = 78
+RSI_EXIT = 72
 
 
 # Stronger long-term trend structure
@@ -51,8 +51,8 @@ STOP_LOSS_PERCENT = 7.0
 
 
 # Profit protection
-TRAIL_START_PERCENT = 12.0
-TRAIL_DISTANCE_PERCENT = 6.0
+TRAIL_START_PERCENT = 8.0
+TRAIL_DISTANCE_PERCENT = 5.0
 
 
 MIN_BARS = 100
