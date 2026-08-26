@@ -1,84 +1,91 @@
 {
-  "strategy": "Weekly Smart Pullback v3.1",
+  "strategy": "Weekly Smart Pullback v4.0",
   "parameters": {
     "rsi_period": 14,
-    "rsi_entry": 40,
-    "rsi_add": 32,
-    "rsi_sell_1": 62,
-    "rsi_sell_2": 72,
+    "rsi_entry": 42,
+    "rsi_add": 34,
+    "rsi_sell_1": 64,
+    "rsi_sell_2": 74,
     "ema_fast": 20,
-    "ema_slow": 40,
+    "ema_mid": 40,
     "ema_long": 80,
-    "min_ema_gap": 0.005,
+    "min_ema_gap": 0.003,
+    "min_ema_slope": 0.001,
     "first_entry_percent": 50.0,
     "second_entry_percent": 50.0,
     "atr_period": 14,
-    "atr_stop_multiplier": 2.5,
-    "max_stop_percent": 8.0
+    "atr_stop_multiplier": 2.7,
+    "max_stop_percent": 7.0,
+    "trail_start_percent": 6.0,
+    "trail_atr_multiplier": 2.5
   },
   "statistics": {
-    "total_trades": 2,
-    "winning_trades": 0,
-    "losing_trades": 2,
-    "win_rate_percent": 0.0,
-    "sum_trade_profit_percent": -8.3,
-    "compound_return_percent": -8.13,
-    "average_win_percent": 0,
-    "average_loss_percent": -4.15,
-    "maximum_drawdown_percent": 8.13,
+    "total_trades": 18,
+    "winning_trades": 5,
+    "losing_trades": 13,
+    "win_rate_percent": 27.78,
+    "sum_trade_profit_percent": 55.15,
+    "compound_return_percent": 57.11,
+    "average_win_percent": 18.85,
+    "average_loss_percent": -3.01,
+    "maximum_drawdown_percent": 17.29,
     "open_positions": 0
   },
   "exit_analysis": {
-    "ATR_STOP": 2
+    "ATR_STOP": 7,
+    "TRAIL_STOP": 11
   },
   "best_trade": {
-    "symbol": "AJWA",
+    "symbol": "CCAP",
     "status": "CLOSED",
-    "entry_date": "2022-12-26",
-    "entry_price": 18.54,
-    "avg_price": 18.54,
+    "entry_date": "2023-03-13",
+    "entry_price": 1.58,
+    "avg_price": 1.58,
     "weight": 0.0,
     "second_entry": false,
-    "highest_price": 19.98,
+    "highest_price": 2.8,
     "sales": [
       {
-        "date": "2023-01-09",
-        "price": 17.25,
+        "date": "2023-05-29",
+        "price": 2.64,
         "weight": 0.5,
-        "profit_pct": -6.96,
-        "reason": "ATR_STOP"
+        "profit_pct": 67.09,
+        "reason": "TRAIL_STOP"
       }
     ],
+    "entry_rsi": 41.1,
     "break_even": false,
-    "entry_rsi": 39.78,
-    "exit_date": "2023-01-09",
-    "exit_price": 17.25,
-    "exit_reason": "ATR_STOP",
-    "profit_pct": -3.48
+    "trail_active": true,
+    "exit_date": "2023-05-29",
+    "exit_price": 2.64,
+    "exit_reason": "TRAIL_STOP",
+    "profit_pct": 33.55
   },
   "worst_trade": {
     "symbol": "EFIH",
     "status": "CLOSED",
-    "entry_date": "2022-12-05",
-    "entry_price": 15.05,
-    "avg_price": 15.05,
+    "entry_date": "2023-01-30",
+    "entry_price": 13.6,
+    "avg_price": 13.6,
     "weight": 0.0,
     "second_entry": false,
-    "highest_price": 17.6,
+    "highest_price": 15.26,
     "sales": [
       {
-        "date": "2023-01-30",
-        "price": 13.6,
+        "date": "2023-03-13",
+        "price": 11.74,
         "weight": 0.5,
-        "profit_pct": -9.63,
-        "reason": "ATR_STOP"
+        "profit_pct": -13.68,
+        "reason": "TRAIL_STOP"
       }
     ],
+    "entry_rsi": 36.01,
     "break_even": false,
-    "entry_rsi": 37.92,
-    "exit_date": "2023-01-30",
-    "exit_price": 13.6,
-    "exit_reason": "ATR_STOP",
-    "profit_pct": -4.82
-  }
+    "trail_active": true,
+    "exit_date": "2023-03-13",
+    "exit_price": 11.74,
+    "exit_reason": "TRAIL_STOP",
+    "profit_pct": -6.84
+  },
+  "open_positions": []
 }
