@@ -1,5 +1,6 @@
 {
-  "strategy": "Weekly Smart Pullback v4.0",
+  "strategy": "Weekly Smart Pullback v5.0",
+  "description": "No Look-Ahead + Realistic Portfolio Accounting",
   "parameters": {
     "rsi_period": 14,
     "rsi_entry": 42,
@@ -17,23 +18,26 @@
     "atr_stop_multiplier": 2.7,
     "max_stop_percent": 7.0,
     "trail_start_percent": 6.0,
-    "trail_atr_multiplier": 2.5
+    "trail_atr_multiplier": 2.5,
+    "max_positions": 8,
+    "position_size_percent": 12.5
   },
   "statistics": {
     "total_trades": 18,
-    "winning_trades": 5,
-    "losing_trades": 13,
-    "win_rate_percent": 27.78,
-    "sum_trade_profit_percent": 55.15,
-    "compound_return_percent": 57.11,
-    "average_win_percent": 18.85,
-    "average_loss_percent": -3.01,
-    "maximum_drawdown_percent": 17.29,
+    "winning_trades": 6,
+    "losing_trades": 12,
+    "win_rate_percent": 33.33,
+    "sum_trade_profit_percent": 63.37,
+    "realistic_compound_return_percent": 8.06,
+    "average_win_percent": 15.73,
+    "average_loss_percent": -2.58,
+    "maximum_drawdown_percent": 2.28,
+    "second_entries": 0,
     "open_positions": 0
   },
   "exit_analysis": {
-    "ATR_STOP": 7,
-    "TRAIL_STOP": 11
+    "TRAIL_STOP": 16,
+    "ATR_STOP": 2
   },
   "best_trade": {
     "symbol": "CCAP",
@@ -43,23 +47,32 @@
     "avg_price": 1.58,
     "weight": 0.0,
     "second_entry": false,
-    "highest_price": 2.8,
+    "highest_price": 3.06,
     "sales": [
       {
         "date": "2023-05-29",
         "price": 2.64,
         "weight": 0.5,
         "profit_pct": 67.09,
+        "capital_return": 33.5443,
+        "reason": "RSI_PARTIAL"
+      },
+      {
+        "date": "2023-07-17",
+        "price": 2.55,
+        "weight": 0.0,
+        "profit_pct": 61.39,
+        "capital_return": 0.0,
         "reason": "TRAIL_STOP"
       }
     ],
     "entry_rsi": 41.1,
-    "break_even": false,
+    "break_even": true,
     "trail_active": true,
-    "exit_date": "2023-05-29",
-    "exit_price": 2.64,
+    "exit_date": "2023-07-17",
+    "exit_price": 2.55,
     "exit_reason": "TRAIL_STOP",
-    "profit_pct": 33.55
+    "profit_pct": 33.54
   },
   "worst_trade": {
     "symbol": "EFIH",
@@ -76,6 +89,7 @@
         "price": 11.74,
         "weight": 0.5,
         "profit_pct": -13.68,
+        "capital_return": -6.8382,
         "reason": "TRAIL_STOP"
       }
     ],
@@ -87,5 +101,645 @@
     "exit_reason": "TRAIL_STOP",
     "profit_pct": -6.84
   },
-  "open_positions": []
+  "open_positions": [],
+  "portfolio_equity": [
+    {
+      "date": "2023-01-09",
+      "symbol": "AJWA",
+      "trade_return_percent": -4.61,
+      "portfolio_return_percent": -0.5763,
+      "portfolio_value": 99423.75
+    },
+    {
+      "date": "2023-01-30",
+      "symbol": "RAYA",
+      "trade_return_percent": -2.15,
+      "portfolio_return_percent": -0.2687,
+      "portfolio_value": 99156.55
+    },
+    {
+      "date": "2023-03-13",
+      "symbol": "EFIH",
+      "trade_return_percent": -6.84,
+      "portfolio_return_percent": -0.855,
+      "portfolio_value": 98308.76
+    },
+    {
+      "date": "2023-03-13",
+      "symbol": "MTIE",
+      "trade_return_percent": -4.81,
+      "portfolio_return_percent": -0.6012,
+      "portfolio_value": 97717.68
+    },
+    {
+      "date": "2023-07-24",
+      "symbol": "EAST",
+      "trade_return_percent": 20.17,
+      "portfolio_return_percent": 2.5213,
+      "portfolio_value": 100181.39
+    },
+    {
+      "date": "2023-07-17",
+      "symbol": "CCAP",
+      "trade_return_percent": 33.54,
+      "portfolio_return_percent": 4.1925,
+      "portfolio_value": 104381.49
+    },
+    {
+      "date": "2023-07-31",
+      "symbol": "AJWA",
+      "trade_return_percent": 11.34,
+      "portfolio_return_percent": 1.4175,
+      "portfolio_value": 105861.1
+    },
+    {
+      "date": "2023-05-15",
+      "symbol": "MOIN",
+      "trade_return_percent": 0.0,
+      "portfolio_return_percent": 0.0,
+      "portfolio_value": 105861.1
+    },
+    {
+      "date": "2023-12-25",
+      "symbol": "JUFO",
+      "trade_return_percent": 18.75,
+      "portfolio_return_percent": 2.3438,
+      "portfolio_value": 108342.22
+    },
+    {
+      "date": "2024-03-18",
+      "symbol": "MBSC",
+      "trade_return_percent": -2.02,
+      "portfolio_return_percent": -0.2525,
+      "portfolio_value": 108068.65
+    },
+    {
+      "date": "2024-06-03",
+      "symbol": "FAIT",
+      "trade_return_percent": -0.07,
+      "portfolio_return_percent": -0.0088,
+      "portfolio_value": 108059.2
+    },
+    {
+      "date": "2024-05-06",
+      "symbol": "MOIN",
+      "trade_return_percent": 0.0,
+      "portfolio_return_percent": 0.0,
+      "portfolio_value": 108059.2
+    },
+    {
+      "date": "2024-05-13",
+      "symbol": "CCAP",
+      "trade_return_percent": 10.45,
+      "portfolio_return_percent": 1.3062,
+      "portfolio_value": 109470.72
+    },
+    {
+      "date": "2024-09-02",
+      "symbol": "MPCO",
+      "trade_return_percent": -2.0,
+      "portfolio_return_percent": -0.25,
+      "portfolio_value": 109197.04
+    },
+    {
+      "date": "2025-09-29",
+      "symbol": "ICFC",
+      "trade_return_percent": -1.18,
+      "portfolio_return_percent": -0.1475,
+      "portfolio_value": 109035.98
+    },
+    {
+      "date": "2026-01-05",
+      "symbol": "MOIN",
+      "trade_return_percent": 0.11,
+      "portfolio_return_percent": 0.0138,
+      "portfolio_value": 109050.97
+    },
+    {
+      "date": "2026-02-16",
+      "symbol": "INFI",
+      "trade_return_percent": -3.76,
+      "portfolio_return_percent": -0.47,
+      "portfolio_value": 108538.43
+    },
+    {
+      "date": "2026-07-06",
+      "symbol": "HDBK",
+      "trade_return_percent": -3.55,
+      "portfolio_return_percent": -0.4437,
+      "portfolio_value": 108056.79
+    }
+  ],
+  "trades": [
+    {
+      "symbol": "AJWA",
+      "status": "CLOSED",
+      "entry_date": "2022-12-12",
+      "entry_price": 19.0,
+      "avg_price": 19.0,
+      "weight": 0.0,
+      "second_entry": false,
+      "highest_price": 19.87,
+      "sales": [
+        {
+          "date": "2023-01-09",
+          "price": 17.25,
+          "weight": 0.5,
+          "profit_pct": -9.21,
+          "capital_return": -4.6053,
+          "reason": "TRAIL_STOP"
+        }
+      ],
+      "entry_rsi": 41.58,
+      "break_even": false,
+      "trail_active": true,
+      "exit_date": "2023-01-09",
+      "exit_price": 17.25,
+      "exit_reason": "TRAIL_STOP",
+      "profit_pct": -4.61
+    },
+    {
+      "symbol": "RAYA",
+      "status": "CLOSED",
+      "entry_date": "2023-01-09",
+      "entry_price": 2.56,
+      "avg_price": 2.56,
+      "weight": 0.0,
+      "second_entry": false,
+      "highest_price": 2.94,
+      "sales": [
+        {
+          "date": "2023-01-30",
+          "price": 2.45,
+          "weight": 0.5,
+          "profit_pct": -4.3,
+          "capital_return": -2.1484,
+          "reason": "TRAIL_STOP"
+        }
+      ],
+      "entry_rsi": 38.57,
+      "break_even": false,
+      "trail_active": true,
+      "exit_date": "2023-01-30",
+      "exit_price": 2.45,
+      "exit_reason": "TRAIL_STOP",
+      "profit_pct": -2.15
+    },
+    {
+      "symbol": "EFIH",
+      "status": "CLOSED",
+      "entry_date": "2023-01-30",
+      "entry_price": 13.6,
+      "avg_price": 13.6,
+      "weight": 0.0,
+      "second_entry": false,
+      "highest_price": 15.26,
+      "sales": [
+        {
+          "date": "2023-03-13",
+          "price": 11.74,
+          "weight": 0.5,
+          "profit_pct": -13.68,
+          "capital_return": -6.8382,
+          "reason": "TRAIL_STOP"
+        }
+      ],
+      "entry_rsi": 36.01,
+      "break_even": false,
+      "trail_active": true,
+      "exit_date": "2023-03-13",
+      "exit_price": 11.74,
+      "exit_reason": "TRAIL_STOP",
+      "profit_pct": -6.84
+    },
+    {
+      "symbol": "MTIE",
+      "status": "CLOSED",
+      "entry_date": "2023-02-27",
+      "entry_price": 2.6,
+      "avg_price": 2.6,
+      "weight": 0.0,
+      "second_entry": false,
+      "highest_price": 2.65,
+      "sales": [
+        {
+          "date": "2023-03-13",
+          "price": 2.35,
+          "weight": 0.5,
+          "profit_pct": -9.62,
+          "capital_return": -4.8077,
+          "reason": "TRAIL_STOP"
+        }
+      ],
+      "entry_rsi": 41.94,
+      "break_even": false,
+      "trail_active": true,
+      "exit_date": "2023-03-13",
+      "exit_price": 2.35,
+      "exit_reason": "TRAIL_STOP",
+      "profit_pct": -4.81
+    },
+    {
+      "symbol": "EAST",
+      "status": "CLOSED",
+      "entry_date": "2023-03-13",
+      "entry_price": 13.36,
+      "avg_price": 13.36,
+      "weight": 0.0,
+      "second_entry": false,
+      "highest_price": 21.74,
+      "sales": [
+        {
+          "date": "2023-06-05",
+          "price": 18.75,
+          "weight": 0.5,
+          "profit_pct": 40.34,
+          "capital_return": 20.1722,
+          "reason": "RSI_PARTIAL"
+        },
+        {
+          "date": "2023-07-24",
+          "price": 18.85,
+          "weight": 0.0,
+          "profit_pct": 41.09,
+          "capital_return": 0.0,
+          "reason": "TRAIL_STOP"
+        }
+      ],
+      "entry_rsi": 41.77,
+      "break_even": true,
+      "trail_active": true,
+      "exit_date": "2023-07-24",
+      "exit_price": 18.85,
+      "exit_reason": "TRAIL_STOP",
+      "profit_pct": 20.17
+    },
+    {
+      "symbol": "CCAP",
+      "status": "CLOSED",
+      "entry_date": "2023-03-13",
+      "entry_price": 1.58,
+      "avg_price": 1.58,
+      "weight": 0.0,
+      "second_entry": false,
+      "highest_price": 3.06,
+      "sales": [
+        {
+          "date": "2023-05-29",
+          "price": 2.64,
+          "weight": 0.5,
+          "profit_pct": 67.09,
+          "capital_return": 33.5443,
+          "reason": "RSI_PARTIAL"
+        },
+        {
+          "date": "2023-07-17",
+          "price": 2.55,
+          "weight": 0.0,
+          "profit_pct": 61.39,
+          "capital_return": 0.0,
+          "reason": "TRAIL_STOP"
+        }
+      ],
+      "entry_rsi": 41.1,
+      "break_even": true,
+      "trail_active": true,
+      "exit_date": "2023-07-17",
+      "exit_price": 2.55,
+      "exit_reason": "TRAIL_STOP",
+      "profit_pct": 33.54
+    },
+    {
+      "symbol": "AJWA",
+      "status": "CLOSED",
+      "entry_date": "2023-03-13",
+      "entry_price": 15.79,
+      "avg_price": 15.79,
+      "weight": 0.0,
+      "second_entry": false,
+      "highest_price": 24.2,
+      "sales": [
+        {
+          "date": "2023-07-31",
+          "price": 19.37,
+          "weight": 0.5,
+          "profit_pct": 22.67,
+          "capital_return": 11.3363,
+          "reason": "TRAIL_STOP"
+        }
+      ],
+      "entry_rsi": 39.17,
+      "break_even": false,
+      "trail_active": true,
+      "exit_date": "2023-07-31",
+      "exit_price": 19.37,
+      "exit_reason": "TRAIL_STOP",
+      "profit_pct": 11.34
+    },
+    {
+      "symbol": "MOIN",
+      "status": "CLOSED",
+      "entry_date": "2023-04-10",
+      "entry_price": 10.3,
+      "avg_price": 10.3,
+      "weight": 0.0,
+      "second_entry": false,
+      "highest_price": 10.96,
+      "sales": [
+        {
+          "date": "2023-05-15",
+          "price": 10.3,
+          "weight": 0.5,
+          "profit_pct": 0.0,
+          "capital_return": 0.0,
+          "reason": "TRAIL_STOP"
+        }
+      ],
+      "entry_rsi": 35.59,
+      "break_even": false,
+      "trail_active": true,
+      "exit_date": "2023-05-15",
+      "exit_price": 10.3,
+      "exit_reason": "TRAIL_STOP",
+      "profit_pct": 0.0
+    },
+    {
+      "symbol": "JUFO",
+      "status": "CLOSED",
+      "entry_date": "2023-10-02",
+      "entry_price": 11.6,
+      "avg_price": 11.6,
+      "weight": 0.0,
+      "second_entry": false,
+      "highest_price": 20.0,
+      "sales": [
+        {
+          "date": "2023-11-20",
+          "price": 15.95,
+          "weight": 0.5,
+          "profit_pct": 37.5,
+          "capital_return": 18.75,
+          "reason": "RSI_PARTIAL"
+        },
+        {
+          "date": "2023-12-25",
+          "price": 15.67,
+          "weight": 0.0,
+          "profit_pct": 35.09,
+          "capital_return": 0.0,
+          "reason": "TRAIL_STOP"
+        }
+      ],
+      "entry_rsi": 40.54,
+      "break_even": true,
+      "trail_active": true,
+      "exit_date": "2023-12-25",
+      "exit_price": 15.67,
+      "exit_reason": "TRAIL_STOP",
+      "profit_pct": 18.75
+    },
+    {
+      "symbol": "MBSC",
+      "status": "CLOSED",
+      "entry_date": "2024-03-11",
+      "entry_price": 39.39,
+      "avg_price": 39.39,
+      "weight": 0.0,
+      "second_entry": false,
+      "highest_price": 39.39,
+      "sales": [
+        {
+          "date": "2024-03-18",
+          "price": 37.8,
+          "weight": 0.5,
+          "profit_pct": -4.04,
+          "capital_return": -2.0183,
+          "reason": "TRAIL_STOP"
+        }
+      ],
+      "entry_rsi": 41.52,
+      "break_even": false,
+      "trail_active": true,
+      "exit_date": "2024-03-18",
+      "exit_price": 37.8,
+      "exit_reason": "TRAIL_STOP",
+      "profit_pct": -2.02
+    },
+    {
+      "symbol": "FAIT",
+      "status": "CLOSED",
+      "entry_date": "2024-03-25",
+      "entry_price": 29.16,
+      "avg_price": 29.16,
+      "weight": 0.0,
+      "second_entry": false,
+      "highest_price": 34.1,
+      "sales": [
+        {
+          "date": "2024-06-03",
+          "price": 29.12,
+          "weight": 0.5,
+          "profit_pct": -0.14,
+          "capital_return": -0.0686,
+          "reason": "TRAIL_STOP"
+        }
+      ],
+      "entry_rsi": 39.13,
+      "break_even": false,
+      "trail_active": true,
+      "exit_date": "2024-06-03",
+      "exit_price": 29.12,
+      "exit_reason": "TRAIL_STOP",
+      "profit_pct": -0.07
+    },
+    {
+      "symbol": "MOIN",
+      "status": "CLOSED",
+      "entry_date": "2024-04-29",
+      "entry_price": 17.12,
+      "avg_price": 17.12,
+      "weight": 0.0,
+      "second_entry": false,
+      "highest_price": 17.12,
+      "sales": [
+        {
+          "date": "2024-05-06",
+          "price": 17.12,
+          "weight": 0.5,
+          "profit_pct": 0.0,
+          "capital_return": 0.0,
+          "reason": "TRAIL_STOP"
+        }
+      ],
+      "entry_rsi": 41.59,
+      "break_even": false,
+      "trail_active": true,
+      "exit_date": "2024-05-06",
+      "exit_price": 17.12,
+      "exit_reason": "TRAIL_STOP",
+      "profit_pct": 0.0
+    },
+    {
+      "symbol": "CCAP",
+      "status": "CLOSED",
+      "entry_date": "2024-05-06",
+      "entry_price": 2.2,
+      "avg_price": 2.2,
+      "weight": 0.0,
+      "second_entry": false,
+      "highest_price": 2.2,
+      "sales": [
+        {
+          "date": "2024-05-13",
+          "price": 2.66,
+          "weight": 0.5,
+          "profit_pct": 20.91,
+          "capital_return": 10.4545,
+          "reason": "TRAIL_STOP"
+        }
+      ],
+      "entry_rsi": 40.73,
+      "break_even": false,
+      "trail_active": true,
+      "exit_date": "2024-05-13",
+      "exit_price": 2.66,
+      "exit_reason": "TRAIL_STOP",
+      "profit_pct": 10.45
+    },
+    {
+      "symbol": "MPCO",
+      "status": "CLOSED",
+      "entry_date": "2024-08-26",
+      "entry_price": 1.0,
+      "avg_price": 1.0,
+      "weight": 0.0,
+      "second_entry": false,
+      "highest_price": 1.0,
+      "sales": [
+        {
+          "date": "2024-09-02",
+          "price": 0.96,
+          "weight": 0.5,
+          "profit_pct": -4.0,
+          "capital_return": -2.0,
+          "reason": "TRAIL_STOP"
+        }
+      ],
+      "entry_rsi": 41.75,
+      "break_even": false,
+      "trail_active": true,
+      "exit_date": "2024-09-02",
+      "exit_price": 0.96,
+      "exit_reason": "TRAIL_STOP",
+      "profit_pct": -2.0
+    },
+    {
+      "symbol": "ICFC",
+      "status": "CLOSED",
+      "entry_date": "2025-09-22",
+      "entry_price": 16.58,
+      "avg_price": 16.58,
+      "weight": 0.0,
+      "second_entry": false,
+      "highest_price": 16.58,
+      "sales": [
+        {
+          "date": "2025-09-29",
+          "price": 16.19,
+          "weight": 0.5,
+          "profit_pct": -2.35,
+          "capital_return": -1.1761,
+          "reason": "TRAIL_STOP"
+        }
+      ],
+      "entry_rsi": 37.01,
+      "break_even": false,
+      "trail_active": true,
+      "exit_date": "2025-09-29",
+      "exit_price": 16.19,
+      "exit_reason": "TRAIL_STOP",
+      "profit_pct": -1.18
+    },
+    {
+      "symbol": "MOIN",
+      "status": "CLOSED",
+      "entry_date": "2025-12-29",
+      "entry_price": 23.08,
+      "avg_price": 23.08,
+      "weight": 0.0,
+      "second_entry": false,
+      "highest_price": 23.08,
+      "sales": [
+        {
+          "date": "2026-01-05",
+          "price": 23.13,
+          "weight": 0.5,
+          "profit_pct": 0.22,
+          "capital_return": 0.1083,
+          "reason": "TRAIL_STOP"
+        }
+      ],
+      "entry_rsi": 41.35,
+      "break_even": false,
+      "trail_active": true,
+      "exit_date": "2026-01-05",
+      "exit_price": 23.13,
+      "exit_reason": "TRAIL_STOP",
+      "profit_pct": 0.11
+    },
+    {
+      "symbol": "INFI",
+      "status": "CLOSED",
+      "entry_date": "2026-02-09",
+      "entry_price": 93.04,
+      "avg_price": 93.04,
+      "weight": 0.0,
+      "second_entry": false,
+      "highest_price": 93.04,
+      "sales": [
+        {
+          "date": "2026-02-16",
+          "price": 86.05,
+          "weight": 0.5,
+          "profit_pct": -7.51,
+          "capital_return": -3.7564,
+          "reason": "ATR_STOP"
+        }
+      ],
+      "entry_rsi": 41.63,
+      "break_even": false,
+      "trail_active": false,
+      "exit_date": "2026-02-16",
+      "exit_price": 86.05,
+      "exit_reason": "ATR_STOP",
+      "profit_pct": -3.76
+    },
+    {
+      "symbol": "HDBK",
+      "status": "CLOSED",
+      "entry_date": "2026-06-29",
+      "entry_price": 84.5,
+      "avg_price": 84.5,
+      "weight": 0.0,
+      "second_entry": false,
+      "highest_price": 84.5,
+      "sales": [
+        {
+          "date": "2026-07-06",
+          "price": 78.5,
+          "weight": 0.5,
+          "profit_pct": -7.1,
+          "capital_return": -3.5503,
+          "reason": "ATR_STOP"
+        }
+      ],
+      "entry_rsi": 33.95,
+      "break_even": false,
+      "trail_active": false,
+      "exit_date": "2026-07-06",
+      "exit_price": 78.5,
+      "exit_reason": "ATR_STOP",
+      "profit_pct": -3.55
+    }
+  ]
 }

@@ -7,22 +7,23 @@
     "avg_price": 19.0,
     "weight": 0.0,
     "second_entry": false,
-    "highest_price": 19.98,
+    "highest_price": 19.87,
     "sales": [
       {
         "date": "2023-01-09",
         "price": 17.25,
         "weight": 0.5,
         "profit_pct": -9.21,
-        "reason": "ATR_STOP"
+        "capital_return": -4.6053,
+        "reason": "TRAIL_STOP"
       }
     ],
     "entry_rsi": 41.58,
     "break_even": false,
-    "trail_active": false,
+    "trail_active": true,
     "exit_date": "2023-01-09",
     "exit_price": 17.25,
-    "exit_reason": "ATR_STOP",
+    "exit_reason": "TRAIL_STOP",
     "profit_pct": -4.61
   },
   {
@@ -40,6 +41,7 @@
         "price": 2.45,
         "weight": 0.5,
         "profit_pct": -4.3,
+        "capital_return": -2.1484,
         "reason": "TRAIL_STOP"
       }
     ],
@@ -66,6 +68,7 @@
         "price": 11.74,
         "weight": 0.5,
         "profit_pct": -13.68,
+        "capital_return": -6.8382,
         "reason": "TRAIL_STOP"
       }
     ],
@@ -92,15 +95,16 @@
         "price": 2.35,
         "weight": 0.5,
         "profit_pct": -9.62,
-        "reason": "ATR_STOP"
+        "capital_return": -4.8077,
+        "reason": "TRAIL_STOP"
       }
     ],
     "entry_rsi": 41.94,
     "break_even": false,
-    "trail_active": false,
+    "trail_active": true,
     "exit_date": "2023-03-13",
     "exit_price": 2.35,
-    "exit_reason": "ATR_STOP",
+    "exit_reason": "TRAIL_STOP",
     "profit_pct": -4.81
   },
   {
@@ -118,6 +122,7 @@
         "price": 18.75,
         "weight": 0.5,
         "profit_pct": 40.34,
+        "capital_return": 20.1722,
         "reason": "RSI_PARTIAL"
       },
       {
@@ -125,6 +130,7 @@
         "price": 18.85,
         "weight": 0.0,
         "profit_pct": 41.09,
+        "capital_return": 0.0,
         "reason": "TRAIL_STOP"
       }
     ],
@@ -144,23 +150,32 @@
     "avg_price": 1.58,
     "weight": 0.0,
     "second_entry": false,
-    "highest_price": 2.8,
+    "highest_price": 3.06,
     "sales": [
       {
         "date": "2023-05-29",
         "price": 2.64,
         "weight": 0.5,
         "profit_pct": 67.09,
+        "capital_return": 33.5443,
+        "reason": "RSI_PARTIAL"
+      },
+      {
+        "date": "2023-07-17",
+        "price": 2.55,
+        "weight": 0.0,
+        "profit_pct": 61.39,
+        "capital_return": 0.0,
         "reason": "TRAIL_STOP"
       }
     ],
     "entry_rsi": 41.1,
-    "break_even": false,
+    "break_even": true,
     "trail_active": true,
-    "exit_date": "2023-05-29",
-    "exit_price": 2.64,
+    "exit_date": "2023-07-17",
+    "exit_price": 2.55,
     "exit_reason": "TRAIL_STOP",
-    "profit_pct": 33.55
+    "profit_pct": 33.54
   },
   {
     "symbol": "AJWA",
@@ -177,6 +192,7 @@
         "price": 19.37,
         "weight": 0.5,
         "profit_pct": 22.67,
+        "capital_return": 11.3363,
         "reason": "TRAIL_STOP"
       }
     ],
@@ -203,6 +219,7 @@
         "price": 10.3,
         "weight": 0.5,
         "profit_pct": 0.0,
+        "capital_return": 0.0,
         "reason": "TRAIL_STOP"
       }
     ],
@@ -229,6 +246,7 @@
         "price": 15.95,
         "weight": 0.5,
         "profit_pct": 37.5,
+        "capital_return": 18.75,
         "reason": "RSI_PARTIAL"
       },
       {
@@ -236,6 +254,7 @@
         "price": 15.67,
         "weight": 0.0,
         "profit_pct": 35.09,
+        "capital_return": 0.0,
         "reason": "TRAIL_STOP"
       }
     ],
@@ -255,22 +274,23 @@
     "avg_price": 39.39,
     "weight": 0.0,
     "second_entry": false,
-    "highest_price": 40.79,
+    "highest_price": 39.39,
     "sales": [
       {
         "date": "2024-03-18",
         "price": 37.8,
         "weight": 0.5,
         "profit_pct": -4.04,
-        "reason": "ATR_STOP"
+        "capital_return": -2.0183,
+        "reason": "TRAIL_STOP"
       }
     ],
     "entry_rsi": 41.52,
     "break_even": false,
-    "trail_active": false,
+    "trail_active": true,
     "exit_date": "2024-03-18",
     "exit_price": 37.8,
-    "exit_reason": "ATR_STOP",
+    "exit_reason": "TRAIL_STOP",
     "profit_pct": -2.02
   },
   {
@@ -288,6 +308,7 @@
         "price": 29.12,
         "weight": 0.5,
         "profit_pct": -0.14,
+        "capital_return": -0.0686,
         "reason": "TRAIL_STOP"
       }
     ],
@@ -307,13 +328,14 @@
     "avg_price": 17.12,
     "weight": 0.0,
     "second_entry": false,
-    "highest_price": 20.54,
+    "highest_price": 17.12,
     "sales": [
       {
         "date": "2024-05-06",
         "price": 17.12,
         "weight": 0.5,
         "profit_pct": 0.0,
+        "capital_return": 0.0,
         "reason": "TRAIL_STOP"
       }
     ],
@@ -333,13 +355,14 @@
     "avg_price": 2.2,
     "weight": 0.0,
     "second_entry": false,
-    "highest_price": 2.9,
+    "highest_price": 2.2,
     "sales": [
       {
         "date": "2024-05-13",
         "price": 2.66,
         "weight": 0.5,
         "profit_pct": 20.91,
+        "capital_return": 10.4545,
         "reason": "TRAIL_STOP"
       }
     ],
@@ -349,7 +372,7 @@
     "exit_date": "2024-05-13",
     "exit_price": 2.66,
     "exit_reason": "TRAIL_STOP",
-    "profit_pct": 10.46
+    "profit_pct": 10.45
   },
   {
     "symbol": "MPCO",
@@ -359,23 +382,24 @@
     "avg_price": 1.0,
     "weight": 0.0,
     "second_entry": false,
-    "highest_price": 1.05,
+    "highest_price": 1.0,
     "sales": [
       {
-        "date": "2024-09-16",
-        "price": 0.93,
+        "date": "2024-09-02",
+        "price": 0.96,
         "weight": 0.5,
-        "profit_pct": -7.0,
-        "reason": "ATR_STOP"
+        "profit_pct": -4.0,
+        "capital_return": -2.0,
+        "reason": "TRAIL_STOP"
       }
     ],
     "entry_rsi": 41.75,
     "break_even": false,
-    "trail_active": false,
-    "exit_date": "2024-09-16",
-    "exit_price": 0.93,
-    "exit_reason": "ATR_STOP",
-    "profit_pct": -3.5
+    "trail_active": true,
+    "exit_date": "2024-09-02",
+    "exit_price": 0.96,
+    "exit_reason": "TRAIL_STOP",
+    "profit_pct": -2.0
   },
   {
     "symbol": "ICFC",
@@ -385,23 +409,24 @@
     "avg_price": 16.58,
     "weight": 0.0,
     "second_entry": false,
-    "highest_price": 18.0,
+    "highest_price": 16.58,
     "sales": [
       {
-        "date": "2025-10-20",
-        "price": 15.07,
+        "date": "2025-09-29",
+        "price": 16.19,
         "weight": 0.5,
-        "profit_pct": -9.11,
+        "profit_pct": -2.35,
+        "capital_return": -1.1761,
         "reason": "TRAIL_STOP"
       }
     ],
     "entry_rsi": 37.01,
     "break_even": false,
     "trail_active": true,
-    "exit_date": "2025-10-20",
-    "exit_price": 15.07,
+    "exit_date": "2025-09-29",
+    "exit_price": 16.19,
     "exit_reason": "TRAIL_STOP",
-    "profit_pct": -4.55
+    "profit_pct": -1.18
   },
   {
     "symbol": "MOIN",
@@ -411,23 +436,24 @@
     "avg_price": 23.08,
     "weight": 0.0,
     "second_entry": false,
-    "highest_price": 24.14,
+    "highest_price": 23.08,
     "sales": [
       {
-        "date": "2026-01-12",
-        "price": 21.57,
+        "date": "2026-01-05",
+        "price": 23.13,
         "weight": 0.5,
-        "profit_pct": -6.54,
-        "reason": "ATR_STOP"
+        "profit_pct": 0.22,
+        "capital_return": 0.1083,
+        "reason": "TRAIL_STOP"
       }
     ],
     "entry_rsi": 41.35,
     "break_even": false,
-    "trail_active": false,
-    "exit_date": "2026-01-12",
-    "exit_price": 21.57,
-    "exit_reason": "ATR_STOP",
-    "profit_pct": -3.27
+    "trail_active": true,
+    "exit_date": "2026-01-05",
+    "exit_price": 23.13,
+    "exit_reason": "TRAIL_STOP",
+    "profit_pct": 0.11
   },
   {
     "symbol": "INFI",
@@ -437,13 +463,14 @@
     "avg_price": 93.04,
     "weight": 0.0,
     "second_entry": false,
-    "highest_price": 93.54,
+    "highest_price": 93.04,
     "sales": [
       {
         "date": "2026-02-16",
         "price": 86.05,
         "weight": 0.5,
         "profit_pct": -7.51,
+        "capital_return": -3.7564,
         "reason": "ATR_STOP"
       }
     ],
@@ -453,7 +480,7 @@
     "exit_date": "2026-02-16",
     "exit_price": 86.05,
     "exit_reason": "ATR_STOP",
-    "profit_pct": -3.75
+    "profit_pct": -3.76
   },
   {
     "symbol": "HDBK",
@@ -463,13 +490,14 @@
     "avg_price": 84.5,
     "weight": 0.0,
     "second_entry": false,
-    "highest_price": 85.0,
+    "highest_price": 84.5,
     "sales": [
       {
         "date": "2026-07-06",
         "price": 78.5,
         "weight": 0.5,
         "profit_pct": -7.1,
+        "capital_return": -3.5503,
         "reason": "ATR_STOP"
       }
     ],
