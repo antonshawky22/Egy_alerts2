@@ -27,43 +27,12 @@ MAX_POSITIONS = 8
 POSITION_SIZE = 1.0 / MAX_POSITIONS
 
 
-# ==============================================================
-# STRATEGY
-# ==============================================================
-#
-# ENTRY:
-#
-#   EMA20 > EMA40 > EMA80
-#   RSI14 <= 42
-#
-# EXIT:
-#
-#   RSI14 >= 70
-#   OR initial stop loss 7%
-#   OR trailing profit protection
-#
-# PROFIT PROTECTION:
-#
-#   Once profit reaches +6%:
-#       trailing becomes active
-#
-#   Stop = 5% below highest price
-#
-# No second entry.
-# No partial selling.
-# No ATR.
-# No EMA slope.
-# No EMA gap.
-# No pullback filter.
-# ==============================================================
-
-
 RSI_PERIOD = 14
 
 RSI_ENTRY = 34
 RSI_EXIT = 72
 
-EMA_FAST = 55
+EMA_FAST = 40
 EMA_MID = 60
 EMA_LONG = 80
 
