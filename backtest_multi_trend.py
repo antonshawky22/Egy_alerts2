@@ -37,7 +37,7 @@ RSI_PERIOD = 14
 RSI_ENTRY = 32
 
 # Simple exit
-RSI_EXIT = 72
+RSI_EXIT = 78
 
 
 # Stronger long-term trend structure
@@ -51,8 +51,8 @@ STOP_LOSS_PERCENT = 7.0
 
 
 # Profit protection
-TRAIL_START_PERCENT = 8.0
-TRAIL_DISTANCE_PERCENT = 5.0
+TRAIL_START_PERCENT = 12.0
+TRAIL_DISTANCE_PERCENT = 6.0
 
 
 MIN_BARS = 100
