@@ -100,7 +100,7 @@
     "entry_price": 6.51
   },
   "RAYA": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -120,7 +120,7 @@
     "entry_price": 28.4
   },
   "TMGH": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 98.0
   },
