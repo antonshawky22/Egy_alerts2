@@ -73,8 +73,8 @@ STOP_L1 = -6.0                # Was -8.0
 STOP_L2 = -5.0
 STOP_L3 = -4.0
 
-TRAILING_TRIGGER = 8.0        # Was 10.0
-TRAILING_GIVEBACK = 3.0       # Was 4.0
+TRAILING_TRIGGER = 6.0        # Was 10.0
+TRAILING_GIVEBACK = 2.0       # Was 4.0
 
 MIN_BARS = 40
 
