@@ -4,70 +4,42 @@
     "cycle": 1,
     "status": "CLOSED",
     "first_entry": {
-      "date": "2025-03-27",
-      "price": 35.3,
-      "position_added": 0.33
-    },
-    "second_entry": null,
-    "third_entry": null,
-    "exits": [
-      {
-        "date": "2025-08-10",
-        "type": "SELL L2",
-        "price": 45.0,
-        "position_sold": 0.33,
-        "profit": 27.48
-      }
-    ],
-    "last_average_price": 35.3,
-    "final_exit_price": 45.0,
-    "exit_date": "2025-08-10",
-    "profit_pct": 27.48,
-    "max_position": 0.33,
-    "peak_profit": 27.478753541076493,
-    "exit_reason": "SELL L2"
-  },
-  {
-    "symbol": "SKPC",
-    "cycle": 1,
-    "status": "CLOSED",
-    "first_entry": {
-      "date": "2025-04-06",
-      "price": 20.37,
+      "date": "2025-04-03",
+      "price": 35.05,
       "position_added": 0.33
     },
     "second_entry": null,
     "third_entry": null,
     "exits": [],
-    "last_average_price": 20.37,
-    "final_exit_price": 18.6,
-    "exit_date": "2025-06-15",
-    "profit_pct": -8.69,
+    "last_average_price": 35.05,
+    "final_exit_price": 37.25,
+    "exit_date": "2025-07-13",
+    "profit_pct": 6.28,
     "max_position": 0.33,
-    "peak_profit": 10.014727540500731,
-    "exit_reason": "STOP LOSS",
-    "stop_trigger_profit": -8.69
+    "peak_profit": 11.982881597717556,
+    "exit_reason": "TRAILING STOP",
+    "stop_trigger_profit": 6.28
   },
   {
     "symbol": "ADIB",
     "cycle": 1,
     "status": "CLOSED",
     "first_entry": {
-      "date": "2025-04-07",
-      "price": 40.45,
+      "date": "2025-04-09",
+      "price": 39.8,
       "position_added": 0.33
     },
     "second_entry": null,
     "third_entry": null,
     "exits": [],
-    "last_average_price": 40.45,
+    "last_average_price": 39.8,
     "final_exit_price": 20.94,
     "exit_date": "2025-05-26",
-    "profit_pct": -48.23,
+    "profit_pct": -47.39,
     "max_position": 0.33,
-    "peak_profit": 4.449938195302836,
+    "peak_profit": 6.15577889447237,
     "exit_reason": "STOP LOSS",
-    "stop_trigger_profit": -48.23
+    "stop_trigger_profit": -47.39
   },
   {
     "symbol": "SUGR",
@@ -131,34 +103,34 @@
     "third_entry": null,
     "exits": [],
     "last_average_price": 49.9,
-    "final_exit_price": 46.41,
-    "exit_date": "2025-11-05",
-    "profit_pct": -6.99,
+    "final_exit_price": 47.6,
+    "exit_date": "2025-11-03",
+    "profit_pct": -4.61,
     "max_position": 0.33,
     "peak_profit": 0.0,
     "exit_reason": "STOP LOSS",
-    "stop_trigger_profit": -6.99
+    "stop_trigger_profit": -4.61
   },
   {
     "symbol": "SUGR",
     "cycle": 2,
     "status": "CLOSED",
     "first_entry": {
-      "date": "2025-10-30",
-      "price": 50.0,
+      "date": "2025-11-02",
+      "price": 49.22,
       "position_added": 0.33
     },
     "second_entry": null,
     "third_entry": null,
     "exits": [],
-    "last_average_price": 50.0,
+    "last_average_price": 49.22,
     "final_exit_price": 46.99,
     "exit_date": "2025-11-20",
-    "profit_pct": -6.02,
+    "profit_pct": -4.53,
     "max_position": 0.33,
     "peak_profit": 0.0,
     "exit_reason": "STOP LOSS",
-    "stop_trigger_profit": -6.02
+    "stop_trigger_profit": -4.53
   },
   {
     "symbol": "ORWE",
@@ -173,41 +145,20 @@
     "third_entry": null,
     "exits": [
       {
-        "date": "2026-08-09",
+        "date": "2026-08-05",
         "type": "SELL L2",
-        "price": 26.8,
+        "price": 26.35,
         "position_sold": 0.33,
-        "profit": 20.18
+        "profit": 18.16
       }
     ],
     "last_average_price": 22.3,
-    "final_exit_price": 26.8,
-    "exit_date": "2026-08-09",
-    "profit_pct": 20.18,
+    "final_exit_price": 26.35,
+    "exit_date": "2026-08-05",
+    "profit_pct": 18.16,
     "max_position": 0.33,
-    "peak_profit": 20.179372197309416,
+    "peak_profit": 18.161434977578477,
     "exit_reason": "SELL L2"
-  },
-  {
-    "symbol": "OLFI",
-    "cycle": 1,
-    "status": "CLOSED",
-    "first_entry": {
-      "date": "2026-01-28",
-      "price": 23.13,
-      "position_added": 0.33
-    },
-    "second_entry": null,
-    "third_entry": null,
-    "exits": [],
-    "last_average_price": 23.13,
-    "final_exit_price": 21.67,
-    "exit_date": "2026-03-02",
-    "profit_pct": -6.31,
-    "max_position": 0.33,
-    "peak_profit": 2.8966709900562115,
-    "exit_reason": "STOP LOSS",
-    "stop_trigger_profit": -6.31
   },
   {
     "symbol": "MCQE",
@@ -226,11 +177,12 @@
     "third_entry": null,
     "exits": [],
     "last_average_price": 177.1,
-    "final_exit_price": 243.6,
-    "exit_date": "2026-08-11",
-    "profit_pct": 37.55,
+    "final_exit_price": 167.34,
+    "exit_date": "2026-06-25",
+    "profit_pct": -5.51,
     "max_position": 0.66,
-    "peak_profit": 37.54940711462451,
-    "exit_reason": "EXIT FULL"
+    "peak_profit": 1.603613777526823,
+    "exit_reason": "STOP LOSS",
+    "stop_trigger_profit": -5.51
   }
 ]
