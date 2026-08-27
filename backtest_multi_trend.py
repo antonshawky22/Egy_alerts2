@@ -1,52 +1,127 @@
-print("="*72)
-print("EGX RESISTANCE BREAKOUT + VOLUME STRATEGY v1.2")
-print("CONFIRMED RESISTANCE + PRESSURE + REAL BREAKOUT + VOLUME")
-print("="*72)
+print("=" * 80)
+print("EGX LADDER CYCLE SYSTEM - FULL BACKTEST v1.0")
+print("MATCHED TO LIVE LADDER STRATEGY v3.4")
+print("=" * 80)
 
 import json
 import os
 import numpy as np
 import pandas as pd
 
-DB_FILE="egx_history_database_v2.json"
-RESULT_FILE="backtest_results.json"
-TRADES_FILE="backtest_trades.json"
 
-INITIAL_CAPITAL=100000.0
-MAX_POSITIONS=8
-POSITION_SIZE=1.0/MAX_POSITIONS
+# ============================================================
+# CONFIG
+# ============================================================
 
-# Swing
-PIVOT_LEFT=3
-PIVOT_RIGHT=3
+DB_FILE = "egx_history_database_v2.json"
 
-# Resistance
-LOOKBACK=120
-ZONE_DISTANCE_PERCENT=1.0
-MIN_RESISTANCE_REACTIONS=1
+RESULT_FILE = "ladder_backtest_results.json"
+TRADES_FILE = "ladder_backtest_trades.json"
+STOCK_SUMMARY_FILE = "ladder_backtest_summary_by_stock.json"
 
-# Reaction
-REACTION_WINDOW=3
-MIN_REACTION_PERCENT=2.0
+INITIAL_CAPITAL = 100000.0
 
-# Breakout
-BREAKOUT_PERCENT=0.30
-MIN_UPSIDE_PERCENT=6.0
+# نفس منطق السلم:
+# L1 = 33%
+# L2 = 33%
+# L3 = 34%
+#
+# إجمالي المركز = 100%
+TRANCHE_1 = 0.33
+TRANCHE_2 = 0.33
+TRANCHE_3 = 0.34
 
-# Pressure
-PRESSURE_LOOKBACK=8
-MIN_PRESSURE_CANDLES=4
-MAX_PRESSURE_DISTANCE_PERCENT=2.0
 
-# Volume
-VOLUME_LOOKBACK=20
-VOLUME_MULTIPLIER=2.50
+# ============================================================
+# LIVE PARAMETERS - EXACT MATCH
+# ============================================================
 
-# Stop
-STOP_BUFFER_PERCENT=0.50
+RSI_PERIOD = 14
 
-# Backtest
-MIN_BARS=60
+EMA20_PERIOD = 20
+EMA30_PERIOD = 30
+EMA50_PERIOD = 50
+EMA75_PERIOD = 75
+
+RUNUP_LOOKBACK = 80
+MAX_RUNUP_PERCENT = 60.0
+
+MAX_GAP_DOWN_PERCENT = -3.0
+
+EMA75_STEP_1 = 5
+EMA75_STEP_2 = 10
+
+EMA75_MIN_TOTAL_RISE = 0.002
+
+MAX_PRICE_ABOVE_EMA75 = 1.08
+
+BUY1_RSI = 58
+BUY2_RSI = 50
+BUY3_RSI = 42
+
+BUY2_MIN_DROP_FROM_AVG = 3.0
+BUY3_MIN_DROP_FROM_AVG = 4.0
+
+SELL1_MIN_POSITION = 0.70
+SELL1_RSI = 68
+SELL1_MIN_PROFIT = 3.0
+
+SELL2_MIN_POSITION = 0.30
+SELL2_MAX_POSITION = 0.70
+SELL2_RSI = 74
+SELL2_MIN_PROFIT = 5.0
+
+SELL3_RSI = 80
+SELL3_MIN_PROFIT = 7.0
+
+STOP_L1 = -8.0
+STOP_L2 = -5.0
+STOP_L3 = -4.0
+
+TRAILING_TRIGGER = 10.0
+TRAILING_GIVEBACK = 4.0
+
+MIN_BARS = 40
+
+
+# ============================================================
+# SYMBOLS
+# ============================================================
+
+SYMBOLS = {
+    "OLFI": "OLFI",
+    "EMFD": "EMFD",
+    "ETEL": "ETEL",
+    "EAST": "EAST",
+    "EFIH": "EFIH",
+    "ABUK": "ABUK",
+    "OIH": "OIH",
+    "SWDY": "SWDY",
+    "ISPH": "ISPH",
+    "ATQA": "ATQA",
+    "MTIE": "MTIE",
+    "HRHO": "HRHO",
+    "ORWE": "ORWE",
+    "JUFO": "JUFO",
+    "DSCW": "DSCW",
+    "SUGR": "SUGR",
+    "ELSH": "ELSH",
+    "RMDA": "RMDA",
+    "RAYA": "RAYA",
+    "EEII": "EEII",
+    "MPCO": "MPCO",
+    "GBCO": "GBCO",
+    "TMGH": "TMGH",
+    "ORHD": "ORHD",
+    "AMOC": "AMOC",
+    "FWRY": "FWRY",
+    "COMI": "COMI",
+    "ADIB": "ADIB",
+    "PHDC": "PHDC",
+    "MCQE": "MCQE",
+    "SKPC": "SKPC",
+    "EGAL": "EGAL"
+}
 
 
 # ============================================================
@@ -56,726 +131,2020 @@ MIN_BARS=60
 if not os.path.exists(DB_FILE):
     raise FileNotFoundError(DB_FILE)
 
-with open(DB_FILE,encoding="utf-8") as f:
-    db=json.load(f)
+with open(DB_FILE, "r", encoding="utf-8") as f:
+    raw_database = json.load(f)
 
-print(f"Database: {len(db)} symbols")
+print(f"Database symbols: {len(raw_database)}")
 
 
 # ============================================================
-# DATA
+# DATA LOADER
 # ============================================================
 
-def to_df(x):
-    if isinstance(x,dict) and "data" in x and "columns" in x:
-        rows=[]
-        for d,v in x["data"].items():
-            r=v.copy() if isinstance(v,dict) else dict(zip(x["columns"],v))
-            r["Date"]=d
-            rows.append(r)
-        x=rows
+def fetch_local_data(name):
 
-    if not isinstance(x,list):
+    try:
+
+        if name not in raw_database:
+            return None
+
+        content = raw_database[name]
+
+        if "columns" in content and "data" in content:
+
+            df = pd.DataFrame.from_dict(
+                content["data"],
+                orient="index",
+                columns=content["columns"]
+            )
+
+            df.index.name = "Date"
+
+            df.index = pd.to_datetime(
+                df.index,
+                errors="coerce"
+            )
+
+            df = df.sort_index()
+
+            required = [
+                "Open",
+                "High",
+                "Low",
+                "Close"
+            ]
+
+            for col in required:
+                if col not in df.columns:
+                    return None
+
+            for col in required:
+                df[col] = pd.to_numeric(
+                    df[col],
+                    errors="coerce"
+                )
+
+            df = df.dropna(
+                subset=required
+            )
+
+            df = df[
+                ~df.index.duplicated(
+                    keep="last"
+                )
+            ]
+
+            return df
+
         return None
 
-    df=pd.DataFrame(x)
-    if df.empty:
+    except Exception as e:
+
+        print(
+            f"⚠️ Error processing {name}: {e}"
+        )
+
         return None
 
-    df.columns=[str(c).strip().capitalize() for c in df.columns]
 
-    required=["Date","Open","High","Low","Close","Volume"]
+# ============================================================
+# RSI
+# ============================================================
 
-    if not all(c in df.columns for c in required):
-        return None
+def rsi(series, period=14):
 
-    df["Date"]=pd.to_datetime(df["Date"],errors="coerce")
+    if len(series) < period + 1:
 
-    for c in required[1:]:
-        df[c]=pd.to_numeric(df[c],errors="coerce")
+        return pd.Series(
+            np.nan,
+            index=series.index
+        )
 
-    df=df.dropna(subset=required)
-    df=df.drop_duplicates("Date")
-    df=df.sort_values("Date")
-    df=df.reset_index(drop=True)
+    delta = series.diff()
+
+    gain = delta.clip(lower=0)
+
+    loss = -delta.clip(upper=0)
+
+    avg_gain = gain.ewm(
+        com=period - 1,
+        adjust=False
+    ).mean()
+
+    avg_loss = loss.ewm(
+        com=period - 1,
+        adjust=False
+    ).mean()
+
+    rs = avg_gain / avg_loss
+
+    return 100 - (
+        100 / (1 + rs)
+    )
+
+
+# ============================================================
+# PREPARE INDICATORS
+# ============================================================
+
+def prepare_data(df):
+
+    df = df.copy()
+
+    close = df["Close"]
+
+    df["EMA20"] = close.ewm(
+        span=EMA20_PERIOD,
+        adjust=False
+    ).mean()
+
+    df["EMA30"] = close.ewm(
+        span=EMA30_PERIOD,
+        adjust=False
+    ).mean()
+
+    df["EMA50"] = close.ewm(
+        span=EMA50_PERIOD,
+        adjust=False
+    ).mean()
+
+    df["EMA75"] = close.ewm(
+        span=EMA75_PERIOD,
+        adjust=False
+    ).mean()
+
+    df["RSI"] = rsi(
+        close,
+        RSI_PERIOD
+    )
 
     return df
 
 
 # ============================================================
-# PIVOTS
+# AVG PRICE
 # ============================================================
 
-def detect_pivots(df):
-    lows=df["Low"].values
-    highs=df["High"].values
-    n=len(df)
+def update_avg(
+    old_avg,
+    old_pos,
+    new_price,
+    new_pos
+):
 
-    pivot_lows=[]
-    pivot_highs=[]
+    if new_pos == 0:
+        return 0.0
 
-    for i in range(PIVOT_LEFT,n-PIVOT_RIGHT):
-        left_lows=lows[i-PIVOT_LEFT:i]
-        right_lows=lows[i+1:i+PIVOT_RIGHT+1]
-        left_highs=highs[i-PIVOT_LEFT:i]
-        right_highs=highs[i+1:i+PIVOT_RIGHT+1]
+    added_pos = new_pos - old_pos
 
-        if lows[i]<left_lows.min() and lows[i]<=right_lows.min():
-            pivot_lows.append({
-                "index":i,
-                "confirmed_at":i+PIVOT_RIGHT,
-                "price":float(lows[i])
-            })
+    if added_pos <= 0:
+        return old_avg
 
-        if highs[i]>left_highs.max() and highs[i]>=right_highs.max():
-            pivot_highs.append({
-                "index":i,
-                "confirmed_at":i+PIVOT_RIGHT,
-                "price":float(highs[i])
-            })
+    total_cost = (
+        old_avg * old_pos
+        +
+        new_price * added_pos
+    )
 
-    return pivot_lows,pivot_highs
+    return total_cost / new_pos
 
 
 # ============================================================
-# RESISTANCE REACTION
+# FINAL WEIGHTED PNL
 # ============================================================
 
-def pivot_has_resistance_reaction(df,pivot_index,pivot_price):
-    end=min(len(df),pivot_index+1+REACTION_WINDOW)
-    future=df.iloc[pivot_index+1:end]
-
-    if future.empty:
-        return False
-
-    min_close=float(future["Close"].min())
-
-    reaction=(pivot_price-min_close)/pivot_price*100
-
-    return reaction>=MIN_REACTION_PERCENT
-
-
-# ============================================================
-# RESISTANCE ZONES
-# ============================================================
-
-def build_resistance_zones(df,confirmed_highs,current_index):
-    start=max(0,current_index-LOOKBACK+1)
-
-    highs=[
-        p for p in confirmed_highs
-        if p["confirmed_at"]<=current_index and p["index"]>=start
-    ]
-
-    clusters=[]
-
-    for p in sorted(highs,key=lambda x:x["index"]):
-        placed=False
-
-        for zone in clusters:
-            distance=abs(p["price"]-zone["price"])/zone["price"]*100
-
-            if distance<=ZONE_DISTANCE_PERCENT:
-                zone["pivots"].append(p)
-                zone["price"]=float(np.mean([x["price"] for x in zone["pivots"]]))
-                placed=True
-                break
-
-        if not placed:
-            clusters.append({
-                "price":float(p["price"]),
-                "pivots":[p]
-            })
-
-    zones=[]
-
-    for zone in clusters:
-        reactions=0
-
-        for p in zone["pivots"]:
-            reaction_end=p["index"]+1+REACTION_WINDOW
-
-            if reaction_end>current_index:
-                continue
-
-            if pivot_has_resistance_reaction(df,p["index"],p["price"]):
-                reactions+=1
-
-        if reactions<MIN_RESISTANCE_REACTIONS:
-            continue
-
-        prices=[p["price"] for p in zone["pivots"]]
-
-        zone_low=min(prices)*(1-ZONE_DISTANCE_PERCENT/100)
-        zone_high=max(prices)*(1+ZONE_DISTANCE_PERCENT/100)
-
-        zones.append({
-            "direction":"RESISTANCE",
-            "price":round(float(np.mean(prices)),4),
-            "low":round(float(zone_low),4),
-            "high":round(float(zone_high),4),
-            "reactions":reactions,
-            "first_pivot":min(p["index"] for p in zone["pivots"]),
-            "last_pivot":max(p["index"] for p in zone["pivots"])
-        })
-
-    return zones
-
-
-# ============================================================
-# REAL BREAKOUT
-# ============================================================
-
-def find_broken_resistance(resistances,prev_close,close):
-    candidates=[]
-
-    for resistance in resistances:
-        level=float(resistance["high"])
-        required=level*(1+BREAKOUT_PERCENT/100)
-
-        # IMPORTANT:
-        # Previous candle must NOT already be above
-        # the breakout level.
-        if prev_close>required:
-            continue
-
-        # Current candle must break it.
-        if close<=required:
-            continue
-
-        candidates.append(resistance)
-
-    if not candidates:
-        return None
-
-    candidates.sort(key=lambda r:r["high"],reverse=True)
-
-    return candidates[0]
-
-
-# ============================================================
-# NEXT RESISTANCE
-# ============================================================
-
-def find_next_resistance(resistances,entry_price,broken_resistance):
-    candidates=[]
-
-    for resistance in resistances:
-        price=float(resistance["price"])
-
-        if price<=entry_price:
-            continue
-
-        if (
-            resistance["first_pivot"]==broken_resistance["first_pivot"]
-            and
-            resistance["last_pivot"]==broken_resistance["last_pivot"]
-        ):
-            continue
-
-        upside=(price-entry_price)/entry_price*100
-
-        if upside<MIN_UPSIDE_PERCENT:
-            continue
-
-        candidates.append(resistance)
-
-    if not candidates:
-        return None
-
-    return min(candidates,key=lambda r:r["price"])
-
-
-# ============================================================
-# VOLUME
-# ============================================================
-
-def volume_confirmed(df,index):
-    start=index-VOLUME_LOOKBACK
-
-    if start<0:
-        return False
-
-    previous=df.iloc[start:index]["Volume"]
-
-    if len(previous)<VOLUME_LOOKBACK:
-        return False
-
-    avg=float(previous.mean())
-
-    if avg<=0:
-        return False
-
-    current=float(df.iloc[index]["Volume"])
-
-    return current>=avg*VOLUME_MULTIPLIER
-
-
-def volume_ratio(df,index):
-    start=index-VOLUME_LOOKBACK
-
-    if start<0:
-        return 0
-
-    avg=float(df.iloc[start:index]["Volume"].mean())
-
-    if avg<=0:
-        return 0
-
-    return float(df.iloc[index]["Volume"])/avg
-
-
-# ============================================================
-# PRESSURE
-# ============================================================
-
-def count_pressure_candles(df,index,resistance):
-    start=index-PRESSURE_LOOKBACK
-
-    if start<0:
-        return 0
-
-    candles=df.iloc[start:index]
-
-    resistance_high=float(resistance["high"])
-    resistance_low=float(resistance["low"])
-
-    count=0
-
-    for _,candle in candles.iterrows():
-        high=float(candle["High"])
-        close=float(candle["Close"])
-
-        distance=(resistance_high-close)/resistance_high*100
-
-        near_resistance=(
-            0<=distance<=MAX_PRESSURE_DISTANCE_PERCENT
+def calculate_final_pnl(
+    realized_tracker,
+    current_position,
+    current_profit
+):
+
+    tracker = list(realized_tracker)
+
+    tracker.append(
+        (
+            current_position,
+            current_profit
         )
+    )
 
-        touched_zone=high>=resistance_low
+    weight_sum = sum(
+        weight
+        for weight, _ in tracker
+    )
 
-        if near_resistance or touched_zone:
-            count+=1
+    if weight_sum <= 0:
+        return current_profit
 
-    return count
-
-
-def pressure_confirmed(df,index,resistance):
-    return count_pressure_candles(df,index,resistance)>=MIN_PRESSURE_CANDLES
+    return (
+        sum(
+            profit * weight
+            for weight, profit in tracker
+        )
+        /
+        weight_sum
+    )
 
 
 # ============================================================
-# BREAKOUT CONFIRMATION
+# NEW TRADE
 # ============================================================
 
-def valid_breakout(row,prev_row,resistance):
-    close=float(row["Close"])
-    prev_close=float(prev_row["Close"])
+def create_trade(
+    symbol,
+    cycle,
+    date,
+    price
+):
 
-    level=float(resistance["high"])
-    required=level*(1+BREAKOUT_PERCENT/100)
+    return {
 
-    return prev_close<=required and close>required
+        "symbol": symbol,
+
+        "cycle": cycle,
+
+        "status": "OPEN",
+
+        "first_entry": {
+            "date": date,
+            "price": round(price, 4),
+            "position_added": 0.33
+        },
+
+        "second_entry": None,
+
+        "third_entry": None,
+
+        "exits": [],
+
+        "last_average_price": round(
+            price,
+            4
+        ),
+
+        "final_exit_price": None,
+
+        "exit_date": None,
+
+        "profit_pct": None,
+
+        "max_position": 0.33,
+
+        "peak_profit": 0.0,
+
+        "exit_reason": None
+    }
 
 
 # ============================================================
 # CLOSE TRADE
 # ============================================================
 
-def close_trade(position,date,price,reason):
-    profit=(price-position["entry_price"])/position["entry_price"]*100
+def close_trade(
+    trade,
+    date,
+    price,
+    final_profit,
+    reason
+):
 
-    return {
-        "symbol":position["symbol"],
-        "status":"CLOSED",
-        "entry_date":position["entry_date"],
-        "entry_price":round(position["entry_price"],4),
-        "exit_date":date,
-        "exit_price":round(price,4),
-        "profit_pct":round(profit,2),
-        "exit_reason":reason,
-        "broken_resistance":position["broken_resistance"],
-        "resistance_reactions":position["resistance_reactions"],
-        "target_resistance":position["target_resistance"],
-        "upside_to_target":position["upside_to_target"],
-        "breakout_volume_ratio":position["breakout_volume_ratio"],
-        "pressure_candles":position["pressure_candles"]
+    trade["status"] = "CLOSED"
+
+    trade["final_exit_price"] = round(
+        price,
+        4
+    )
+
+    trade["exit_date"] = date
+
+    trade["profit_pct"] = round(
+        final_profit,
+        2
+    )
+
+    trade["exit_reason"] = reason
+
+    return trade
+
+
+# ============================================================
+# BACKTEST ONE STOCK
+# ============================================================
+
+def backtest_stock(symbol, df):
+
+    df = prepare_data(df)
+
+    state = {
+
+        "cycle": 1,
+
+        "position": 0.0,
+
+        "avg_price": 0.0,
+
+        "peak_profit": 0.0,
+
+        "realized_pnl_tracker": []
     }
 
+    trades = []
 
-# ============================================================
-# BACKTEST
-# ============================================================
+    signals = []
 
-def backtest(sym,df):
-    _,pivot_highs=detect_pivots(df)
+    for i in range(
+        MIN_BARS,
+        len(df)
+    ):
 
-    position=None
-    trades=[]
+        row = df.iloc[i]
 
-    for i in range(MIN_BARS,len(df)):
-        row=df.iloc[i]
-        prev_row=df.iloc[i-1]
+        date = df.index[i].strftime(
+            "%Y-%m-%d"
+        )
 
-        date=row["Date"].strftime("%Y-%m-%d")
-        high=float(row["High"])
-        low=float(row["Low"])
-        close=float(row["Close"])
+        price = float(
+            row["Close"]
+        )
 
-        resistances=build_resistance_zones(df,pivot_highs,i)
+        rsi_val = float(
+            row["RSI"]
+        )
+
+        ema75 = float(
+            row["EMA75"]
+        )
 
         # ----------------------------------------------------
-        # MANAGE POSITION
+        # INVALID INDICATORS
         # ----------------------------------------------------
 
-        if position is not None:
-            broken=position["broken_resistance_zone"]
-            target_zone=position["target_resistance_zone"]
+        if (
+            pd.isna(rsi_val)
+            or
+            pd.isna(ema75)
+        ):
+            continue
 
-            stop_price=(
-                float(broken["low"])
-                *(1-STOP_BUFFER_PERCENT/100)
+        # ----------------------------------------------------
+        # CURRENT POSITION
+        # ----------------------------------------------------
+
+        position = state["position"]
+
+        avg_price = state["avg_price"]
+
+        # ----------------------------------------------------
+        # RUN-UP FILTER
+        # ----------------------------------------------------
+
+        lookback = min(
+            len(df.iloc[:i + 1]),
+            RUNUP_LOOKBACK
+        )
+
+        recent = df.iloc[
+            i + 1 - lookback:
+            i + 1
+        ]
+
+        lowest_80 = float(
+            recent["Low"].min()
+        )
+
+        highest_80 = float(
+            recent["High"].max()
+        )
+
+        if lowest_80 > 0:
+
+            run_up_percent = (
+                (
+                    highest_80
+                    -
+                    lowest_80
+                )
+                /
+                lowest_80
+            ) * 100
+
+        else:
+
+            run_up_percent = 0.0
+
+        safe_to_buy = (
+            run_up_percent
+            <=
+            MAX_RUNUP_PERCENT
+        )
+
+        # ----------------------------------------------------
+        # GAP FILTER
+        # EXACTLY SAME LOGIC
+        # ----------------------------------------------------
+
+        if i < 3:
+            continue
+
+        gap1 = (
+            (
+                df["Open"].iloc[i]
+                -
+                df["Close"].iloc[i - 1]
+            )
+            /
+            df["Close"].iloc[i - 1]
+        ) * 100
+
+        gap2 = (
+            (
+                df["Open"].iloc[i - 1]
+                -
+                df["Close"].iloc[i - 2]
+            )
+            /
+            df["Close"].iloc[i - 2]
+        ) * 100
+
+        gap3 = (
+            (
+                df["Open"].iloc[i - 2]
+                -
+                df["Close"].iloc[i - 3]
+            )
+            /
+            df["Close"].iloc[i - 3]
+        ) * 100
+
+        no_gap_down = (
+            gap1 > MAX_GAP_DOWN_PERCENT
+            and
+            gap2 > MAX_GAP_DOWN_PERCENT
+            and
+            gap3 > MAX_GAP_DOWN_PERCENT
+        )
+
+        # ----------------------------------------------------
+        # EMA75 UP
+        # EXACT LIVE LOGIC
+        # ----------------------------------------------------
+
+        ema_up = (
+
+            df["EMA75"].iloc[i]
+            >
+            df["EMA75"].iloc[i - 5]
+
+            and
+
+            df["EMA75"].iloc[i - 5]
+            >
+            df["EMA75"].iloc[i - 10]
+
+            and
+
+            df["EMA75"].iloc[i]
+            >
+            df["EMA75"].iloc[i - 10]
+            *
+            1.002
+
+            and
+
+            price
+            <=
+            df["EMA75"].iloc[i]
+            *
+            1.08
+        )
+
+        # ----------------------------------------------------
+        # BUY CONDITIONS
+        # ----------------------------------------------------
+
+        buy1 = (
+            safe_to_buy
+            and
+            ema_up
+            and
+            no_gap_down
+            and
+            rsi_val <= BUY1_RSI
+        )
+
+        buy2 = (
+            safe_to_buy
+            and
+            ema_up
+            and
+            no_gap_down
+            and
+            rsi_val <= BUY2_RSI
+        )
+
+        buy3 = (
+            safe_to_buy
+            and
+            ema_up
+            and
+            no_gap_down
+            and
+            rsi_val <= BUY3_RSI
+        )
+
+        # ----------------------------------------------------
+        # PROFIT
+        # ----------------------------------------------------
+
+        profit = 0.0
+
+        if avg_price > 0:
+
+            profit = (
+                (
+                    price
+                    -
+                    avg_price
+                )
+                /
+                avg_price
+            ) * 100
+
+        # ----------------------------------------------------
+        # SELL CONDITIONS
+        # ----------------------------------------------------
+
+        sell1 = (
+            position > 0.70
+            and
+            rsi_val >= SELL1_RSI
+            and
+            profit > SELL1_MIN_PROFIT
+        )
+
+        sell2 = (
+            position > SELL2_MIN_POSITION
+            and
+            position <= SELL2_MAX_POSITION
+            and
+            rsi_val >= SELL2_RSI
+            and
+            profit > SELL2_MIN_PROFIT
+        )
+
+        sell3 = (
+            position > 0
+            and
+            rsi_val >= SELL3_RSI
+            and
+            profit > SELL3_MIN_PROFIT
+        )
+
+        action = None
+
+        # ----------------------------------------------------
+        # BUY L1
+        # ----------------------------------------------------
+
+        if (
+            position == 0
+            and
+            buy1
+        ):
+
+            state["position"] = 0.33
+
+            state["avg_price"] = price
+
+            state["peak_profit"] = 0.0
+
+            state[
+                "realized_pnl_tracker"
+            ] = []
+
+            profit = 0.0
+
+            action = "BUY L1"
+
+            trade = create_trade(
+                symbol,
+                state["cycle"],
+                date,
+                price
             )
 
-            # Stop has priority.
-            if low<=stop_price:
-                trades.append(
-                    close_trade(
-                        position,
-                        date,
-                        stop_price,
-                        "BREAKOUT_FAILURE"
+            trades.append(trade)
+
+            signals.append({
+                "symbol": symbol,
+                "date": date,
+                "action": "BUY L1",
+                "price": round(price, 4),
+                "rsi": round(rsi_val, 2),
+                "position": 0.33
+            })
+
+        # ----------------------------------------------------
+        # BUY L2
+        # ----------------------------------------------------
+
+        elif (
+            0.32 < position < 0.50
+            and
+            buy2
+            and
+            price
+            <
+            avg_price * 0.97
+        ):
+
+            old_pos = position
+
+            state["position"] = 0.66
+
+            state["avg_price"] = update_avg(
+                avg_price,
+                old_pos,
+                price,
+                state["position"]
+            )
+
+            profit = (
+                (
+                    price
+                    -
+                    state["avg_price"]
+                )
+                /
+                state["avg_price"]
+            ) * 100
+
+            action = "BUY L2"
+
+            trade = trades[-1]
+
+            trade["second_entry"] = {
+                "date": date,
+                "price": round(price, 4),
+                "position_added": 0.33
+            }
+
+            trade["last_average_price"] = round(
+                state["avg_price"],
+                4
+            )
+
+            trade["max_position"] = max(
+                trade["max_position"],
+                0.66
+            )
+
+            signals.append({
+                "symbol": symbol,
+                "date": date,
+                "action": "BUY L2",
+                "price": round(price, 4),
+                "rsi": round(rsi_val, 2),
+                "position": 0.66,
+                "avg_price": round(
+                    state["avg_price"],
+                    4
+                )
+            })
+
+        # ----------------------------------------------------
+        # BUY L3
+        # ----------------------------------------------------
+
+        elif (
+            0.65 < position < 1.0
+            and
+            buy3
+            and
+            price
+            <
+            avg_price * 0.96
+        ):
+
+            old_pos = position
+
+            state["position"] = 1.0
+
+            state["avg_price"] = update_avg(
+                avg_price,
+                old_pos,
+                price,
+                state["position"]
+            )
+
+            profit = (
+                (
+                    price
+                    -
+                    state["avg_price"]
+                )
+                /
+                state["avg_price"]
+            ) * 100
+
+            action = "BUY L3"
+
+            trade = trades[-1]
+
+            trade["third_entry"] = {
+                "date": date,
+                "price": round(price, 4),
+                "position_added": 0.34
+            }
+
+            trade["last_average_price"] = round(
+                state["avg_price"],
+                4
+            )
+
+            trade["max_position"] = 1.0
+
+            signals.append({
+                "symbol": symbol,
+                "date": date,
+                "action": "BUY L3",
+                "price": round(price, 4),
+                "rsi": round(rsi_val, 2),
+                "position": 1.0,
+                "avg_price": round(
+                    state["avg_price"],
+                    4
+                )
+            })
+
+        # ----------------------------------------------------
+        # PEAK PROFIT
+        # EXACT LIVE LOGIC
+        # ----------------------------------------------------
+
+        if profit > state["peak_profit"]:
+
+            state["peak_profit"] = profit
+
+        if trades:
+
+            active_trade = trades[-1]
+
+            if active_trade["status"] == "OPEN":
+
+                active_trade["peak_profit"] = max(
+                    active_trade["peak_profit"],
+                    state["peak_profit"]
+                )
+
+        # ----------------------------------------------------
+        # SELL / STOP
+        # ----------------------------------------------------
+
+        initial_pos = position
+
+        if (
+            initial_pos > 0
+            and
+            state["position"] > 0
+        ):
+
+            stop_triggered = False
+
+            # -----------------------------------------------
+            # STOP LOSS
+            # -----------------------------------------------
+
+            if (
+                state["position"] <= 0.33
+                and
+                profit <= STOP_L1
+            ):
+
+                stop_triggered = True
+
+            elif (
+                state["position"] <= 0.66
+                and
+                profit <= STOP_L2
+            ):
+
+                stop_triggered = True
+
+            elif (
+                state["position"] == 1.0
+                and
+                profit <= STOP_L3
+            ):
+
+                stop_triggered = True
+
+            # -----------------------------------------------
+            # TRAILING FAILURE
+            # -----------------------------------------------
+
+            if (
+                state["peak_profit"] > TRAILING_TRIGGER
+                and
+                (
+                    state["peak_profit"]
+                    -
+                    profit
+                )
+                >=
+                TRAILING_GIVEBACK
+            ):
+
+                stop_triggered = True
+
+            # -----------------------------------------------
+            # STOP LOSS
+            # -----------------------------------------------
+
+            if stop_triggered:
+
+                action = "STOP LOSS"
+
+                final_profit = calculate_final_pnl(
+                    state["realized_pnl_tracker"],
+                    state["position"],
+                    profit
+                )
+
+                trade = trades[-1]
+
+                close_trade(
+                    trade,
+                    date,
+                    price,
+                    final_profit,
+                    "STOP LOSS"
+                )
+
+                trade["stop_trigger_profit"] = round(
+                    profit,
+                    2
+                )
+
+                state["position"] = 0.0
+
+                signals.append({
+                    "symbol": symbol,
+                    "date": date,
+                    "action": "STOP LOSS",
+                    "price": round(price, 4),
+                    "rsi": round(rsi_val, 2),
+                    "profit": round(
+                        final_profit,
+                        2
+                    )
+                })
+
+            # -----------------------------------------------
+            # FULL EXIT
+            # -----------------------------------------------
+
+            elif sell3:
+
+                action = "EXIT FULL"
+
+                final_profit = calculate_final_pnl(
+                    state["realized_pnl_tracker"],
+                    state["position"],
+                    profit
+                )
+
+                trade = trades[-1]
+
+                close_trade(
+                    trade,
+                    date,
+                    price,
+                    final_profit,
+                    "EXIT FULL"
+                )
+
+                state["position"] = 0.0
+
+                signals.append({
+                    "symbol": symbol,
+                    "date": date,
+                    "action": "EXIT FULL",
+                    "price": round(price, 4),
+                    "rsi": round(rsi_val, 2),
+                    "profit": round(
+                        final_profit,
+                        2
+                    )
+                })
+
+            # -----------------------------------------------
+            # SELL L2
+            # -----------------------------------------------
+
+            elif sell2:
+
+                sell_amount = min(
+                    0.33,
+                    state["position"]
+                )
+
+                state[
+                    "realized_pnl_tracker"
+                ].append(
+                    (
+                        sell_amount,
+                        profit
                     )
                 )
-                position=None
-                continue
 
-            if target_zone is not None:
-                target=float(target_zone["price"])
+                state["position"] = round(
+                    state["position"]
+                    -
+                    sell_amount,
+                    2
+                )
 
-                if high>=target:
-                    trades.append(
-                        close_trade(
-                            position,
-                            date,
-                            target,
-                            "RESISTANCE"
-                        )
+                action = "SELL L2"
+
+                trade = trades[-1]
+
+                trade["exits"].append({
+                    "date": date,
+                    "type": "SELL L2",
+                    "price": round(price, 4),
+                    "position_sold": round(
+                        sell_amount,
+                        2
+                    ),
+                    "profit": round(
+                        profit,
+                        2
                     )
-                    position=None
-                    continue
+                })
 
-            continue
+                signals.append({
+                    "symbol": symbol,
+                    "date": date,
+                    "action": "SELL L2",
+                    "price": round(price, 4),
+                    "rsi": round(rsi_val, 2),
+                    "profit": round(
+                        profit,
+                        2
+                    ),
+                    "position": state["position"]
+                })
+
+                if state["position"] == 0:
+
+                    final_profit = calculate_final_pnl(
+                        state[
+                            "realized_pnl_tracker"
+                        ],
+                        0,
+                        profit
+                    )
+
+                    close_trade(
+                        trade,
+                        date,
+                        price,
+                        final_profit,
+                        "SELL L2"
+                    )
+
+            # -----------------------------------------------
+            # SELL L1
+            # -----------------------------------------------
+
+            elif sell1:
+
+                sell_amount = min(
+                    0.33,
+                    state["position"]
+                )
+
+                state[
+                    "realized_pnl_tracker"
+                ].append(
+                    (
+                        sell_amount,
+                        profit
+                    )
+                )
+
+                state["position"] = round(
+                    state["position"]
+                    -
+                    sell_amount,
+                    2
+                )
+
+                action = "SELL L1"
+
+                trade = trades[-1]
+
+                trade["exits"].append({
+                    "date": date,
+                    "type": "SELL L1",
+                    "price": round(price, 4),
+                    "position_sold": round(
+                        sell_amount,
+                        2
+                    ),
+                    "profit": round(
+                        profit,
+                        2
+                    )
+                })
+
+                signals.append({
+                    "symbol": symbol,
+                    "date": date,
+                    "action": "SELL L1",
+                    "price": round(price, 4),
+                    "rsi": round(rsi_val, 2),
+                    "profit": round(
+                        profit,
+                        2
+                    ),
+                    "position": state["position"]
+                })
+
+                if state["position"] == 0:
+
+                    final_profit = calculate_final_pnl(
+                        state[
+                            "realized_pnl_tracker"
+                        ],
+                        0,
+                        profit
+                    )
+
+                    close_trade(
+                        trade,
+                        date,
+                        price,
+                        final_profit,
+                        "SELL L1"
+                    )
 
         # ----------------------------------------------------
-        # FIND REAL BREAKOUT
+        # RESET AFTER FULL EXIT
         # ----------------------------------------------------
 
-        broken=find_broken_resistance(
-            resistances,
-            float(prev_row["Close"]),
-            close
-        )
+        if (
+            state["position"] == 0
+            and
+            action in {
+                "SELL L1",
+                "SELL L2",
+                "EXIT FULL",
+                "STOP LOSS"
+            }
+        ):
 
-        if broken is None:
-            continue
+            state["avg_price"] = 0.0
 
-        if not valid_breakout(row,prev_row,broken):
-            continue
+            state["peak_profit"] = 0.0
 
-        # ----------------------------------------------------
-        # PRESSURE
-        # ----------------------------------------------------
+            state[
+                "realized_pnl_tracker"
+            ] = []
 
-        pressure_count=count_pressure_candles(
-            df,
-            i,
-            broken
-        )
+            state["cycle"] += 1
 
-        if pressure_count<MIN_PRESSURE_CANDLES:
-            continue
+    # ========================================================
+    # CLOSE OPEN TRADE AT END OF DATA
+    # ========================================================
 
-        # ----------------------------------------------------
-        # VOLUME
-        # ----------------------------------------------------
+    if state["position"] > 0 and trades:
 
-        if not volume_confirmed(df,i):
-            continue
+        trade = trades[-1]
 
-        vr=volume_ratio(df,i)
+        if trade["status"] == "OPEN":
 
-        # ----------------------------------------------------
-        # NEXT RESISTANCE
-        # ----------------------------------------------------
+            last_price = float(
+                df["Close"].iloc[-1]
+            )
 
-        target_zone=find_next_resistance(
-            resistances,
-            close,
-            broken
-        )
+            last_date = df.index[-1].strftime(
+                "%Y-%m-%d"
+            )
 
-        if target_zone is None:
-            continue
+            final_profit = calculate_final_pnl(
+                state["realized_pnl_tracker"],
+                state["position"],
+                (
+                    (
+                        last_price
+                        -
+                        state["avg_price"]
+                    )
+                    /
+                    state["avg_price"]
+                ) * 100
+            )
 
-        # ----------------------------------------------------
-        # NEXT DAY ENTRY
-        # ----------------------------------------------------
+            close_trade(
+                trade,
+                last_date,
+                last_price,
+                final_profit,
+                "END_OF_DATA"
+            )
 
-        if i+1>=len(df):
-            continue
+            trade["status"] = "OPEN"
 
-        next_row=df.iloc[i+1]
-
-        entry_date=next_row["Date"].strftime("%Y-%m-%d")
-        entry_price=float(next_row["Open"])
-        target_price=float(target_zone["price"])
-
-        actual_upside=(target_price-entry_price)/entry_price*100
-
-        if actual_upside<MIN_UPSIDE_PERCENT:
-            continue
-
-        position={
-            "symbol":sym,
-            "entry_date":entry_date,
-            "entry_price":entry_price,
-            "broken_resistance_zone":broken,
-            "broken_resistance":round(float(broken["price"]),4),
-            "resistance_reactions":broken["reactions"],
-            "target_resistance_zone":target_zone,
-            "target_resistance":round(target_price,4),
-            "upside_to_target":round(actual_upside,2),
-            "breakout_volume_ratio":round(vr,2),
-            "pressure_candles":pressure_count
-        }
-
-    # --------------------------------------------------------
-    # END OF DATA
-    # --------------------------------------------------------
-
-    if position is not None:
-        last=df.iloc[-1]
-
-        trade=close_trade(
-            position,
-            last["Date"].strftime("%Y-%m-%d"),
-            float(last["Close"]),
-            "END_OF_DATA"
-        )
-
-        trade["status"]="OPEN"
-        trades.append(trade)
-
-    return trades
+    return trades, signals
 
 
 # ============================================================
-# RUN
+# RUN ALL STOCKS
 # ============================================================
 
-all_trades=[]
+all_trades = []
+all_signals = []
 
-for sym,data in db.items():
-    if sym.upper() in {"EGX30","EGX70","EGX100"}:
-        continue
+print("\nRUNNING BACKTEST...\n")
 
-    df=to_df(data)
+for symbol in SYMBOLS:
+
+    df = fetch_local_data(symbol)
 
     if df is None:
-        print(f"⚠️ {sym}: invalid data or Volume missing")
+
+        print(
+            f"{symbol:8} | NO DATA"
+        )
+
         continue
 
-    if len(df)<MIN_BARS:
-        print(f"⚠️ {sym}: insufficient data ({len(df)})")
+    if len(df) < MIN_BARS:
+
+        print(
+            f"{symbol:8} | "
+            f"INSUFFICIENT DATA "
+            f"({len(df)})"
+        )
+
         continue
 
-    trades=backtest(sym,df)
+    trades, signals = backtest_stock(
+        symbol,
+        df
+    )
+
     all_trades.extend(trades)
+    all_signals.extend(signals)
 
-    closed_count=sum(t["status"]=="CLOSED" for t in trades)
+    closed_count = sum(
+        t["status"] == "CLOSED"
+        for t in trades
+    )
 
-    print(f"{sym:8} | {closed_count:3} closed")
+    print(
+        f"{symbol:8} | "
+        f"{closed_count:3} closed | "
+        f"{len(signals):3} signals"
+    )
 
 
 # ============================================================
 # SORT
 # ============================================================
 
-all_trades.sort(key=lambda x:x["entry_date"])
+all_trades.sort(
+    key=lambda x: x["first_entry"]["date"]
+)
 
-closed=[t for t in all_trades if t["status"]=="CLOSED"]
-opened=[t for t in all_trades if t["status"]=="OPEN"]
-
-
-# ============================================================
-# STATISTICS
-# ============================================================
-
-profits=[float(t["profit_pct"]) for t in closed]
-wins=[p for p in profits if p>0]
-losses=[p for p in profits if p<=0]
-
-n=len(profits)
-
-winrate=len(wins)/n*100 if n else 0
-sumprofit=sum(profits)
-
-avgwin=float(np.mean(wins)) if wins else 0
-avgloss=float(np.mean(losses)) if losses else 0
+all_signals.sort(
+    key=lambda x: x["date"]
+)
 
 
 # ============================================================
-# PORTFOLIO
+# CLOSED TRADES
 # ============================================================
 
-portfolio=INITIAL_CAPITAL
-equity=[portfolio]
-portfolio_history=[]
+closed_trades = [
+    t
+    for t in all_trades
+    if (
+        t["status"] == "CLOSED"
+        and
+        t["profit_pct"] is not None
+        and
+        t["exit_reason"] != "END_OF_DATA"
+    )
+]
 
-for trade in closed:
-    trade_return=trade["profit_pct"]/100*POSITION_SIZE
-    portfolio*=1+trade_return
-    equity.append(portfolio)
 
-    portfolio_history.append({
-        "date":trade["exit_date"],
-        "symbol":trade["symbol"],
-        "trade_return_percent":trade["profit_pct"],
-        "portfolio_return_percent":round(trade_return*100,4),
-        "portfolio_value":round(portfolio,2)
+open_trades = [
+    t
+    for t in all_trades
+    if t["status"] == "OPEN"
+]
+
+
+# ============================================================
+# BASIC STATISTICS
+# ============================================================
+
+profits = [
+    float(t["profit_pct"])
+    for t in closed_trades
+]
+
+wins = [
+    p for p in profits
+    if p > 0
+]
+
+losses = [
+    p for p in profits
+    if p <= 0
+]
+
+total_trades = len(profits)
+
+winning_trades = len(wins)
+
+losing_trades = len(losses)
+
+win_rate = (
+    winning_trades
+    /
+    total_trades
+    *
+    100
+    if total_trades
+    else 0
+)
+
+sum_profit = sum(profits)
+
+average_profit = (
+    float(np.mean(profits))
+    if profits
+    else 0
+)
+
+average_win = (
+    float(np.mean(wins))
+    if wins
+    else 0
+)
+
+average_loss = (
+    float(np.mean(losses))
+    if losses
+    else 0
+)
+
+
+# ============================================================
+# PROFIT FACTOR
+# ============================================================
+
+gross_profit = sum(
+    p for p in profits
+    if p > 0
+)
+
+gross_loss = abs(
+    sum(
+        p for p in profits
+        if p < 0
+    )
+)
+
+profit_factor = (
+    gross_profit
+    /
+    gross_loss
+    if gross_loss > 0
+    else 0
+)
+
+
+# ============================================================
+# PORTFOLIO SIMULATION
+# ============================================================
+#
+# مهم:
+# هنا نحسب عائد الدورة على رأس المال.
+#
+# لأن كل سهم في الـ live strategy يمكن أن يمتلك
+# مركزًا مستقلًا، سنستخدم POSITION_SIZE = 1/8
+# مثل النظام السابق إذا أردت Portfolio موحد.
+#
+# لكن هنا سنحسب أيضًا Trade Return مستقل.
+#
+
+MAX_PORTFOLIO_POSITIONS = 8
+
+POSITION_SIZE = (
+    1.0
+    /
+    MAX_PORTFOLIO_POSITIONS
+)
+
+portfolio = INITIAL_CAPITAL
+
+equity_curve = []
+
+peak_equity = portfolio
+
+max_drawdown = 0.0
+
+
+for trade in closed_trades:
+
+    trade_return = (
+        trade["profit_pct"]
+        /
+        100
+        *
+        POSITION_SIZE
+    )
+
+    portfolio *= (
+        1
+        +
+        trade_return
+    )
+
+    peak_equity = max(
+        peak_equity,
+        portfolio
+    )
+
+    drawdown = (
+        (
+            peak_equity
+            -
+            portfolio
+        )
+        /
+        peak_equity
+    ) * 100
+
+    max_drawdown = max(
+        max_drawdown,
+        drawdown
+    )
+
+    equity_curve.append({
+
+        "date": trade["exit_date"],
+
+        "symbol": trade["symbol"],
+
+        "profit_pct": trade["profit_pct"],
+
+        "portfolio_return_percent":
+            round(
+                trade_return * 100,
+                4
+            ),
+
+        "portfolio_value":
+            round(
+                portfolio,
+                2
+            )
     })
 
-compound_return=(portfolio/INITIAL_CAPITAL-1)*100
 
-
-# ============================================================
-# DRAWDOWN
-# ============================================================
-
-peak=INITIAL_CAPITAL
-max_drawdown=0.0
-
-for value in equity:
-    peak=max(peak,value)
-    drawdown=(peak-value)/peak*100
-    max_drawdown=max(max_drawdown,drawdown)
+compound_return = (
+    (
+        portfolio
+        /
+        INITIAL_CAPITAL
+    )
+    -
+    1
+) * 100
 
 
 # ============================================================
 # EXIT ANALYSIS
 # ============================================================
 
-exit_analysis={}
+exit_analysis = {}
 
-for trade in closed:
-    reason=trade.get("exit_reason","UNKNOWN")
-    exit_analysis[reason]=exit_analysis.get(reason,0)+1
+for trade in closed_trades:
+
+    reason = trade["exit_reason"]
+
+    exit_analysis[reason] = (
+        exit_analysis.get(
+            reason,
+            0
+        )
+        +
+        1
+    )
+
+
+# ============================================================
+# LADDER ANALYSIS
+# ============================================================
+
+buy_l1_count = sum(
+    1
+    for s in all_signals
+    if s["action"] == "BUY L1"
+)
+
+buy_l2_count = sum(
+    1
+    for s in all_signals
+    if s["action"] == "BUY L2"
+)
+
+buy_l3_count = sum(
+    1
+    for s in all_signals
+    if s["action"] == "BUY L3"
+)
+
+sell_l1_count = sum(
+    1
+    for s in all_signals
+    if s["action"] == "SELL L1"
+)
+
+sell_l2_count = sum(
+    1
+    for s in all_signals
+    if s["action"] == "SELL L2"
+)
+
+full_exit_count = sum(
+    1
+    for s in all_signals
+    if s["action"] == "EXIT FULL"
+)
+
+stop_count = sum(
+    1
+    for s in all_signals
+    if s["action"] == "STOP LOSS"
+)
+
+
+# ============================================================
+# L3 COMPLETION
+# ============================================================
+
+l3_completed = sum(
+    1
+    for trade in all_trades
+    if trade["third_entry"] is not None
+)
 
 
 # ============================================================
 # BEST / WORST
 # ============================================================
 
-best=max(closed,key=lambda x:x["profit_pct"]) if closed else None
-worst=min(closed,key=lambda x:x["profit_pct"]) if closed else None
+best_trade = (
+    max(
+        closed_trades,
+        key=lambda x: x["profit_pct"]
+    )
+    if closed_trades
+    else None
+)
+
+worst_trade = (
+    min(
+        closed_trades,
+        key=lambda x: x["profit_pct"]
+    )
+    if closed_trades
+    else None
+)
+
+
+# ============================================================
+# STOCK SUMMARY
+# ============================================================
+
+stock_summary = {}
+
+for symbol in SYMBOLS:
+
+    stock_trades = [
+        t
+        for t in closed_trades
+        if t["symbol"] == symbol
+    ]
+
+    if not stock_trades:
+        continue
+
+    stock_profits = [
+        float(t["profit_pct"])
+        for t in stock_trades
+    ]
+
+    stock_wins = [
+        p for p in stock_profits
+        if p > 0
+    ]
+
+    stock_losses = [
+        p for p in stock_profits
+        if p <= 0
+    ]
+
+    stock_summary[symbol] = {
+
+        "trades":
+            len(stock_profits),
+
+        "wins":
+            len(stock_wins),
+
+        "losses":
+            len(stock_losses),
+
+        "win_rate_percent":
+            round(
+                len(stock_wins)
+                /
+                len(stock_profits)
+                *
+                100,
+                2
+            ),
+
+        "sum_profit_percent":
+            round(
+                sum(stock_profits),
+                2
+            ),
+
+        "average_profit_percent":
+            round(
+                float(
+                    np.mean(
+                        stock_profits
+                    )
+                ),
+                2
+            ),
+
+        "average_win_percent":
+            round(
+                float(
+                    np.mean(
+                        stock_wins
+                    )
+                ),
+                2
+            )
+            if stock_wins
+            else 0,
+
+        "average_loss_percent":
+            round(
+                float(
+                    np.mean(
+                        stock_losses
+                    )
+                ),
+                2
+            )
+            if stock_losses
+            else 0
+    }
 
 
 # ============================================================
 # RESULT
 # ============================================================
 
-result={
-    "strategy":"EGX Resistance Breakout + Volume Strategy v1.2",
-    "description":"Confirmed swing resistance breakout with real breakout transition, pre-breakout pressure, strong volume, next resistance target and structural failure stop.",
-    "parameters":{
-        "pivot_left":PIVOT_LEFT,
-        "pivot_right":PIVOT_RIGHT,
-        "lookback":LOOKBACK,
-        "zone_distance_percent":ZONE_DISTANCE_PERCENT,
-        "minimum_resistance_reactions":MIN_RESISTANCE_REACTIONS,
-        "reaction_window":REACTION_WINDOW,
-        "minimum_reaction_percent":MIN_REACTION_PERCENT,
-        "breakout_percent":BREAKOUT_PERCENT,
-        "minimum_upside_percent":MIN_UPSIDE_PERCENT,
-        "pressure_lookback":PRESSURE_LOOKBACK,
-        "minimum_pressure_candles":MIN_PRESSURE_CANDLES,
-        "max_pressure_distance_percent":MAX_PRESSURE_DISTANCE_PERCENT,
-        "volume_lookback":VOLUME_LOOKBACK,
-        "volume_multiplier":VOLUME_MULTIPLIER,
-        "stop_buffer_percent":STOP_BUFFER_PERCENT,
-        "max_positions":MAX_POSITIONS,
-        "position_size_percent":POSITION_SIZE*100
+result = {
+
+    "strategy":
+        "EGX Ladder Cycle System v3.4",
+
+    "backtest_version":
+        "Full historical state-machine backtest v1.0",
+
+    "description":
+        "Historical simulation matching the live Ladder Strategy v3.4 logic.",
+
+    "data_file":
+        DB_FILE,
+
+    "parameters": {
+
+        "rsi_period":
+            RSI_PERIOD,
+
+        "ema20_period":
+            EMA20_PERIOD,
+
+        "ema30_period":
+            EMA30_PERIOD,
+
+        "ema50_period":
+            EMA50_PERIOD,
+
+        "ema75_period":
+            EMA75_PERIOD,
+
+        "runup_lookback":
+            RUNUP_LOOKBACK,
+
+        "max_runup_percent":
+            MAX_RUNUP_PERCENT,
+
+        "max_gap_down_percent":
+            MAX_GAP_DOWN_PERCENT,
+
+        "buy1_rsi":
+            BUY1_RSI,
+
+        "buy2_rsi":
+            BUY2_RSI,
+
+        "buy3_rsi":
+            BUY3_RSI,
+
+        "buy2_min_drop_from_avg":
+            BUY2_MIN_DROP_FROM_AVG,
+
+        "buy3_min_drop_from_avg":
+            BUY3_MIN_DROP_FROM_AVG,
+
+        "sell1_rsi":
+            SELL1_RSI,
+
+        "sell1_min_profit":
+            SELL1_MIN_PROFIT,
+
+        "sell2_rsi":
+            SELL2_RSI,
+
+        "sell2_min_profit":
+            SELL2_MIN_PROFIT,
+
+        "sell3_rsi":
+            SELL3_RSI,
+
+        "sell3_min_profit":
+            SELL3_MIN_PROFIT,
+
+        "stop_l1":
+            STOP_L1,
+
+        "stop_l2":
+            STOP_L2,
+
+        "stop_l3":
+            STOP_L3,
+
+        "trailing_trigger":
+            TRAILING_TRIGGER,
+
+        "trailing_giveback":
+            TRAILING_GIVEBACK,
+
+        "tranche_1":
+            TRANCHE_1,
+
+        "tranche_2":
+            TRANCHE_2,
+
+        "tranche_3":
+            TRANCHE_3
     },
-    "statistics":{
-        "total_trades":n,
-        "winning_trades":len(wins),
-        "losing_trades":len(losses),
-        "win_rate_percent":round(winrate,2),
-        "sum_trade_profit_percent":round(sumprofit,2),
-        "realistic_compound_return_percent":round(compound_return,2),
-        "average_win_percent":round(avgwin,2),
-        "average_loss_percent":round(avgloss,2),
-        "maximum_drawdown_percent":round(max_drawdown,2),
-        "open_positions":len(opened)
+
+    "statistics": {
+
+        "total_closed_trades":
+            total_trades,
+
+        "winning_trades":
+            winning_trades,
+
+        "losing_trades":
+            losing_trades,
+
+        "win_rate_percent":
+            round(
+                win_rate,
+                2
+            ),
+
+        "sum_trade_profit_percent":
+            round(
+                sum_profit,
+                2
+            ),
+
+        "average_trade_profit_percent":
+            round(
+                average_profit,
+                2
+            ),
+
+        "average_win_percent":
+            round(
+                average_win,
+                2
+            ),
+
+        "average_loss_percent":
+            round(
+                average_loss,
+                2
+            ),
+
+        "gross_profit":
+            round(
+                gross_profit,
+                2
+            ),
+
+        "gross_loss":
+            round(
+                gross_loss,
+                2
+            ),
+
+        "profit_factor":
+            round(
+                profit_factor,
+                2
+            ),
+
+        "realistic_compound_return_percent":
+            round(
+                compound_return,
+                2
+            ),
+
+        "maximum_drawdown_percent":
+            round(
+                max_drawdown,
+                2
+            ),
+
+        "open_positions":
+            len(open_trades)
     },
-    "exit_analysis":exit_analysis,
-    "best_trade":best,
-    "worst_trade":worst,
-    "open_positions":opened,
-    "portfolio_equity":portfolio_history,
-    "trades":all_trades
+
+    "ladder_statistics": {
+
+        "buy_l1":
+            buy_l1_count,
+
+        "buy_l2":
+            buy_l2_count,
+
+        "buy_l3":
+            buy_l3_count,
+
+        "sell_l1":
+            sell_l1_count,
+
+        "sell_l2":
+            sell_l2_count,
+
+        "full_exit":
+            full_exit_count,
+
+        "stop_loss":
+            stop_count,
+
+        "trades_reaching_l3":
+            l3_completed
+    },
+
+    "exit_analysis":
+        exit_analysis,
+
+    "best_trade":
+        best_trade,
+
+    "worst_trade":
+        worst_trade,
+
+    "stock_summary":
+        stock_summary,
+
+    "open_positions":
+        open_trades,
+
+    "portfolio_equity":
+        equity_curve,
+
+    "trades":
+        all_trades
 }
 
 
 # ============================================================
-# SAVE
+# SAVE RESULTS
 # ============================================================
 
-with open(RESULT_FILE,"w",encoding="utf-8") as f:
-    json.dump(result,f,ensure_ascii=False,indent=2)
+with open(
+    RESULT_FILE,
+    "w",
+    encoding="utf-8"
+) as f:
 
-with open(TRADES_FILE,"w",encoding="utf-8") as f:
-    json.dump(all_trades,f,ensure_ascii=False,indent=2)
-
-
-# ============================================================
-# FINAL
-# ============================================================
-
-print("\n"+"="*72)
-print("FINAL RESULTS")
-print("="*72)
-
-print(f"Trades              : {n}")
-print(f"Winners             : {len(wins)}")
-print(f"Losers              : {len(losses)}")
-print(f"Win Rate            : {winrate:.2f}%")
-print(f"Sum Profit          : {sumprofit:.2f}%")
-print(f"Compound Return     : {compound_return:.2f}%")
-print(f"Average Win         : {avgwin:.2f}%")
-print(f"Average Loss        : {avgloss:.2f}%")
-print(f"Maximum Drawdown    : {max_drawdown:.2f}%")
-print(f"Open Positions      : {len(opened)}")
-
-print("\nEXIT ANALYSIS")
-
-for reason,count in exit_analysis.items():
-    print(f"{reason:22}: {count}")
-
-if best:
-    print(
-        f"\nBEST  : {best['symbol']} | "
-        f"{best['profit_pct']:.2f}% | "
-        f"{best['entry_date']} -> {best['exit_date']}"
+    json.dump(
+        result,
+        f,
+        ensure_ascii=False,
+        indent=2
     )
 
-if worst:
-    print(
-        f"WORST : {worst['symbol']} | "
-        f"{worst['profit_pct']:.2f}% | "
-        f"{worst['entry_date']} -> {worst['exit_date']}"
+
+with open(
+    TRADES_FILE,
+    "w",
+    encoding="utf-8"
+) as f:
+
+    json.dump(
+        all_trades,
+        f,
+        ensure_ascii=False,
+        indent=2
     )
 
-print(f"\nSaved: {RESULT_FILE}, {TRADES_FILE}")
-print("="*72)
+
+with open(
+    STOCK_SUMMARY_FILE,
+    "w",
+    encoding="utf-8"
+) as f:
+
+    json.dump(
+        stock_summary,
+        f,
+        ensure_ascii=False,
+        indent=2
+    )
+
+
+# ============================================================
+# FINAL OUTPUT
+# ============================================================
+
+print("\n")
+print("=" * 80)
+print("FINAL BACKTEST RESULTS")
+print("=" * 80)
+
+print(
+    f"Closed Trades       : {total_trades}"
+)
+
+print(
+    f"Winners             : {winning_trades}"
+)
+
+print(
+    f"Losers              : {losing_trades}"
+)
+
+print(
+    f"Win Rate            : {win_rate:.2f}%"
+)
+
+print(
+    f"Sum Profit          : {sum_profit:.2f}%"
+)
+
+print(
+    f"Average Trade       : {average_profit:.2f}%"
+)
+
+print(
+    f"Average Win         : {average_win:.2f}%"
+)
+
+print(
+    f"Average Loss        : {average_loss:.2f}%"
+)
+
+print(
+    f"Profit Factor       : {profit_factor:.2f}"
+)
+
+print(
+    f"Compound Return     : {compound_return:.2f}%"
+)
+
+print(
+    f"Maximum Drawdown    : {max_drawdown:.2f}%"
+)
+
+print(
+    f"Open Positions      : {len(open_trades)}"
+)
+
+
+print("\n")
+print("=" * 80)
+print("LADDER ANALYSIS")
+print("=" * 80)
+
+print(
+    f"BUY L1              : {buy_l1_count}"
+)
+
+print(
+    f"BUY L2              : {buy_l2_count}"
+)
+
+print(
+    f"BUY L3              : {buy_l3_count}"
+)
+
+print(
+    f"SELL L1             : {sell_l1_count}"
+)
+
+print(
+    f"SELL L2             : {sell_l2_count}"
+)
+
+print(
+    f"EXIT FULL           : {full_exit_count}"
+)
+
+print(
+    f"STOP LOSS           : {stop_count}"
+)
+
+print(
+    f"Reached L3          : {l3_completed}"
+)
+
+
+print("\n")
+print("=" * 80)
+print("EXIT ANALYSIS")
+print("=" * 80)
+
+for reason, count in exit_analysis.items():
+
+    print(
+        f"{reason:20} : {count}"
+    )
+
+
+if best_trade:
+
+    print("\nBEST TRADE")
+
+    print(
+        f"{best_trade['symbol']} | "
+        f"{best_trade['profit_pct']:.2f}% | "
+        f"{best_trade['first_entry']['date']} -> "
+        f"{best_trade['exit_date']}"
+    )
+
+
+if worst_trade:
+
+    print("\nWORST TRADE")
+
+    print(
+        f"{worst_trade['symbol']} | "
+        f"{worst_trade['profit_pct']:.2f}% | "
+        f"{worst_trade['first_entry']['date']} -> "
+        f"{worst_trade['exit_date']}"
+    )
+
+
+print("\n")
+print("=" * 80)
+print("FILES SAVED")
+print("=" * 80)
+
+print(
+    RESULT_FILE
+)
+
+print(
+    TRADES_FILE
+)
+
+print(
+    STOCK_SUMMARY_FILE
+)
+
+print("=" * 80)
