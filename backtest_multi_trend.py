@@ -1293,14 +1293,7 @@ for value in equity:
         value
     )
 
-    drawdown = (
-        peak - value
-    )
-    /
-    peak
-    *
-    100
-
+    drawdown = (peak - value
     max_drawdown = max(
         max_drawdown,
         drawdown
