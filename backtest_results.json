@@ -12,7 +12,7 @@
     "runup_lookback": 80,
     "max_runup_percent": 60.0,
     "max_gap_down_percent": -3.0,
-    "buy1_rsi": 53,
+    "buy1_rsi": 58,
     "buy2_rsi": 50,
     "buy3_rsi": 42,
     "buy2_min_drop_from_avg": 3.0,
@@ -26,396 +26,397 @@
     "stop_l1": -6.0,
     "stop_l2": -5.0,
     "stop_l3": -4.0,
-    "trailing_trigger": 18,
-    "trailing_giveback": 7.0,
+    "trailing_trigger": 15,
+    "trailing_giveback": 5,
     "tranche_1": 0.33,
     "tranche_2": 0.33,
     "tranche_3": 0.34
   },
   "statistics": {
-    "total_closed_trades": 128,
-    "winning_trades": 55,
-    "losing_trades": 73,
-    "win_rate_percent": 42.97,
-    "sum_trade_profit_percent": 756.44,
-    "average_trade_profit_percent": 5.91,
-    "average_win_percent": 22.75,
-    "average_loss_percent": -6.78,
-    "gross_profit": 1251.07,
-    "gross_loss": 494.63,
-    "profit_factor": 2.53,
-    "realistic_compound_return_percent": 149.67,
-    "maximum_drawdown_percent": 7.39,
-    "open_positions": 16
+    "total_closed_trades": 156,
+    "winning_trades": 76,
+    "losing_trades": 80,
+    "win_rate_percent": 48.72,
+    "sum_trade_profit_percent": 883.75,
+    "average_trade_profit_percent": 5.67,
+    "average_win_percent": 19.2,
+    "average_loss_percent": -7.19,
+    "gross_profit": 1458.9,
+    "gross_loss": 575.15,
+    "profit_factor": 2.54,
+    "realistic_compound_return_percent": 192.26,
+    "maximum_drawdown_percent": 8.08,
+    "open_positions": 14
   },
   "ladder_statistics": {
-    "buy_l1": 144,
-    "buy_l2": 58,
-    "buy_l3": 20,
-    "sell_l1": 0,
-    "sell_l2": 18,
-    "full_exit": 0,
-    "stop_loss": 72,
-    "trailing_stop": 39,
-    "trades_reaching_l3": 20
+    "buy_l1": 170,
+    "buy_l2": 80,
+    "buy_l3": 25,
+    "sell_l1": 1,
+    "sell_l2": 17,
+    "full_exit": 1,
+    "stop_loss": 79,
+    "trailing_stop": 63,
+    "trades_reaching_l3": 25
   },
   "exit_analysis": {
-    "STOP LOSS": 72,
-    "SELL L2": 17,
-    "TRAILING STOP": 39
+    "STOP LOSS": 79,
+    "TRAILING STOP": 63,
+    "SELL L2": 13,
+    "EXIT FULL": 1
   },
   "best_trade": {
-    "symbol": "ADIB",
+    "symbol": "MPCO",
     "cycle": 2,
     "status": "CLOSED",
     "first_entry": {
-      "date": "2025-11-24",
-      "price": 24.35,
+      "date": "2025-08-20",
+      "price": 1.73,
+      "position_added": 0.33
+    },
+    "second_entry": {
+      "date": "2025-09-08",
+      "price": 1.67,
+      "position_added": 0.33
+    },
+    "third_entry": null,
+    "exits": [
+      {
+        "date": "2025-09-29",
+        "type": "SELL L2",
+        "price": 2.42,
+        "position_sold": 0.33,
+        "profit": 42.35
+      }
+    ],
+    "last_average_price": 1.7,
+    "final_exit_price": 2.69,
+    "exit_date": "2025-09-30",
+    "profit_pct": 50.29,
+    "max_position": 0.66,
+    "peak_profit": 58.235294117647044,
+    "exit_reason": "EXIT FULL"
+  },
+  "worst_trade": {
+    "symbol": "ADIB",
+    "cycle": 1,
+    "status": "CLOSED",
+    "first_entry": {
+      "date": "2025-03-03",
+      "price": 40.84,
       "position_added": 0.33
     },
     "second_entry": null,
     "third_entry": null,
-    "exits": [
-      {
-        "date": "2026-01-26",
-        "type": "SELL L2",
-        "price": 38.01,
-        "position_sold": 0.33,
-        "profit": 56.1
-      }
-    ],
-    "last_average_price": 24.35,
-    "final_exit_price": 38.01,
-    "exit_date": "2026-01-26",
-    "profit_pct": 56.1,
-    "max_position": 0.33,
-    "peak_profit": 56.09856262833674,
-    "exit_reason": "SELL L2"
-  },
-  "worst_trade": {
-    "symbol": "ELSH",
-    "cycle": 2,
-    "status": "CLOSED",
-    "first_entry": {
-      "date": "2025-06-15",
-      "price": 7.04,
-      "position_added": 0.33
-    },
-    "second_entry": {
-      "date": "2025-06-17",
-      "price": 6.75,
-      "position_added": 0.33
-    },
-    "third_entry": null,
     "exits": [],
-    "last_average_price": 6.895,
-    "final_exit_price": 4.85,
-    "exit_date": "2025-06-24",
-    "profit_pct": -29.66,
-    "max_position": 0.66,
-    "peak_profit": 2.683103698332132,
+    "last_average_price": 40.84,
+    "final_exit_price": 20.94,
+    "exit_date": "2025-05-26",
+    "profit_pct": -48.73,
+    "max_position": 0.33,
+    "peak_profit": 7.468168462291863,
     "exit_reason": "STOP LOSS",
-    "stop_trigger_profit": -29.66
+    "stop_trigger_profit": -48.73
   },
   "stock_summary": {
     "OLFI": {
-      "trades": 5,
-      "wins": 2,
+      "trades": 6,
+      "wins": 3,
       "losses": 3,
-      "win_rate_percent": 40.0,
-      "sum_profit_percent": 16.36,
-      "average_profit_percent": 3.27,
-      "average_win_percent": 17.39,
-      "average_loss_percent": -6.14
+      "win_rate_percent": 50.0,
+      "sum_profit_percent": 27.42,
+      "average_profit_percent": 4.57,
+      "average_win_percent": 15.29,
+      "average_loss_percent": -6.15
     },
     "EMFD": {
-      "trades": 5,
-      "wins": 2,
-      "losses": 3,
-      "win_rate_percent": 40.0,
-      "sum_profit_percent": 3.97,
-      "average_profit_percent": 0.79,
-      "average_win_percent": 11.11,
-      "average_loss_percent": -6.08
+      "trades": 7,
+      "wins": 3,
+      "losses": 4,
+      "win_rate_percent": 42.86,
+      "sum_profit_percent": 12.0,
+      "average_profit_percent": 1.71,
+      "average_win_percent": 12.6,
+      "average_loss_percent": -6.45
     },
     "ETEL": {
+      "trades": 4,
+      "wins": 3,
+      "losses": 1,
+      "win_rate_percent": 75.0,
+      "sum_profit_percent": 58.09,
+      "average_profit_percent": 14.52,
+      "average_win_percent": 21.22,
+      "average_loss_percent": -5.58
+    },
+    "EAST": {
+      "trades": 7,
+      "wins": 3,
+      "losses": 4,
+      "win_rate_percent": 42.86,
+      "sum_profit_percent": 9.23,
+      "average_profit_percent": 1.32,
+      "average_win_percent": 11.04,
+      "average_loss_percent": -5.97
+    },
+    "EFIH": {
       "trades": 3,
       "wins": 2,
       "losses": 1,
       "win_rate_percent": 66.67,
-      "sum_profit_percent": 42.56,
-      "average_profit_percent": 14.19,
-      "average_win_percent": 24.09,
-      "average_loss_percent": -5.62
-    },
-    "EAST": {
-      "trades": 6,
-      "wins": 2,
-      "losses": 4,
-      "win_rate_percent": 33.33,
-      "sum_profit_percent": 21.92,
-      "average_profit_percent": 3.65,
-      "average_win_percent": 23.08,
-      "average_loss_percent": -6.06
-    },
-    "EFIH": {
-      "trades": 1,
-      "wins": 1,
-      "losses": 0,
-      "win_rate_percent": 100.0,
-      "sum_profit_percent": 42.98,
-      "average_profit_percent": 42.98,
-      "average_win_percent": 42.98,
-      "average_loss_percent": 0
+      "sum_profit_percent": -1.7,
+      "average_profit_percent": -0.57,
+      "average_win_percent": 13.43,
+      "average_loss_percent": -28.56
     },
     "ABUK": {
       "trades": 4,
       "wins": 1,
       "losses": 3,
       "win_rate_percent": 25.0,
-      "sum_profit_percent": 15.12,
-      "average_profit_percent": 3.78,
-      "average_win_percent": 33.52,
-      "average_loss_percent": -6.13
+      "sum_profit_percent": 12.85,
+      "average_profit_percent": 3.21,
+      "average_win_percent": 30.9,
+      "average_loss_percent": -6.02
     },
     "OIH": {
-      "trades": 4,
-      "wins": 2,
+      "trades": 5,
+      "wins": 3,
       "losses": 2,
-      "win_rate_percent": 50.0,
-      "sum_profit_percent": 51.35,
-      "average_profit_percent": 12.84,
-      "average_win_percent": 30.65,
-      "average_loss_percent": -4.97
+      "win_rate_percent": 60.0,
+      "sum_profit_percent": 86.3,
+      "average_profit_percent": 17.26,
+      "average_win_percent": 32.05,
+      "average_loss_percent": -4.93
     },
     "SWDY": {
       "trades": 6,
       "wins": 2,
       "losses": 4,
       "win_rate_percent": 33.33,
-      "sum_profit_percent": 5.13,
-      "average_profit_percent": 0.85,
-      "average_win_percent": 18.26,
-      "average_loss_percent": -7.85
+      "sum_profit_percent": 12.1,
+      "average_profit_percent": 2.02,
+      "average_win_percent": 21.34,
+      "average_loss_percent": -7.64
     },
     "ISPH": {
-      "trades": 5,
-      "wins": 4,
-      "losses": 1,
-      "win_rate_percent": 80.0,
-      "sum_profit_percent": 40.46,
-      "average_profit_percent": 8.09,
-      "average_win_percent": 12.47,
-      "average_loss_percent": -9.41
+      "trades": 7,
+      "wins": 5,
+      "losses": 2,
+      "win_rate_percent": 71.43,
+      "sum_profit_percent": 41.87,
+      "average_profit_percent": 5.98,
+      "average_win_percent": 11.3,
+      "average_loss_percent": -7.31
     },
     "ATQA": {
-      "trades": 1,
-      "wins": 0,
-      "losses": 1,
-      "win_rate_percent": 0.0,
-      "sum_profit_percent": -5.34,
-      "average_profit_percent": -5.34,
-      "average_win_percent": 0,
-      "average_loss_percent": -5.34
+      "trades": 3,
+      "wins": 1,
+      "losses": 2,
+      "win_rate_percent": 33.33,
+      "sum_profit_percent": 1.29,
+      "average_profit_percent": 0.43,
+      "average_win_percent": 10.88,
+      "average_loss_percent": -4.79
     },
     "MTIE": {
       "trades": 6,
       "wins": 2,
       "losses": 4,
       "win_rate_percent": 33.33,
-      "sum_profit_percent": 19.39,
-      "average_profit_percent": 3.23,
+      "sum_profit_percent": 21.06,
+      "average_profit_percent": 3.51,
       "average_win_percent": 22.95,
-      "average_loss_percent": -6.63
+      "average_loss_percent": -6.21
     },
     "HRHO": {
-      "trades": 5,
-      "wins": 1,
-      "losses": 4,
-      "win_rate_percent": 20.0,
-      "sum_profit_percent": -7.53,
-      "average_profit_percent": -1.51,
-      "average_win_percent": 14.23,
-      "average_loss_percent": -5.44
+      "trades": 7,
+      "wins": 2,
+      "losses": 5,
+      "win_rate_percent": 28.57,
+      "sum_profit_percent": 0.67,
+      "average_profit_percent": 0.1,
+      "average_win_percent": 12.7,
+      "average_loss_percent": -4.95
     },
     "ORWE": {
-      "trades": 3,
-      "wins": 0,
-      "losses": 3,
-      "win_rate_percent": 0.0,
-      "sum_profit_percent": -15.98,
-      "average_profit_percent": -5.33,
-      "average_win_percent": 0,
-      "average_loss_percent": -5.33
-    },
-    "JUFO": {
-      "trades": 3,
-      "wins": 0,
-      "losses": 3,
-      "win_rate_percent": 0.0,
-      "sum_profit_percent": -15.14,
-      "average_profit_percent": -5.05,
-      "average_win_percent": 0,
-      "average_loss_percent": -5.05
-    },
-    "DSCW": {
-      "trades": 5,
-      "wins": 0,
-      "losses": 5,
-      "win_rate_percent": 0.0,
-      "sum_profit_percent": -32.42,
-      "average_profit_percent": -6.48,
-      "average_win_percent": 0,
-      "average_loss_percent": -6.48
-    },
-    "SUGR": {
       "trades": 3,
       "wins": 1,
       "losses": 2,
       "win_rate_percent": 33.33,
-      "sum_profit_percent": 13.2,
-      "average_profit_percent": 4.4,
-      "average_win_percent": 27.16,
-      "average_loss_percent": -6.98
+      "sum_profit_percent": 0.89,
+      "average_profit_percent": 0.3,
+      "average_win_percent": 12.69,
+      "average_loss_percent": -5.9
+    },
+    "JUFO": {
+      "trades": 4,
+      "wins": 1,
+      "losses": 3,
+      "win_rate_percent": 25.0,
+      "sum_profit_percent": -0.8,
+      "average_profit_percent": -0.2,
+      "average_win_percent": 14.34,
+      "average_loss_percent": -5.05
+    },
+    "DSCW": {
+      "trades": 5,
+      "wins": 1,
+      "losses": 4,
+      "win_rate_percent": 20.0,
+      "sum_profit_percent": -1.66,
+      "average_profit_percent": -0.33,
+      "average_win_percent": 24.15,
+      "average_loss_percent": -6.45
+    },
+    "SUGR": {
+      "trades": 4,
+      "wins": 1,
+      "losses": 3,
+      "win_rate_percent": 25.0,
+      "sum_profit_percent": 5.38,
+      "average_profit_percent": 1.34,
+      "average_win_percent": 25.81,
+      "average_loss_percent": -6.81
     },
     "ELSH": {
       "trades": 3,
       "wins": 1,
       "losses": 2,
       "win_rate_percent": 33.33,
-      "sum_profit_percent": -11.86,
-      "average_profit_percent": -3.95,
-      "average_win_percent": 24.39,
-      "average_loss_percent": -18.12
+      "sum_profit_percent": -6.79,
+      "average_profit_percent": -2.26,
+      "average_win_percent": 29.62,
+      "average_loss_percent": -18.2
     },
     "RMDA": {
       "trades": 3,
       "wins": 1,
       "losses": 2,
       "win_rate_percent": 33.33,
-      "sum_profit_percent": -6.21,
-      "average_profit_percent": -2.07,
+      "sum_profit_percent": 16.2,
+      "average_profit_percent": 5.4,
       "average_win_percent": 26.56,
-      "average_loss_percent": -16.38
+      "average_loss_percent": -5.18
     },
     "RAYA": {
       "trades": 2,
       "wins": 1,
       "losses": 1,
       "win_rate_percent": 50.0,
-      "sum_profit_percent": 13.55,
-      "average_profit_percent": 6.77,
-      "average_win_percent": 18.88,
+      "sum_profit_percent": 15.12,
+      "average_profit_percent": 7.56,
+      "average_win_percent": 20.45,
       "average_loss_percent": -5.33
     },
     "EEII": {
-      "trades": 4,
-      "wins": 3,
+      "trades": 5,
+      "wins": 4,
       "losses": 1,
-      "win_rate_percent": 75.0,
-      "sum_profit_percent": 69.3,
-      "average_profit_percent": 17.33,
-      "average_win_percent": 25.11,
+      "win_rate_percent": 80.0,
+      "sum_profit_percent": 74.2,
+      "average_profit_percent": 14.84,
+      "average_win_percent": 20.06,
       "average_loss_percent": -6.04
     },
     "MPCO": {
-      "trades": 3,
-      "wins": 2,
+      "trades": 5,
+      "wins": 4,
       "losses": 1,
-      "win_rate_percent": 66.67,
-      "sum_profit_percent": 54.15,
-      "average_profit_percent": 18.05,
-      "average_win_percent": 29.98,
-      "average_loss_percent": -5.81
+      "win_rate_percent": 80.0,
+      "sum_profit_percent": 87.26,
+      "average_profit_percent": 17.45,
+      "average_win_percent": 23.11,
+      "average_loss_percent": -5.17
     },
     "GBCO": {
-      "trades": 7,
-      "wins": 4,
+      "trades": 8,
+      "wins": 5,
       "losses": 3,
-      "win_rate_percent": 57.14,
-      "sum_profit_percent": 30.68,
-      "average_profit_percent": 4.38,
-      "average_win_percent": 12.6,
-      "average_loss_percent": -6.57
+      "win_rate_percent": 62.5,
+      "sum_profit_percent": 57.92,
+      "average_profit_percent": 7.24,
+      "average_win_percent": 15.46,
+      "average_loss_percent": -6.45
     },
     "TMGH": {
       "trades": 3,
       "wins": 2,
       "losses": 1,
       "win_rate_percent": 66.67,
-      "sum_profit_percent": 44.56,
-      "average_profit_percent": 14.85,
-      "average_win_percent": 25.41,
+      "sum_profit_percent": 47.79,
+      "average_profit_percent": 15.93,
+      "average_win_percent": 27.03,
       "average_loss_percent": -6.27
     },
     "ORHD": {
-      "trades": 3,
-      "wins": 1,
-      "losses": 2,
-      "win_rate_percent": 33.33,
-      "sum_profit_percent": 10.83,
-      "average_profit_percent": 3.61,
-      "average_win_percent": 21.78,
-      "average_loss_percent": -5.47
+      "trades": 5,
+      "wins": 2,
+      "losses": 3,
+      "win_rate_percent": 40.0,
+      "sum_profit_percent": 22.24,
+      "average_profit_percent": 4.45,
+      "average_win_percent": 18.23,
+      "average_loss_percent": -4.74
     },
     "AMOC": {
-      "trades": 4,
-      "wins": 1,
-      "losses": 3,
-      "win_rate_percent": 25.0,
-      "sum_profit_percent": 17.96,
-      "average_profit_percent": 4.49,
-      "average_win_percent": 32.62,
-      "average_loss_percent": -4.89
+      "trades": 6,
+      "wins": 2,
+      "losses": 4,
+      "win_rate_percent": 33.33,
+      "sum_profit_percent": 21.2,
+      "average_profit_percent": 3.53,
+      "average_win_percent": 20.79,
+      "average_loss_percent": -5.09
     },
     "FWRY": {
-      "trades": 7,
-      "wins": 5,
+      "trades": 8,
+      "wins": 6,
       "losses": 2,
-      "win_rate_percent": 71.43,
-      "sum_profit_percent": 78.03,
-      "average_profit_percent": 11.15,
-      "average_win_percent": 17.4,
-      "average_loss_percent": -4.48
+      "win_rate_percent": 75.0,
+      "sum_profit_percent": 85.76,
+      "average_profit_percent": 10.72,
+      "average_win_percent": 15.94,
+      "average_loss_percent": -4.94
     },
     "COMI": {
-      "trades": 5,
+      "trades": 6,
       "wins": 4,
-      "losses": 1,
-      "win_rate_percent": 80.0,
-      "sum_profit_percent": 72.48,
-      "average_profit_percent": 14.5,
-      "average_win_percent": 19.38,
-      "average_loss_percent": -5.03
+      "losses": 2,
+      "win_rate_percent": 66.67,
+      "sum_profit_percent": 70.04,
+      "average_profit_percent": 11.67,
+      "average_win_percent": 20.05,
+      "average_loss_percent": -5.08
     },
     "ADIB": {
-      "trades": 2,
-      "wins": 1,
+      "trades": 3,
+      "wins": 2,
       "losses": 1,
-      "win_rate_percent": 50.0,
-      "sum_profit_percent": 50.9,
-      "average_profit_percent": 25.45,
-      "average_win_percent": 56.1,
-      "average_loss_percent": -5.2
+      "win_rate_percent": 66.67,
+      "sum_profit_percent": -1.19,
+      "average_profit_percent": -0.4,
+      "average_win_percent": 23.77,
+      "average_loss_percent": -48.73
     },
     "PHDC": {
       "trades": 6,
       "wins": 3,
       "losses": 3,
       "win_rate_percent": 50.0,
-      "sum_profit_percent": 28.63,
-      "average_profit_percent": 4.77,
-      "average_win_percent": 15.94,
-      "average_loss_percent": -6.4
+      "sum_profit_percent": 31.24,
+      "average_profit_percent": 5.21,
+      "average_win_percent": 17.55,
+      "average_loss_percent": -7.14
     },
     "MCQE": {
       "trades": 3,
       "wins": 2,
       "losses": 1,
       "win_rate_percent": 66.67,
-      "sum_profit_percent": 82.91,
-      "average_profit_percent": 27.64,
-      "average_win_percent": 43.97,
+      "sum_profit_percent": 45.22,
+      "average_profit_percent": 15.07,
+      "average_win_percent": 25.12,
       "average_loss_percent": -5.02
     },
     "SKPC": {
@@ -423,45 +424,57 @@
       "wins": 0,
       "losses": 4,
       "win_rate_percent": 0.0,
-      "sum_profit_percent": -36.23,
-      "average_profit_percent": -9.06,
+      "sum_profit_percent": -38.27,
+      "average_profit_percent": -9.57,
       "average_win_percent": 0,
-      "average_loss_percent": -9.06
+      "average_loss_percent": -9.57
     },
     "EGAL": {
-      "trades": 4,
-      "wins": 2,
+      "trades": 5,
+      "wins": 3,
       "losses": 2,
-      "win_rate_percent": 50.0,
-      "sum_profit_percent": 60.73,
-      "average_profit_percent": 15.18,
-      "average_win_percent": 35.57,
+      "win_rate_percent": 60.0,
+      "sum_profit_percent": 70.82,
+      "average_profit_percent": 14.16,
+      "average_win_percent": 27.08,
       "average_loss_percent": -5.21
     }
   },
   "open_positions": [
     {
-      "symbol": "ORWE",
+      "symbol": "ATQA",
       "cycle": 4,
       "status": "OPEN",
       "first_entry": {
-        "date": "2026-02-19",
-        "price": 22.98,
+        "date": "2026-05-10",
+        "price": 9.81,
         "position_added": 0.33
       },
       "second_entry": {
-        "date": "2026-05-18",
-        "price": 22.08,
+        "date": "2026-05-20",
+        "price": 9.42,
         "position_added": 0.33
       },
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 22.53,
-      "final_exit_price": 25.6,
+      "third_entry": {
+        "date": "2026-06-11",
+        "price": 9.17,
+        "position_added": 0.34
+      },
+      "exits": [
+        {
+          "date": "2026-08-12",
+          "type": "SELL L1",
+          "price": 11.02,
+          "position_sold": 0.33,
+          "profit": 16.44
+        }
+      ],
+      "last_average_price": 9.4637,
+      "final_exit_price": 11.6,
       "exit_date": "2026-08-26",
-      "profit_pct": 13.63,
-      "max_position": 0.66,
-      "peak_profit": 18.95250776742123,
+      "profit_pct": 20.55,
+      "max_position": 1.0,
+      "peak_profit": 22.573623424242108,
       "exit_reason": "END_OF_DATA"
     },
     {
@@ -485,104 +498,8 @@
       "exit_reason": "END_OF_DATA"
     },
     {
-      "symbol": "COMI",
-      "cycle": 6,
-      "status": "OPEN",
-      "first_entry": {
-        "date": "2026-05-17",
-        "price": 133.0,
-        "position_added": 0.33
-      },
-      "second_entry": null,
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 133.0,
-      "final_exit_price": 139.28,
-      "exit_date": "2026-08-26",
-      "profit_pct": 4.72,
-      "max_position": 0.33,
-      "peak_profit": 6.390977443609022,
-      "exit_reason": "END_OF_DATA"
-    },
-    {
-      "symbol": "ATQA",
-      "cycle": 2,
-      "status": "OPEN",
-      "first_entry": {
-        "date": "2026-05-18",
-        "price": 9.7,
-        "position_added": 0.33
-      },
-      "second_entry": {
-        "date": "2026-06-11",
-        "price": 9.17,
-        "position_added": 0.33
-      },
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 9.435,
-      "final_exit_price": 11.6,
-      "exit_date": "2026-08-26",
-      "profit_pct": 22.95,
-      "max_position": 0.66,
-      "peak_profit": 22.946475887652348,
-      "exit_reason": "END_OF_DATA"
-    },
-    {
-      "symbol": "ETEL",
-      "cycle": 4,
-      "status": "OPEN",
-      "first_entry": {
-        "date": "2026-06-03",
-        "price": 96.1,
-        "position_added": 0.33
-      },
-      "second_entry": {
-        "date": "2026-06-10",
-        "price": 92.56,
-        "position_added": 0.33
-      },
-      "third_entry": {
-        "date": "2026-06-11",
-        "price": 90.16,
-        "position_added": 0.34
-      },
-      "exits": [],
-      "last_average_price": 92.9122,
-      "final_exit_price": 116.0,
-      "exit_date": "2026-08-26",
-      "profit_pct": 24.85,
-      "max_position": 1.0,
-      "peak_profit": 28.04561726016605,
-      "exit_reason": "END_OF_DATA"
-    },
-    {
-      "symbol": "EFIH",
-      "cycle": 2,
-      "status": "OPEN",
-      "first_entry": {
-        "date": "2026-06-07",
-        "price": 21.6,
-        "position_added": 0.33
-      },
-      "second_entry": {
-        "date": "2026-06-10",
-        "price": 20.89,
-        "position_added": 0.33
-      },
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 21.245,
-      "final_exit_price": 24.0,
-      "exit_date": "2026-08-26",
-      "profit_pct": 12.97,
-      "max_position": 0.66,
-      "peak_profit": 17.627677100494203,
-      "exit_reason": "END_OF_DATA"
-    },
-    {
       "symbol": "ADIB",
-      "cycle": 3,
+      "cycle": 4,
       "status": "OPEN",
       "first_entry": {
         "date": "2026-06-08",
@@ -605,28 +522,8 @@
       "exit_reason": "END_OF_DATA"
     },
     {
-      "symbol": "OLFI",
-      "cycle": 6,
-      "status": "OPEN",
-      "first_entry": {
-        "date": "2026-06-23",
-        "price": 22.02,
-        "position_added": 0.33
-      },
-      "second_entry": null,
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 22.02,
-      "final_exit_price": 23.3,
-      "exit_date": "2026-08-26",
-      "profit_pct": 5.81,
-      "max_position": 0.33,
-      "peak_profit": 16.25794732061763,
-      "exit_reason": "END_OF_DATA"
-    },
-    {
       "symbol": "EMFD",
-      "cycle": 6,
+      "cycle": 8,
       "status": "OPEN",
       "first_entry": {
         "date": "2026-06-28",
@@ -645,28 +542,48 @@
       "exit_reason": "END_OF_DATA"
     },
     {
-      "symbol": "MPCO",
+      "symbol": "EFIH",
       "cycle": 4,
       "status": "OPEN",
       "first_entry": {
-        "date": "2026-06-28",
-        "price": 1.77,
+        "date": "2026-07-14",
+        "price": 21.87,
         "position_added": 0.33
       },
       "second_entry": null,
       "third_entry": null,
       "exits": [],
-      "last_average_price": 1.77,
-      "final_exit_price": 2.23,
+      "last_average_price": 21.87,
+      "final_exit_price": 24.0,
       "exit_date": "2026-08-26",
-      "profit_pct": 25.99,
+      "profit_pct": 9.74,
       "max_position": 0.33,
-      "peak_profit": 32.20338983050846,
+      "peak_profit": 14.266117969821662,
+      "exit_reason": "END_OF_DATA"
+    },
+    {
+      "symbol": "COMI",
+      "cycle": 7,
+      "status": "OPEN",
+      "first_entry": {
+        "date": "2026-07-14",
+        "price": 134.97,
+        "position_added": 0.33
+      },
+      "second_entry": null,
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 134.97,
+      "final_exit_price": 139.28,
+      "exit_date": "2026-08-26",
+      "profit_pct": 3.19,
+      "max_position": 0.33,
+      "peak_profit": 4.8381121730754995,
       "exit_reason": "END_OF_DATA"
     },
     {
       "symbol": "FWRY",
-      "cycle": 8,
+      "cycle": 9,
       "status": "OPEN",
       "first_entry": {
         "date": "2026-07-15",
@@ -682,26 +599,6 @@
       "profit_pct": 1.18,
       "max_position": 0.33,
       "peak_profit": 4.884594739667205,
-      "exit_reason": "END_OF_DATA"
-    },
-    {
-      "symbol": "EGAL",
-      "cycle": 5,
-      "status": "OPEN",
-      "first_entry": {
-        "date": "2026-07-22",
-        "price": 301.12,
-        "position_added": 0.33
-      },
-      "second_entry": null,
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 301.12,
-      "final_exit_price": 365.0,
-      "exit_date": "2026-08-26",
-      "profit_pct": 21.21,
-      "max_position": 0.33,
-      "peak_profit": 21.21413390010627,
       "exit_reason": "END_OF_DATA"
     },
     {
@@ -733,8 +630,32 @@
       "exit_reason": "END_OF_DATA"
     },
     {
+      "symbol": "PHDC",
+      "cycle": 7,
+      "status": "OPEN",
+      "first_entry": {
+        "date": "2026-08-12",
+        "price": 15.19,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2026-08-26",
+        "price": 14.67,
+        "position_added": 0.33
+      },
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 14.93,
+      "final_exit_price": 14.67,
+      "exit_date": "2026-08-26",
+      "profit_pct": -1.74,
+      "max_position": 0.66,
+      "peak_profit": 3.2258064516129044,
+      "exit_reason": "END_OF_DATA"
+    },
+    {
       "symbol": "ISPH",
-      "cycle": 6,
+      "cycle": 8,
       "status": "OPEN",
       "first_entry": {
         "date": "2026-08-19",
@@ -753,8 +674,72 @@
       "exit_reason": "END_OF_DATA"
     },
     {
-      "symbol": "ORHD",
+      "symbol": "OLFI",
+      "cycle": 7,
+      "status": "OPEN",
+      "first_entry": {
+        "date": "2026-08-20",
+        "price": 23.98,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2026-08-25",
+        "price": 23.12,
+        "position_added": 0.33
+      },
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 23.55,
+      "final_exit_price": 23.3,
+      "exit_date": "2026-08-26",
+      "profit_pct": -1.06,
+      "max_position": 0.66,
+      "peak_profit": 1.0842368640533695,
+      "exit_reason": "END_OF_DATA"
+    },
+    {
+      "symbol": "ABUK",
+      "cycle": 5,
+      "status": "OPEN",
+      "first_entry": {
+        "date": "2026-08-20",
+        "price": 75.52,
+        "position_added": 0.33
+      },
+      "second_entry": null,
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 75.52,
+      "final_exit_price": 75.76,
+      "exit_date": "2026-08-26",
+      "profit_pct": 0.32,
+      "max_position": 0.33,
+      "peak_profit": 1.562500000000009,
+      "exit_reason": "END_OF_DATA"
+    },
+    {
+      "symbol": "ORWE",
       "cycle": 4,
+      "status": "OPEN",
+      "first_entry": {
+        "date": "2026-08-20",
+        "price": 25.36,
+        "position_added": 0.33
+      },
+      "second_entry": null,
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 25.36,
+      "final_exit_price": 25.6,
+      "exit_date": "2026-08-26",
+      "profit_pct": 0.95,
+      "max_position": 0.33,
+      "peak_profit": 4.495268138801264,
+      "exit_reason": "END_OF_DATA"
+    },
+    {
+      "symbol": "ORHD",
+      "cycle": 6,
       "status": "OPEN",
       "first_entry": {
         "date": "2026-08-20",
@@ -770,30 +755,6 @@
       "profit_pct": 3.69,
       "max_position": 0.33,
       "peak_profit": 3.685623627044174,
-      "exit_reason": "END_OF_DATA"
-    },
-    {
-      "symbol": "PHDC",
-      "cycle": 7,
-      "status": "OPEN",
-      "first_entry": {
-        "date": "2026-08-20",
-        "price": 15.15,
-        "position_added": 0.33
-      },
-      "second_entry": {
-        "date": "2026-08-26",
-        "price": 14.67,
-        "position_added": 0.33
-      },
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 14.91,
-      "final_exit_price": 14.67,
-      "exit_date": "2026-08-26",
-      "profit_pct": -1.61,
-      "max_position": 0.66,
-      "peak_profit": 0.33003300330032304,
       "exit_reason": "END_OF_DATA"
     }
   ],
@@ -813,886 +774,1082 @@
       "portfolio_value": 98256.08
     },
     {
-      "date": "2025-05-27",
-      "symbol": "MCQE",
-      "profit_pct": 54.83,
-      "portfolio_return_percent": 6.8537,
-      "portfolio_value": 104990.3
-    },
-    {
       "date": "2025-04-06",
       "symbol": "AMOC",
-      "profit_pct": -5.04,
-      "portfolio_return_percent": -0.63,
-      "portfolio_value": 104328.86
+      "profit_pct": -5.16,
+      "portfolio_return_percent": -0.645,
+      "portfolio_value": 97622.33
+    },
+    {
+      "date": "2025-05-19",
+      "symbol": "MCQE",
+      "profit_pct": 17.14,
+      "portfolio_return_percent": 2.1425,
+      "portfolio_value": 99713.88
+    },
+    {
+      "date": "2025-07-13",
+      "symbol": "DSCW",
+      "profit_pct": 24.15,
+      "portfolio_return_percent": 3.0187,
+      "portfolio_value": 102724.0
     },
     {
       "date": "2025-03-18",
       "symbol": "EEII",
-      "profit_pct": 33.83,
-      "portfolio_return_percent": 4.2287,
-      "portfolio_value": 108740.67
+      "profit_pct": 32.84,
+      "portfolio_return_percent": 4.105,
+      "portfolio_value": 106940.82
     },
     {
-      "date": "2025-06-18",
+      "date": "2025-05-26",
+      "symbol": "ADIB",
+      "profit_pct": -48.73,
+      "portfolio_return_percent": -6.0912,
+      "portfolio_value": 100426.78
+    },
+    {
+      "date": "2025-05-20",
       "symbol": "EAST",
-      "profit_pct": -5.38,
-      "portfolio_return_percent": -0.6725,
-      "portfolio_value": 108009.39
-    },
-    {
-      "date": "2025-06-02",
-      "symbol": "DSCW",
-      "profit_pct": -5.18,
-      "portfolio_return_percent": -0.6475,
-      "portfolio_value": 107310.03
-    },
-    {
-      "date": "2025-06-15",
-      "symbol": "MPCO",
-      "profit_pct": -5.81,
-      "portfolio_return_percent": -0.7262,
-      "portfolio_value": 106530.69
-    },
-    {
-      "date": "2025-04-07",
-      "symbol": "ABUK",
-      "profit_pct": -6.37,
-      "portfolio_return_percent": -0.7963,
-      "portfolio_value": 105682.44
+      "profit_pct": 7.14,
+      "portfolio_return_percent": 0.8925,
+      "portfolio_value": 101323.09
     },
     {
       "date": "2025-03-25",
       "symbol": "OLFI",
-      "profit_pct": -7.01,
-      "portfolio_return_percent": -0.8762,
-      "portfolio_value": 104756.4
+      "profit_pct": -7.36,
+      "portfolio_return_percent": -0.92,
+      "portfolio_value": 100390.92
     },
     {
       "date": "2025-04-09",
-      "symbol": "SKPC",
-      "profit_pct": -5.71,
-      "portfolio_return_percent": -0.7137,
-      "portfolio_value": 104008.7
+      "symbol": "GBCO",
+      "profit_pct": 20.57,
+      "portfolio_return_percent": 2.5713,
+      "portfolio_value": 102972.22
     },
     {
-      "date": "2025-04-07",
+      "date": "2025-06-12",
+      "symbol": "MPCO",
+      "profit_pct": -5.17,
+      "portfolio_return_percent": -0.6462,
+      "portfolio_value": 102306.76
+    },
+    {
+      "date": "2025-04-06",
       "symbol": "ETEL",
-      "profit_pct": -5.62,
-      "portfolio_return_percent": -0.7025,
-      "portfolio_value": 103278.04
+      "profit_pct": -5.58,
+      "portfolio_return_percent": -0.6975,
+      "portfolio_value": 101593.17
+    },
+    {
+      "date": "2025-04-06",
+      "symbol": "ABUK",
+      "profit_pct": -5.52,
+      "portfolio_return_percent": -0.69,
+      "portfolio_value": 100892.18
     },
     {
       "date": "2025-04-09",
       "symbol": "SWDY",
-      "profit_pct": -6.61,
-      "portfolio_return_percent": -0.8263,
-      "portfolio_value": 102424.7
+      "profit_pct": -5.22,
+      "portfolio_return_percent": -0.6525,
+      "portfolio_value": 100233.86
     },
     {
-      "date": "2025-06-15",
-      "symbol": "EMFD",
-      "profit_pct": 9.23,
-      "portfolio_return_percent": 1.1538,
-      "portfolio_value": 103606.43
+      "date": "2025-04-09",
+      "symbol": "SKPC",
+      "profit_pct": -5.68,
+      "portfolio_return_percent": -0.71,
+      "portfolio_value": 99522.2
     },
     {
       "date": "2025-06-02",
-      "symbol": "HRHO",
-      "profit_pct": 14.23,
-      "portfolio_return_percent": 1.7788,
-      "portfolio_value": 105449.33
-    },
-    {
-      "date": "2025-06-12",
-      "symbol": "ELSH",
-      "profit_pct": 24.39,
-      "portfolio_return_percent": 3.0488,
-      "portfolio_value": 108664.21
-    },
-    {
-      "date": "2025-09-01",
-      "symbol": "COMI",
-      "profit_pct": 20.88,
-      "portfolio_return_percent": 2.61,
-      "portfolio_value": 111500.35
-    },
-    {
-      "date": "2025-05-07",
-      "symbol": "ADIB",
-      "profit_pct": -5.2,
-      "portfolio_return_percent": -0.65,
-      "portfolio_value": 110775.6
+      "symbol": "EMFD",
+      "profit_pct": 15.13,
+      "portfolio_return_percent": 1.8913,
+      "portfolio_value": 101404.41
     },
     {
       "date": "2025-04-09",
       "symbol": "PHDC",
-      "profit_pct": -7.09,
-      "portfolio_return_percent": -0.8863,
-      "portfolio_value": 109793.85
+      "profit_pct": -8.77,
+      "portfolio_return_percent": -1.0962,
+      "portfolio_value": 100292.77
     },
     {
-      "date": "2025-05-11",
+      "date": "2025-08-26",
+      "symbol": "COMI",
+      "profit_pct": 24.26,
+      "portfolio_return_percent": 3.0325,
+      "portfolio_value": 103334.15
+    },
+    {
+      "date": "2025-05-26",
+      "symbol": "HRHO",
+      "profit_pct": 15.91,
+      "portfolio_return_percent": 1.9887,
+      "portfolio_value": 105389.2
+    },
+    {
+      "date": "2025-06-11",
+      "symbol": "ELSH",
+      "profit_pct": 29.62,
+      "portfolio_return_percent": 3.7025,
+      "portfolio_value": 109291.24
+    },
+    {
+      "date": "2025-05-07",
       "symbol": "FWRY",
-      "profit_pct": 11.24,
-      "portfolio_return_percent": 1.405,
-      "portfolio_value": 111336.45
+      "profit_pct": 12.79,
+      "portfolio_return_percent": 1.5987,
+      "portfolio_value": 111038.53
+    },
+    {
+      "date": "2025-06-03",
+      "symbol": "OIH",
+      "profit_pct": 36.07,
+      "portfolio_return_percent": 4.5088,
+      "portfolio_value": 116044.98
+    },
+    {
+      "date": "2025-05-18",
+      "symbol": "SKPC",
+      "profit_pct": -6.63,
+      "portfolio_return_percent": -0.8287,
+      "portfolio_value": 115083.26
     },
     {
       "date": "2025-09-02",
       "symbol": "RMDA",
       "profit_pct": -5.12,
       "portfolio_return_percent": -0.64,
-      "portfolio_value": 110623.9
-    },
-    {
-      "date": "2025-05-18",
-      "symbol": "SKPC",
-      "profit_pct": -5.34,
-      "portfolio_return_percent": -0.6675,
-      "portfolio_value": 109885.48
+      "portfolio_value": 114346.73
     },
     {
       "date": "2025-06-15",
       "symbol": "SWDY",
-      "profit_pct": -5.28,
-      "portfolio_return_percent": -0.66,
-      "portfolio_value": 109160.24
+      "profit_pct": -5.02,
+      "portfolio_return_percent": -0.6275,
+      "portfolio_value": 113629.2
+    },
+    {
+      "date": "2025-06-12",
+      "symbol": "PHDC",
+      "profit_pct": 18.63,
+      "portfolio_return_percent": 2.3287,
+      "portfolio_value": 116275.34
+    },
+    {
+      "date": "2025-05-25",
+      "symbol": "EFIH",
+      "profit_pct": -28.56,
+      "portfolio_return_percent": -3.57,
+      "portfolio_value": 112124.31
     },
     {
       "date": "2025-07-01",
       "symbol": "OLFI",
       "profit_pct": 25.49,
       "portfolio_return_percent": 3.1862,
-      "portfolio_value": 112638.36
+      "portfolio_value": 115696.87
+    },
+    {
+      "date": "2025-07-21",
+      "symbol": "RAYA",
+      "profit_pct": 20.45,
+      "portfolio_return_percent": 2.5562,
+      "portfolio_value": 118654.37
     },
     {
       "date": "2025-06-15",
       "symbol": "GBCO",
       "profit_pct": 5.61,
       "portfolio_return_percent": 0.7013,
-      "portfolio_value": 113428.23
+      "portfolio_value": 119486.44
     },
     {
-      "date": "2025-06-15",
-      "symbol": "PHDC",
-      "profit_pct": 17.98,
-      "portfolio_return_percent": 2.2475,
-      "portfolio_value": 115977.53
-    },
-    {
-      "date": "2025-07-16",
+      "date": "2025-06-03",
       "symbol": "FWRY",
-      "profit_pct": 24.14,
-      "portfolio_return_percent": 3.0175,
-      "portfolio_value": 119477.16
-    },
-    {
-      "date": "2025-07-22",
-      "symbol": "RAYA",
-      "profit_pct": 18.88,
-      "portfolio_return_percent": 2.36,
-      "portfolio_value": 122296.82
+      "profit_pct": 11.53,
+      "portfolio_return_percent": 1.4412,
+      "portfolio_value": 121208.54
     },
     {
       "date": "2025-06-17",
       "symbol": "MTIE",
-      "profit_pct": -8.19,
-      "portfolio_return_percent": -1.0237,
-      "portfolio_value": 121044.8
+      "profit_pct": -8.49,
+      "portfolio_return_percent": -1.0613,
+      "portfolio_value": 119922.21
     },
     {
-      "date": "2025-11-05",
+      "date": "2025-11-06",
       "symbol": "TMGH",
-      "profit_pct": 32.08,
-      "portfolio_return_percent": 4.01,
-      "portfolio_value": 125898.7
+      "profit_pct": 33.92,
+      "portfolio_return_percent": 4.24,
+      "portfolio_value": 125006.91
+    },
+    {
+      "date": "2025-06-11",
+      "symbol": "EAST",
+      "profit_pct": -5.21,
+      "portfolio_return_percent": -0.6512,
+      "portfolio_value": 124192.8
     },
     {
       "date": "2025-09-09",
       "symbol": "ETEL",
       "profit_pct": 22.06,
       "portfolio_return_percent": 2.7575,
-      "portfolio_value": 129370.36
+      "portfolio_value": 127617.42
     },
     {
       "date": "2025-12-03",
       "symbol": "SUGR",
       "profit_pct": -5.48,
       "portfolio_return_percent": -0.685,
-      "portfolio_value": 128484.17
+      "portfolio_value": 126743.24
+    },
+    {
+      "date": "2025-07-27",
+      "symbol": "EMFD",
+      "profit_pct": -7.57,
+      "portfolio_return_percent": -0.9463,
+      "portfolio_value": 125543.93
     },
     {
       "date": "2025-06-18",
       "symbol": "HRHO",
       "profit_pct": -5.12,
       "portfolio_return_percent": -0.64,
-      "portfolio_value": 127661.87
+      "portfolio_value": 124740.45
     },
     {
       "date": "2025-06-24",
       "symbol": "ELSH",
       "profit_pct": -29.66,
       "portfolio_return_percent": -3.7075,
-      "portfolio_value": 122928.81
+      "portfolio_value": 120115.7
     },
     {
       "date": "2025-10-23",
       "symbol": "EGAL",
       "profit_pct": 30.53,
       "portfolio_return_percent": 3.8163,
-      "portfolio_value": 127620.08
+      "portfolio_value": 124699.62
     },
     {
-      "date": "2025-07-29",
-      "symbol": "EMFD",
-      "profit_pct": -5.31,
-      "portfolio_return_percent": -0.6637,
-      "portfolio_value": 126773.0
+      "date": "2025-06-30",
+      "symbol": "FWRY",
+      "profit_pct": 13.47,
+      "portfolio_return_percent": 1.6838,
+      "portfolio_value": 126799.25
     },
     {
-      "date": "2025-07-16",
+      "date": "2025-07-13",
       "symbol": "PHDC",
-      "profit_pct": 14.14,
-      "portfolio_return_percent": 1.7675,
-      "portfolio_value": 129013.71
+      "profit_pct": 16.21,
+      "portfolio_return_percent": 2.0263,
+      "portfolio_value": 129368.52
     },
     {
-      "date": "2025-08-31",
+      "date": "2025-08-27",
       "symbol": "GBCO",
-      "profit_pct": 14.54,
-      "portfolio_return_percent": 1.8175,
-      "portfolio_value": 131358.54
+      "profit_pct": 15.46,
+      "portfolio_return_percent": 1.9325,
+      "portfolio_value": 131868.56
     },
     {
-      "date": "2025-08-31",
+      "date": "2025-08-26",
       "symbol": "ISPH",
-      "profit_pct": 11.1,
-      "portfolio_return_percent": 1.3875,
-      "portfolio_value": 133181.14
+      "profit_pct": 13.39,
+      "portfolio_return_percent": 1.6738,
+      "portfolio_value": 134075.71
     },
     {
       "date": "2025-09-07",
       "symbol": "ORWE",
       "profit_pct": -5.88,
       "portfolio_return_percent": -0.735,
-      "portfolio_value": 132202.25
+      "portfolio_value": 133090.26
+    },
+    {
+      "date": "2025-08-18",
+      "symbol": "EAST",
+      "profit_pct": 13.17,
+      "portfolio_return_percent": 1.6463,
+      "portfolio_value": 135281.25
     },
     {
       "date": "2025-08-31",
       "symbol": "MTIE",
-      "profit_pct": -5.95,
-      "portfolio_return_percent": -0.7438,
-      "portfolio_value": 131219.0
+      "profit_pct": -5.73,
+      "portfolio_return_percent": -0.7163,
+      "portfolio_value": 134312.3
     },
     {
-      "date": "2025-10-16",
+      "date": "2025-07-30",
       "symbol": "AMOC",
-      "profit_pct": -5.13,
-      "portfolio_return_percent": -0.6412,
-      "portfolio_value": 130377.56
+      "profit_pct": -5.6,
+      "portfolio_return_percent": -0.7,
+      "portfolio_value": 133372.12
     },
     {
-      "date": "2025-11-23",
+      "date": "2025-09-03",
       "symbol": "ATQA",
-      "profit_pct": -5.34,
-      "portfolio_return_percent": -0.6675,
-      "portfolio_value": 129507.29
+      "profit_pct": 10.88,
+      "portfolio_return_percent": 1.36,
+      "portfolio_value": 135185.98
     },
     {
       "date": "2025-09-03",
       "symbol": "OLFI",
       "profit_pct": -5.79,
       "portfolio_return_percent": -0.7238,
-      "portfolio_value": 128569.98
+      "portfolio_value": 134207.57
     },
     {
       "date": "2025-08-24",
       "symbol": "PHDC",
       "profit_pct": -4.39,
       "portfolio_return_percent": -0.5487,
-      "portfolio_value": 127864.45
-    },
-    {
-      "date": "2025-08-20",
-      "symbol": "EAST",
-      "profit_pct": 12.51,
-      "portfolio_return_percent": 1.5637,
-      "portfolio_value": 129863.93
+      "portfolio_value": 133471.1
     },
     {
       "date": "2025-09-16",
       "symbol": "RAYA",
       "profit_pct": -5.33,
       "portfolio_return_percent": -0.6663,
-      "portfolio_value": 128998.71
+      "portfolio_value": 132581.85
+    },
+    {
+      "date": "2025-09-17",
+      "symbol": "ORHD",
+      "profit_pct": -6.07,
+      "portfolio_return_percent": -0.7588,
+      "portfolio_value": 131575.89
     },
     {
       "date": "2025-08-12",
       "symbol": "DSCW",
       "profit_pct": -5.59,
       "portfolio_return_percent": -0.6987,
-      "portfolio_value": 128097.33
+      "portfolio_value": 130656.5
     },
     {
       "date": "2025-08-26",
       "symbol": "DSCW",
       "profit_pct": -5.69,
       "portfolio_return_percent": -0.7113,
-      "portfolio_value": 127186.24
+      "portfolio_value": 129727.21
+    },
+    {
+      "date": "2025-10-27",
+      "symbol": "ABUK",
+      "profit_pct": -5.55,
+      "portfolio_return_percent": -0.6937,
+      "portfolio_value": 128827.22
     },
     {
       "date": "2025-09-22",
       "symbol": "SWDY",
       "profit_pct": -5.48,
       "portfolio_return_percent": -0.685,
-      "portfolio_value": 126315.02
+      "portfolio_value": 127944.76
     },
     {
-      "date": "2025-10-27",
-      "symbol": "ABUK",
-      "profit_pct": -5.05,
-      "portfolio_return_percent": -0.6312,
-      "portfolio_value": 125517.65
+      "date": "2025-09-30",
+      "symbol": "MPCO",
+      "profit_pct": 50.29,
+      "portfolio_return_percent": 6.2862,
+      "portfolio_value": 135987.69
     },
     {
-      "date": "2025-09-17",
-      "symbol": "ORHD",
-      "profit_pct": -6.81,
-      "portfolio_return_percent": -0.8512,
-      "portfolio_value": 124449.18
-    },
-    {
-      "date": "2026-02-19",
+      "date": "2025-10-19",
       "symbol": "ISPH",
-      "profit_pct": 13.38,
-      "portfolio_return_percent": 1.6725,
-      "portfolio_value": 126530.6
+      "profit_pct": 11.46,
+      "portfolio_return_percent": 1.4325,
+      "portfolio_value": 137935.71
     },
     {
       "date": "2025-09-15",
       "symbol": "GBCO",
-      "profit_pct": -7.71,
-      "portfolio_return_percent": -0.9637,
-      "portfolio_value": 125311.16
+      "profit_pct": -7.69,
+      "portfolio_return_percent": -0.9613,
+      "portfolio_value": 136609.8
     },
     {
-      "date": "2025-12-08",
+      "date": "2025-11-19",
       "symbol": "COMI",
-      "profit_pct": 11.55,
-      "portfolio_return_percent": 1.4438,
-      "portfolio_value": 127120.34
+      "profit_pct": 10.35,
+      "portfolio_return_percent": 1.2937,
+      "portfolio_value": 138377.19
     },
     {
-      "date": "2025-11-24",
-      "symbol": "FWRY",
-      "profit_pct": 14.94,
-      "portfolio_return_percent": 1.8675,
-      "portfolio_value": 129494.31
+      "date": "2025-10-30",
+      "symbol": "HRHO",
+      "profit_pct": 9.49,
+      "portfolio_return_percent": 1.1863,
+      "portfolio_value": 140018.69
     },
     {
-      "date": "2025-11-09",
+      "date": "2025-10-01",
       "symbol": "EAST",
-      "profit_pct": 33.65,
-      "portfolio_return_percent": 4.2062,
-      "portfolio_value": 134941.16
+      "profit_pct": 12.81,
+      "portfolio_return_percent": 1.6012,
+      "portfolio_value": 142260.74
     },
     {
-      "date": "2025-09-29",
-      "symbol": "MPCO",
-      "profit_pct": 42.35,
-      "portfolio_return_percent": 5.2938,
-      "portfolio_value": 142084.61
+      "date": "2025-11-11",
+      "symbol": "FWRY",
+      "profit_pct": 16.09,
+      "portfolio_return_percent": 2.0112,
+      "portfolio_value": 145121.96
     },
     {
-      "date": "2025-12-23",
+      "date": "2025-09-18",
+      "symbol": "ATQA",
+      "profit_pct": -4.56,
+      "portfolio_return_percent": -0.57,
+      "portfolio_value": 144294.76
+    },
+    {
+      "date": "2025-10-28",
       "symbol": "EEII",
-      "profit_pct": 24.59,
-      "portfolio_return_percent": 3.0737,
-      "portfolio_value": 146451.94
+      "profit_pct": 10.38,
+      "portfolio_return_percent": 1.2975,
+      "portfolio_value": 146166.99
+    },
+    {
+      "date": "2025-11-05",
+      "symbol": "ATQA",
+      "profit_pct": -5.03,
+      "portfolio_return_percent": -0.6288,
+      "portfolio_value": 145247.96
+    },
+    {
+      "date": "2025-10-15",
+      "symbol": "AMOC",
+      "profit_pct": -5.12,
+      "portfolio_return_percent": -0.64,
+      "portfolio_value": 144318.38
     },
     {
       "date": "2026-01-04",
       "symbol": "SKPC",
-      "profit_pct": -19.79,
-      "portfolio_return_percent": -2.4737,
-      "portfolio_value": 142829.08
+      "profit_pct": -20.41,
+      "portfolio_return_percent": -2.5513,
+      "portfolio_value": 140636.45
+    },
+    {
+      "date": "2026-01-15",
+      "symbol": "ISPH",
+      "profit_pct": -5.21,
+      "portfolio_return_percent": -0.6512,
+      "portfolio_value": 139720.56
+    },
+    {
+      "date": "2025-11-11",
+      "symbol": "ORHD",
+      "profit_pct": 13.99,
+      "portfolio_return_percent": 1.7488,
+      "portfolio_value": 142163.92
+    },
+    {
+      "date": "2026-01-26",
+      "symbol": "OLFI",
+      "profit_pct": 12.22,
+      "portfolio_return_percent": 1.5275,
+      "portfolio_value": 144335.48
+    },
+    {
+      "date": "2025-11-16",
+      "symbol": "EMFD",
+      "profit_pct": 9.69,
+      "portfolio_return_percent": 1.2112,
+      "portfolio_value": 146083.74
     },
     {
       "date": "2025-12-08",
       "symbol": "SWDY",
-      "profit_pct": -14.02,
-      "portfolio_return_percent": -1.7525,
-      "portfolio_value": 140326.0
+      "profit_pct": -14.85,
+      "portfolio_return_percent": -1.8562,
+      "portfolio_value": 143372.06
     },
     {
-      "date": "2026-01-27",
-      "symbol": "OLFI",
-      "profit_pct": 9.29,
-      "portfolio_return_percent": 1.1612,
-      "portfolio_value": 141955.54
-    },
-    {
-      "date": "2025-12-02",
-      "symbol": "HRHO",
-      "profit_pct": -5.21,
-      "portfolio_return_percent": -0.6512,
-      "portfolio_value": 141031.05
-    },
-    {
-      "date": "2025-11-24",
+      "date": "2025-11-05",
       "symbol": "RMDA",
-      "profit_pct": -27.65,
-      "portfolio_return_percent": -3.4562,
-      "portfolio_value": 136156.67
+      "profit_pct": -5.24,
+      "portfolio_return_percent": -0.655,
+      "portfolio_value": 142432.97
+    },
+    {
+      "date": "2026-02-08",
+      "symbol": "GBCO",
+      "profit_pct": 21.57,
+      "portfolio_return_percent": 2.6963,
+      "portfolio_value": 146273.32
+    },
+    {
+      "date": "2025-12-22",
+      "symbol": "EEII",
+      "profit_pct": 20.1,
+      "portfolio_return_percent": 2.5125,
+      "portfolio_value": 149948.44
+    },
+    {
+      "date": "2025-11-06",
+      "symbol": "OIH",
+      "profit_pct": -5.41,
+      "portfolio_return_percent": -0.6763,
+      "portfolio_value": 148934.41
+    },
+    {
+      "date": "2026-02-22",
+      "symbol": "PHDC",
+      "profit_pct": 17.81,
+      "portfolio_return_percent": 2.2262,
+      "portfolio_value": 152250.07
     },
     {
       "date": "2025-11-16",
       "symbol": "ETEL",
       "profit_pct": 26.12,
       "portfolio_return_percent": 3.265,
-      "portfolio_value": 140602.18
+      "portfolio_value": 157221.03
     },
     {
-      "date": "2025-11-12",
-      "symbol": "OIH",
-      "profit_pct": -5.5,
-      "portfolio_return_percent": -0.6875,
-      "portfolio_value": 139635.54
+      "date": "2025-11-20",
+      "symbol": "HRHO",
+      "profit_pct": -4.01,
+      "portfolio_return_percent": -0.5012,
+      "portfolio_value": 156432.96
     },
     {
-      "date": "2026-02-25",
-      "symbol": "PHDC",
-      "profit_pct": 15.7,
-      "portfolio_return_percent": 1.9625,
-      "portfolio_value": 142375.89
-    },
-    {
-      "date": "2025-11-27",
+      "date": "2026-01-15",
       "symbol": "ORWE",
-      "profit_pct": -4.03,
-      "portfolio_return_percent": -0.5038,
-      "portfolio_value": 141658.67
+      "profit_pct": -5.92,
+      "portfolio_return_percent": -0.74,
+      "portfolio_value": 155275.36
+    },
+    {
+      "date": "2026-01-14",
+      "symbol": "ELSH",
+      "profit_pct": -6.75,
+      "portfolio_return_percent": -0.8438,
+      "portfolio_value": 153965.22
+    },
+    {
+      "date": "2026-01-05",
+      "symbol": "ORHD",
+      "profit_pct": -4.09,
+      "portfolio_return_percent": -0.5112,
+      "portfolio_value": 153178.07
     },
     {
       "date": "2025-11-26",
       "symbol": "EMFD",
       "profit_pct": -6.02,
       "portfolio_return_percent": -0.7525,
-      "portfolio_value": 140592.69
+      "portfolio_value": 152025.41
     },
     {
-      "date": "2026-01-14",
-      "symbol": "ORHD",
-      "profit_pct": -4.14,
-      "portfolio_return_percent": -0.5175,
-      "portfolio_value": 139865.12
+      "date": "2025-12-18",
+      "symbol": "ADIB",
+      "profit_pct": 12.75,
+      "portfolio_return_percent": 1.5938,
+      "portfolio_value": 154448.31
+    },
+    {
+      "date": "2026-02-22",
+      "symbol": "COMI",
+      "profit_pct": 30.4,
+      "portfolio_return_percent": 3.8,
+      "portfolio_value": 160317.35
     },
     {
       "date": "2026-01-08",
       "symbol": "EGAL",
       "profit_pct": 40.61,
       "portfolio_return_percent": 5.0762,
-      "portfolio_value": 146965.03
+      "portfolio_value": 168455.46
     },
     {
       "date": "2025-12-18",
       "symbol": "EAST",
       "profit_pct": -8.23,
       "portfolio_return_percent": -1.0288,
-      "portfolio_value": 145453.12
+      "portfolio_value": 166722.47
     },
     {
-      "date": "2026-01-26",
-      "symbol": "ADIB",
-      "profit_pct": 56.1,
-      "portfolio_return_percent": 7.0125,
-      "portfolio_value": 155653.03
-    },
-    {
-      "date": "2026-01-13",
-      "symbol": "ELSH",
-      "profit_pct": -6.59,
-      "portfolio_return_percent": -0.8237,
-      "portfolio_value": 154370.83
-    },
-    {
-      "date": "2026-02-22",
+      "date": "2026-02-19",
       "symbol": "FWRY",
-      "profit_pct": 25.51,
-      "portfolio_return_percent": 3.1887,
-      "portfolio_value": 159293.33
+      "profit_pct": 30.6,
+      "portfolio_return_percent": 3.825,
+      "portfolio_value": 173099.61
     },
     {
-      "date": "2026-02-22",
+      "date": "2025-12-18",
       "symbol": "EFIH",
-      "profit_pct": 42.98,
-      "portfolio_return_percent": 5.3725,
-      "portfolio_value": 167851.37
-    },
-    {
-      "date": "2026-02-08",
-      "symbol": "GBCO",
-      "profit_pct": 15.3,
-      "portfolio_return_percent": 1.9125,
-      "portfolio_value": 171061.52
-    },
-    {
-      "date": "2026-02-22",
-      "symbol": "COMI",
-      "profit_pct": 30.31,
-      "portfolio_return_percent": 3.7887,
-      "portfolio_value": 177542.62
+      "profit_pct": 17.22,
+      "portfolio_return_percent": 2.1525,
+      "portfolio_value": 176825.58
     },
     {
       "date": "2026-01-15",
-      "symbol": "ORWE",
-      "profit_pct": -6.07,
-      "portfolio_return_percent": -0.7588,
-      "portfolio_value": 176195.51
-    },
-    {
-      "date": "2026-03-01",
       "symbol": "EMFD",
-      "profit_pct": -6.91,
-      "portfolio_return_percent": -0.8637,
-      "portfolio_value": 174673.63
+      "profit_pct": -6.32,
+      "portfolio_return_percent": -0.79,
+      "portfolio_value": 175428.65
     },
     {
       "date": "2026-02-01",
       "symbol": "ABUK",
-      "profit_pct": 33.52,
-      "portfolio_return_percent": 4.19,
-      "portfolio_value": 181992.45
+      "profit_pct": 30.9,
+      "portfolio_return_percent": 3.8625,
+      "portfolio_value": 182204.59
+    },
+    {
+      "date": "2026-04-16",
+      "symbol": "OIH",
+      "profit_pct": 37.39,
+      "portfolio_return_percent": 4.6738,
+      "portfolio_value": 190720.37
     },
     {
       "date": "2026-01-15",
       "symbol": "EEII",
       "profit_pct": -6.04,
       "portfolio_return_percent": -0.755,
-      "portfolio_value": 180618.41
+      "portfolio_value": 189280.43
     },
     {
-      "date": "2026-04-16",
-      "symbol": "OIH",
-      "profit_pct": 38.6,
-      "portfolio_return_percent": 4.825,
-      "portfolio_value": 189333.25
+      "date": "2026-01-26",
+      "symbol": "ADIB",
+      "profit_pct": 34.79,
+      "portfolio_return_percent": 4.3487,
+      "portfolio_value": 197511.77
     },
     {
-      "date": "2026-06-11",
+      "date": "2026-05-18",
       "symbol": "SWDY",
-      "profit_pct": 10.3,
-      "portfolio_return_percent": 1.2875,
-      "portfolio_value": 191770.91
+      "profit_pct": 10.86,
+      "portfolio_return_percent": 1.3575,
+      "portfolio_value": 200192.99
     },
     {
-      "date": "2026-02-22",
+      "date": "2026-02-11",
+      "symbol": "JUFO",
+      "profit_pct": 14.34,
+      "portfolio_return_percent": 1.7925,
+      "portfolio_value": 203781.45
+    },
+    {
+      "date": "2026-02-19",
       "symbol": "TMGH",
-      "profit_pct": 18.75,
-      "portfolio_return_percent": 2.3438,
-      "portfolio_value": 196265.54
+      "profit_pct": 20.14,
+      "portfolio_return_percent": 2.5175,
+      "portfolio_value": 208911.65
     },
     {
-      "date": "2026-02-25",
+      "date": "2026-02-24",
       "symbol": "OLFI",
-      "profit_pct": -5.62,
-      "portfolio_return_percent": -0.7025,
-      "portfolio_value": 194886.78
+      "profit_pct": -5.31,
+      "portfolio_return_percent": -0.6637,
+      "portfolio_value": 207525.0
+    },
+    {
+      "date": "2026-02-19",
+      "symbol": "ISPH",
+      "profit_pct": 6.41,
+      "portfolio_return_percent": 0.8013,
+      "portfolio_value": 209187.79
     },
     {
       "date": "2026-02-19",
       "symbol": "MTIE",
       "profit_pct": 15.86,
       "portfolio_return_percent": 1.9825,
-      "portfolio_value": 198750.41
+      "portfolio_value": 213334.94
+    },
+    {
+      "date": "2026-03-01",
+      "symbol": "SUGR",
+      "profit_pct": -6.47,
+      "portfolio_return_percent": -0.8087,
+      "portfolio_value": 211609.59
     },
     {
       "date": "2026-03-09",
       "symbol": "AMOC",
-      "profit_pct": 32.62,
-      "portfolio_return_percent": 4.0775,
-      "portfolio_value": 206854.45
-    },
-    {
-      "date": "2026-08-24",
-      "symbol": "SUGR",
-      "profit_pct": 27.16,
-      "portfolio_return_percent": 3.395,
-      "portfolio_value": 213877.16
+      "profit_pct": 31.13,
+      "portfolio_return_percent": 3.8912,
+      "portfolio_value": 219843.85
     },
     {
       "date": "2026-02-25",
       "symbol": "EGAL",
       "profit_pct": -4.31,
       "portfolio_return_percent": -0.5387,
-      "portfolio_value": 212724.9
+      "portfolio_value": 218659.44
+    },
+    {
+      "date": "2026-03-04",
+      "symbol": "EAST",
+      "profit_pct": -5.32,
+      "portfolio_return_percent": -0.665,
+      "portfolio_value": 217205.35
+    },
+    {
+      "date": "2026-02-26",
+      "symbol": "EMFD",
+      "profit_pct": -5.89,
+      "portfolio_return_percent": -0.7362,
+      "portfolio_value": 215606.18
     },
     {
       "date": "2026-03-16",
       "symbol": "JUFO",
       "profit_pct": -5.19,
       "portfolio_return_percent": -0.6488,
-      "portfolio_value": 211344.85
+      "portfolio_value": 214207.44
     },
     {
-      "date": "2026-03-04",
-      "symbol": "EAST",
-      "profit_pct": -5.47,
-      "portfolio_return_percent": -0.6837,
-      "portfolio_value": 209899.78
+      "date": "2026-02-26",
+      "symbol": "HRHO",
+      "profit_pct": -4.93,
+      "portfolio_return_percent": -0.6162,
+      "portfolio_value": 212887.38
+    },
+    {
+      "date": "2026-08-19",
+      "symbol": "ORWE",
+      "profit_pct": 12.69,
+      "portfolio_return_percent": 1.5862,
+      "portfolio_value": 216264.31
     },
     {
       "date": "2026-03-09",
       "symbol": "ISPH",
       "profit_pct": -9.41,
       "portfolio_return_percent": -1.1763,
-      "portfolio_value": 207430.83
+      "portfolio_value": 213720.5
     },
     {
-      "date": "2026-03-02",
-      "symbol": "HRHO",
-      "profit_pct": -5.56,
-      "portfolio_return_percent": -0.695,
-      "portfolio_value": 205989.19
+      "date": "2026-03-16",
+      "symbol": "MTIE",
+      "profit_pct": -5.16,
+      "portfolio_return_percent": -0.645,
+      "portfolio_value": 212342.0
     },
     {
       "date": "2026-03-04",
       "symbol": "GBCO",
       "profit_pct": -5.74,
       "portfolio_return_percent": -0.7175,
-      "portfolio_value": 204511.21
+      "portfolio_value": 210818.45
+    },
+    {
+      "date": "2026-03-16",
+      "symbol": "PHDC",
+      "profit_pct": -8.25,
+      "portfolio_return_percent": -1.0312,
+      "portfolio_value": 208644.38
+    },
+    {
+      "date": "2026-03-03",
+      "symbol": "ORHD",
+      "profit_pct": -4.06,
+      "portfolio_return_percent": -0.5075,
+      "portfolio_value": 207585.51
     },
     {
       "date": "2026-03-16",
       "symbol": "FWRY",
       "profit_pct": -4.62,
       "portfolio_return_percent": -0.5775,
-      "portfolio_value": 203330.16
+      "portfolio_value": 206386.71
     },
     {
-      "date": "2026-03-16",
-      "symbol": "PHDC",
-      "profit_pct": -7.71,
-      "portfolio_return_percent": -0.9637,
-      "portfolio_value": 201370.57
-    },
-    {
-      "date": "2026-03-30",
-      "symbol": "MTIE",
-      "profit_pct": -6.91,
-      "portfolio_return_percent": -0.8637,
-      "portfolio_value": 199631.23
+      "date": "2026-03-15",
+      "symbol": "HRHO",
+      "profit_pct": -5.54,
+      "portfolio_return_percent": -0.6925,
+      "portfolio_value": 204957.48
     },
     {
       "date": "2026-03-09",
       "symbol": "TMGH",
       "profit_pct": -6.27,
       "portfolio_return_percent": -0.7837,
-      "portfolio_value": 198066.62
-    },
-    {
-      "date": "2026-04-26",
-      "symbol": "ORHD",
-      "profit_pct": 21.78,
-      "portfolio_return_percent": 2.7225,
-      "portfolio_value": 203458.98
+      "portfolio_value": 203351.12
     },
     {
       "date": "2026-03-15",
       "symbol": "COMI",
       "profit_pct": -5.03,
       "portfolio_return_percent": -0.6288,
-      "portfolio_value": 202179.73
+      "portfolio_value": 202072.55
     },
     {
-      "date": "2026-05-14",
+      "date": "2026-04-30",
       "symbol": "COMI",
-      "profit_pct": 14.77,
-      "portfolio_return_percent": 1.8462,
-      "portfolio_value": 205912.48
+      "profit_pct": 15.19,
+      "portfolio_return_percent": 1.8988,
+      "portfolio_value": 205909.41
+    },
+    {
+      "date": "2026-06-16",
+      "symbol": "SKPC",
+      "profit_pct": -5.55,
+      "portfolio_return_percent": -0.6937,
+      "portfolio_value": 204480.91
     },
     {
       "date": "2026-04-30",
       "symbol": "FWRY",
       "profit_pct": 11.16,
       "portfolio_return_percent": 1.395,
-      "portfolio_value": 208784.96
+      "portfolio_value": 207333.42
     },
     {
-      "date": "2026-06-16",
-      "symbol": "SKPC",
-      "profit_pct": -5.39,
-      "portfolio_return_percent": -0.6737,
-      "portfolio_value": 207378.27
+      "date": "2026-04-23",
+      "symbol": "ORHD",
+      "profit_pct": 22.47,
+      "portfolio_return_percent": 2.8087,
+      "portfolio_value": 213156.9
+    },
+    {
+      "date": "2026-08-24",
+      "symbol": "SUGR",
+      "profit_pct": 25.81,
+      "portfolio_return_percent": 3.2262,
+      "portfolio_value": 220033.87
     },
     {
       "date": "2026-06-23",
       "symbol": "AMOC",
       "profit_pct": -4.49,
       "portfolio_return_percent": -0.5613,
-      "portfolio_value": 206214.36
+      "portfolio_value": 218798.93
+    },
+    {
+      "date": "2026-07-08",
+      "symbol": "EFIH",
+      "profit_pct": 9.64,
+      "portfolio_return_percent": 1.205,
+      "portfolio_value": 221435.46
+    },
+    {
+      "date": "2026-05-20",
+      "symbol": "DSCW",
+      "profit_pct": -8.47,
+      "portfolio_return_percent": -1.0588,
+      "portfolio_value": 219091.01
     },
     {
       "date": "2026-07-08",
       "symbol": "GBCO",
-      "profit_pct": 14.95,
-      "portfolio_return_percent": 1.8687,
-      "portfolio_value": 210067.99
+      "profit_pct": 14.07,
+      "portfolio_return_percent": 1.7587,
+      "portfolio_value": 222944.27
+    },
+    {
+      "date": "2026-06-29",
+      "symbol": "EAST",
+      "profit_pct": -5.13,
+      "portfolio_return_percent": -0.6412,
+      "portfolio_value": 221514.64
+    },
+    {
+      "date": "2026-06-10",
+      "symbol": "ISPH",
+      "profit_pct": 8.36,
+      "portfolio_return_percent": 1.045,
+      "portfolio_value": 223829.47
     },
     {
       "date": "2026-06-23",
       "symbol": "MCQE",
       "profit_pct": -5.02,
       "portfolio_return_percent": -0.6275,
-      "portfolio_value": 208749.81
+      "portfolio_value": 222424.94
     },
     {
       "date": "2026-06-10",
-      "symbol": "ISPH",
-      "profit_pct": 10.88,
-      "portfolio_return_percent": 1.36,
-      "portfolio_value": 211588.81
-    },
-    {
-      "date": "2026-06-01",
-      "symbol": "EAST",
-      "profit_pct": -5.16,
-      "portfolio_return_percent": -0.645,
-      "portfolio_value": 210224.06
+      "symbol": "HRHO",
+      "profit_pct": -5.13,
+      "portfolio_return_percent": -0.6412,
+      "portfolio_value": 220998.64
     },
     {
       "date": "2026-08-06",
       "symbol": "JUFO",
       "profit_pct": -4.42,
       "portfolio_return_percent": -0.5525,
-      "portfolio_value": 209062.57
+      "portfolio_value": 219777.62
     },
     {
-      "date": "2026-05-20",
-      "symbol": "DSCW",
-      "profit_pct": -9.9,
-      "portfolio_return_percent": -1.2375,
-      "portfolio_value": 206475.42
+      "date": "2026-06-10",
+      "symbol": "FWRY",
+      "profit_pct": -5.26,
+      "portfolio_return_percent": -0.6575,
+      "portfolio_value": 218332.59
+    },
+    {
+      "date": "2026-06-29",
+      "symbol": "COMI",
+      "profit_pct": -5.13,
+      "portfolio_return_percent": -0.6412,
+      "portfolio_value": 216932.53
     },
     {
       "date": "2026-06-28",
       "symbol": "EGAL",
       "profit_pct": -6.1,
       "portfolio_return_percent": -0.7625,
-      "portfolio_value": 204901.05
+      "portfolio_value": 215278.42
     },
     {
-      "date": "2026-08-25",
-      "symbol": "HRHO",
-      "profit_pct": -5.87,
-      "portfolio_return_percent": -0.7338,
-      "portfolio_value": 203397.59
-    },
-    {
-      "date": "2026-06-10",
-      "symbol": "FWRY",
-      "profit_pct": -4.34,
-      "portfolio_return_percent": -0.5425,
-      "portfolio_value": 202294.16
+      "date": "2026-06-08",
+      "symbol": "MPCO",
+      "profit_pct": 11.32,
+      "portfolio_return_percent": 1.415,
+      "portfolio_value": 218324.61
     },
     {
       "date": "2026-06-10",
       "symbol": "EMFD",
       "profit_pct": 12.98,
       "portfolio_return_percent": 1.6225,
-      "portfolio_value": 205576.38
-    },
-    {
-      "date": "2026-06-24",
-      "symbol": "MPCO",
-      "profit_pct": 17.61,
-      "portfolio_return_percent": 2.2012,
-      "portfolio_value": 210101.63
+      "portfolio_value": 221866.92
     },
     {
       "date": "2026-06-11",
       "symbol": "OIH",
       "profit_pct": -4.45,
       "portfolio_return_percent": -0.5563,
-      "portfolio_value": 208932.94
+      "portfolio_value": 220632.79
+    },
+    {
+      "date": "2026-08-19",
+      "symbol": "SWDY",
+      "profit_pct": 31.81,
+      "portfolio_return_percent": 3.9762,
+      "portfolio_value": 229405.7
     },
     {
       "date": "2026-08-09",
       "symbol": "MTIE",
       "profit_pct": 30.05,
       "portfolio_return_percent": 3.7562,
-      "portfolio_value": 216780.98
+      "portfolio_value": 238022.75
     },
     {
       "date": "2026-06-11",
       "symbol": "ABUK",
       "profit_pct": -6.98,
       "portfolio_return_percent": -0.8725,
-      "portfolio_value": 214889.57
+      "portfolio_value": 235946.0
     },
     {
-      "date": "2026-08-05",
+      "date": "2026-08-03",
+      "symbol": "ETEL",
+      "profit_pct": 15.49,
+      "portfolio_return_percent": 1.9363,
+      "portfolio_value": 240514.51
+    },
+    {
+      "date": "2026-06-23",
+      "symbol": "MPCO",
+      "profit_pct": 11.05,
+      "portfolio_return_percent": 1.3813,
+      "portfolio_value": 243836.61
+    },
+    {
+      "date": "2026-08-04",
       "symbol": "ISPH",
-      "profit_pct": 14.51,
-      "portfolio_return_percent": 1.8138,
-      "portfolio_value": 218787.13
+      "profit_pct": 16.87,
+      "portfolio_return_percent": 2.1088,
+      "portfolio_value": 248978.52
     },
     {
       "date": "2026-08-03",
       "symbol": "RMDA",
       "profit_pct": 26.56,
       "portfolio_return_percent": 3.32,
-      "portfolio_value": 226050.86
+      "portfolio_value": 257244.61
     },
     {
-      "date": "2026-08-04",
-      "symbol": "SWDY",
-      "profit_pct": 26.22,
-      "portfolio_return_percent": 3.2775,
-      "portfolio_value": 233459.68
+      "date": "2026-08-19",
+      "symbol": "OLFI",
+      "profit_pct": 8.17,
+      "portfolio_return_percent": 1.0212,
+      "portfolio_value": 259871.72
+    },
+    {
+      "date": "2026-08-17",
+      "symbol": "MPCO",
+      "profit_pct": 19.77,
+      "portfolio_return_percent": 2.4712,
+      "portfolio_value": 266293.8
     },
     {
       "date": "2026-08-12",
       "symbol": "OIH",
       "profit_pct": 22.7,
       "portfolio_return_percent": 2.8375,
-      "portfolio_value": 240084.09
+      "portfolio_value": 273849.88
     },
     {
       "date": "2026-08-25",
       "symbol": "GBCO",
-      "profit_pct": -6.27,
-      "portfolio_return_percent": -0.7837,
-      "portfolio_value": 238202.44
+      "profit_pct": -5.93,
+      "portfolio_return_percent": -0.7412,
+      "portfolio_value": 271819.97
+    },
+    {
+      "date": "2026-08-03",
+      "symbol": "AMOC",
+      "profit_pct": 10.44,
+      "portfolio_return_percent": 1.305,
+      "portfolio_value": 275367.22
+    },
+    {
+      "date": "2026-08-19",
+      "symbol": "EGAL",
+      "profit_pct": 10.09,
+      "portfolio_return_percent": 1.2612,
+      "portfolio_value": 278840.29
     },
     {
       "date": "2026-08-11",
       "symbol": "MCQE",
       "profit_pct": 33.1,
       "portfolio_return_percent": 4.1375,
-      "portfolio_value": 248058.06
+      "portfolio_value": 290377.31
     },
     {
       "date": "2026-08-20",
       "symbol": "EEII",
       "profit_pct": 16.92,
       "portfolio_return_percent": 2.115,
-      "portfolio_value": 253304.49
+      "portfolio_value": 296518.79
     },
     {
       "date": "2026-08-25",
       "symbol": "DSCW",
       "profit_pct": -6.06,
       "portfolio_return_percent": -0.7575,
-      "portfolio_value": 251385.71
+      "portfolio_value": 294272.66
     },
     {
       "date": "2026-08-20",
       "symbol": "MTIE",
       "profit_pct": -5.47,
       "portfolio_return_percent": -0.6837,
-      "portfolio_value": 249666.86
+      "portfolio_value": 292260.57
     }
   ],
   "trades": [
@@ -1743,6 +1900,27 @@
       "stop_trigger_profit": -8.48
     },
     {
+      "symbol": "AMOC",
+      "cycle": 1,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2025-03-02",
+        "price": 7.95,
+        "position_added": 0.33
+      },
+      "second_entry": null,
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 7.95,
+      "final_exit_price": 7.54,
+      "exit_date": "2025-04-06",
+      "profit_pct": -5.16,
+      "max_position": 0.33,
+      "peak_profit": 0.6289308176100606,
+      "exit_reason": "STOP LOSS",
+      "stop_trigger_profit": -5.16
+    },
+    {
       "symbol": "MCQE",
       "cycle": 1,
       "status": "CLOSED",
@@ -1753,51 +1931,48 @@
       },
       "second_entry": null,
       "third_entry": null,
-      "exits": [
-        {
-          "date": "2025-05-27",
-          "type": "SELL L2",
-          "price": 37.95,
-          "position_sold": 0.33,
-          "profit": 54.83
-        }
-      ],
+      "exits": [],
       "last_average_price": 24.51,
-      "final_exit_price": 37.95,
-      "exit_date": "2025-05-27",
-      "profit_pct": 54.83,
+      "final_exit_price": 28.71,
+      "exit_date": "2025-05-19",
+      "profit_pct": 17.14,
       "max_position": 0.33,
-      "peak_profit": 54.83476132190943,
-      "exit_reason": "SELL L2"
+      "peak_profit": 22.195022439820473,
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 17.14
     },
     {
-      "symbol": "AMOC",
+      "symbol": "DSCW",
       "cycle": 1,
       "status": "CLOSED",
       "first_entry": {
         "date": "2025-03-03",
-        "price": 7.94,
+        "price": 2.55,
         "position_added": 0.33
       },
-      "second_entry": null,
+      "second_entry": {
+        "date": "2025-03-25",
+        "price": 2.46,
+        "position_added": 0.33
+      },
       "third_entry": null,
       "exits": [],
-      "last_average_price": 7.94,
-      "final_exit_price": 7.54,
-      "exit_date": "2025-04-06",
-      "profit_pct": -5.04,
-      "max_position": 0.33,
-      "peak_profit": 0.7556675062972242,
-      "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -5.04
+      "last_average_price": 2.505,
+      "final_exit_price": 3.11,
+      "exit_date": "2025-07-13",
+      "profit_pct": 24.15,
+      "max_position": 0.66,
+      "peak_profit": 29.74051896207583,
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 24.15
     },
     {
       "symbol": "EEII",
       "cycle": 1,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2025-03-04",
-        "price": 1.33,
+        "date": "2025-03-03",
+        "price": 1.34,
         "position_added": 0.33
       },
       "second_entry": null,
@@ -1808,137 +1983,204 @@
           "type": "SELL L2",
           "price": 1.78,
           "position_sold": 0.33,
-          "profit": 33.83
+          "profit": 32.84
         }
       ],
-      "last_average_price": 1.33,
+      "last_average_price": 1.34,
       "final_exit_price": 1.78,
       "exit_date": "2025-03-18",
-      "profit_pct": 33.83,
+      "profit_pct": 32.84,
       "max_position": 0.33,
-      "peak_profit": 33.834586466165405,
+      "peak_profit": 32.83582089552238,
       "exit_reason": "SELL L2"
+    },
+    {
+      "symbol": "ADIB",
+      "cycle": 1,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2025-03-03",
+        "price": 40.84,
+        "position_added": 0.33
+      },
+      "second_entry": null,
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 40.84,
+      "final_exit_price": 20.94,
+      "exit_date": "2025-05-26",
+      "profit_pct": -48.73,
+      "max_position": 0.33,
+      "peak_profit": 7.468168462291863,
+      "exit_reason": "STOP LOSS",
+      "stop_trigger_profit": -48.73
     },
     {
       "symbol": "EAST",
       "cycle": 1,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2025-03-09",
-        "price": 30.65,
+        "date": "2025-03-04",
+        "price": 30.8,
         "position_added": 0.33
       },
       "second_entry": null,
       "third_entry": null,
       "exits": [],
-      "last_average_price": 30.65,
-      "final_exit_price": 29.0,
-      "exit_date": "2025-06-18",
-      "profit_pct": -5.38,
+      "last_average_price": 30.8,
+      "final_exit_price": 33.0,
+      "exit_date": "2025-05-20",
+      "profit_pct": 7.14,
       "max_position": 0.33,
-      "peak_profit": 15.758564437194122,
-      "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -5.38
-    },
-    {
-      "symbol": "DSCW",
-      "cycle": 1,
-      "status": "CLOSED",
-      "first_entry": {
-        "date": "2025-03-09",
-        "price": 2.51,
-        "position_added": 0.33
-      },
-      "second_entry": null,
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 2.51,
-      "final_exit_price": 2.38,
-      "exit_date": "2025-06-02",
-      "profit_pct": -5.18,
-      "max_position": 0.33,
-      "peak_profit": 12.749003984063759,
-      "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -5.18
-    },
-    {
-      "symbol": "MPCO",
-      "cycle": 1,
-      "status": "CLOSED",
-      "first_entry": {
-        "date": "2025-03-10",
-        "price": 1.72,
-        "position_added": 0.33
-      },
-      "second_entry": null,
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 1.72,
-      "final_exit_price": 1.62,
-      "exit_date": "2025-06-15",
-      "profit_pct": -5.81,
-      "max_position": 0.33,
-      "peak_profit": 13.372093023255813,
-      "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -5.81
-    },
-    {
-      "symbol": "ABUK",
-      "cycle": 1,
-      "status": "CLOSED",
-      "first_entry": {
-        "date": "2025-03-13",
-        "price": 58.73,
-        "position_added": 0.33
-      },
-      "second_entry": {
-        "date": "2025-03-19",
-        "price": 56.05,
-        "position_added": 0.33
-      },
-      "third_entry": {
-        "date": "2025-04-06",
-        "price": 54.3,
-        "position_added": 0.34
-      },
-      "exits": [],
-      "last_average_price": 56.3394,
-      "final_exit_price": 52.75,
-      "exit_date": "2025-04-07",
-      "profit_pct": -6.37,
-      "max_position": 1.0,
-      "peak_profit": 0.8002724331687485,
-      "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -6.37
+      "peak_profit": 15.194805194805184,
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 7.14
     },
     {
       "symbol": "OLFI",
       "cycle": 1,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2025-03-17",
-        "price": 18.68,
+        "date": "2025-03-06",
+        "price": 18.75,
         "position_added": 0.33
       },
       "second_entry": null,
       "third_entry": null,
       "exits": [],
-      "last_average_price": 18.68,
+      "last_average_price": 18.75,
       "final_exit_price": 17.37,
       "exit_date": "2025-03-25",
-      "profit_pct": -7.01,
+      "profit_pct": -7.36,
       "max_position": 0.33,
-      "peak_profit": 0.4817987152034253,
+      "peak_profit": 2.933333333333337,
       "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -7.01
+      "stop_trigger_profit": -7.36
+    },
+    {
+      "symbol": "GBCO",
+      "cycle": 1,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2025-03-06",
+        "price": 17.11,
+        "position_added": 0.33
+      },
+      "second_entry": null,
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 17.11,
+      "final_exit_price": 20.63,
+      "exit_date": "2025-04-09",
+      "profit_pct": 20.57,
+      "max_position": 0.33,
+      "peak_profit": 26.35885447106956,
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 20.57
+    },
+    {
+      "symbol": "MPCO",
+      "cycle": 1,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2025-03-09",
+        "price": 1.74,
+        "position_added": 0.33
+      },
+      "second_entry": null,
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 1.74,
+      "final_exit_price": 1.65,
+      "exit_date": "2025-06-12",
+      "profit_pct": -5.17,
+      "max_position": 0.33,
+      "peak_profit": 12.068965517241377,
+      "exit_reason": "STOP LOSS",
+      "stop_trigger_profit": -5.17
+    },
+    {
+      "symbol": "ETEL",
+      "cycle": 1,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2025-03-10",
+        "price": 36.61,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2025-03-27",
+        "price": 35.3,
+        "position_added": 0.33
+      },
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 35.955,
+      "final_exit_price": 33.95,
+      "exit_date": "2025-04-06",
+      "profit_pct": -5.58,
+      "max_position": 0.66,
+      "peak_profit": 1.3384321223709423,
+      "exit_reason": "STOP LOSS",
+      "stop_trigger_profit": -5.58
+    },
+    {
+      "symbol": "ABUK",
+      "cycle": 1,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2025-03-11",
+        "price": 59.3,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2025-03-18",
+        "price": 57.43,
+        "position_added": 0.33
+      },
+      "third_entry": {
+        "date": "2025-03-24",
+        "price": 55.74,
+        "position_added": 0.34
+      },
+      "exits": [],
+      "last_average_price": 57.4725,
+      "final_exit_price": 54.3,
+      "exit_date": "2025-04-06",
+      "profit_pct": -5.52,
+      "max_position": 1.0,
+      "peak_profit": 0.37099494097808766,
+      "exit_reason": "STOP LOSS",
+      "stop_trigger_profit": -5.52
+    },
+    {
+      "symbol": "SWDY",
+      "cycle": 1,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2025-03-11",
+        "price": 80.5,
+        "position_added": 0.33
+      },
+      "second_entry": null,
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 80.5,
+      "final_exit_price": 76.3,
+      "exit_date": "2025-04-09",
+      "profit_pct": -5.22,
+      "max_position": 0.33,
+      "peak_profit": 8.695652173913043,
+      "exit_reason": "STOP LOSS",
+      "stop_trigger_profit": -5.22
     },
     {
       "symbol": "SKPC",
       "cycle": 1,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2025-03-19",
-        "price": 21.92,
+        "date": "2025-03-11",
+        "price": 21.9,
         "position_added": 0.33
       },
       "second_entry": {
@@ -1952,60 +2194,14 @@
         "position_added": 0.34
       },
       "exits": [],
-      "last_average_price": 21.1587,
+      "last_average_price": 21.1521,
       "final_exit_price": 19.95,
       "exit_date": "2025-04-09",
-      "profit_pct": -5.71,
+      "profit_pct": -5.68,
       "max_position": 1.0,
-      "peak_profit": 0.6678104042308889,
+      "peak_profit": 4.566210045662101,
       "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -5.71
-    },
-    {
-      "symbol": "ETEL",
-      "cycle": 1,
-      "status": "CLOSED",
-      "first_entry": {
-        "date": "2025-03-24",
-        "price": 36.32,
-        "position_added": 0.33
-      },
-      "second_entry": {
-        "date": "2025-04-03",
-        "price": 35.05,
-        "position_added": 0.33
-      },
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 35.685,
-      "final_exit_price": 33.68,
-      "exit_date": "2025-04-07",
-      "profit_pct": -5.62,
-      "max_position": 0.66,
-      "peak_profit": 0.05506607929516279,
-      "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -5.62
-    },
-    {
-      "symbol": "SWDY",
-      "cycle": 1,
-      "status": "CLOSED",
-      "first_entry": {
-        "date": "2025-03-24",
-        "price": 81.7,
-        "position_added": 0.33
-      },
-      "second_entry": null,
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 81.7,
-      "final_exit_price": 76.3,
-      "exit_date": "2025-04-09",
-      "profit_pct": -6.61,
-      "max_position": 0.33,
-      "peak_profit": 1.2239902080783354,
-      "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -6.61
+      "stop_trigger_profit": -5.68
     },
     {
       "symbol": "EMFD",
@@ -2024,13 +2220,63 @@
       "third_entry": null,
       "exits": [],
       "last_average_price": 8.13,
-      "final_exit_price": 8.88,
-      "exit_date": "2025-06-15",
-      "profit_pct": 9.23,
+      "final_exit_price": 9.36,
+      "exit_date": "2025-06-02",
+      "profit_pct": 15.13,
       "max_position": 0.66,
       "peak_profit": 21.77121771217714,
       "exit_reason": "TRAILING STOP",
-      "stop_trigger_profit": 9.23
+      "stop_trigger_profit": 15.13
+    },
+    {
+      "symbol": "PHDC",
+      "cycle": 1,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2025-03-25",
+        "price": 7.02,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2025-04-06",
+        "price": 6.77,
+        "position_added": 0.33
+      },
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 6.895,
+      "final_exit_price": 6.29,
+      "exit_date": "2025-04-09",
+      "profit_pct": -8.77,
+      "max_position": 0.66,
+      "peak_profit": 1.1396011396011407,
+      "exit_reason": "STOP LOSS",
+      "stop_trigger_profit": -8.77
+    },
+    {
+      "symbol": "COMI",
+      "cycle": 1,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2025-04-03",
+        "price": 79.7,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2025-04-08",
+        "price": 76.42,
+        "position_added": 0.33
+      },
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 78.06,
+      "final_exit_price": 97.0,
+      "exit_date": "2025-08-26",
+      "profit_pct": 24.26,
+      "max_position": 0.66,
+      "peak_profit": 29.36202920830131,
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 24.26
     },
     {
       "symbol": "HRHO",
@@ -2045,13 +2291,13 @@
       "third_entry": null,
       "exits": [],
       "last_average_price": 26.15,
-      "final_exit_price": 29.87,
-      "exit_date": "2025-06-02",
-      "profit_pct": 14.23,
+      "final_exit_price": 30.31,
+      "exit_date": "2025-05-26",
+      "profit_pct": 15.91,
       "max_position": 0.33,
       "peak_profit": 21.414913957934996,
       "exit_reason": "TRAILING STOP",
-      "stop_trigger_profit": 14.23
+      "stop_trigger_profit": 15.91
     },
     {
       "symbol": "ELSH",
@@ -2066,97 +2312,80 @@
       "third_entry": null,
       "exits": [],
       "last_average_price": 6.11,
-      "final_exit_price": 7.6,
-      "exit_date": "2025-06-12",
-      "profit_pct": 24.39,
+      "final_exit_price": 7.92,
+      "exit_date": "2025-06-11",
+      "profit_pct": 29.62,
       "max_position": 0.33,
       "peak_profit": 35.02454991816693,
       "exit_reason": "TRAILING STOP",
-      "stop_trigger_profit": 24.39
-    },
-    {
-      "symbol": "COMI",
-      "cycle": 1,
-      "status": "CLOSED",
-      "first_entry": {
-        "date": "2025-04-06",
-        "price": 78.6,
-        "position_added": 0.33
-      },
-      "second_entry": null,
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 78.6,
-      "final_exit_price": 95.01,
-      "exit_date": "2025-09-01",
-      "profit_pct": 20.88,
-      "max_position": 0.33,
-      "peak_profit": 28.473282442748104,
-      "exit_reason": "TRAILING STOP",
-      "stop_trigger_profit": 20.88
-    },
-    {
-      "symbol": "ADIB",
-      "cycle": 1,
-      "status": "CLOSED",
-      "first_entry": {
-        "date": "2025-04-06",
-        "price": 41.0,
-        "position_added": 0.33
-      },
-      "second_entry": null,
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 41.0,
-      "final_exit_price": 38.87,
-      "exit_date": "2025-05-07",
-      "profit_pct": -5.2,
-      "max_position": 0.33,
-      "peak_profit": 3.048780487804878,
-      "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -5.2
-    },
-    {
-      "symbol": "PHDC",
-      "cycle": 1,
-      "status": "CLOSED",
-      "first_entry": {
-        "date": "2025-04-06",
-        "price": 6.77,
-        "position_added": 0.33
-      },
-      "second_entry": null,
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 6.77,
-      "final_exit_price": 6.29,
-      "exit_date": "2025-04-09",
-      "profit_pct": -7.09,
-      "max_position": 0.33,
-      "peak_profit": 0.0,
-      "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -7.09
+      "stop_trigger_profit": 29.62
     },
     {
       "symbol": "FWRY",
       "cycle": 1,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2025-04-07",
-        "price": 8.81,
+        "date": "2025-04-06",
+        "price": 9.07,
         "position_added": 0.33
       },
       "second_entry": null,
       "third_entry": null,
       "exits": [],
-      "last_average_price": 8.81,
-      "final_exit_price": 9.8,
-      "exit_date": "2025-05-11",
-      "profit_pct": 11.24,
+      "last_average_price": 9.07,
+      "final_exit_price": 10.23,
+      "exit_date": "2025-05-07",
+      "profit_pct": 12.79,
       "max_position": 0.33,
-      "peak_profit": 21.56640181611805,
+      "peak_profit": 18.08158765159868,
       "exit_reason": "TRAILING STOP",
-      "stop_trigger_profit": 11.24
+      "stop_trigger_profit": 12.79
+    },
+    {
+      "symbol": "OIH",
+      "cycle": 1,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2025-04-09",
+        "price": 0.61,
+        "position_added": 0.33
+      },
+      "second_entry": null,
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 0.61,
+      "final_exit_price": 0.83,
+      "exit_date": "2025-06-03",
+      "profit_pct": 36.07,
+      "max_position": 0.33,
+      "peak_profit": 42.622950819672134,
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 36.07
+    },
+    {
+      "symbol": "SKPC",
+      "cycle": 2,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2025-04-15",
+        "price": 22.0,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2025-05-11",
+        "price": 21.29,
+        "position_added": 0.33
+      },
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 21.645,
+      "final_exit_price": 20.21,
+      "exit_date": "2025-05-18",
+      "profit_pct": -6.63,
+      "max_position": 0.66,
+      "peak_profit": 1.8636363636363642,
+      "exit_reason": "STOP LOSS",
+      "stop_trigger_profit": -6.63
     },
     {
       "symbol": "RMDA",
@@ -2180,50 +2409,75 @@
       "stop_trigger_profit": -5.12
     },
     {
-      "symbol": "SKPC",
-      "cycle": 2,
-      "status": "CLOSED",
-      "first_entry": {
-        "date": "2025-04-30",
-        "price": 21.9,
-        "position_added": 0.33
-      },
-      "second_entry": {
-        "date": "2025-05-14",
-        "price": 20.8,
-        "position_added": 0.33
-      },
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 21.35,
-      "final_exit_price": 20.21,
-      "exit_date": "2025-05-18",
-      "profit_pct": -5.34,
-      "max_position": 0.66,
-      "peak_profit": 0.13698630136986822,
-      "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -5.34
-    },
-    {
       "symbol": "SWDY",
       "cycle": 2,
       "status": "CLOSED",
       "first_entry": {
+        "date": "2025-05-06",
+        "price": 82.0,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2025-05-11",
+        "price": 79.3,
+        "position_added": 0.33
+      },
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 80.65,
+      "final_exit_price": 76.6,
+      "exit_date": "2025-06-15",
+      "profit_pct": -5.02,
+      "max_position": 0.66,
+      "peak_profit": 1.6738995660260492,
+      "exit_reason": "STOP LOSS",
+      "stop_trigger_profit": -5.02
+    },
+    {
+      "symbol": "PHDC",
+      "cycle": 2,
+      "status": "CLOSED",
+      "first_entry": {
         "date": "2025-05-07",
-        "price": 80.87,
+        "price": 7.01,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2025-05-11",
+        "price": 6.73,
+        "position_added": 0.33
+      },
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 6.87,
+      "final_exit_price": 8.15,
+      "exit_date": "2025-06-12",
+      "profit_pct": 18.63,
+      "max_position": 0.66,
+      "peak_profit": 24.745269286754006,
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 18.63
+    },
+    {
+      "symbol": "EFIH",
+      "cycle": 1,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2025-05-08",
+        "price": 18.45,
         "position_added": 0.33
       },
       "second_entry": null,
       "third_entry": null,
       "exits": [],
-      "last_average_price": 80.87,
-      "final_exit_price": 76.6,
-      "exit_date": "2025-06-15",
-      "profit_pct": -5.28,
+      "last_average_price": 18.45,
+      "final_exit_price": 13.18,
+      "exit_date": "2025-05-25",
+      "profit_pct": -28.56,
       "max_position": 0.33,
-      "peak_profit": 1.3973043155681903,
+      "peak_profit": 3.7940379403794,
       "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -5.28
+      "stop_trigger_profit": -28.56
     },
     {
       "symbol": "OLFI",
@@ -2247,8 +2501,33 @@
       "stop_trigger_profit": 25.49
     },
     {
-      "symbol": "GBCO",
+      "symbol": "RAYA",
       "cycle": 1,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2025-05-11",
+        "price": 2.75,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2025-05-26",
+        "price": 2.63,
+        "position_added": 0.33
+      },
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 2.69,
+      "final_exit_price": 3.24,
+      "exit_date": "2025-07-21",
+      "profit_pct": 20.45,
+      "max_position": 0.66,
+      "peak_profit": 25.650557620817843,
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 20.45
+    },
+    {
+      "symbol": "GBCO",
+      "cycle": 2,
       "status": "CLOSED",
       "first_entry": {
         "date": "2025-05-11",
@@ -2272,107 +2551,69 @@
       "stop_trigger_profit": 5.61
     },
     {
-      "symbol": "PHDC",
-      "cycle": 2,
-      "status": "CLOSED",
-      "first_entry": {
-        "date": "2025-05-11",
-        "price": 6.73,
-        "position_added": 0.33
-      },
-      "second_entry": null,
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 6.73,
-      "final_exit_price": 7.94,
-      "exit_date": "2025-06-15",
-      "profit_pct": 17.98,
-      "max_position": 0.33,
-      "peak_profit": 27.340267459138186,
-      "exit_reason": "TRAILING STOP",
-      "stop_trigger_profit": 17.98
-    },
-    {
       "symbol": "FWRY",
       "cycle": 2,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2025-05-12",
-        "price": 9.9,
+        "date": "2025-05-11",
+        "price": 9.8,
         "position_added": 0.33
       },
       "second_entry": null,
       "third_entry": null,
       "exits": [],
-      "last_average_price": 9.9,
-      "final_exit_price": 12.29,
-      "exit_date": "2025-07-16",
-      "profit_pct": 24.14,
+      "last_average_price": 9.8,
+      "final_exit_price": 10.93,
+      "exit_date": "2025-06-03",
+      "profit_pct": 11.53,
       "max_position": 0.33,
-      "peak_profit": 33.838383838383834,
+      "peak_profit": 18.87755102040816,
       "exit_reason": "TRAILING STOP",
-      "stop_trigger_profit": 24.14
-    },
-    {
-      "symbol": "RAYA",
-      "cycle": 1,
-      "status": "CLOSED",
-      "first_entry": {
-        "date": "2025-05-15",
-        "price": 2.72,
-        "position_added": 0.33
-      },
-      "second_entry": {
-        "date": "2025-05-26",
-        "price": 2.63,
-        "position_added": 0.33
-      },
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 2.675,
-      "final_exit_price": 3.18,
-      "exit_date": "2025-07-22",
-      "profit_pct": 18.88,
-      "max_position": 0.66,
-      "peak_profit": 26.355140186915893,
-      "exit_reason": "TRAILING STOP",
-      "stop_trigger_profit": 18.88
+      "stop_trigger_profit": 11.53
     },
     {
       "symbol": "MTIE",
       "cycle": 1,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2025-05-18",
-        "price": 7.92,
+        "date": "2025-05-12",
+        "price": 8.11,
         "position_added": 0.33
       },
       "second_entry": {
-        "date": "2025-06-15",
-        "price": 7.59,
+        "date": "2025-05-19",
+        "price": 7.7,
         "position_added": 0.33
       },
-      "third_entry": null,
+      "third_entry": {
+        "date": "2025-06-16",
+        "price": 7.54,
+        "position_added": 0.34
+      },
       "exits": [],
-      "last_average_price": 7.755,
+      "last_average_price": 7.7809,
       "final_exit_price": 7.12,
       "exit_date": "2025-06-17",
-      "profit_pct": -8.19,
-      "max_position": 0.66,
-      "peak_profit": 6.060606060606066,
+      "profit_pct": -8.49,
+      "max_position": 1.0,
+      "peak_profit": 6.261859582542708,
       "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -8.19
+      "stop_trigger_profit": -8.49
     },
     {
       "symbol": "TMGH",
       "cycle": 1,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2025-05-19",
-        "price": 52.0,
+        "date": "2025-05-14",
+        "price": 52.93,
         "position_added": 0.33
       },
-      "second_entry": null,
+      "second_entry": {
+        "date": "2025-06-19",
+        "price": 51.3,
+        "position_added": 0.33
+      },
       "third_entry": null,
       "exits": [
         {
@@ -2380,16 +2621,44 @@
           "type": "SELL L2",
           "price": 68.68,
           "position_sold": 0.33,
-          "profit": 32.08
+          "profit": 31.79
+        },
+        {
+          "date": "2025-11-06",
+          "type": "SELL L2",
+          "price": 70.9,
+          "position_sold": 0.33,
+          "profit": 36.05
         }
       ],
-      "last_average_price": 52.0,
-      "final_exit_price": 68.68,
-      "exit_date": "2025-11-05",
-      "profit_pct": 32.08,
-      "max_position": 0.33,
-      "peak_profit": 32.076923076923094,
+      "last_average_price": 52.115,
+      "final_exit_price": 70.9,
+      "exit_date": "2025-11-06",
+      "profit_pct": 33.92,
+      "max_position": 0.66,
+      "peak_profit": 36.04528446704406,
       "exit_reason": "SELL L2"
+    },
+    {
+      "symbol": "EAST",
+      "cycle": 2,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2025-05-21",
+        "price": 32.6,
+        "position_added": 0.33
+      },
+      "second_entry": null,
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 32.6,
+      "final_exit_price": 30.9,
+      "exit_date": "2025-06-11",
+      "profit_pct": -5.21,
+      "max_position": 0.33,
+      "peak_profit": 2.3006134969325154,
+      "exit_reason": "STOP LOSS",
+      "stop_trigger_profit": -5.21
     },
     {
       "symbol": "ETEL",
@@ -2436,6 +2705,31 @@
       "peak_profit": 11.475072105480018,
       "exit_reason": "STOP LOSS",
       "stop_trigger_profit": -5.48
+    },
+    {
+      "symbol": "EMFD",
+      "cycle": 2,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2025-06-11",
+        "price": 9.34,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2025-06-15",
+        "price": 8.88,
+        "position_added": 0.33
+      },
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 9.11,
+      "final_exit_price": 8.42,
+      "exit_date": "2025-07-27",
+      "profit_pct": -7.57,
+      "max_position": 0.66,
+      "peak_profit": 4.281009879253554,
+      "exit_reason": "STOP LOSS",
+      "stop_trigger_profit": -7.57
     },
     {
       "symbol": "HRHO",
@@ -2516,25 +2810,25 @@
       "exit_reason": "SELL L2"
     },
     {
-      "symbol": "EMFD",
-      "cycle": 2,
+      "symbol": "FWRY",
+      "cycle": 3,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2025-06-16",
-        "price": 8.85,
+        "date": "2025-06-17",
+        "price": 10.62,
         "position_added": 0.33
       },
       "second_entry": null,
       "third_entry": null,
       "exits": [],
-      "last_average_price": 8.85,
-      "final_exit_price": 8.38,
-      "exit_date": "2025-07-29",
-      "profit_pct": -5.31,
+      "last_average_price": 10.62,
+      "final_exit_price": 12.05,
+      "exit_date": "2025-06-30",
+      "profit_pct": 13.47,
       "max_position": 0.33,
-      "peak_profit": 7.344632768361587,
-      "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -5.31
+      "peak_profit": 19.114877589453872,
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 13.47
     },
     {
       "symbol": "PHDC",
@@ -2549,17 +2843,17 @@
       "third_entry": null,
       "exits": [],
       "last_average_price": 7.71,
-      "final_exit_price": 8.8,
-      "exit_date": "2025-07-16",
-      "profit_pct": 14.14,
+      "final_exit_price": 8.96,
+      "exit_date": "2025-07-13",
+      "profit_pct": 16.21,
       "max_position": 0.33,
       "peak_profit": 22.438391699092083,
       "exit_reason": "TRAILING STOP",
-      "stop_trigger_profit": 14.14
+      "stop_trigger_profit": 16.21
     },
     {
       "symbol": "GBCO",
-      "cycle": 2,
+      "cycle": 3,
       "status": "CLOSED",
       "first_entry": {
         "date": "2025-06-19",
@@ -2570,34 +2864,34 @@
       "third_entry": null,
       "exits": [],
       "last_average_price": 21.8,
-      "final_exit_price": 24.97,
-      "exit_date": "2025-08-31",
-      "profit_pct": 14.54,
+      "final_exit_price": 25.17,
+      "exit_date": "2025-08-27",
+      "profit_pct": 15.46,
       "max_position": 0.33,
       "peak_profit": 21.605504587155966,
       "exit_reason": "TRAILING STOP",
-      "stop_trigger_profit": 14.54
+      "stop_trigger_profit": 15.46
     },
     {
       "symbol": "ISPH",
       "cycle": 1,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2025-07-02",
-        "price": 9.19,
+        "date": "2025-06-24",
+        "price": 9.26,
         "position_added": 0.33
       },
       "second_entry": null,
       "third_entry": null,
       "exits": [],
-      "last_average_price": 9.19,
-      "final_exit_price": 10.21,
-      "exit_date": "2025-08-31",
-      "profit_pct": 11.1,
+      "last_average_price": 9.26,
+      "final_exit_price": 10.5,
+      "exit_date": "2025-08-26",
+      "profit_pct": 13.39,
       "max_position": 0.33,
-      "peak_profit": 20.02176278563656,
+      "peak_profit": 19.114470842332608,
       "exit_reason": "TRAILING STOP",
-      "stop_trigger_profit": 11.1
+      "stop_trigger_profit": 13.39
     },
     {
       "symbol": "ORWE",
@@ -2621,50 +2915,71 @@
       "stop_trigger_profit": -5.88
     },
     {
-      "symbol": "MTIE",
-      "cycle": 2,
+      "symbol": "EAST",
+      "cycle": 3,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2025-07-22",
-        "price": 8.4,
+        "date": "2025-07-17",
+        "price": 32.5,
         "position_added": 0.33
       },
       "second_entry": null,
       "third_entry": null,
       "exits": [],
-      "last_average_price": 8.4,
+      "last_average_price": 32.5,
+      "final_exit_price": 36.78,
+      "exit_date": "2025-08-18",
+      "profit_pct": 13.17,
+      "max_position": 0.33,
+      "peak_profit": 19.907692307692304,
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 13.17
+    },
+    {
+      "symbol": "MTIE",
+      "cycle": 2,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2025-07-17",
+        "price": 8.52,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2025-07-27",
+        "price": 8.24,
+        "position_added": 0.33
+      },
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 8.38,
       "final_exit_price": 7.9,
       "exit_date": "2025-08-31",
-      "profit_pct": -5.95,
-      "max_position": 0.33,
-      "peak_profit": 4.047619047619046,
+      "profit_pct": -5.73,
+      "max_position": 0.66,
+      "peak_profit": 4.295942720763738,
       "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -5.95
+      "stop_trigger_profit": -5.73
     },
     {
       "symbol": "AMOC",
       "cycle": 2,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2025-07-22",
-        "price": 7.52,
+        "date": "2025-07-21",
+        "price": 7.68,
         "position_added": 0.33
       },
-      "second_entry": {
-        "date": "2025-10-13",
-        "price": 6.9,
-        "position_added": 0.33
-      },
+      "second_entry": null,
       "third_entry": null,
       "exits": [],
-      "last_average_price": 7.21,
-      "final_exit_price": 6.84,
-      "exit_date": "2025-10-16",
-      "profit_pct": -5.13,
-      "max_position": 0.66,
-      "peak_profit": 2.393617021276604,
+      "last_average_price": 7.68,
+      "final_exit_price": 7.25,
+      "exit_date": "2025-07-30",
+      "profit_pct": -5.6,
+      "max_position": 0.33,
+      "peak_profit": 0.0,
       "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -5.13
+      "stop_trigger_profit": -5.6
     },
     {
       "symbol": "ATQA",
@@ -2679,13 +2994,13 @@
       "third_entry": null,
       "exits": [],
       "last_average_price": 10.29,
-      "final_exit_price": 9.74,
-      "exit_date": "2025-11-23",
-      "profit_pct": -5.34,
+      "final_exit_price": 11.41,
+      "exit_date": "2025-09-03",
+      "profit_pct": 10.88,
       "max_position": 0.33,
       "peak_profit": 16.326530612244913,
-      "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -5.34
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 10.88
     },
     {
       "symbol": "OLFI",
@@ -2742,27 +3057,6 @@
       "stop_trigger_profit": -4.39
     },
     {
-      "symbol": "EAST",
-      "cycle": 2,
-      "status": "CLOSED",
-      "first_entry": {
-        "date": "2025-07-28",
-        "price": 32.46,
-        "position_added": 0.33
-      },
-      "second_entry": null,
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 32.46,
-      "final_exit_price": 36.52,
-      "exit_date": "2025-08-20",
-      "profit_pct": 12.51,
-      "max_position": 0.33,
-      "peak_profit": 20.055452865064687,
-      "exit_reason": "TRAILING STOP",
-      "stop_trigger_profit": 12.51
-    },
-    {
       "symbol": "RAYA",
       "cycle": 2,
       "status": "CLOSED",
@@ -2786,6 +3080,31 @@
       "peak_profit": 7.868852459016401,
       "exit_reason": "STOP LOSS",
       "stop_trigger_profit": -5.33
+    },
+    {
+      "symbol": "ORHD",
+      "cycle": 1,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2025-07-31",
+        "price": 22.5,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2025-09-03",
+        "price": 21.79,
+        "position_added": 0.33
+      },
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 22.145,
+      "final_exit_price": 20.8,
+      "exit_date": "2025-09-17",
+      "profit_pct": -6.07,
+      "max_position": 0.66,
+      "peak_profit": 6.888888888888892,
+      "exit_reason": "STOP LOSS",
+      "stop_trigger_profit": -6.07
     },
     {
       "symbol": "DSCW",
@@ -2830,6 +3149,31 @@
       "stop_trigger_profit": -5.69
     },
     {
+      "symbol": "ABUK",
+      "cycle": 2,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2025-08-18",
+        "price": 52.4,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2025-10-22",
+        "price": 49.9,
+        "position_added": 0.33
+      },
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 51.15,
+      "final_exit_price": 48.31,
+      "exit_date": "2025-10-27",
+      "profit_pct": -5.55,
+      "max_position": 0.66,
+      "peak_profit": 3.9694656488549587,
+      "exit_reason": "STOP LOSS",
+      "stop_trigger_profit": -5.55
+    },
+    {
       "symbol": "SWDY",
       "cycle": 3,
       "status": "CLOSED",
@@ -2851,83 +3195,65 @@
       "stop_trigger_profit": -5.48
     },
     {
-      "symbol": "ABUK",
+      "symbol": "MPCO",
       "cycle": 2,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2025-08-24",
-        "price": 51.86,
+        "date": "2025-08-20",
+        "price": 1.73,
         "position_added": 0.33
       },
       "second_entry": {
-        "date": "2025-10-22",
-        "price": 49.9,
+        "date": "2025-09-08",
+        "price": 1.67,
         "position_added": 0.33
       },
       "third_entry": null,
-      "exits": [],
-      "last_average_price": 50.88,
-      "final_exit_price": 48.31,
-      "exit_date": "2025-10-27",
-      "profit_pct": -5.05,
+      "exits": [
+        {
+          "date": "2025-09-29",
+          "type": "SELL L2",
+          "price": 2.42,
+          "position_sold": 0.33,
+          "profit": 42.35
+        }
+      ],
+      "last_average_price": 1.7,
+      "final_exit_price": 2.69,
+      "exit_date": "2025-09-30",
+      "profit_pct": 50.29,
       "max_position": 0.66,
-      "peak_profit": 5.052063247204006,
-      "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -5.05
-    },
-    {
-      "symbol": "ORHD",
-      "cycle": 1,
-      "status": "CLOSED",
-      "first_entry": {
-        "date": "2025-08-27",
-        "price": 22.85,
-        "position_added": 0.33
-      },
-      "second_entry": {
-        "date": "2025-09-03",
-        "price": 21.79,
-        "position_added": 0.33
-      },
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 22.32,
-      "final_exit_price": 20.8,
-      "exit_date": "2025-09-17",
-      "profit_pct": -6.81,
-      "max_position": 0.66,
-      "peak_profit": 1.4442013129102769,
-      "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -6.81
+      "peak_profit": 58.235294117647044,
+      "exit_reason": "EXIT FULL"
     },
     {
       "symbol": "ISPH",
       "cycle": 2,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2025-09-01",
-        "price": 10.39,
+        "date": "2025-08-31",
+        "price": 10.21,
         "position_added": 0.33
       },
       "second_entry": null,
       "third_entry": null,
       "exits": [],
-      "last_average_price": 10.39,
-      "final_exit_price": 11.78,
-      "exit_date": "2026-02-19",
-      "profit_pct": 13.38,
+      "last_average_price": 10.21,
+      "final_exit_price": 11.38,
+      "exit_date": "2025-10-19",
+      "profit_pct": 11.46,
       "max_position": 0.33,
-      "peak_profit": 22.714148219441764,
+      "peak_profit": 16.552399608227223,
       "exit_reason": "TRAILING STOP",
-      "stop_trigger_profit": 13.38
+      "stop_trigger_profit": 11.46
     },
     {
       "symbol": "GBCO",
-      "cycle": 3,
+      "cycle": 4,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2025-09-01",
-        "price": 24.99,
+        "date": "2025-08-31",
+        "price": 24.97,
         "position_added": 0.33
       },
       "second_entry": {
@@ -2941,39 +3267,81 @@
         "position_added": 0.34
       },
       "exits": [],
-      "last_average_price": 24.1312,
+      "last_average_price": 24.1246,
       "final_exit_price": 22.27,
       "exit_date": "2025-09-15",
-      "profit_pct": -7.71,
+      "profit_pct": -7.69,
       "max_position": 1.0,
-      "peak_profit": 0.0,
+      "peak_profit": 0.08009611533840438,
       "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -7.71
+      "stop_trigger_profit": -7.69
     },
     {
       "symbol": "COMI",
       "cycle": 2,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2025-09-02",
-        "price": 96.0,
+        "date": "2025-08-31",
+        "price": 96.51,
         "position_added": 0.33
       },
       "second_entry": null,
       "third_entry": null,
       "exits": [],
-      "last_average_price": 96.0,
-      "final_exit_price": 107.09,
-      "exit_date": "2025-12-08",
-      "profit_pct": 11.55,
+      "last_average_price": 96.51,
+      "final_exit_price": 106.5,
+      "exit_date": "2025-11-19",
+      "profit_pct": 10.35,
       "max_position": 0.33,
-      "peak_profit": 21.666666666666664,
+      "peak_profit": 15.532069215625318,
       "exit_reason": "TRAILING STOP",
-      "stop_trigger_profit": 11.55
+      "stop_trigger_profit": 10.35
+    },
+    {
+      "symbol": "HRHO",
+      "cycle": 3,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2025-09-02",
+        "price": 25.71,
+        "position_added": 0.33
+      },
+      "second_entry": null,
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 25.71,
+      "final_exit_price": 28.15,
+      "exit_date": "2025-10-30",
+      "profit_pct": 9.49,
+      "max_position": 0.33,
+      "peak_profit": 16.29716063788408,
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 9.49
+    },
+    {
+      "symbol": "EAST",
+      "cycle": 4,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2025-09-03",
+        "price": 37.23,
+        "position_added": 0.33
+      },
+      "second_entry": null,
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 37.23,
+      "final_exit_price": 42.0,
+      "exit_date": "2025-10-01",
+      "profit_pct": 12.81,
+      "max_position": 0.33,
+      "peak_profit": 18.023099650819237,
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 12.81
     },
     {
       "symbol": "FWRY",
-      "cycle": 3,
+      "cycle": 4,
       "status": "CLOSED",
       "first_entry": {
         "date": "2025-09-03",
@@ -2984,69 +3352,42 @@
       "third_entry": null,
       "exits": [],
       "last_average_price": 13.05,
-      "final_exit_price": 15.0,
-      "exit_date": "2025-11-24",
-      "profit_pct": 14.94,
+      "final_exit_price": 15.15,
+      "exit_date": "2025-11-11",
+      "profit_pct": 16.09,
       "max_position": 0.33,
       "peak_profit": 22.605363984674323,
       "exit_reason": "TRAILING STOP",
-      "stop_trigger_profit": 14.94
+      "stop_trigger_profit": 16.09
     },
     {
-      "symbol": "EAST",
-      "cycle": 3,
-      "status": "CLOSED",
-      "first_entry": {
-        "date": "2025-09-07",
-        "price": 37.03,
-        "position_added": 0.33
-      },
-      "second_entry": null,
-      "third_entry": null,
-      "exits": [
-        {
-          "date": "2025-11-09",
-          "type": "SELL L2",
-          "price": 49.49,
-          "position_sold": 0.33,
-          "profit": 33.65
-        }
-      ],
-      "last_average_price": 37.03,
-      "final_exit_price": 49.49,
-      "exit_date": "2025-11-09",
-      "profit_pct": 33.65,
-      "max_position": 0.33,
-      "peak_profit": 33.64839319470699,
-      "exit_reason": "SELL L2"
-    },
-    {
-      "symbol": "MPCO",
+      "symbol": "ATQA",
       "cycle": 2,
       "status": "CLOSED",
       "first_entry": {
         "date": "2025-09-07",
-        "price": 1.7,
+        "price": 11.02,
         "position_added": 0.33
       },
-      "second_entry": null,
-      "third_entry": null,
-      "exits": [
-        {
-          "date": "2025-09-29",
-          "type": "SELL L2",
-          "price": 2.42,
-          "position_sold": 0.33,
-          "profit": 42.35
-        }
-      ],
-      "last_average_price": 1.7,
-      "final_exit_price": 2.42,
-      "exit_date": "2025-09-29",
-      "profit_pct": 42.35,
-      "max_position": 0.33,
-      "peak_profit": 42.35294117647059,
-      "exit_reason": "SELL L2"
+      "second_entry": {
+        "date": "2025-09-16",
+        "price": 10.5,
+        "position_added": 0.33
+      },
+      "third_entry": {
+        "date": "2025-09-17",
+        "price": 10.3,
+        "position_added": 0.34
+      },
+      "exits": [],
+      "last_average_price": 10.6036,
+      "final_exit_price": 10.12,
+      "exit_date": "2025-09-18",
+      "profit_pct": -4.56,
+      "max_position": 1.0,
+      "peak_profit": 0.907441016333935,
+      "exit_reason": "STOP LOSS",
+      "stop_trigger_profit": -4.56
     },
     {
       "symbol": "EEII",
@@ -3061,122 +3402,306 @@
       "third_entry": null,
       "exits": [],
       "last_average_price": 1.83,
-      "final_exit_price": 2.28,
-      "exit_date": "2025-12-23",
-      "profit_pct": 24.59,
+      "final_exit_price": 2.02,
+      "exit_date": "2025-10-28",
+      "profit_pct": 10.38,
       "max_position": 0.33,
-      "peak_profit": 35.5191256830601,
+      "peak_profit": 17.4863387978142,
       "exit_reason": "TRAILING STOP",
-      "stop_trigger_profit": 24.59
+      "stop_trigger_profit": 10.38
+    },
+    {
+      "symbol": "ATQA",
+      "cycle": 3,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2025-10-12",
+        "price": 10.74,
+        "position_added": 0.33
+      },
+      "second_entry": null,
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 10.74,
+      "final_exit_price": 10.2,
+      "exit_date": "2025-11-05",
+      "profit_pct": -5.03,
+      "max_position": 0.33,
+      "peak_profit": 2.607076350093104,
+      "exit_reason": "STOP LOSS",
+      "stop_trigger_profit": -5.03
+    },
+    {
+      "symbol": "AMOC",
+      "cycle": 3,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2025-10-12",
+        "price": 7.56,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2025-10-13",
+        "price": 6.9,
+        "position_added": 0.33
+      },
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 7.23,
+      "final_exit_price": 6.86,
+      "exit_date": "2025-10-15",
+      "profit_pct": -5.12,
+      "max_position": 0.66,
+      "peak_profit": 0.0,
+      "exit_reason": "STOP LOSS",
+      "stop_trigger_profit": -5.12
     },
     {
       "symbol": "SKPC",
       "cycle": 3,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2025-10-15",
-        "price": 19.5,
+        "date": "2025-10-12",
+        "price": 19.65,
         "position_added": 0.33
       },
       "second_entry": null,
       "third_entry": null,
       "exits": [],
-      "last_average_price": 19.5,
+      "last_average_price": 19.65,
       "final_exit_price": 15.64,
       "exit_date": "2026-01-04",
-      "profit_pct": -19.79,
+      "profit_pct": -20.41,
       "max_position": 0.33,
-      "peak_profit": 2.1538461538461626,
+      "peak_profit": 1.3740458015267334,
       "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -19.79
+      "stop_trigger_profit": -20.41
     },
     {
-      "symbol": "SWDY",
-      "cycle": 4,
+      "symbol": "ISPH",
+      "cycle": 3,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2025-10-26",
-        "price": 76.2,
+        "date": "2025-10-21",
+        "price": 11.3,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2025-11-11",
+        "price": 10.64,
+        "position_added": 0.33
+      },
+      "third_entry": {
+        "date": "2025-11-12",
+        "price": 10.51,
+        "position_added": 0.34
+      },
+      "exits": [],
+      "last_average_price": 10.8136,
+      "final_exit_price": 10.25,
+      "exit_date": "2026-01-15",
+      "profit_pct": -5.21,
+      "max_position": 1.0,
+      "peak_profit": 8.382037434341935,
+      "exit_reason": "STOP LOSS",
+      "stop_trigger_profit": -5.21
+    },
+    {
+      "symbol": "ORHD",
+      "cycle": 2,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2025-10-22",
+        "price": 22.51,
         "position_added": 0.33
       },
       "second_entry": null,
       "third_entry": null,
       "exits": [],
-      "last_average_price": 76.2,
-      "final_exit_price": 65.52,
-      "exit_date": "2025-12-08",
-      "profit_pct": -14.02,
+      "last_average_price": 22.51,
+      "final_exit_price": 25.66,
+      "exit_date": "2025-11-11",
+      "profit_pct": 13.99,
       "max_position": 0.33,
-      "peak_profit": 7.755905511811019,
-      "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -14.02
+      "peak_profit": 19.058196357174584,
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 13.99
     },
     {
       "symbol": "OLFI",
       "cycle": 4,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2025-10-28",
-        "price": 22.07,
+        "date": "2025-10-23",
+        "price": 22.26,
         "position_added": 0.33
       },
       "second_entry": null,
       "third_entry": null,
       "exits": [],
-      "last_average_price": 22.07,
-      "final_exit_price": 24.12,
-      "exit_date": "2026-01-27",
-      "profit_pct": 9.29,
+      "last_average_price": 22.26,
+      "final_exit_price": 24.98,
+      "exit_date": "2026-01-26",
+      "profit_pct": 12.22,
       "max_position": 0.33,
-      "peak_profit": 20.07249660172179,
+      "peak_profit": 19.047619047619037,
       "exit_reason": "TRAILING STOP",
-      "stop_trigger_profit": 9.29
+      "stop_trigger_profit": 12.22
     },
     {
-      "symbol": "HRHO",
+      "symbol": "EMFD",
       "cycle": 3,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2025-10-30",
-        "price": 28.15,
+        "date": "2025-10-23",
+        "price": 8.98,
         "position_added": 0.33
       },
-      "second_entry": {
-        "date": "2025-11-19",
-        "price": 26.75,
-        "position_added": 0.33
-      },
+      "second_entry": null,
       "third_entry": null,
       "exits": [],
-      "last_average_price": 27.45,
-      "final_exit_price": 26.02,
-      "exit_date": "2025-12-02",
-      "profit_pct": -5.21,
-      "max_position": 0.66,
-      "peak_profit": 5.71936056838367,
+      "last_average_price": 8.98,
+      "final_exit_price": 9.85,
+      "exit_date": "2025-11-16",
+      "profit_pct": 9.69,
+      "max_position": 0.33,
+      "peak_profit": 15.367483296213797,
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 9.69
+    },
+    {
+      "symbol": "SWDY",
+      "cycle": 4,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2025-10-23",
+        "price": 76.95,
+        "position_added": 0.33
+      },
+      "second_entry": null,
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 76.95,
+      "final_exit_price": 65.52,
+      "exit_date": "2025-12-08",
+      "profit_pct": -14.85,
+      "max_position": 0.33,
+      "peak_profit": 6.705653021442489,
       "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -5.21
+      "stop_trigger_profit": -14.85
     },
     {
       "symbol": "RMDA",
       "cycle": 2,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2025-10-30",
-        "price": 4.34,
+        "date": "2025-10-28",
+        "price": 4.39,
         "position_added": 0.33
       },
       "second_entry": null,
       "third_entry": null,
       "exits": [],
-      "last_average_price": 4.34,
-      "final_exit_price": 3.14,
-      "exit_date": "2025-11-24",
-      "profit_pct": -27.65,
+      "last_average_price": 4.39,
+      "final_exit_price": 4.16,
+      "exit_date": "2025-11-05",
+      "profit_pct": -5.24,
       "max_position": 0.33,
+      "peak_profit": 0.2277904328018377,
+      "exit_reason": "STOP LOSS",
+      "stop_trigger_profit": -5.24
+    },
+    {
+      "symbol": "GBCO",
+      "cycle": 5,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2025-10-28",
+        "price": 24.43,
+        "position_added": 0.33
+      },
+      "second_entry": null,
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 24.43,
+      "final_exit_price": 29.7,
+      "exit_date": "2026-02-08",
+      "profit_pct": 21.57,
+      "max_position": 0.33,
+      "peak_profit": 30.126893164142444,
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 21.57
+    },
+    {
+      "symbol": "EEII",
+      "cycle": 3,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2025-10-29",
+        "price": 2.0,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2025-11-10",
+        "price": 1.93,
+        "position_added": 0.33
+      },
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 1.965,
+      "final_exit_price": 2.36,
+      "exit_date": "2025-12-22",
+      "profit_pct": 20.1,
+      "max_position": 0.66,
+      "peak_profit": 26.2086513994911,
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 20.1
+    },
+    {
+      "symbol": "OIH",
+      "cycle": 2,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2025-10-30",
+        "price": 1.13,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2025-11-02",
+        "price": 1.09,
+        "position_added": 0.33
+      },
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 1.11,
+      "final_exit_price": 1.05,
+      "exit_date": "2025-11-06",
+      "profit_pct": -5.41,
+      "max_position": 0.66,
       "peak_profit": 0.0,
       "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -27.65
+      "stop_trigger_profit": -5.41
+    },
+    {
+      "symbol": "PHDC",
+      "cycle": 5,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2025-10-30",
+        "price": 7.86,
+        "position_added": 0.33
+      },
+      "second_entry": null,
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 7.86,
+      "final_exit_price": 9.26,
+      "exit_date": "2026-02-22",
+      "profit_pct": 17.81,
+      "max_position": 0.33,
+      "peak_profit": 23.91857506361323,
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 17.81
     },
     {
       "symbol": "ETEL",
@@ -3207,79 +3732,112 @@
       "exit_reason": "SELL L2"
     },
     {
-      "symbol": "OIH",
-      "cycle": 1,
+      "symbol": "HRHO",
+      "cycle": 4,
       "status": "CLOSED",
       "first_entry": {
         "date": "2025-11-02",
-        "price": 1.09,
+        "price": 28.5,
         "position_added": 0.33
       },
-      "second_entry": null,
-      "third_entry": null,
+      "second_entry": {
+        "date": "2025-11-16",
+        "price": 27.6,
+        "position_added": 0.33
+      },
+      "third_entry": {
+        "date": "2025-11-19",
+        "price": 26.75,
+        "position_added": 0.34
+      },
       "exits": [],
-      "last_average_price": 1.09,
-      "final_exit_price": 1.03,
-      "exit_date": "2025-11-12",
-      "profit_pct": -5.5,
-      "max_position": 0.33,
-      "peak_profit": 0.9174311926605512,
+      "last_average_price": 27.608,
+      "final_exit_price": 26.5,
+      "exit_date": "2025-11-20",
+      "profit_pct": -4.01,
+      "max_position": 1.0,
+      "peak_profit": 4.421052631578952,
       "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -5.5
-    },
-    {
-      "symbol": "PHDC",
-      "cycle": 5,
-      "status": "CLOSED",
-      "first_entry": {
-        "date": "2025-11-02",
-        "price": 7.77,
-        "position_added": 0.33
-      },
-      "second_entry": null,
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 7.77,
-      "final_exit_price": 8.99,
-      "exit_date": "2026-02-25",
-      "profit_pct": 15.7,
-      "max_position": 0.33,
-      "peak_profit": 25.353925353925366,
-      "exit_reason": "TRAILING STOP",
-      "stop_trigger_profit": 15.7
+      "stop_trigger_profit": -4.01
     },
     {
       "symbol": "ORWE",
       "cycle": 2,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2025-11-16",
-        "price": 23.69,
+        "date": "2025-11-02",
+        "price": 23.45,
         "position_added": 0.33
       },
       "second_entry": {
-        "date": "2025-11-20",
-        "price": 22.8,
+        "date": "2025-11-23",
+        "price": 22.3,
+        "position_added": 0.33
+      },
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 22.875,
+      "final_exit_price": 21.52,
+      "exit_date": "2026-01-15",
+      "profit_pct": -5.92,
+      "max_position": 0.66,
+      "peak_profit": 6.268656716417921,
+      "exit_reason": "STOP LOSS",
+      "stop_trigger_profit": -5.92
+    },
+    {
+      "symbol": "ELSH",
+      "cycle": 3,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2025-11-09",
+        "price": 8.15,
+        "position_added": 0.33
+      },
+      "second_entry": null,
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 8.15,
+      "final_exit_price": 7.6,
+      "exit_date": "2026-01-14",
+      "profit_pct": -6.75,
+      "max_position": 0.33,
+      "peak_profit": 12.883435582822072,
+      "exit_reason": "STOP LOSS",
+      "stop_trigger_profit": -6.75
+    },
+    {
+      "symbol": "ORHD",
+      "cycle": 3,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2025-11-13",
+        "price": 25.02,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2026-01-04",
+        "price": 24.06,
         "position_added": 0.33
       },
       "third_entry": {
-        "date": "2025-11-23",
-        "price": 22.3,
+        "date": "2026-01-05",
+        "price": 23.05,
         "position_added": 0.34
       },
       "exits": [],
-      "last_average_price": 22.9237,
-      "final_exit_price": 22.0,
-      "exit_date": "2025-11-27",
-      "profit_pct": -4.03,
+      "last_average_price": 24.0334,
+      "final_exit_price": 23.05,
+      "exit_date": "2026-01-05",
+      "profit_pct": -4.09,
       "max_position": 1.0,
-      "peak_profit": 0.16884761502743414,
+      "peak_profit": 4.676258992805763,
       "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -4.03
+      "stop_trigger_profit": -4.09
     },
     {
       "symbol": "EMFD",
-      "cycle": 3,
+      "cycle": 4,
       "status": "CLOSED",
       "first_entry": {
         "date": "2025-11-17",
@@ -3307,33 +3865,54 @@
       "stop_trigger_profit": -6.02
     },
     {
-      "symbol": "ORHD",
+      "symbol": "ADIB",
       "cycle": 2,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2025-11-20",
-        "price": 24.9,
+        "date": "2025-11-18",
+        "price": 25.3,
         "position_added": 0.33
       },
       "second_entry": {
-        "date": "2026-01-04",
-        "price": 24.06,
+        "date": "2025-11-24",
+        "price": 24.35,
         "position_added": 0.33
       },
-      "third_entry": {
-        "date": "2026-01-05",
-        "price": 23.05,
-        "position_added": 0.34
-      },
+      "third_entry": null,
       "exits": [],
-      "last_average_price": 23.9938,
-      "final_exit_price": 23.0,
-      "exit_date": "2026-01-14",
-      "profit_pct": -4.14,
-      "max_position": 1.0,
-      "peak_profit": 5.180722891566276,
-      "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -4.14
+      "last_average_price": 24.825,
+      "final_exit_price": 27.99,
+      "exit_date": "2025-12-18",
+      "profit_pct": 12.75,
+      "max_position": 0.66,
+      "peak_profit": 18.429003021148016,
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 12.75
+    },
+    {
+      "symbol": "COMI",
+      "cycle": 3,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2025-11-20",
+        "price": 106.02,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2025-12-18",
+        "price": 101.03,
+        "position_added": 0.33
+      },
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 103.525,
+      "final_exit_price": 135.0,
+      "exit_date": "2026-02-22",
+      "profit_pct": 30.4,
+      "max_position": 0.66,
+      "peak_profit": 38.121226756822026,
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 30.4
     },
     {
       "symbol": "EGAL",
@@ -3370,7 +3949,7 @@
     },
     {
       "symbol": "EAST",
-      "cycle": 4,
+      "cycle": 5,
       "status": "CLOSED",
       "first_entry": {
         "date": "2025-11-24",
@@ -3394,78 +3973,29 @@
       "stop_trigger_profit": -8.23
     },
     {
-      "symbol": "ADIB",
-      "cycle": 2,
+      "symbol": "FWRY",
+      "cycle": 5,
       "status": "CLOSED",
       "first_entry": {
         "date": "2025-11-24",
-        "price": 24.35,
-        "position_added": 0.33
-      },
-      "second_entry": null,
-      "third_entry": null,
-      "exits": [
-        {
-          "date": "2026-01-26",
-          "type": "SELL L2",
-          "price": 38.01,
-          "position_sold": 0.33,
-          "profit": 56.1
-        }
-      ],
-      "last_average_price": 24.35,
-      "final_exit_price": 38.01,
-      "exit_date": "2026-01-26",
-      "profit_pct": 56.1,
-      "max_position": 0.33,
-      "peak_profit": 56.09856262833674,
-      "exit_reason": "SELL L2"
-    },
-    {
-      "symbol": "ELSH",
-      "cycle": 3,
-      "status": "CLOSED",
-      "first_entry": {
-        "date": "2025-11-25",
-        "price": 8.35,
+        "price": 15.0,
         "position_added": 0.33
       },
       "second_entry": null,
       "third_entry": null,
       "exits": [],
-      "last_average_price": 8.35,
-      "final_exit_price": 7.8,
-      "exit_date": "2026-01-13",
-      "profit_pct": -6.59,
+      "last_average_price": 15.0,
+      "final_exit_price": 19.59,
+      "exit_date": "2026-02-19",
+      "profit_pct": 30.6,
       "max_position": 0.33,
-      "peak_profit": 1.3173652694610924,
-      "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -6.59
-    },
-    {
-      "symbol": "FWRY",
-      "cycle": 4,
-      "status": "CLOSED",
-      "first_entry": {
-        "date": "2025-11-25",
-        "price": 14.78,
-        "position_added": 0.33
-      },
-      "second_entry": null,
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 14.78,
-      "final_exit_price": 18.55,
-      "exit_date": "2026-02-22",
-      "profit_pct": 25.51,
-      "max_position": 0.33,
-      "peak_profit": 39.30987821380244,
+      "peak_profit": 37.266666666666666,
       "exit_reason": "TRAILING STOP",
-      "stop_trigger_profit": 25.51
+      "stop_trigger_profit": 30.6
     },
     {
       "symbol": "EFIH",
-      "cycle": 1,
+      "cycle": 2,
       "status": "CLOSED",
       "first_entry": {
         "date": "2025-11-26",
@@ -3476,113 +4006,46 @@
       "third_entry": null,
       "exits": [],
       "last_average_price": 15.1,
-      "final_exit_price": 21.59,
-      "exit_date": "2026-02-22",
-      "profit_pct": 42.98,
+      "final_exit_price": 17.7,
+      "exit_date": "2025-12-18",
+      "profit_pct": 17.22,
       "max_position": 0.33,
-      "peak_profit": 54.172185430463585,
+      "peak_profit": 23.17880794701988,
       "exit_reason": "TRAILING STOP",
-      "stop_trigger_profit": 42.98
-    },
-    {
-      "symbol": "GBCO",
-      "cycle": 4,
-      "status": "CLOSED",
-      "first_entry": {
-        "date": "2025-11-26",
-        "price": 26.19,
-        "position_added": 0.33
-      },
-      "second_entry": {
-        "date": "2025-12-02",
-        "price": 25.33,
-        "position_added": 0.33
-      },
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 25.76,
-      "final_exit_price": 29.7,
-      "exit_date": "2026-02-08",
-      "profit_pct": 15.3,
-      "max_position": 0.66,
-      "peak_profit": 23.408385093167674,
-      "exit_reason": "TRAILING STOP",
-      "stop_trigger_profit": 15.3
-    },
-    {
-      "symbol": "COMI",
-      "cycle": 3,
-      "status": "CLOSED",
-      "first_entry": {
-        "date": "2025-12-11",
-        "price": 106.17,
-        "position_added": 0.33
-      },
-      "second_entry": {
-        "date": "2025-12-18",
-        "price": 101.03,
-        "position_added": 0.33
-      },
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 103.6,
-      "final_exit_price": 135.0,
-      "exit_date": "2026-02-22",
-      "profit_pct": 30.31,
-      "max_position": 0.66,
-      "peak_profit": 38.02123552123552,
-      "exit_reason": "TRAILING STOP",
-      "stop_trigger_profit": 30.31
-    },
-    {
-      "symbol": "ORWE",
-      "cycle": 3,
-      "status": "CLOSED",
-      "first_entry": {
-        "date": "2025-12-15",
-        "price": 22.91,
-        "position_added": 0.33
-      },
-      "second_entry": null,
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 22.91,
-      "final_exit_price": 21.52,
-      "exit_date": "2026-01-15",
-      "profit_pct": -6.07,
-      "max_position": 0.33,
-      "peak_profit": 3.448275862068962,
-      "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -6.07
+      "stop_trigger_profit": 17.22
     },
     {
       "symbol": "EMFD",
-      "cycle": 4,
+      "cycle": 5,
       "status": "CLOSED",
       "first_entry": {
+        "date": "2025-12-16",
+        "price": 9.75,
+        "position_added": 0.33
+      },
+      "second_entry": {
         "date": "2025-12-18",
         "price": 9.4,
         "position_added": 0.33
       },
-      "second_entry": null,
       "third_entry": null,
       "exits": [],
-      "last_average_price": 9.4,
-      "final_exit_price": 8.75,
-      "exit_date": "2026-03-01",
-      "profit_pct": -6.91,
-      "max_position": 0.33,
-      "peak_profit": 4.255319148936174,
+      "last_average_price": 9.575,
+      "final_exit_price": 8.97,
+      "exit_date": "2026-01-15",
+      "profit_pct": -6.32,
+      "max_position": 0.66,
+      "peak_profit": 2.349869451697124,
       "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -6.91
+      "stop_trigger_profit": -6.32
     },
     {
       "symbol": "ABUK",
       "cycle": 3,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2026-01-05",
-        "price": 49.02,
+        "date": "2026-01-04",
+        "price": 50.0,
         "position_added": 0.33
       },
       "second_entry": null,
@@ -3593,20 +4056,48 @@
           "type": "SELL L2",
           "price": 65.45,
           "position_sold": 0.33,
-          "profit": 33.52
+          "profit": 30.9
         }
       ],
-      "last_average_price": 49.02,
+      "last_average_price": 50.0,
       "final_exit_price": 65.45,
       "exit_date": "2026-02-01",
-      "profit_pct": 33.52,
+      "profit_pct": 30.9,
       "max_position": 0.33,
-      "peak_profit": 33.51693186454508,
+      "peak_profit": 30.900000000000006,
+      "exit_reason": "SELL L2"
+    },
+    {
+      "symbol": "OIH",
+      "cycle": 3,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2026-01-05",
+        "price": 1.15,
+        "position_added": 0.33
+      },
+      "second_entry": null,
+      "third_entry": null,
+      "exits": [
+        {
+          "date": "2026-04-16",
+          "type": "SELL L2",
+          "price": 1.58,
+          "position_sold": 0.33,
+          "profit": 37.39
+        }
+      ],
+      "last_average_price": 1.15,
+      "final_exit_price": 1.58,
+      "exit_date": "2026-04-16",
+      "profit_pct": 37.39,
+      "max_position": 0.33,
+      "peak_profit": 37.39130434782611,
       "exit_reason": "SELL L2"
     },
     {
       "symbol": "EEII",
-      "cycle": 3,
+      "cycle": 4,
       "status": "CLOSED",
       "first_entry": {
         "date": "2026-01-05",
@@ -3634,31 +4125,31 @@
       "stop_trigger_profit": -6.04
     },
     {
-      "symbol": "OIH",
-      "cycle": 2,
+      "symbol": "ADIB",
+      "cycle": 3,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2026-01-15",
-        "price": 1.14,
+        "date": "2026-01-05",
+        "price": 28.2,
         "position_added": 0.33
       },
       "second_entry": null,
       "third_entry": null,
       "exits": [
         {
-          "date": "2026-04-16",
+          "date": "2026-01-26",
           "type": "SELL L2",
-          "price": 1.58,
+          "price": 38.01,
           "position_sold": 0.33,
-          "profit": 38.6
+          "profit": 34.79
         }
       ],
-      "last_average_price": 1.14,
-      "final_exit_price": 1.58,
-      "exit_date": "2026-04-16",
-      "profit_pct": 38.6,
+      "last_average_price": 28.2,
+      "final_exit_price": 38.01,
+      "exit_date": "2026-01-26",
+      "profit_pct": 34.79,
       "max_position": 0.33,
-      "peak_profit": 38.59649122807019,
+      "peak_profit": 34.78723404255319,
       "exit_reason": "SELL L2"
     },
     {
@@ -3666,21 +4157,42 @@
       "cycle": 5,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2026-01-15",
-        "price": 76.53,
+        "date": "2026-01-13",
+        "price": 78.51,
         "position_added": 0.33
       },
       "second_entry": null,
       "third_entry": null,
       "exits": [],
-      "last_average_price": 76.53,
-      "final_exit_price": 84.41,
-      "exit_date": "2026-06-11",
-      "profit_pct": 10.3,
+      "last_average_price": 78.51,
+      "final_exit_price": 87.04,
+      "exit_date": "2026-05-18",
+      "profit_pct": 10.86,
       "max_position": 0.33,
-      "peak_profit": 19.626290343656077,
+      "peak_profit": 16.60934912749967,
       "exit_reason": "TRAILING STOP",
-      "stop_trigger_profit": 10.3
+      "stop_trigger_profit": 10.86
+    },
+    {
+      "symbol": "JUFO",
+      "cycle": 2,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2026-01-15",
+        "price": 26.02,
+        "position_added": 0.33
+      },
+      "second_entry": null,
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 26.02,
+      "final_exit_price": 29.75,
+      "exit_date": "2026-02-11",
+      "profit_pct": 14.34,
+      "max_position": 0.33,
+      "peak_profit": 19.446579554189082,
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 14.34
     },
     {
       "symbol": "TMGH",
@@ -3695,34 +4207,59 @@
       "third_entry": null,
       "exits": [],
       "last_average_price": 76.2,
-      "final_exit_price": 90.49,
-      "exit_date": "2026-02-22",
-      "profit_pct": 18.75,
+      "final_exit_price": 91.55,
+      "exit_date": "2026-02-19",
+      "profit_pct": 20.14,
       "max_position": 0.33,
       "peak_profit": 26.46981627296588,
       "exit_reason": "TRAILING STOP",
-      "stop_trigger_profit": 18.75
+      "stop_trigger_profit": 20.14
     },
     {
       "symbol": "OLFI",
       "cycle": 5,
       "status": "CLOSED",
       "first_entry": {
+        "date": "2026-01-27",
+        "price": 24.12,
+        "position_added": 0.33
+      },
+      "second_entry": {
         "date": "2026-01-28",
         "price": 23.13,
+        "position_added": 0.33
+      },
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 23.625,
+      "final_exit_price": 22.37,
+      "exit_date": "2026-02-24",
+      "profit_pct": -5.31,
+      "max_position": 0.66,
+      "peak_profit": 0.7407407407407437,
+      "exit_reason": "STOP LOSS",
+      "stop_trigger_profit": -5.31
+    },
+    {
+      "symbol": "ISPH",
+      "cycle": 4,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2026-02-01",
+        "price": 11.07,
         "position_added": 0.33
       },
       "second_entry": null,
       "third_entry": null,
       "exits": [],
-      "last_average_price": 23.13,
-      "final_exit_price": 21.83,
-      "exit_date": "2026-02-25",
-      "profit_pct": -5.62,
+      "last_average_price": 11.07,
+      "final_exit_price": 11.78,
+      "exit_date": "2026-02-19",
+      "profit_pct": 6.41,
       "max_position": 0.33,
-      "peak_profit": 2.8966709900562115,
-      "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -5.62
+      "peak_profit": 15.176151761517612,
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 6.41
     },
     {
       "symbol": "MTIE",
@@ -3746,12 +4283,33 @@
       "stop_trigger_profit": 15.86
     },
     {
-      "symbol": "AMOC",
+      "symbol": "SUGR",
       "cycle": 3,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2026-02-05",
-        "price": 7.02,
+        "date": "2026-02-03",
+        "price": 48.52,
+        "position_added": 0.33
+      },
+      "second_entry": null,
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 48.52,
+      "final_exit_price": 45.38,
+      "exit_date": "2026-03-01",
+      "profit_pct": -6.47,
+      "max_position": 0.33,
+      "peak_profit": 1.1953833470733681,
+      "exit_reason": "STOP LOSS",
+      "stop_trigger_profit": -6.47
+    },
+    {
+      "symbol": "AMOC",
+      "cycle": 4,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2026-02-04",
+        "price": 7.1,
         "position_added": 0.33
       },
       "second_entry": null,
@@ -3762,43 +4320,15 @@
           "type": "SELL L2",
           "price": 9.31,
           "position_sold": 0.33,
-          "profit": 32.62
+          "profit": 31.13
         }
       ],
-      "last_average_price": 7.02,
+      "last_average_price": 7.1,
       "final_exit_price": 9.31,
       "exit_date": "2026-03-09",
-      "profit_pct": 32.62,
+      "profit_pct": 31.13,
       "max_position": 0.33,
-      "peak_profit": 32.621082621082635,
-      "exit_reason": "SELL L2"
-    },
-    {
-      "symbol": "SUGR",
-      "cycle": 3,
-      "status": "CLOSED",
-      "first_entry": {
-        "date": "2026-02-09",
-        "price": 47.49,
-        "position_added": 0.33
-      },
-      "second_entry": null,
-      "third_entry": null,
-      "exits": [
-        {
-          "date": "2026-08-24",
-          "type": "SELL L2",
-          "price": 60.39,
-          "position_sold": 0.33,
-          "profit": 27.16
-        }
-      ],
-      "last_average_price": 47.49,
-      "final_exit_price": 60.39,
-      "exit_date": "2026-08-24",
-      "profit_pct": 27.16,
-      "max_position": 0.33,
-      "peak_profit": 27.16361339229311,
+      "peak_profit": 31.126760563380294,
       "exit_reason": "SELL L2"
     },
     {
@@ -3831,8 +4361,58 @@
       "stop_trigger_profit": -4.31
     },
     {
+      "symbol": "EAST",
+      "cycle": 6,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2026-02-12",
+        "price": 40.66,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2026-03-03",
+        "price": 39.29,
+        "position_added": 0.33
+      },
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 39.975,
+      "final_exit_price": 37.85,
+      "exit_date": "2026-03-04",
+      "profit_pct": -5.32,
+      "max_position": 0.66,
+      "peak_profit": 5.263157894736844,
+      "exit_reason": "STOP LOSS",
+      "stop_trigger_profit": -5.32
+    },
+    {
+      "symbol": "EMFD",
+      "cycle": 6,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2026-02-15",
+        "price": 9.68,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2026-02-22",
+        "price": 9.34,
+        "position_added": 0.33
+      },
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 9.51,
+      "final_exit_price": 8.95,
+      "exit_date": "2026-02-26",
+      "profit_pct": -5.89,
+      "max_position": 0.66,
+      "peak_profit": 1.2396694214876136,
+      "exit_reason": "STOP LOSS",
+      "stop_trigger_profit": -5.89
+    },
+    {
       "symbol": "JUFO",
-      "cycle": 2,
+      "cycle": 3,
       "status": "CLOSED",
       "first_entry": {
         "date": "2026-02-16",
@@ -3860,30 +4440,38 @@
       "stop_trigger_profit": -5.19
     },
     {
-      "symbol": "EAST",
+      "symbol": "HRHO",
       "cycle": 5,
       "status": "CLOSED",
       "first_entry": {
         "date": "2026-02-19",
-        "price": 40.04,
+        "price": 29.51,
         "position_added": 0.33
       },
-      "second_entry": null,
-      "third_entry": null,
+      "second_entry": {
+        "date": "2026-02-22",
+        "price": 28.51,
+        "position_added": 0.33
+      },
+      "third_entry": {
+        "date": "2026-02-25",
+        "price": 27.4,
+        "position_added": 0.34
+      },
       "exits": [],
-      "last_average_price": 40.04,
-      "final_exit_price": 37.85,
-      "exit_date": "2026-03-04",
-      "profit_pct": -5.47,
-      "max_position": 0.33,
-      "peak_profit": 6.893106893106888,
+      "last_average_price": 28.4626,
+      "final_exit_price": 27.06,
+      "exit_date": "2026-02-26",
+      "profit_pct": -4.93,
+      "max_position": 1.0,
+      "peak_profit": 0.0,
       "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -5.47
+      "stop_trigger_profit": -4.93
     },
     {
       "symbol": "ORWE",
-      "cycle": 4,
-      "status": "OPEN",
+      "cycle": 3,
+      "status": "CLOSED",
       "first_entry": {
         "date": "2026-02-19",
         "price": 22.98,
@@ -3897,16 +4485,17 @@
       "third_entry": null,
       "exits": [],
       "last_average_price": 22.53,
-      "final_exit_price": 25.6,
-      "exit_date": "2026-08-26",
-      "profit_pct": 13.63,
+      "final_exit_price": 25.39,
+      "exit_date": "2026-08-19",
+      "profit_pct": 12.69,
       "max_position": 0.66,
       "peak_profit": 18.95250776742123,
-      "exit_reason": "END_OF_DATA"
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 12.69
     },
     {
       "symbol": "ISPH",
-      "cycle": 3,
+      "cycle": 5,
       "status": "CLOSED",
       "first_entry": {
         "date": "2026-02-22",
@@ -3926,33 +4515,33 @@
       "stop_trigger_profit": -9.41
     },
     {
-      "symbol": "HRHO",
+      "symbol": "MTIE",
       "cycle": 4,
       "status": "CLOSED",
       "first_entry": {
         "date": "2026-02-22",
-        "price": 28.51,
+        "price": 8.08,
         "position_added": 0.33
       },
       "second_entry": {
-        "date": "2026-02-25",
-        "price": 27.4,
+        "date": "2026-03-03",
+        "price": 7.82,
         "position_added": 0.33
       },
       "third_entry": null,
       "exits": [],
-      "last_average_price": 27.955,
-      "final_exit_price": 26.4,
-      "exit_date": "2026-03-02",
-      "profit_pct": -5.56,
+      "last_average_price": 7.95,
+      "final_exit_price": 7.54,
+      "exit_date": "2026-03-16",
+      "profit_pct": -5.16,
       "max_position": 0.66,
-      "peak_profit": 0.6664328305857513,
+      "peak_profit": 9.529702970297024,
       "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -5.56
+      "stop_trigger_profit": -5.16
     },
     {
       "symbol": "GBCO",
-      "cycle": 5,
+      "cycle": 6,
       "status": "CLOSED",
       "first_entry": {
         "date": "2026-02-22",
@@ -3976,8 +4565,66 @@
       "stop_trigger_profit": -5.74
     },
     {
+      "symbol": "PHDC",
+      "cycle": 6,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2026-02-24",
+        "price": 9.25,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2026-03-01",
+        "price": 8.9,
+        "position_added": 0.33
+      },
+      "third_entry": {
+        "date": "2026-03-04",
+        "price": 8.67,
+        "position_added": 0.34
+      },
+      "exits": [],
+      "last_average_price": 8.9373,
+      "final_exit_price": 8.2,
+      "exit_date": "2026-03-16",
+      "profit_pct": -8.25,
+      "max_position": 1.0,
+      "peak_profit": 3.3869289382699446,
+      "exit_reason": "STOP LOSS",
+      "stop_trigger_profit": -8.25
+    },
+    {
+      "symbol": "ORHD",
+      "cycle": 4,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2026-02-25",
+        "price": 26.0,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2026-03-01",
+        "price": 24.93,
+        "position_added": 0.33
+      },
+      "third_entry": {
+        "date": "2026-03-03",
+        "price": 23.93,
+        "position_added": 0.34
+      },
+      "exits": [],
+      "last_average_price": 24.9431,
+      "final_exit_price": 23.93,
+      "exit_date": "2026-03-03",
+      "profit_pct": -4.06,
+      "max_position": 1.0,
+      "peak_profit": 0.0,
+      "exit_reason": "STOP LOSS",
+      "stop_trigger_profit": -4.06
+    },
+    {
       "symbol": "FWRY",
-      "cycle": 5,
+      "cycle": 6,
       "status": "CLOSED",
       "first_entry": {
         "date": "2026-02-25",
@@ -4005,54 +4652,25 @@
       "stop_trigger_profit": -4.62
     },
     {
-      "symbol": "PHDC",
+      "symbol": "HRHO",
       "cycle": 6,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2026-02-26",
-        "price": 9.05,
-        "position_added": 0.33
-      },
-      "second_entry": {
-        "date": "2026-03-03",
-        "price": 8.72,
-        "position_added": 0.33
-      },
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 8.885,
-      "final_exit_price": 8.2,
-      "exit_date": "2026-03-16",
-      "profit_pct": -7.71,
-      "max_position": 0.66,
-      "peak_profit": 3.9954980303882994,
-      "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -7.71
-    },
-    {
-      "symbol": "MTIE",
-      "cycle": 4,
-      "status": "CLOSED",
-      "first_entry": {
         "date": "2026-03-01",
-        "price": 8.02,
+        "price": 26.91,
         "position_added": 0.33
       },
-      "second_entry": {
-        "date": "2026-03-04",
-        "price": 7.6,
-        "position_added": 0.33
-      },
+      "second_entry": null,
       "third_entry": null,
       "exits": [],
-      "last_average_price": 7.81,
-      "final_exit_price": 7.27,
-      "exit_date": "2026-03-30",
-      "profit_pct": -6.91,
-      "max_position": 0.66,
-      "peak_profit": 1.6645326504481421,
+      "last_average_price": 26.91,
+      "final_exit_price": 25.42,
+      "exit_date": "2026-03-15",
+      "profit_pct": -5.54,
+      "max_position": 0.33,
+      "peak_profit": 0.0,
       "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -6.91
+      "stop_trigger_profit": -5.54
     },
     {
       "symbol": "TMGH",
@@ -4078,31 +4696,6 @@
       "peak_profit": 0.0,
       "exit_reason": "STOP LOSS",
       "stop_trigger_profit": -6.27
-    },
-    {
-      "symbol": "ORHD",
-      "cycle": 3,
-      "status": "CLOSED",
-      "first_entry": {
-        "date": "2026-03-01",
-        "price": 24.93,
-        "position_added": 0.33
-      },
-      "second_entry": {
-        "date": "2026-03-03",
-        "price": 23.93,
-        "position_added": 0.33
-      },
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 24.43,
-      "final_exit_price": 29.75,
-      "exit_date": "2026-04-26",
-      "profit_pct": 21.78,
-      "max_position": 0.66,
-      "peak_profit": 30.57715923045434,
-      "exit_reason": "TRAILING STOP",
-      "stop_trigger_profit": 21.78
     },
     {
       "symbol": "COMI",
@@ -4146,17 +4739,42 @@
       "third_entry": null,
       "exits": [],
       "last_average_price": 117.2,
-      "final_exit_price": 134.51,
-      "exit_date": "2026-05-14",
-      "profit_pct": 14.77,
+      "final_exit_price": 135.0,
+      "exit_date": "2026-04-30",
+      "profit_pct": 15.19,
       "max_position": 0.33,
-      "peak_profit": 22.448805460750844,
+      "peak_profit": 21.16040955631399,
       "exit_reason": "TRAILING STOP",
-      "stop_trigger_profit": 14.77
+      "stop_trigger_profit": 15.19
+    },
+    {
+      "symbol": "SKPC",
+      "cycle": 4,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2026-03-16",
+        "price": 17.51,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2026-04-08",
+        "price": 16.9,
+        "position_added": 0.33
+      },
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 17.205,
+      "final_exit_price": 16.25,
+      "exit_date": "2026-06-16",
+      "profit_pct": -5.55,
+      "max_position": 0.66,
+      "peak_profit": 7.701249636733524,
+      "exit_reason": "STOP LOSS",
+      "stop_trigger_profit": -5.55
     },
     {
       "symbol": "FWRY",
-      "cycle": 6,
+      "cycle": 7,
       "status": "CLOSED",
       "first_entry": {
         "date": "2026-03-17",
@@ -4180,33 +4798,61 @@
       "stop_trigger_profit": 11.16
     },
     {
-      "symbol": "SKPC",
-      "cycle": 4,
+      "symbol": "ORHD",
+      "cycle": 5,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2026-03-17",
-        "price": 17.45,
+        "date": "2026-03-18",
+        "price": 25.1,
         "position_added": 0.33
       },
       "second_entry": {
-        "date": "2026-04-08",
-        "price": 16.9,
+        "date": "2026-03-30",
+        "price": 24.3,
         "position_added": 0.33
       },
       "third_entry": null,
       "exits": [],
-      "last_average_price": 17.175,
-      "final_exit_price": 16.25,
-      "exit_date": "2026-06-16",
-      "profit_pct": -5.39,
+      "last_average_price": 24.7,
+      "final_exit_price": 30.25,
+      "exit_date": "2026-04-23",
+      "profit_pct": 22.47,
       "max_position": 0.66,
-      "peak_profit": 7.889374090247476,
-      "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -5.39
+      "peak_profit": 29.1497975708502,
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 22.47
+    },
+    {
+      "symbol": "SUGR",
+      "cycle": 4,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2026-03-30",
+        "price": 48.0,
+        "position_added": 0.33
+      },
+      "second_entry": null,
+      "third_entry": null,
+      "exits": [
+        {
+          "date": "2026-08-24",
+          "type": "SELL L2",
+          "price": 60.39,
+          "position_sold": 0.33,
+          "profit": 25.81
+        }
+      ],
+      "last_average_price": 48.0,
+      "final_exit_price": 60.39,
+      "exit_date": "2026-08-24",
+      "profit_pct": 25.81,
+      "max_position": 0.33,
+      "peak_profit": 25.8125,
+      "exit_reason": "SELL L2"
     },
     {
       "symbol": "AMOC",
-      "cycle": 4,
+      "cycle": 5,
       "status": "CLOSED",
       "first_entry": {
         "date": "2026-03-31",
@@ -4234,25 +4880,121 @@
       "stop_trigger_profit": -4.49
     },
     {
-      "symbol": "GBCO",
-      "cycle": 6,
+      "symbol": "EFIH",
+      "cycle": 3,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2026-04-28",
-        "price": 26.42,
+        "date": "2026-04-20",
+        "price": 20.34,
         "position_added": 0.33
       },
       "second_entry": null,
       "third_entry": null,
       "exits": [],
-      "last_average_price": 26.42,
+      "last_average_price": 20.34,
+      "final_exit_price": 22.3,
+      "exit_date": "2026-07-08",
+      "profit_pct": 9.64,
+      "max_position": 0.33,
+      "peak_profit": 15.191740412979351,
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 9.64
+    },
+    {
+      "symbol": "DSCW",
+      "cycle": 4,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2026-04-20",
+        "price": 1.92,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2026-05-17",
+        "price": 1.86,
+        "position_added": 0.33
+      },
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 1.89,
+      "final_exit_price": 1.73,
+      "exit_date": "2026-05-20",
+      "profit_pct": -8.47,
+      "max_position": 0.66,
+      "peak_profit": 9.375000000000009,
+      "exit_reason": "STOP LOSS",
+      "stop_trigger_profit": -8.47
+    },
+    {
+      "symbol": "GBCO",
+      "cycle": 7,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2026-04-26",
+        "price": 27.1,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2026-05-19",
+        "price": 26.15,
+        "position_added": 0.33
+      },
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 26.625,
       "final_exit_price": 30.37,
       "exit_date": "2026-07-08",
-      "profit_pct": 14.95,
-      "max_position": 0.33,
-      "peak_profit": 22.823618470855415,
+      "profit_pct": 14.07,
+      "max_position": 0.66,
+      "peak_profit": 21.877934272300482,
       "exit_reason": "TRAILING STOP",
-      "stop_trigger_profit": 14.95
+      "stop_trigger_profit": 14.07
+    },
+    {
+      "symbol": "EAST",
+      "cycle": 7,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2026-04-28",
+        "price": 40.0,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2026-05-04",
+        "price": 38.0,
+        "position_added": 0.33
+      },
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 39.0,
+      "final_exit_price": 37.0,
+      "exit_date": "2026-06-29",
+      "profit_pct": -5.13,
+      "max_position": 0.66,
+      "peak_profit": 3.8461538461538463,
+      "exit_reason": "STOP LOSS",
+      "stop_trigger_profit": -5.13
+    },
+    {
+      "symbol": "ISPH",
+      "cycle": 6,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2026-04-29",
+        "price": 11.0,
+        "position_added": 0.33
+      },
+      "second_entry": null,
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 11.0,
+      "final_exit_price": 11.92,
+      "exit_date": "2026-06-10",
+      "profit_pct": 8.36,
+      "max_position": 0.33,
+      "peak_profit": 15.36363636363636,
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 8.36
     },
     {
       "symbol": "MCQE",
@@ -4284,50 +5026,33 @@
       "stop_trigger_profit": -5.02
     },
     {
-      "symbol": "ISPH",
-      "cycle": 4,
+      "symbol": "HRHO",
+      "cycle": 7,
       "status": "CLOSED",
       "first_entry": {
         "date": "2026-04-30",
-        "price": 10.75,
+        "price": 27.91,
         "position_added": 0.33
       },
-      "second_entry": null,
+      "second_entry": {
+        "date": "2026-05-18",
+        "price": 27.01,
+        "position_added": 0.33
+      },
       "third_entry": null,
       "exits": [],
-      "last_average_price": 10.75,
-      "final_exit_price": 11.92,
+      "last_average_price": 27.46,
+      "final_exit_price": 26.05,
       "exit_date": "2026-06-10",
-      "profit_pct": 10.88,
-      "max_position": 0.33,
-      "peak_profit": 18.046511627906973,
-      "exit_reason": "TRAILING STOP",
-      "stop_trigger_profit": 10.88
-    },
-    {
-      "symbol": "EAST",
-      "cycle": 6,
-      "status": "CLOSED",
-      "first_entry": {
-        "date": "2026-05-03",
-        "price": 39.17,
-        "position_added": 0.33
-      },
-      "second_entry": null,
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 39.17,
-      "final_exit_price": 37.15,
-      "exit_date": "2026-06-01",
-      "profit_pct": -5.16,
-      "max_position": 0.33,
-      "peak_profit": 3.3954557058973664,
+      "profit_pct": -5.13,
+      "max_position": 0.66,
+      "peak_profit": 7.273378717305628,
       "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -5.16
+      "stop_trigger_profit": -5.13
     },
     {
       "symbol": "JUFO",
-      "cycle": 3,
+      "cycle": 4,
       "status": "CLOSED",
       "first_entry": {
         "date": "2026-05-03",
@@ -4347,29 +5072,54 @@
       "stop_trigger_profit": -4.42
     },
     {
-      "symbol": "DSCW",
-      "cycle": 4,
+      "symbol": "FWRY",
+      "cycle": 8,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2026-05-04",
-        "price": 1.95,
+        "date": "2026-05-03",
+        "price": 19.51,
         "position_added": 0.33
       },
       "second_entry": {
-        "date": "2026-05-14",
-        "price": 1.89,
+        "date": "2026-06-07",
+        "price": 18.7,
         "position_added": 0.33
       },
       "third_entry": null,
       "exits": [],
-      "last_average_price": 1.92,
-      "final_exit_price": 1.73,
-      "exit_date": "2026-05-20",
-      "profit_pct": -9.9,
+      "last_average_price": 19.105,
+      "final_exit_price": 18.1,
+      "exit_date": "2026-06-10",
+      "profit_pct": -5.26,
       "max_position": 0.66,
-      "peak_profit": 1.0256410256410264,
+      "peak_profit": 8.9185033316248,
       "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -9.9
+      "stop_trigger_profit": -5.26
+    },
+    {
+      "symbol": "COMI",
+      "cycle": 6,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2026-05-03",
+        "price": 136.0,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2026-05-18",
+        "price": 131.51,
+        "position_added": 0.33
+      },
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 133.755,
+      "final_exit_price": 126.89,
+      "exit_date": "2026-06-29",
+      "profit_pct": -5.13,
+      "max_position": 0.66,
+      "peak_profit": 5.522058823529405,
+      "exit_reason": "STOP LOSS",
+      "stop_trigger_profit": -5.13
     },
     {
       "symbol": "EGAL",
@@ -4393,29 +5143,65 @@
       "stop_trigger_profit": -6.1
     },
     {
-      "symbol": "HRHO",
-      "cycle": 5,
+      "symbol": "MPCO",
+      "cycle": 3,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2026-05-17",
-        "price": 27.81,
+        "date": "2026-05-06",
+        "price": 1.62,
         "position_added": 0.33
       },
       "second_entry": {
-        "date": "2026-05-19",
-        "price": 26.92,
+        "date": "2026-05-20",
+        "price": 1.56,
         "position_added": 0.33
       },
       "third_entry": null,
       "exits": [],
-      "last_average_price": 27.365,
-      "final_exit_price": 25.76,
-      "exit_date": "2026-08-25",
-      "profit_pct": -5.87,
+      "last_average_price": 1.59,
+      "final_exit_price": 1.77,
+      "exit_date": "2026-06-08",
+      "profit_pct": 11.32,
       "max_position": 0.66,
-      "peak_profit": 1.9550520738168937,
-      "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -5.87
+      "peak_profit": 16.352201257861633,
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 11.32
+    },
+    {
+      "symbol": "ATQA",
+      "cycle": 4,
+      "status": "OPEN",
+      "first_entry": {
+        "date": "2026-05-10",
+        "price": 9.81,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2026-05-20",
+        "price": 9.42,
+        "position_added": 0.33
+      },
+      "third_entry": {
+        "date": "2026-06-11",
+        "price": 9.17,
+        "position_added": 0.34
+      },
+      "exits": [
+        {
+          "date": "2026-08-12",
+          "type": "SELL L1",
+          "price": 11.02,
+          "position_sold": 0.33,
+          "profit": 16.44
+        }
+      ],
+      "last_average_price": 9.4637,
+      "final_exit_price": 11.6,
+      "exit_date": "2026-08-26",
+      "profit_pct": 20.55,
+      "max_position": 1.0,
+      "peak_profit": 22.573623424242108,
+      "exit_reason": "END_OF_DATA"
     },
     {
       "symbol": "TMGH",
@@ -4438,57 +5224,8 @@
       "exit_reason": "END_OF_DATA"
     },
     {
-      "symbol": "FWRY",
-      "cycle": 7,
-      "status": "CLOSED",
-      "first_entry": {
-        "date": "2026-05-17",
-        "price": 19.67,
-        "position_added": 0.33
-      },
-      "second_entry": {
-        "date": "2026-06-07",
-        "price": 18.7,
-        "position_added": 0.33
-      },
-      "third_entry": {
-        "date": "2026-06-08",
-        "price": 18.41,
-        "position_added": 0.34
-      },
-      "exits": [],
-      "last_average_price": 18.9215,
-      "final_exit_price": 18.1,
-      "exit_date": "2026-06-10",
-      "profit_pct": -4.34,
-      "max_position": 1.0,
-      "peak_profit": 4.168784951703084,
-      "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -4.34
-    },
-    {
-      "symbol": "COMI",
-      "cycle": 6,
-      "status": "OPEN",
-      "first_entry": {
-        "date": "2026-05-17",
-        "price": 133.0,
-        "position_added": 0.33
-      },
-      "second_entry": null,
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 133.0,
-      "final_exit_price": 139.28,
-      "exit_date": "2026-08-26",
-      "profit_pct": 4.72,
-      "max_position": 0.33,
-      "peak_profit": 6.390977443609022,
-      "exit_reason": "END_OF_DATA"
-    },
-    {
       "symbol": "EMFD",
-      "cycle": 5,
+      "cycle": 7,
       "status": "CLOSED",
       "first_entry": {
         "date": "2026-05-18",
@@ -4512,57 +5249,8 @@
       "stop_trigger_profit": 12.98
     },
     {
-      "symbol": "ATQA",
-      "cycle": 2,
-      "status": "OPEN",
-      "first_entry": {
-        "date": "2026-05-18",
-        "price": 9.7,
-        "position_added": 0.33
-      },
-      "second_entry": {
-        "date": "2026-06-11",
-        "price": 9.17,
-        "position_added": 0.33
-      },
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 9.435,
-      "final_exit_price": 11.6,
-      "exit_date": "2026-08-26",
-      "profit_pct": 22.95,
-      "max_position": 0.66,
-      "peak_profit": 22.946475887652348,
-      "exit_reason": "END_OF_DATA"
-    },
-    {
-      "symbol": "MPCO",
-      "cycle": 3,
-      "status": "CLOSED",
-      "first_entry": {
-        "date": "2026-05-18",
-        "price": 1.62,
-        "position_added": 0.33
-      },
-      "second_entry": {
-        "date": "2026-05-20",
-        "price": 1.56,
-        "position_added": 0.33
-      },
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 1.59,
-      "final_exit_price": 1.87,
-      "exit_date": "2026-06-24",
-      "profit_pct": 17.61,
-      "max_position": 0.66,
-      "peak_profit": 25.786163522012572,
-      "exit_reason": "TRAILING STOP",
-      "stop_trigger_profit": 17.61
-    },
-    {
       "symbol": "OIH",
-      "cycle": 3,
+      "cycle": 4,
       "status": "CLOSED",
       "first_entry": {
         "date": "2026-05-20",
@@ -4588,6 +5276,39 @@
       "peak_profit": 1.360544217687076,
       "exit_reason": "STOP LOSS",
       "stop_trigger_profit": -4.45
+    },
+    {
+      "symbol": "SWDY",
+      "cycle": 6,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2026-05-21",
+        "price": 87.9,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2026-06-11",
+        "price": 84.41,
+        "position_added": 0.33
+      },
+      "third_entry": null,
+      "exits": [
+        {
+          "date": "2026-08-04",
+          "type": "SELL L2",
+          "price": 109.02,
+          "position_sold": 0.33,
+          "profit": 26.54
+        }
+      ],
+      "last_average_price": 86.155,
+      "final_exit_price": 118.11,
+      "exit_date": "2026-08-19",
+      "profit_pct": 31.81,
+      "max_position": 0.66,
+      "peak_profit": 47.698914746677495,
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 37.09
     },
     {
       "symbol": "MTIE",
@@ -4649,7 +5370,7 @@
     {
       "symbol": "ETEL",
       "cycle": 4,
-      "status": "OPEN",
+      "status": "CLOSED",
       "first_entry": {
         "date": "2026-06-03",
         "price": 96.1,
@@ -4667,40 +5388,17 @@
       },
       "exits": [],
       "last_average_price": 92.9122,
-      "final_exit_price": 116.0,
-      "exit_date": "2026-08-26",
-      "profit_pct": 24.85,
+      "final_exit_price": 107.3,
+      "exit_date": "2026-08-03",
+      "profit_pct": 15.49,
       "max_position": 1.0,
-      "peak_profit": 28.04561726016605,
-      "exit_reason": "END_OF_DATA"
-    },
-    {
-      "symbol": "EFIH",
-      "cycle": 2,
-      "status": "OPEN",
-      "first_entry": {
-        "date": "2026-06-07",
-        "price": 21.6,
-        "position_added": 0.33
-      },
-      "second_entry": {
-        "date": "2026-06-10",
-        "price": 20.89,
-        "position_added": 0.33
-      },
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 21.245,
-      "final_exit_price": 24.0,
-      "exit_date": "2026-08-26",
-      "profit_pct": 12.97,
-      "max_position": 0.66,
-      "peak_profit": 17.627677100494203,
-      "exit_reason": "END_OF_DATA"
+      "peak_profit": 21.73858761282157,
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 15.49
     },
     {
       "symbol": "ADIB",
-      "cycle": 3,
+      "cycle": 4,
       "status": "OPEN",
       "first_entry": {
         "date": "2026-06-08",
@@ -4723,8 +5421,29 @@
       "exit_reason": "END_OF_DATA"
     },
     {
+      "symbol": "MPCO",
+      "cycle": 4,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2026-06-10",
+        "price": 1.72,
+        "position_added": 0.33
+      },
+      "second_entry": null,
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 1.72,
+      "final_exit_price": 1.91,
+      "exit_date": "2026-06-23",
+      "profit_pct": 11.05,
+      "max_position": 0.33,
+      "peak_profit": 16.27906976744186,
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 11.05
+    },
+    {
       "symbol": "ISPH",
-      "cycle": 5,
+      "cycle": 7,
       "status": "CLOSED",
       "first_entry": {
         "date": "2026-06-11",
@@ -4735,13 +5454,13 @@
       "third_entry": null,
       "exits": [],
       "last_average_price": 11.44,
-      "final_exit_price": 13.1,
-      "exit_date": "2026-08-05",
-      "profit_pct": 14.51,
+      "final_exit_price": 13.37,
+      "exit_date": "2026-08-04",
+      "profit_pct": 16.87,
       "max_position": 0.33,
       "peak_profit": 23.33916083916084,
       "exit_reason": "TRAILING STOP",
-      "stop_trigger_profit": 14.51
+      "stop_trigger_profit": 16.87
     },
     {
       "symbol": "RMDA",
@@ -4772,37 +5491,9 @@
       "exit_reason": "SELL L2"
     },
     {
-      "symbol": "SWDY",
-      "cycle": 6,
-      "status": "CLOSED",
-      "first_entry": {
-        "date": "2026-06-14",
-        "price": 86.37,
-        "position_added": 0.33
-      },
-      "second_entry": null,
-      "third_entry": null,
-      "exits": [
-        {
-          "date": "2026-08-04",
-          "type": "SELL L2",
-          "price": 109.02,
-          "position_sold": 0.33,
-          "profit": 26.22
-        }
-      ],
-      "last_average_price": 86.37,
-      "final_exit_price": 109.02,
-      "exit_date": "2026-08-04",
-      "profit_pct": 26.22,
-      "max_position": 0.33,
-      "peak_profit": 26.224383466481406,
-      "exit_reason": "SELL L2"
-    },
-    {
       "symbol": "OLFI",
       "cycle": 6,
-      "status": "OPEN",
+      "status": "CLOSED",
       "first_entry": {
         "date": "2026-06-23",
         "price": 22.02,
@@ -4812,16 +5503,17 @@
       "third_entry": null,
       "exits": [],
       "last_average_price": 22.02,
-      "final_exit_price": 23.3,
-      "exit_date": "2026-08-26",
-      "profit_pct": 5.81,
+      "final_exit_price": 23.82,
+      "exit_date": "2026-08-19",
+      "profit_pct": 8.17,
       "max_position": 0.33,
       "peak_profit": 16.25794732061763,
-      "exit_reason": "END_OF_DATA"
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 8.17
     },
     {
       "symbol": "EMFD",
-      "cycle": 6,
+      "cycle": 8,
       "status": "OPEN",
       "first_entry": {
         "date": "2026-06-28",
@@ -4841,8 +5533,8 @@
     },
     {
       "symbol": "MPCO",
-      "cycle": 4,
-      "status": "OPEN",
+      "cycle": 5,
+      "status": "CLOSED",
       "first_entry": {
         "date": "2026-06-28",
         "price": 1.77,
@@ -4852,16 +5544,17 @@
       "third_entry": null,
       "exits": [],
       "last_average_price": 1.77,
-      "final_exit_price": 2.23,
-      "exit_date": "2026-08-26",
-      "profit_pct": 25.99,
+      "final_exit_price": 2.12,
+      "exit_date": "2026-08-17",
+      "profit_pct": 19.77,
       "max_position": 0.33,
-      "peak_profit": 32.20338983050846,
-      "exit_reason": "END_OF_DATA"
+      "peak_profit": 25.98870056497175,
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 19.77
     },
     {
       "symbol": "OIH",
-      "cycle": 4,
+      "cycle": 5,
       "status": "CLOSED",
       "first_entry": {
         "date": "2026-07-04",
@@ -4888,8 +5581,73 @@
       "exit_reason": "SELL L2"
     },
     {
-      "symbol": "FWRY",
+      "symbol": "GBCO",
       "cycle": 8,
+      "status": "CLOSED",
+      "first_entry": {
+        "date": "2026-07-09",
+        "price": 30.72,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2026-07-30",
+        "price": 29.66,
+        "position_added": 0.33
+      },
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 30.19,
+      "final_exit_price": 28.4,
+      "exit_date": "2026-08-25",
+      "profit_pct": -5.93,
+      "max_position": 0.66,
+      "peak_profit": 8.333333333333341,
+      "exit_reason": "STOP LOSS",
+      "stop_trigger_profit": -5.93
+    },
+    {
+      "symbol": "EFIH",
+      "cycle": 4,
+      "status": "OPEN",
+      "first_entry": {
+        "date": "2026-07-14",
+        "price": 21.87,
+        "position_added": 0.33
+      },
+      "second_entry": null,
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 21.87,
+      "final_exit_price": 24.0,
+      "exit_date": "2026-08-26",
+      "profit_pct": 9.74,
+      "max_position": 0.33,
+      "peak_profit": 14.266117969821662,
+      "exit_reason": "END_OF_DATA"
+    },
+    {
+      "symbol": "COMI",
+      "cycle": 7,
+      "status": "OPEN",
+      "first_entry": {
+        "date": "2026-07-14",
+        "price": 134.97,
+        "position_added": 0.33
+      },
+      "second_entry": null,
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 134.97,
+      "final_exit_price": 139.28,
+      "exit_date": "2026-08-26",
+      "profit_pct": 3.19,
+      "max_position": 0.33,
+      "peak_profit": 4.8381121730754995,
+      "exit_reason": "END_OF_DATA"
+    },
+    {
+      "symbol": "FWRY",
+      "cycle": 9,
       "status": "OPEN",
       "first_entry": {
         "date": "2026-07-15",
@@ -4908,38 +5666,30 @@
       "exit_reason": "END_OF_DATA"
     },
     {
-      "symbol": "GBCO",
-      "cycle": 7,
+      "symbol": "AMOC",
+      "cycle": 6,
       "status": "CLOSED",
       "first_entry": {
-        "date": "2026-07-22",
-        "price": 31.31,
+        "date": "2026-07-21",
+        "price": 8.24,
         "position_added": 0.33
       },
-      "second_entry": {
-        "date": "2026-07-27",
-        "price": 30.3,
-        "position_added": 0.33
-      },
-      "third_entry": {
-        "date": "2026-08-20",
-        "price": 29.32,
-        "position_added": 0.34
-      },
+      "second_entry": null,
+      "third_entry": null,
       "exits": [],
-      "last_average_price": 30.3001,
-      "final_exit_price": 28.4,
-      "exit_date": "2026-08-25",
-      "profit_pct": -6.27,
-      "max_position": 1.0,
-      "peak_profit": 3.91170264567441,
-      "exit_reason": "STOP LOSS",
-      "stop_trigger_profit": -6.27
+      "last_average_price": 8.24,
+      "final_exit_price": 9.1,
+      "exit_date": "2026-08-03",
+      "profit_pct": 10.44,
+      "max_position": 0.33,
+      "peak_profit": 16.262135922330096,
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 10.44
     },
     {
       "symbol": "EGAL",
       "cycle": 5,
-      "status": "OPEN",
+      "status": "CLOSED",
       "first_entry": {
         "date": "2026-07-22",
         "price": 301.12,
@@ -4949,12 +5699,13 @@
       "third_entry": null,
       "exits": [],
       "last_average_price": 301.12,
-      "final_exit_price": 365.0,
-      "exit_date": "2026-08-26",
-      "profit_pct": 21.21,
+      "final_exit_price": 331.5,
+      "exit_date": "2026-08-19",
+      "profit_pct": 10.09,
       "max_position": 0.33,
-      "peak_profit": 21.21413390010627,
-      "exit_reason": "END_OF_DATA"
+      "peak_profit": 15.588469713071198,
+      "exit_reason": "TRAILING STOP",
+      "stop_trigger_profit": 10.09
     },
     {
       "symbol": "MCQE",
@@ -4986,7 +5737,7 @@
     },
     {
       "symbol": "EEII",
-      "cycle": 4,
+      "cycle": 5,
       "status": "CLOSED",
       "first_entry": {
         "date": "2026-07-30",
@@ -5031,6 +5782,30 @@
       "profit_pct": 1.63,
       "max_position": 1.0,
       "peak_profit": 1.632445367403347,
+      "exit_reason": "END_OF_DATA"
+    },
+    {
+      "symbol": "PHDC",
+      "cycle": 7,
+      "status": "OPEN",
+      "first_entry": {
+        "date": "2026-08-12",
+        "price": 15.19,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2026-08-26",
+        "price": 14.67,
+        "position_added": 0.33
+      },
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 14.93,
+      "final_exit_price": 14.67,
+      "exit_date": "2026-08-26",
+      "profit_pct": -1.74,
+      "max_position": 0.66,
+      "peak_profit": 3.2258064516129044,
       "exit_reason": "END_OF_DATA"
     },
     {
@@ -5081,7 +5856,7 @@
     },
     {
       "symbol": "ISPH",
-      "cycle": 6,
+      "cycle": 8,
       "status": "OPEN",
       "first_entry": {
         "date": "2026-08-19",
@@ -5100,8 +5875,72 @@
       "exit_reason": "END_OF_DATA"
     },
     {
-      "symbol": "ORHD",
+      "symbol": "OLFI",
+      "cycle": 7,
+      "status": "OPEN",
+      "first_entry": {
+        "date": "2026-08-20",
+        "price": 23.98,
+        "position_added": 0.33
+      },
+      "second_entry": {
+        "date": "2026-08-25",
+        "price": 23.12,
+        "position_added": 0.33
+      },
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 23.55,
+      "final_exit_price": 23.3,
+      "exit_date": "2026-08-26",
+      "profit_pct": -1.06,
+      "max_position": 0.66,
+      "peak_profit": 1.0842368640533695,
+      "exit_reason": "END_OF_DATA"
+    },
+    {
+      "symbol": "ABUK",
+      "cycle": 5,
+      "status": "OPEN",
+      "first_entry": {
+        "date": "2026-08-20",
+        "price": 75.52,
+        "position_added": 0.33
+      },
+      "second_entry": null,
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 75.52,
+      "final_exit_price": 75.76,
+      "exit_date": "2026-08-26",
+      "profit_pct": 0.32,
+      "max_position": 0.33,
+      "peak_profit": 1.562500000000009,
+      "exit_reason": "END_OF_DATA"
+    },
+    {
+      "symbol": "ORWE",
       "cycle": 4,
+      "status": "OPEN",
+      "first_entry": {
+        "date": "2026-08-20",
+        "price": 25.36,
+        "position_added": 0.33
+      },
+      "second_entry": null,
+      "third_entry": null,
+      "exits": [],
+      "last_average_price": 25.36,
+      "final_exit_price": 25.6,
+      "exit_date": "2026-08-26",
+      "profit_pct": 0.95,
+      "max_position": 0.33,
+      "peak_profit": 4.495268138801264,
+      "exit_reason": "END_OF_DATA"
+    },
+    {
+      "symbol": "ORHD",
+      "cycle": 6,
       "status": "OPEN",
       "first_entry": {
         "date": "2026-08-20",
@@ -5117,30 +5956,6 @@
       "profit_pct": 3.69,
       "max_position": 0.33,
       "peak_profit": 3.685623627044174,
-      "exit_reason": "END_OF_DATA"
-    },
-    {
-      "symbol": "PHDC",
-      "cycle": 7,
-      "status": "OPEN",
-      "first_entry": {
-        "date": "2026-08-20",
-        "price": 15.15,
-        "position_added": 0.33
-      },
-      "second_entry": {
-        "date": "2026-08-26",
-        "price": 14.67,
-        "position_added": 0.33
-      },
-      "third_entry": null,
-      "exits": [],
-      "last_average_price": 14.91,
-      "final_exit_price": 14.67,
-      "exit_date": "2026-08-26",
-      "profit_pct": -1.61,
-      "max_position": 0.66,
-      "peak_profit": 0.33003300330032304,
       "exit_reason": "END_OF_DATA"
     }
   ]
