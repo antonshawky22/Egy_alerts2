@@ -1,221 +1,1419 @@
-print("="*72);print("EGX WEEKLY PURE TRENDLINE STRATEGY v3.0");print("="*72)
-import json,os,numpy as np,pandas as pd
+print("=" * 72)
+print("EGX SUPPORT & RESISTANCE STRATEGY v1.0")
+print("PURE OHLC PRICE ACTION")
+print("=" * 72)
 
-DB_FILE="egx_weekly_database_v1.json"; RESULT_FILE="backtest_results.json"; TRADES_FILE="backtest_trades.json"
-INITIAL_CAPITAL=100000.;MAX_POSITIONS=8;POSITION_SIZE=1/MAX_POSITIONS
-PIVOT_LEFT=3;PIVOT_RIGHT=3;MAX_LINE_BARS=60
-MIN_SLOPE_PERCENT=.10;MIN_PIVOT_GAP=5
-MAX_TOUCH_DISTANCE=2.;MIN_REBOUND=.30;MAX_EXTENSION=5.
-MIN_TOUCHES=2;MAX_VIOLATIONS=1;TOUCH_TOLERANCE=1.5
-STOP_BUFFER=1.;MIN_STOP=3.;MAX_STOP=8.
-BREAK_BUFFER=1.;BREAK_BARS=1
-TRAIL_START=10.;TRAIL_DISTANCE=5.;MIN_BARS=120
-MIN_BODY_PERCENT=.25;MIN_CLOSE_POSITION=.60
+import json
+import os
+import numpy as np
+import pandas as pd
 
-if not os.path.exists(DB_FILE): raise FileNotFoundError(DB_FILE)
-with open(DB_FILE,encoding="utf-8") as f: db=json.load(f)
+
+# ============================================================
+# CONFIGURATION
+# ============================================================
+
+DB_FILE = "egx_weekly_database_v1.json"
+
+RESULT_FILE = "backtest_results.json"
+TRADES_FILE = "backtest_trades.json"
+
+INITIAL_CAPITAL = 100000.0
+MAX_POSITIONS = 8
+POSITION_SIZE = 1.0 / MAX_POSITIONS
+
+# ------------------------------------------------------------
+# Swing detection
+# ------------------------------------------------------------
+
+PIVOT_LEFT = 3
+PIVOT_RIGHT = 3
+
+# ------------------------------------------------------------
+# Historical zone detection
+# ------------------------------------------------------------
+
+LOOKBACK = 120
+
+# Two pivots within this distance become one zone
+ZONE_DISTANCE_PERCENT = 1.0
+
+# Minimum confirmed reactions required for a support entry
+MIN_SUPPORT_REACTIONS = 2
+
+# Resistance needs only one confirmed reaction
+MIN_RESISTANCE_REACTIONS = 1
+
+# ------------------------------------------------------------
+# Reaction
+# ------------------------------------------------------------
+
+REACTION_WINDOW = 3
+
+# Minimum bounce from the pivot/zone
+MIN_REACTION_PERCENT = 1.0
+
+# ------------------------------------------------------------
+# Failed Breakdown
+# ------------------------------------------------------------
+
+# Price must enter/break the lower part of support
+BREAK_TOLERANCE_PERCENT = 0.20
+
+# Close must recover above the support zone
+RECOVERY_REQUIRED = True
+
+# ------------------------------------------------------------
+# Trade quality
+# ------------------------------------------------------------
+
+# Minimum distance from entry to target resistance
+MIN_UPSIDE_PERCENT = 5.0
+
+# Small buffer below support for structural stop
+STOP_BUFFER_PERCENT = 0.50
+
+# ------------------------------------------------------------
+# Backtest
+# ------------------------------------------------------------
+
+MIN_BARS = 40
+
+
+# ============================================================
+# LOAD DATABASE
+# ============================================================
+
+if not os.path.exists(DB_FILE):
+    raise FileNotFoundError(DB_FILE)
+
+with open(DB_FILE, encoding="utf-8") as f:
+    db = json.load(f)
+
 print(f"Database: {len(db)} symbols")
 
+
+# ============================================================
+# DATA CONVERSION
+# ============================================================
+
 def to_df(x):
-    if isinstance(x,dict) and "data" in x and "columns" in x:
-        rows=[]
-        for d,v in x["data"].items():
-            r=v.copy() if isinstance(v,dict) else dict(zip(x["columns"],v))
-            r["Date"]=d;rows.append(r)
-        x=rows
-    if not isinstance(x,list): return None
-    df=pd.DataFrame(x)
-    if df.empty:return None
-    df.columns=[str(c).strip().capitalize() for c in df.columns]
-    req=["Date","Open","High","Low","Close"]
-    if not all(c in df for c in req):return None
-    df["Date"]=pd.to_datetime(df.Date,errors="coerce")
-    for c in req[1:]:df[c]=pd.to_numeric(df[c],errors="coerce")
-    return df.dropna(subset=req).drop_duplicates("Date").sort_values("Date").reset_index(drop=True)
 
-def pivots(df):
-    lo,hi=df.Low.values,df.High.values;n=len(df);pl=[];ph=[]
-    for i in range(PIVOT_LEFT,n-PIVOT_RIGHT):
-        if lo[i]<lo[i-PIVOT_LEFT:i].min() and lo[i]<=lo[i+1:i+PIVOT_RIGHT+1].min():
-            pl.append((i,i+PIVOT_RIGHT,float(lo[i])))
-        if hi[i]>hi[i-PIVOT_LEFT:i].max() and hi[i]>=hi[i+1:i+PIVOT_RIGHT+1].max():
-            ph.append((i,i+PIVOT_RIGHT,float(hi[i])))
-    return pl,ph
+    if isinstance(x, dict) and "data" in x and "columns" in x:
 
-def line(p1,p2):
-    x1,y1=p1[0],p1[2];x2,y2=p2[0],p2[2]
-    if x2<=x1 or x2-x1<MIN_PIVOT_GAP:return None
-    s=(y2-y1)/(x2-x1)
-    if s<=0 or s/y1*100<MIN_SLOPE_PERCENT:return None
-    return {"x1":x1,"y1":y1,"x2":x2,"y2":y2,"s":s,"b":y1-s*x1}
+        rows = []
 
-def lv(L,i):return L["s"]*i+L["b"]
+        for d, v in x["data"].items():
 
-def best_line(df,i):
-    ps,_=pivots(df.iloc[:i+1])
-    ps=[p for p in ps if p[1]<=i]
-    if len(ps)<2:return None
-    cand=[]
-    for a in range(max(0,len(ps)-10),len(ps)-1):
-        for b in range(a+1,len(ps)):
-            p1,p2=ps[a],ps[b]
-            if p2[0]-p1[0]>MAX_LINE_BARS:continue
-            L=line(p1,p2)
-            if not L:continue
-            touches=viol=0;last_touch=p2[0]
-            for p in ps:
-                if p[0]<=p1[0]:continue
-                d=(p[2]-lv(L,p[0]))/lv(L,p[0])*100
-                if abs(d)<=TOUCH_TOLERANCE:touches+=1;last_touch=p[0]
-                elif d< -TOUCH_TOLERANCE:viol+=1
-            if touches<MIN_TOUCHES or viol>MAX_VIOLATIONS:continue
-            score=touches*100+p2[0]*2-(i-last_touch)*.5-(p2[0]-p1[0])*.2-viol*100
-            cand.append((score,L,p1,p2,touches,viol))
-    return max(cand,key=lambda x:x[0]) if cand else None
+            if isinstance(v, dict):
+                r = v.copy()
+            else:
+                r = dict(zip(x["columns"], v))
 
-def close_trade(pos,date,price,reason):
-    p=(price-pos["avg_price"])/pos["avg_price"]*100
-    w=pos["weight"]
-    pos["sales"].append({"date":date,"price":round(price,4),"weight":w,
-                         "profit_pct":round(p,2),"capital_return":round(p*w,4),"reason":reason})
-    pos.update(status="CLOSED",exit_date=date,exit_price=round(price,4),
-               exit_reason=reason,weight=0.,profit_pct=round(sum(x["capital_return"] for x in pos["sales"]),2))
-    return pos
+            r["Date"] = d
+            rows.append(r)
 
-def backtest(sym,df):
-    pl,_=pivots(df);pos=None;trades=[];breaks=0
-    for i in range(MIN_BARS,len(df)):
-        r=df.iloc[i];date=r.Date.strftime("%Y-%m-%d")
-        close,high,low,op=map(float,[r.Close,r.High,r.Low,r.Open])
-        info=best_line(df,i);L=info[1] if info else None
-        support=lv(L,i) if L else None
+        x = rows
 
-        if pos is None:
-            if not L or support<=0:continue
-            dist=(close-support)/support*100
-            lowdist=(low-support)/support*100
-            rng=high-low
-            body=abs(close-op)
-            bullish=close>op
-            rejection=(bullish and rng>0 and body/rng>=MIN_BODY_PERCENT and
-                       (close-low)/rng>=MIN_CLOSE_POSITION)
-            entry=(0<=dist<=MAX_EXTENSION and lowdist<=MAX_TOUCH_DISTANCE and
-                   close>=support*(1+MIN_REBOUND/100) and rejection)
-            if entry:
-                stop=support*(1-STOP_BUFFER/100)
-                risk=(close-stop)/close*100
-                if risk<MIN_STOP:stop=close*(1-MIN_STOP/100)
-                if risk>MAX_STOP:stop=close*(1-MAX_STOP/100)
-                pos={"symbol":sym,"status":"OPEN","entry_date":date,
-                     "entry_price":close,"avg_price":close,"weight":1.,
-                     "highest_price":close,"entry_support":round(support,4),
-                     "trendline_slope_percent":round(L["s"]/L["y1"]*100,4),
-                     "pivot1_date":df.iloc[info[2][0]].Date.strftime("%Y-%m-%d"),
-                     "pivot2_date":df.iloc[info[3][0]].Date.strftime("%Y-%m-%d"),
-                     "touches":info[4],"violations":info[5],"stop_price":round(stop,4),
-                     "trail_active":False,"sales":[]}
+    if not isinstance(x, list):
+        return None
+
+    df = pd.DataFrame(x)
+
+    if df.empty:
+        return None
+
+    df.columns = [
+        str(c).strip().capitalize()
+        for c in df.columns
+    ]
+
+    required = [
+        "Date",
+        "Open",
+        "High",
+        "Low",
+        "Close"
+    ]
+
+    if not all(c in df.columns for c in required):
+        return None
+
+    df["Date"] = pd.to_datetime(
+        df["Date"],
+        errors="coerce"
+    )
+
+    for c in required[1:]:
+        df[c] = pd.to_numeric(
+            df[c],
+            errors="coerce"
+        )
+
+    df = (
+        df
+        .dropna(subset=required)
+        .drop_duplicates("Date")
+        .sort_values("Date")
+        .reset_index(drop=True)
+    )
+
+    return df
+
+
+# ============================================================
+# RAW SWING DETECTION
+# ============================================================
+
+def detect_pivots(df):
+    """
+    Creates candidate pivots.
+
+    IMPORTANT:
+    A pivot at index i becomes known only at:
+        i + PIVOT_RIGHT
+
+    This information is carried in 'confirmed_at'.
+
+    This prevents look-ahead bias.
+    """
+
+    lows = df["Low"].values
+    highs = df["High"].values
+
+    n = len(df)
+
+    pivot_lows = []
+    pivot_highs = []
+
+    for i in range(
+        PIVOT_LEFT,
+        n - PIVOT_RIGHT
+    ):
+
+        left_lows = lows[
+            i - PIVOT_LEFT:i
+        ]
+
+        right_lows = lows[
+            i + 1:i + PIVOT_RIGHT + 1
+        ]
+
+        left_highs = highs[
+            i - PIVOT_LEFT:i
+        ]
+
+        right_highs = highs[
+            i + 1:i + PIVOT_RIGHT + 1
+        ]
+
+        # -----------------------------
+        # Swing Low
+        # -----------------------------
+
+        if (
+            lows[i] < left_lows.min()
+            and
+            lows[i] <= right_lows.min()
+        ):
+
+            pivot_lows.append({
+                "index": i,
+                "confirmed_at": i + PIVOT_RIGHT,
+                "price": float(lows[i])
+            })
+
+        # -----------------------------
+        # Swing High
+        # -----------------------------
+
+        if (
+            highs[i] > left_highs.max()
+            and
+            highs[i] >= right_highs.max()
+        ):
+
+            pivot_highs.append({
+                "index": i,
+                "confirmed_at": i + PIVOT_RIGHT,
+                "price": float(highs[i])
+            })
+
+    return pivot_lows, pivot_highs
+
+
+# ============================================================
+# REACTION CHECK
+# ============================================================
+
+def pivot_has_reaction(
+    df,
+    pivot_index,
+    pivot_price,
+    direction
+):
+    """
+    Determines whether a pivot produced a meaningful
+    price reaction.
+
+    No indicators are used.
+
+    Support:
+        price must move upward after the pivot.
+
+    Resistance:
+        price must move downward after the pivot.
+    """
+
+    end = min(
+        len(df),
+        pivot_index + 1 + REACTION_WINDOW
+    )
+
+    future = df.iloc[
+        pivot_index + 1:end
+    ]
+
+    if future.empty:
+        return False
+
+    if direction == "SUPPORT":
+
+        max_close = float(
+            future["Close"].max()
+        )
+
+        rebound = (
+            (max_close - pivot_price)
+            / pivot_price
+            * 100
+        )
+
+        return rebound >= MIN_REACTION_PERCENT
+
+    if direction == "RESISTANCE":
+
+        min_close = float(
+            future["Close"].min()
+        )
+
+        reaction = (
+            (pivot_price - min_close)
+            / pivot_price
+            * 100
+        )
+
+        return reaction >= MIN_REACTION_PERCENT
+
+    return False
+
+
+# ============================================================
+# BUILD ZONES
+# ============================================================
+
+def build_zones(
+    df,
+    confirmed_lows,
+    confirmed_highs,
+    current_index
+):
+    """
+    Builds support/resistance zones using ONLY pivots
+    that are already confirmed by current_index.
+
+    No future pivot is allowed.
+
+    Zones are rebuilt from the most recent LOOKBACK window.
+    """
+
+    start = max(
+        0,
+        current_index - LOOKBACK + 1
+    )
+
+    # --------------------------------------------------------
+    # Confirmed pivots only
+    # --------------------------------------------------------
+
+    lows = [
+        p for p in confirmed_lows
+        if (
+            p["confirmed_at"] <= current_index
+            and
+            p["index"] >= start
+        )
+    ]
+
+    highs = [
+        p for p in confirmed_highs
+        if (
+            p["confirmed_at"] <= current_index
+            and
+            p["index"] >= start
+        )
+    ]
+
+    # --------------------------------------------------------
+    # Create clusters
+    # --------------------------------------------------------
+
+    def cluster_pivots(
+        pivots,
+        direction
+    ):
+
+        clusters = []
+
+        # Process chronologically
+        pivots = sorted(
+            pivots,
+            key=lambda x: x["index"]
+        )
+
+        for p in pivots:
+
+            placed = False
+
+            for zone in clusters:
+
+                zone_price = zone["price"]
+
+                distance = (
+                    abs(p["price"] - zone_price)
+                    / zone_price
+                    * 100
+                )
+
+                if distance <= ZONE_DISTANCE_PERCENT:
+
+                    zone["pivots"].append(p)
+
+                    prices = [
+                        x["price"]
+                        for x in zone["pivots"]
+                    ]
+
+                    zone["price"] = float(
+                        np.mean(prices)
+                    )
+
+                    placed = True
+                    break
+
+            if not placed:
+
+                clusters.append({
+                    "price": float(p["price"]),
+                    "pivots": [p],
+                    "direction": direction
+                })
+
+        # ----------------------------------------------------
+        # Calculate reaction count
+        # ----------------------------------------------------
+
+        zones = []
+
+        for zone in clusters:
+
+            reactions = 0
+
+            valid_pivots = []
+
+            for p in zone["pivots"]:
+
+                # Reaction can only be evaluated when
+                # its reaction window has already happened.
+                reaction_end = (
+                    p["index"]
+                    + 1
+                    + REACTION_WINDOW
+                )
+
+                if reaction_end > current_index:
+                    continue
+
+                if pivot_has_reaction(
+                    df,
+                    p["index"],
+                    p["price"],
+                    direction
+                ):
+
+                    reactions += 1
+                    valid_pivots.append(p)
+
+            if reactions == 0:
+                continue
+
+            prices = [
+                p["price"]
+                for p in zone["pivots"]
+            ]
+
+            zone_low = min(prices)
+            zone_high = max(prices)
+
+            # Expand the zone slightly using the agreed
+            # percentage tolerance.
+            zone_low *= (
+                1 - ZONE_DISTANCE_PERCENT / 100
+            )
+
+            zone_high *= (
+                1 + ZONE_DISTANCE_PERCENT / 100
+            )
+
+            zones.append({
+                "direction": direction,
+                "price": round(
+                    float(np.mean(prices)),
+                    4
+                ),
+                "low": round(
+                    float(zone_low),
+                    4
+                ),
+                "high": round(
+                    float(zone_high),
+                    4
+                ),
+                "reactions": reactions,
+                "first_pivot": min(
+                    p["index"]
+                    for p in zone["pivots"]
+                ),
+                "last_pivot": max(
+                    p["index"]
+                    for p in zone["pivots"]
+                )
+            })
+
+        return zones
+
+    supports = cluster_pivots(
+        lows,
+        "SUPPORT"
+    )
+
+    resistances = cluster_pivots(
+        highs,
+        "RESISTANCE"
+    )
+
+    return supports, resistances
+
+
+# ============================================================
+# FIND TARGET RESISTANCE
+# ============================================================
+
+def find_target_resistance(
+    resistances,
+    entry_price
+):
+
+    candidates = []
+
+    for zone in resistances:
+
+        if zone["reactions"] < MIN_RESISTANCE_REACTIONS:
             continue
 
-        avg=pos["avg_price"];prev_high=pos["highest_price"]
-        stop=max(float(pos["stop_price"]),avg*(1-MAX_STOP/100))
-        if (prev_high-avg)/avg*100>=TRAIL_START:
-            pos["trail_active"]=True
-            stop=max(stop,prev_high*(1-TRAIL_DISTANCE/100))
-        if low<=stop:
-            trades.append(close_trade(pos,date,stop,"TRAIL_STOP" if pos["trail_active"] else "STOP_LOSS"))
-            pos=None;breaks=0;continue
+        if zone["price"] <= entry_price:
+            continue
 
-        if L:
-            if close<support*(1-BREAK_BUFFER/100):breaks+=1
-            else:breaks=0
-        else:breaks+=1
-        if breaks>=BREAK_BARS:
-            trades.append(close_trade(pos,date,close,"TRENDLINE_BREAK"))
-            pos=None;breaks=0;continue
+        upside = (
+            (zone["price"] - entry_price)
+            / entry_price
+            * 100
+        )
 
-        pos["highest_price"]=max(prev_high,high)
+        if upside >= MIN_UPSIDE_PERCENT:
 
-    if pos:
-        last=float(df.iloc[-1].Close)
-        pos["last_price"]=last;pos["unrealized_pct"]=round((last-pos["avg_price"])/pos["avg_price"]*100,2)
-        trades.append(pos)
+            candidates.append(
+                (zone["price"], zone)
+            )
+
+    if not candidates:
+        return None
+
+    candidates.sort(
+        key=lambda x: x[0]
+    )
+
+    return candidates[0][1]
+
+
+# ============================================================
+# FAILED BREAKDOWN
+# ============================================================
+
+def failed_breakdown(
+    row,
+    support
+):
+    """
+    Core BUY condition.
+
+    Price must test/break the lower part of support,
+    but the candle must close back above the zone.
+
+    No indicators.
+    """
+
+    low = float(row["Low"])
+    close = float(row["Close"])
+
+    zone_low = float(
+        support["low"]
+    )
+
+    zone_high = float(
+        support["high"]
+    )
+
+    # Price must reach the support area.
+    touched = (
+        low <= zone_high
+    )
+
+    # A real penetration of the zone.
+    broke = (
+        low <
+        zone_low *
+        (1 - BREAK_TOLERANCE_PERCENT / 100)
+    )
+
+    # Recovery above zone.
+    recovered = (
+        close >= zone_high
+        if RECOVERY_REQUIRED
+        else close >= zone_low
+    )
+
+    return (
+        touched
+        and broke
+        and recovered
+    )
+
+
+# ============================================================
+# CLOSE TRADE
+# ============================================================
+
+def close_trade(
+    position,
+    date,
+    price,
+    reason
+):
+
+    profit = (
+        (price - position["entry_price"])
+        / position["entry_price"]
+        * 100
+    )
+
+    return {
+        "symbol": position["symbol"],
+        "status": "CLOSED",
+
+        "entry_date": position["entry_date"],
+        "entry_price": round(
+            position["entry_price"],
+            4
+        ),
+
+        "exit_date": date,
+        "exit_price": round(
+            price,
+            4
+        ),
+
+        "profit_pct": round(
+            profit,
+            2
+        ),
+
+        "exit_reason": reason,
+
+        "support": position["support"],
+        "support_reactions": position[
+            "support_reactions"
+        ],
+
+        "resistance": position[
+            "resistance"
+        ],
+
+        "upside_to_resistance": position[
+            "upside_to_resistance"
+        ]
+    }
+
+
+# ============================================================
+# BACKTEST ONE SYMBOL
+# ============================================================
+
+def backtest(
+    sym,
+    df
+):
+
+    pivot_lows, pivot_highs = detect_pivots(df)
+
+    position = None
+    trades = []
+
+    for i in range(
+        MIN_BARS,
+        len(df)
+    ):
+
+        row = df.iloc[i]
+
+        date = row["Date"].strftime(
+            "%Y-%m-%d"
+        )
+
+        open_price = float(row["Open"])
+        high = float(row["High"])
+        low = float(row["Low"])
+        close = float(row["Close"])
+
+        # ====================================================
+        # BUILD ONLY WHAT WAS KNOWN BY THIS DATE
+        # ====================================================
+
+        supports, resistances = build_zones(
+            df,
+            pivot_lows,
+            pivot_highs,
+            i
+        )
+
+        # ====================================================
+        # MANAGE OPEN POSITION
+        # ====================================================
+
+        if position is not None:
+
+            support = position[
+                "support_zone"
+            ]
+
+            resistance = position[
+                "resistance_zone"
+            ]
+
+            # ------------------------------------------------
+            # Structural stop
+            # ------------------------------------------------
+
+            stop_price = (
+                support["low"]
+                *
+                (1 - STOP_BUFFER_PERCENT / 100)
+            )
+
+            # ------------------------------------------------
+            # Stop has priority
+            # ------------------------------------------------
+
+            if close < stop_price:
+
+                trades.append(
+                    close_trade(
+                        position,
+                        date,
+                        close,
+                        "SUPPORT_BREAK"
+                    )
+                )
+
+                position = None
+                continue
+
+            # ------------------------------------------------
+            # Target resistance
+            # ------------------------------------------------
+
+            if resistance is not None:
+
+                target = float(
+                    resistance["price"]
+                )
+
+                if high >= target:
+
+                    trades.append(
+                        close_trade(
+                            position,
+                            date,
+                            target,
+                            "RESISTANCE"
+                        )
+                    )
+
+                    position = None
+                    continue
+
+            continue
+
+        # ====================================================
+        # FIND BUY SETUP
+        # ====================================================
+
+        valid_supports = [
+            s for s in supports
+            if s["reactions"]
+            >= MIN_SUPPORT_REACTIONS
+        ]
+
+        if not valid_supports:
+            continue
+
+        # ----------------------------------------------------
+        # Find supports currently being tested
+        # ----------------------------------------------------
+
+        tested_supports = []
+
+        for support in valid_supports:
+
+            if low > support["high"]:
+                continue
+
+            if close < support["low"]:
+                continue
+
+            if failed_breakdown(
+                row,
+                support
+            ):
+
+                tested_supports.append(
+                    support
+                )
+
+        if not tested_supports:
+            continue
+
+        # ----------------------------------------------------
+        # Choose nearest support below/around price
+        # ----------------------------------------------------
+
+        tested_supports.sort(
+            key=lambda s:
+            abs(close - s["price"])
+        )
+
+        support = tested_supports[0]
+
+        # ====================================================
+        # FIND TARGET RESISTANCE
+        # ====================================================
+
+        resistance = find_target_resistance(
+            resistances,
+            close
+        )
+
+        if resistance is None:
+            continue
+
+        upside = (
+            (resistance["price"] - close)
+            / close
+            * 100
+        )
+
+        if upside < MIN_UPSIDE_PERCENT:
+            continue
+
+        # ====================================================
+        # ENTRY
+        # ====================================================
+
+        # Signal is known only after today's close.
+        # Therefore entry occurs at NEXT day's OPEN.
+
+        if i + 1 >= len(df):
+            continue
+
+        next_row = df.iloc[i + 1]
+
+        entry_date = next_row[
+            "Date"
+        ].strftime("%Y-%m-%d")
+
+        entry_price = float(
+            next_row["Open"]
+        )
+
+        # Recalculate available upside
+        # using actual next-day entry.
+        actual_upside = (
+            (resistance["price"] - entry_price)
+            / entry_price
+            * 100
+        )
+
+        if actual_upside < MIN_UPSIDE_PERCENT:
+            continue
+
+        position = {
+            "symbol": sym,
+
+            "entry_date": entry_date,
+            "entry_price": entry_price,
+
+            "support_zone": support,
+            "resistance_zone": resistance,
+
+            "support": round(
+                support["price"],
+                4
+            ),
+
+            "support_reactions":
+                support["reactions"],
+
+            "resistance": round(
+                resistance["price"],
+                4
+            ),
+
+            "upside_to_resistance":
+                round(
+                    actual_upside,
+                    2
+                )
+        }
+
+    # ========================================================
+    # CLOSE OPEN POSITION AT LAST CLOSE
+    # ========================================================
+
+    if position is not None:
+
+        last = df.iloc[-1]
+
+        last_date = last[
+            "Date"
+        ].strftime("%Y-%m-%d")
+
+        last_close = float(
+            last["Close"]
+        )
+
+        trade = close_trade(
+            position,
+            last_date,
+            last_close,
+            "END_OF_DATA"
+        )
+
+        trade["status"] = "OPEN"
+
+        trades.append(trade)
+
     return trades
 
-all_trades=[]
-for sym,data in db.items():
-    if sym.upper() in {"EGX30","EGX70","EGX100"}:continue
-    df=to_df(data)
-    if df is None or len(df)<MIN_BARS:
-        print(f"⚠️ {sym}: insufficient/invalid data");continue
-    t=backtest(sym,df);all_trades+=t
-    print(f"{sym:8} | {sum(x['status']=='CLOSED' for x in t):3} closed")
 
-all_trades.sort(key=lambda x:x["entry_date"])
-closed=[x for x in all_trades if x["status"]=="CLOSED"]
-opened=[x for x in all_trades if x["status"]=="OPEN"]
-profits=[float(x["profit_pct"]) for x in closed]
-wins=[x for x in profits if x>0];losses=[x for x in profits if x<=0]
-n=len(profits);winrate=len(wins)/n*100 if n else 0
-sumprofit=sum(profits);avgwin=np.mean(wins) if wins else 0;avgloss=np.mean(losses) if losses else 0
+# ============================================================
+# RUN ALL SYMBOLS
+# ============================================================
 
-portfolio=INITIAL_CAPITAL;equity=[portfolio];peq=[]
-for t in closed:
-    ret=t["profit_pct"]/100*POSITION_SIZE
-    portfolio*=1+ret
-    equity.append(portfolio)
-    peq.append({"date":t["exit_date"],"symbol":t["symbol"],
-                "trade_return_percent":t["profit_pct"],
-                "portfolio_return_percent":round(ret*100,4),
-                "portfolio_value":round(portfolio,2)})
-compound=(portfolio/INITIAL_CAPITAL-1)*100
-peak=INITIAL_CAPITAL;dd=0
-for v in equity:
-    peak=max(peak,v);dd=max(dd,(peak-v)/peak*100)
+all_trades = []
 
-exit_analysis={}
-for t in closed:
-    r=t.get("exit_reason","UNKNOWN");exit_analysis[r]=exit_analysis.get(r,0)+1
-best=max(closed,key=lambda x:x["profit_pct"]) if closed else None
-worst=min(closed,key=lambda x:x["profit_pct"]) if closed else None
+for sym, data in db.items():
 
-result={
-"strategy":"Weekly Pure Diagonal Trendline Strategy v3.0",
-"description":"Confirmed ascending support trendline + quality scoring + pullback touch + bullish rejection + structural stop + trendline break",
-"parameters":{
-"pivot_left":PIVOT_LEFT,"pivot_right":PIVOT_RIGHT,"max_line_bars":MAX_LINE_BARS,
-"min_slope_percent":MIN_SLOPE_PERCENT,"min_pivot_gap":MIN_PIVOT_GAP,
-"max_touch_distance_percent":MAX_TOUCH_DISTANCE,"min_rebound_percent":MIN_REBOUND,
-"max_extension_percent":MAX_EXTENSION,"min_touches":MIN_TOUCHES,
-"max_violations":MAX_VIOLATIONS,"touch_tolerance_percent":TOUCH_TOLERANCE,
-"stop_buffer_percent":STOP_BUFFER,"min_stop_percent":MIN_STOP,"max_stop_percent":MAX_STOP,
-"break_buffer_percent":BREAK_BUFFER,"break_confirmation_bars":BREAK_BARS,
-"trail_start_percent":TRAIL_START,"trail_distance_percent":TRAIL_DISTANCE,
-"max_positions":MAX_POSITIONS,"position_size_percent":POSITION_SIZE*100},
-"statistics":{"total_trades":n,"winning_trades":len(wins),"losing_trades":len(losses),
-"win_rate_percent":round(winrate,2),"sum_trade_profit_percent":round(sumprofit,2),
-"realistic_compound_return_percent":round(compound,2),"average_win_percent":round(avgwin,2),
-"average_loss_percent":round(avgloss,2),"maximum_drawdown_percent":round(dd,2),
-"open_positions":len(opened)},"exit_analysis":exit_analysis,
-"best_trade":best,"worst_trade":worst,"open_positions":opened,
-"portfolio_equity":peq,"trades":all_trades}
+    if sym.upper() in {
+        "EGX30",
+        "EGX70",
+        "EGX100"
+    }:
+        continue
 
-for fn,obj in [(RESULT_FILE,result),(TRADES_FILE,all_trades)]:
-    with open(fn,"w",encoding="utf-8") as f:json.dump(obj,f,ensure_ascii=False,indent=2)
+    df = to_df(data)
 
-print("\n"+"="*72);print("FINAL RESULTS");print("="*72)
-print(f"Trades              : {n}")
-print(f"Winners             : {len(wins)}")
-print(f"Losers              : {len(losses)}")
-print(f"Win Rate            : {winrate:.2f}%")
-print(f"Sum Profit          : {sumprofit:.2f}%")
-print(f"Compound Return     : {compound:.2f}%")
-print(f"Average Win         : {avgwin:.2f}%")
-print(f"Average Loss        : {avgloss:.2f}%")
-print(f"Maximum Drawdown    : {dd:.2f}%")
-print(f"Open Positions      : {len(opened)}")
+    if df is None:
+        print(
+            f"⚠️ {sym}: invalid data"
+        )
+        continue
+
+    if len(df) < MIN_BARS:
+        print(
+            f"⚠️ {sym}: insufficient data "
+            f"({len(df)})"
+        )
+        continue
+
+    trades = backtest(
+        sym,
+        df
+    )
+
+    all_trades.extend(
+        trades
+    )
+
+    closed_count = sum(
+        t["status"] == "CLOSED"
+        for t in trades
+    )
+
+    print(
+        f"{sym:8} | "
+        f"{closed_count:3} closed"
+    )
+
+
+# ============================================================
+# RESULTS
+# ============================================================
+
+all_trades.sort(
+    key=lambda x:
+    x["entry_date"]
+)
+
+closed = [
+    t for t in all_trades
+    if t["status"] == "CLOSED"
+]
+
+opened = [
+    t for t in all_trades
+    if t["status"] == "OPEN"
+]
+
+profits = [
+    float(t["profit_pct"])
+    for t in closed
+]
+
+wins = [
+    p for p in profits
+    if p > 0
+]
+
+losses = [
+    p for p in profits
+    if p <= 0
+]
+
+n = len(profits)
+
+winrate = (
+    len(wins) / n * 100
+    if n
+    else 0
+)
+
+sumprofit = sum(profits)
+
+avgwin = (
+    float(np.mean(wins))
+    if wins
+    else 0
+)
+
+avgloss = (
+    float(np.mean(losses))
+    if losses
+    else 0
+)
+
+
+# ============================================================
+# PORTFOLIO SIMULATION
+# ============================================================
+
+portfolio = INITIAL_CAPITAL
+
+equity = [
+    portfolio
+]
+
+portfolio_history = []
+
+for trade in closed:
+
+    trade_return = (
+        trade["profit_pct"]
+        / 100
+        * POSITION_SIZE
+    )
+
+    portfolio *= (
+        1 + trade_return
+    )
+
+    equity.append(
+        portfolio
+    )
+
+    portfolio_history.append({
+        "date":
+            trade["exit_date"],
+
+        "symbol":
+            trade["symbol"],
+
+        "trade_return_percent":
+            trade["profit_pct"],
+
+        "portfolio_return_percent":
+            round(
+                trade_return * 100,
+                4
+            ),
+
+        "portfolio_value":
+            round(
+                portfolio,
+                2
+            )
+    })
+
+
+compound_return = (
+    portfolio / INITIAL_CAPITAL
+    - 1
+) * 100
+
+
+# ============================================================
+# MAX DRAWDOWN
+# ============================================================
+
+peak = INITIAL_CAPITAL
+max_drawdown = 0
+
+for value in equity:
+
+    peak = max(
+        peak,
+        value
+    )
+
+    drawdown = (
+        peak - value
+    ) / peak * 100
+
+    max_drawdown = max(
+        max_drawdown,
+        drawdown
+    )
+
+
+# ============================================================
+# EXIT ANALYSIS
+# ============================================================
+
+exit_analysis = {}
+
+for trade in closed:
+
+    reason = trade.get(
+        "exit_reason",
+        "UNKNOWN"
+    )
+
+    exit_analysis[reason] = (
+        exit_analysis.get(
+            reason,
+            0
+        ) + 1
+    )
+
+
+# ============================================================
+# BEST / WORST
+# ============================================================
+
+best = (
+    max(
+        closed,
+        key=lambda x:
+        x["profit_pct"]
+    )
+    if closed
+    else None
+)
+
+worst = (
+    min(
+        closed,
+        key=lambda x:
+        x["profit_pct"]
+    )
+    if closed
+    else None
+)
+
+
+# ============================================================
+# RESULT JSON
+# ============================================================
+
+result = {
+
+    "strategy":
+        "EGX Support & Resistance Strategy v1.0",
+
+    "description":
+        "Pure OHLC support/resistance strategy using confirmed swing pivots, price zones, failed breakdown entries and structural resistance exits.",
+
+    "parameters": {
+
+        "pivot_left":
+            PIVOT_LEFT,
+
+        "pivot_right":
+            PIVOT_RIGHT,
+
+        "lookback":
+            LOOKBACK,
+
+        "zone_distance_percent":
+            ZONE_DISTANCE_PERCENT,
+
+        "minimum_support_reactions":
+            MIN_SUPPORT_REACTIONS,
+
+        "minimum_resistance_reactions":
+            MIN_RESISTANCE_REACTIONS,
+
+        "reaction_window":
+            REACTION_WINDOW,
+
+        "minimum_reaction_percent":
+            MIN_REACTION_PERCENT,
+
+        "break_tolerance_percent":
+            BREAK_TOLERANCE_PERCENT,
+
+        "minimum_upside_percent":
+            MIN_UPSIDE_PERCENT,
+
+        "stop_buffer_percent":
+            STOP_BUFFER_PERCENT,
+
+        "max_positions":
+            MAX_POSITIONS,
+
+        "position_size_percent":
+            POSITION_SIZE * 100
+    },
+
+    "statistics": {
+
+        "total_trades":
+            n,
+
+        "winning_trades":
+            len(wins),
+
+        "losing_trades":
+            len(losses),
+
+        "win_rate_percent":
+            round(
+                winrate,
+                2
+            ),
+
+        "sum_trade_profit_percent":
+            round(
+                sumprofit,
+                2
+            ),
+
+        "realistic_compound_return_percent":
+            round(
+                compound_return,
+                2
+            ),
+
+        "average_win_percent":
+            round(
+                avgwin,
+                2
+            ),
+
+        "average_loss_percent":
+            round(
+                avgloss,
+                2
+            ),
+
+        "maximum_drawdown_percent":
+            round(
+                max_drawdown,
+                2
+            ),
+
+        "open_positions":
+            len(opened)
+    },
+
+    "exit_analysis":
+        exit_analysis,
+
+    "best_trade":
+        best,
+
+    "worst_trade":
+        worst,
+
+    "open_positions":
+        opened,
+
+    "portfolio_equity":
+        portfolio_history,
+
+    "trades":
+        all_trades
+}
+
+
+# ============================================================
+# SAVE
+# ============================================================
+
+with open(
+    RESULT_FILE,
+    "w",
+    encoding="utf-8"
+) as f:
+
+    json.dump(
+        result,
+        f,
+        ensure_ascii=False,
+        indent=2
+    )
+
+
+with open(
+    TRADES_FILE,
+    "w",
+    encoding="utf-8"
+) as f:
+
+    json.dump(
+        all_trades,
+        f,
+        ensure_ascii=False,
+        indent=2
+    )
+
+
+# ============================================================
+# PRINT RESULTS
+# ============================================================
+
+print(
+    "\n" + "=" * 72
+)
+
+print("FINAL RESULTS")
+
+print(
+    "=" * 72
+)
+
+print(
+    f"Trades              : {n}"
+)
+
+print(
+    f"Winners             : {len(wins)}"
+)
+
+print(
+    f"Losers              : {len(losses)}"
+)
+
+print(
+    f"Win Rate            : {winrate:.2f}%"
+)
+
+print(
+    f"Sum Profit          : {sumprofit:.2f}%"
+)
+
+print(
+    f"Compound Return     : "
+    f"{compound_return:.2f}%"
+)
+
+print(
+    f"Average Win         : "
+    f"{avgwin:.2f}%"
+)
+
+print(
+    f"Average Loss        : "
+    f"{avgloss:.2f}%"
+)
+
+print(
+    f"Maximum Drawdown    : "
+    f"{max_drawdown:.2f}%"
+)
+
+print(
+    f"Open Positions      : "
+    f"{len(opened)}"
+)
+
+
 print("\nEXIT ANALYSIS")
-for k,v in exit_analysis.items():print(f"{k:22}: {v}")
-if best:print(f"\nBEST  : {best['symbol']} | {best['profit_pct']:.2f}% | {best['entry_date']} -> {best['exit_date']}")
-if worst:print(f"WORST : {worst['symbol']} | {worst['profit_pct']:.2f}% | {worst['entry_date']} -> {worst['exit_date']}")
-print(f"\nSaved: {RESULT_FILE}, {TRADES_FILE}")
-print("="*72)
+
+for reason, count in exit_analysis.items():
+
+    print(
+        f"{reason:22}: {count}"
+    )
+
+
+if best:
+
+    print(
+        f"\nBEST  : "
+        f"{best['symbol']} | "
+        f"{best['profit_pct']:.2f}% | "
+        f"{best['entry_date']} -> "
+        f"{best['exit_date']}"
+    )
+
+
+if worst:
+
+    print(
+        f"WORST : "
+        f"{worst['symbol']} | "
+        f"{worst['profit_pct']:.2f}% | "
+        f"{worst['entry_date']} -> "
+        f"{worst['exit_date']}"
+    )
+
+
+print(
+    f"\nSaved: "
+    f"{RESULT_FILE}, "
+    f"{TRADES_FILE}"
+)
+
+print(
+    "=" * 72
+)
