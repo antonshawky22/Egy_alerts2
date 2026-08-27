@@ -3031,11 +3031,11 @@
     },
     "exits": [
       {
-        "date": "2026-03-25",
+        "date": "2026-03-24",
         "type": "SELL L1",
-        "price": 1.31,
+        "price": 1.29,
         "position_sold": 0.33,
-        "profit": 10.12
+        "profit": 8.44
       },
       {
         "date": "2026-03-29",
@@ -3055,7 +3055,7 @@
     "last_average_price": 1.1896,
     "final_exit_price": 1.46,
     "exit_date": "2026-04-07",
-    "profit_pct": 13.3,
+    "profit_pct": 12.74,
     "max_position": 1.0,
     "peak_profit": 22.730329522528578,
     "exit_reason": "EXIT FULL"
@@ -4077,11 +4077,11 @@
     },
     "exits": [
       {
-        "date": "2026-07-21",
+        "date": "2026-07-07",
         "type": "SELL L1",
-        "price": 103.61,
+        "price": 98.5,
         "position_sold": 0.33,
-        "profit": 11.51
+        "profit": 6.01
       },
       {
         "date": "2026-07-28",
@@ -4101,7 +4101,7 @@
     "last_average_price": 92.9122,
     "final_exit_price": 103.6,
     "exit_date": "2026-07-30",
-    "profit_pct": 13.23,
+    "profit_pct": 11.41,
     "max_position": 1.0,
     "peak_profit": 14.94722975023732,
     "exit_reason": "TRAILING STOP",
