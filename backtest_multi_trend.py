@@ -1,7 +1,7 @@
-print("=" * 65)
-print("EGX RESISTANCE BREAKOUT + VOLUME STRATEGY v1.0")
-print("CONFIRMED SWING RESISTANCE + VOLUME CONFIRMATION")
-print("=" * 65)
+print("=" * 72)
+print("EGX RESISTANCE BREAKOUT + VOLUME STRATEGY v1.1")
+print("RESISTANCE PRESSURE + BREAKOUT + VOLUME")
+print("=" * 72)
 
 import json
 import os
@@ -27,15 +27,20 @@ MIN_RESISTANCE_REACTIONS = 1
 
 # Reaction
 REACTION_WINDOW = 3
-MIN_REACTION_PERCENT = 2.0
+MIN_REACTION_PERCENT = 1.0
 
 # Breakout
 BREAKOUT_PERCENT = 0.20
 MIN_UPSIDE_PERCENT = 5.0
 
+# Pressure before breakout
+PRESSURE_LOOKBACK = 8
+MIN_PRESSURE_CANDLES = 3
+MAX_PRESSURE_DISTANCE_PERCENT = 3.0
+
 # Volume
 VOLUME_LOOKBACK = 20
-VOLUME_MULTIPLIER = 2.50
+VOLUME_MULTIPLIER = 1.50
 
 # Stop
 STOP_BUFFER_PERCENT = 0.50
@@ -110,7 +115,8 @@ def to_df(x):
         )
 
     df = (
-        df.dropna(subset=required)
+        df
+        .dropna(subset=required)
         .drop_duplicates("Date")
         .sort_values("Date")
         .reset_index(drop=True)
@@ -126,14 +132,27 @@ def to_df(x):
 def detect_pivots(df):
     lows = df["Low"].values
     highs = df["High"].values
-
-    pivot_highs = []
-
     n = len(df)
 
+    pivot_lows = []
+    pivot_highs = []
+
     for i in range(PIVOT_LEFT, n - PIVOT_RIGHT):
+        left_lows = lows[i - PIVOT_LEFT:i]
+        right_lows = lows[i + 1:i + PIVOT_RIGHT + 1]
+
         left_highs = highs[i - PIVOT_LEFT:i]
         right_highs = highs[i + 1:i + PIVOT_RIGHT + 1]
+
+        if (
+            lows[i] < left_lows.min()
+            and lows[i] <= right_lows.min()
+        ):
+            pivot_lows.append({
+                "index": i,
+                "confirmed_at": i + PIVOT_RIGHT,
+                "price": float(lows[i])
+            })
 
         if (
             highs[i] > left_highs.max()
@@ -145,7 +164,7 @@ def detect_pivots(df):
                 "price": float(highs[i])
             })
 
-    return pivot_highs
+    return pivot_lows, pivot_highs
 
 
 # ============================================================
@@ -188,7 +207,7 @@ def pivot_has_resistance_reaction(
 
 def build_resistance_zones(
     df,
-    pivot_highs,
+    confirmed_highs,
     current_index
 ):
     start = max(
@@ -197,26 +216,29 @@ def build_resistance_zones(
     )
 
     highs = [
-        p for p in pivot_highs
+        p for p in confirmed_highs
         if (
             p["confirmed_at"] <= current_index
             and p["index"] >= start
         )
     ]
 
-    highs.sort(
+    clusters = []
+
+    highs = sorted(
+        highs,
         key=lambda x: x["index"]
     )
-
-    clusters = []
 
     for p in highs:
         placed = False
 
         for zone in clusters:
+            zone_price = zone["price"]
+
             distance = (
-                abs(p["price"] - zone["price"])
-                / zone["price"]
+                abs(p["price"] - zone_price)
+                / zone_price
                 * 100
             )
 
@@ -327,7 +349,10 @@ def find_broken_resistance(
 
         required_close = (
             breakout_level
-            * (1 + BREAKOUT_PERCENT / 100)
+            * (
+                1
+                + BREAKOUT_PERCENT / 100
+            )
         )
 
         if close <= required_close:
@@ -365,15 +390,13 @@ def find_next_resistance(
         if resistance_price <= entry_price:
             continue
 
-        same_zone = (
+        if (
             resistance["first_pivot"]
             == broken_resistance["first_pivot"]
             and
             resistance["last_pivot"]
             == broken_resistance["last_pivot"]
-        )
-
-        if same_zone:
+        ):
             continue
 
         upside = (
@@ -401,28 +424,28 @@ def find_next_resistance(
 # VOLUME CONFIRMATION
 # ============================================================
 
-def get_volume_ratio(
+def volume_confirmed(
     df,
     index
 ):
-    start = index - VOLUME_LOOKBACK
-
-    if start < 0:
-        return None
+    start = max(
+        0,
+        index - VOLUME_LOOKBACK
+    )
 
     previous_volume = df.iloc[
         start:index
     ]["Volume"]
 
     if len(previous_volume) < VOLUME_LOOKBACK:
-        return None
+        return False
 
     average_volume = float(
         previous_volume.mean()
     )
 
     if average_volume <= 0:
-        return None
+        return False
 
     current_volume = float(
         df.iloc[index]["Volume"]
@@ -430,23 +453,65 @@ def get_volume_ratio(
 
     return (
         current_volume
-        / average_volume
+        >=
+        average_volume * VOLUME_MULTIPLIER
     )
 
 
-def volume_confirmed(
+# ============================================================
+# PRESSURE BEFORE BREAKOUT
+# ============================================================
+
+def pressure_confirmed(
     df,
-    index
+    index,
+    resistance
 ):
-    ratio = get_volume_ratio(
-        df,
-        index
+    start = max(
+        0,
+        index - PRESSURE_LOOKBACK
     )
 
-    if ratio is None:
+    if index - start < PRESSURE_LOOKBACK:
         return False
 
-    return ratio >= VOLUME_MULTIPLIER
+    candles = df.iloc[start:index]
+
+    resistance_high = float(
+        resistance["high"]
+    )
+
+    resistance_low = float(
+        resistance["low"]
+    )
+
+    pressure_count = 0
+
+    for _, candle in candles.iterrows():
+        high = float(candle["High"])
+        close = float(candle["Close"])
+
+        distance_from_resistance = (
+            (resistance_high - close)
+            / resistance_high
+            * 100
+        )
+
+        near_resistance = (
+            distance_from_resistance >= 0
+            and
+            distance_from_resistance
+            <= MAX_PRESSURE_DISTANCE_PERCENT
+        )
+
+        touched_zone = (
+            high >= resistance_low
+        )
+
+        if near_resistance or touched_zone:
+            pressure_count += 1
+
+    return pressure_count >= MIN_PRESSURE_CANDLES
 
 
 # ============================================================
@@ -467,7 +532,10 @@ def valid_breakout(
 
     required_close = (
         breakout_level
-        * (1 + BREAKOUT_PERCENT / 100)
+        * (
+            1
+            + BREAKOUT_PERCENT / 100
+        )
     )
 
     return close > required_close
@@ -521,16 +589,74 @@ def close_trade(
         ],
         "breakout_volume_ratio": position[
             "breakout_volume_ratio"
+        ],
+        "pressure_candles": position[
+            "pressure_candles"
         ]
     }
+
+
+# ============================================================
+# COUNT PRESSURE CANDLES
+# ============================================================
+
+def count_pressure_candles(
+    df,
+    index,
+    resistance
+):
+    start = max(
+        0,
+        index - PRESSURE_LOOKBACK
+    )
+
+    candles = df.iloc[start:index]
+
+    resistance_high = float(
+        resistance["high"]
+    )
+
+    resistance_low = float(
+        resistance["low"]
+    )
+
+    count = 0
+
+    for _, candle in candles.iterrows():
+        high = float(candle["High"])
+        close = float(candle["Close"])
+
+        distance = (
+            (resistance_high - close)
+            / resistance_high
+            * 100
+        )
+
+        near_resistance = (
+            distance >= 0
+            and
+            distance <= MAX_PRESSURE_DISTANCE_PERCENT
+        )
+
+        touched_zone = (
+            high >= resistance_low
+        )
+
+        if near_resistance or touched_zone:
+            count += 1
+
+    return count
 
 
 # ============================================================
 # BACKTEST ONE SYMBOL
 # ============================================================
 
-def backtest(sym, df):
-    pivot_highs = detect_pivots(df)
+def backtest(
+    sym,
+    df
+):
+    pivot_lows, pivot_highs = detect_pivots(df)
 
     position = None
     trades = []
@@ -555,7 +681,7 @@ def backtest(sym, df):
         )
 
         # ====================================================
-        # MANAGE OPEN POSITION
+        # MANAGE POSITION
         # ====================================================
 
         if position is not None:
@@ -571,11 +697,11 @@ def backtest(sym, df):
                 broken_resistance["low"]
                 * (
                     1
-                    - STOP_BUFFER_PERCENT / 100
+                    -
+                    STOP_BUFFER_PERCENT / 100
                 )
             )
 
-            # Stop has priority
             if close < stop_price:
                 trades.append(
                     close_trade(
@@ -589,7 +715,6 @@ def backtest(sym, df):
                 position = None
                 continue
 
-            # Target
             if target_resistance is not None:
                 target = float(
                     target_resistance["price"]
@@ -623,7 +748,7 @@ def backtest(sym, df):
             continue
 
         # ====================================================
-        # CONFIRM BREAKOUT
+        # BREAKOUT
         # ====================================================
 
         if not valid_breakout(
@@ -633,7 +758,24 @@ def backtest(sym, df):
             continue
 
         # ====================================================
-        # CONFIRM VOLUME
+        # PRESSURE
+        # ====================================================
+
+        if not pressure_confirmed(
+            df,
+            i,
+            broken_resistance
+        ):
+            continue
+
+        pressure_count = count_pressure_candles(
+            df,
+            i,
+            broken_resistance
+        )
+
+        # ====================================================
+        # VOLUME
         # ====================================================
 
         if not volume_confirmed(
@@ -642,16 +784,8 @@ def backtest(sym, df):
         ):
             continue
 
-        volume_ratio = get_volume_ratio(
-            df,
-            i
-        )
-
-        if volume_ratio is None:
-            continue
-
         # ====================================================
-        # FIND NEXT RESISTANCE
+        # TARGET
         # ====================================================
 
         target_resistance = find_next_resistance(
@@ -663,22 +797,14 @@ def backtest(sym, df):
         if target_resistance is None:
             continue
 
-        # ====================================================
-        # NEXT DAY ENTRY
-        # ====================================================
-
         if i + 1 >= len(df):
             continue
 
-        next_row = df.iloc[
-            i + 1
-        ]
+        next_row = df.iloc[i + 1]
 
         entry_date = next_row[
             "Date"
-        ].strftime(
-            "%Y-%m-%d"
-        )
+        ].strftime("%Y-%m-%d")
 
         entry_price = float(
             next_row["Open"]
@@ -696,6 +822,32 @@ def backtest(sym, df):
 
         if actual_upside < MIN_UPSIDE_PERCENT:
             continue
+
+        # ====================================================
+        # VOLUME RATIO
+        # ====================================================
+
+        volume_start = (
+            i - VOLUME_LOOKBACK
+        )
+
+        average_volume = float(
+            df.iloc[
+                volume_start:i
+            ]["Volume"].mean()
+        )
+
+        current_volume = float(
+            df.iloc[i]["Volume"]
+        )
+
+        volume_ratio = (
+            current_volume
+            /
+            average_volume
+            if average_volume > 0
+            else 0
+        )
 
         # ====================================================
         # CREATE POSITION
@@ -732,11 +884,13 @@ def backtest(sym, df):
                 round(
                     volume_ratio,
                     2
-                )
+                ),
+            "pressure_candles":
+                pressure_count
         }
 
     # ========================================================
-    # END OF DATA
+    # OPEN POSITION
     # ========================================================
 
     if position is not None:
@@ -744,9 +898,7 @@ def backtest(sym, df):
 
         last_date = last[
             "Date"
-        ].strftime(
-            "%Y-%m-%d"
-        )
+        ].strftime("%Y-%m-%d")
 
         last_close = float(
             last["Close"]
@@ -859,7 +1011,9 @@ winrate = (
     else 0
 )
 
-sumprofit = sum(profits)
+sumprofit = sum(
+    profits
+)
 
 avgwin = (
     float(np.mean(wins))
@@ -879,7 +1033,11 @@ avgloss = (
 # ============================================================
 
 portfolio = INITIAL_CAPITAL
-equity = [portfolio]
+
+equity = [
+    portfolio
+]
+
 portfolio_history = []
 
 for trade in closed:
@@ -898,10 +1056,8 @@ for trade in closed:
     )
 
     portfolio_history.append({
-        "date":
-            trade["exit_date"],
-        "symbol":
-            trade["symbol"],
+        "date": trade["exit_date"],
+        "symbol": trade["symbol"],
         "trade_return_percent":
             trade["profit_pct"],
         "portfolio_return_percent":
@@ -916,9 +1072,11 @@ for trade in closed:
             )
     })
 
+
 compound_return = (
     portfolio
-    / INITIAL_CAPITAL
+    /
+    INITIAL_CAPITAL
     - 1
 ) * 100
 
@@ -964,7 +1122,8 @@ for trade in closed:
         exit_analysis.get(
             reason,
             0
-        ) + 1
+        )
+        + 1
     )
 
 
@@ -997,10 +1156,10 @@ worst = (
 
 result = {
     "strategy":
-        "EGX Resistance Breakout + Volume Strategy v1.0",
+        "EGX Resistance Breakout + Volume Strategy v1.1",
 
     "description":
-        "Confirmed swing resistance breakout with volume confirmation, next resistance target and structural breakout-failure stop.",
+        "Confirmed swing resistance breakout with pre-breakout price pressure, volume confirmation, next resistance target and structural breakout-failure stop.",
 
     "parameters": {
         "pivot_left":
@@ -1019,12 +1178,18 @@ result = {
             MIN_REACTION_PERCENT,
         "breakout_percent":
             BREAKOUT_PERCENT,
+        "minimum_upside_percent":
+            MIN_UPSIDE_PERCENT,
+        "pressure_lookback":
+            PRESSURE_LOOKBACK,
+        "minimum_pressure_candles":
+            MIN_PRESSURE_CANDLES,
+        "max_pressure_distance_percent":
+            MAX_PRESSURE_DISTANCE_PERCENT,
         "volume_lookback":
             VOLUME_LOOKBACK,
         "volume_multiplier":
             VOLUME_MULTIPLIER,
-        "minimum_upside_percent":
-            MIN_UPSIDE_PERCENT,
         "stop_buffer_percent":
             STOP_BUFFER_PERCENT,
         "max_positions":
@@ -1127,9 +1292,9 @@ with open(
 # PRINT RESULTS
 # ============================================================
 
-print("\n" + "=" * 65)
+print("\n" + "=" * 72)
 print("FINAL RESULTS")
-print("=" * 65)
+print("=" * 72)
 
 print(f"Trades              : {n}")
 print(f"Winners             : {len(wins)}")
@@ -1171,4 +1336,4 @@ print(
     f"\nSaved: {RESULT_FILE}, {TRADES_FILE}"
 )
 
-print("=" * 65)
+print("=" * 72)
