@@ -50,7 +50,7 @@ EMA75_MIN_TOTAL_RISE = 0.002
 MAX_PRICE_ABOVE_EMA75 = 1.08
 
 # --- MODIFIED PARAMETERS FOR BETTER WIN RATE & RISK MGMT ---
-BUY1_RSI = 53                 # Was 58
+BUY1_RSI = 58                 # Was 58
 BUY2_RSI = 50
 BUY3_RSI = 42
 
@@ -73,8 +73,8 @@ STOP_L1 = -6.0                # Was -8.0
 STOP_L2 = -5.0
 STOP_L3 = -4.0
 
-TRAILING_TRIGGER = 18        # Was 10.0
-TRAILING_GIVEBACK = 7.0       # Was 4.0
+TRAILING_TRIGGER = 15        # Was 10.0
+TRAILING_GIVEBACK = 5      # Was 4.0
 
 MIN_BARS = 40
 
