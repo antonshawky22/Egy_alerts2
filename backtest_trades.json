@@ -10,15 +10,22 @@
     },
     "second_entry": null,
     "third_entry": null,
-    "exits": [],
+    "exits": [
+      {
+        "date": "2025-08-10",
+        "type": "SELL L2",
+        "price": 45.0,
+        "position_sold": 0.33,
+        "profit": 28.39
+      }
+    ],
     "last_average_price": 35.05,
-    "final_exit_price": 37.25,
-    "exit_date": "2025-07-13",
-    "profit_pct": 6.28,
+    "final_exit_price": 45.0,
+    "exit_date": "2025-08-10",
+    "profit_pct": 28.39,
     "max_position": 0.33,
-    "peak_profit": 11.982881597717556,
-    "exit_reason": "TRAILING STOP",
-    "stop_trigger_profit": 6.28
+    "peak_profit": 28.388017118402292,
+    "exit_reason": "SELL L2"
   },
   {
     "symbol": "ADIB",
@@ -54,13 +61,13 @@
     "third_entry": null,
     "exits": [],
     "last_average_price": 47.03,
-    "final_exit_price": 52.25,
-    "exit_date": "2025-09-09",
-    "profit_pct": 11.1,
+    "final_exit_price": 50.5,
+    "exit_date": "2025-10-29",
+    "profit_pct": 7.38,
     "max_position": 0.33,
-    "peak_profit": 14.84159047416542,
+    "peak_profit": 15.054220710184985,
     "exit_reason": "TRAILING STOP",
-    "stop_trigger_profit": 11.1
+    "stop_trigger_profit": 7.38
   },
   {
     "symbol": "AMOC",
@@ -103,13 +110,13 @@
     "third_entry": null,
     "exits": [],
     "last_average_price": 49.9,
-    "final_exit_price": 47.6,
-    "exit_date": "2025-11-03",
-    "profit_pct": -4.61,
+    "final_exit_price": 46.41,
+    "exit_date": "2025-11-05",
+    "profit_pct": -6.99,
     "max_position": 0.33,
     "peak_profit": 0.0,
     "exit_reason": "STOP LOSS",
-    "stop_trigger_profit": -4.61
+    "stop_trigger_profit": -6.99
   },
   {
     "symbol": "SUGR",
@@ -124,13 +131,13 @@
     "third_entry": null,
     "exits": [],
     "last_average_price": 49.22,
-    "final_exit_price": 46.99,
-    "exit_date": "2025-11-20",
-    "profit_pct": -4.53,
+    "final_exit_price": 46.6,
+    "exit_date": "2025-11-25",
+    "profit_pct": -5.32,
     "max_position": 0.33,
     "peak_profit": 0.0,
     "exit_reason": "STOP LOSS",
-    "stop_trigger_profit": -4.53
+    "stop_trigger_profit": -5.32
   },
   {
     "symbol": "ORWE",
