@@ -13,7 +13,7 @@ import pandas as pd
 # CONFIGURATION
 # ============================================================
 
-DB_FILE = "DB_FILE = "egx_history_database_v2.json"
+DB_FILE = "egx_history_database_v2.json"
 
 RESULT_FILE = "backtest_results.json"
 TRADES_FILE = "backtest_trades.json"
