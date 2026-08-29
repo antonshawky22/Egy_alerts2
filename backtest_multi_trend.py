@@ -26,7 +26,7 @@ INITIAL_CAPITAL = 100000.0
 # ============================================================
 
 RSI_PERIOD = 14
-EMA75_PERIOD = 100
+EMA100_PERIOD = 100
 RUNUP_LOOKBACK = 120
 MAX_RUNUP_PERCENT = 80
 MAX_GAP_DOWN_PERCENT = -5.0
@@ -175,7 +175,7 @@ def prepare_data(df):
     df = df.copy()
     close = df["Close"]
 
-    df["EMA75"] = close.ewm(span=EMA75_PERIOD, adjust=False).mean()
+    df["EMA100"] = close.ewm(span=EMA100_PERIOD, adjust=False).mean()
     df["RSI"] = rsi(close, RSI_PERIOD)
 
     return df
@@ -276,9 +276,9 @@ def backtest_stock(symbol, df):
         date = df.index[i].strftime("%Y-%m-%d")
         price = float(row["Close"])
         rsi_val = float(row["RSI"])
-        ema75 = float(row["EMA75"])
+        ema100 = float(row["EMA100"])
 
-        if pd.isna(rsi_val) or pd.isna(ema75):
+        if pd.isna(rsi_val) or pd.isna(ema100):
             continue
 
         position = state["position"]
@@ -310,10 +310,10 @@ def backtest_stock(symbol, df):
         )
 
         ema_up = (
-            df["EMA75"].iloc[i] > df["EMA75"].iloc[i - 5] and
-            df["EMA75"].iloc[i - 5] > df["EMA75"].iloc[i - 10] and
-            df["EMA75"].iloc[i] > df["EMA75"].iloc[i - 10] * 1.002 and
-            price <= df["EMA75"].iloc[i] * 1.08
+            df["EMA100"].iloc[i] > df["EMA100"].iloc[i - 5] and
+            df["EMA100"].iloc[i - 5] > df["EMA100"].iloc[i - 10] and
+            df["EMA100"].iloc[i] > df["EMA100"].iloc[i - 10] * 1.002 and
+            price <= df["EMA100"].iloc[i] * 1.08
         )
 
         buy1 = safe_to_buy and ema_up and no_gap_down and rsi_val <= BUY1_RSI
