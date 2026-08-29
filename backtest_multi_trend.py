@@ -22,25 +22,19 @@ STOCK_SUMMARY_FILE = "ladder_backtest_summary_by_stock.json"
 INITIAL_CAPITAL = 100000.0
 
 # ============================================================
-# LIVE PARAMETERS - OPTIMIZED MATCH
+# LIVE PARAMETERS - ACTIVE USED ONLY
 # ============================================================
 
 RSI_PERIOD = 14
-EMA20_PERIOD = 20
-EMA30_PERIOD = 30
-EMA50_PERIOD = 50
 EMA75_PERIOD = 100
 RUNUP_LOOKBACK = 120
 MAX_RUNUP_PERCENT = 80
 MAX_GAP_DOWN_PERCENT = -5.0
-EMA75_STEP_1 = 5
-EMA75_STEP_2 = 10
-EMA75_MIN_TOTAL_RISE = 0.002
-MAX_PRICE_ABOVE_EMA75 = 1.10
+
 BUY1_RSI = 53
 BUY2_RSI = 33
 BUY3_RSI = 28
-SELL1_MIN_POSITION = 0.70
+
 SELL1_RSI = 66
 SELL1_MIN_PROFIT = 15
 SELL2_MIN_POSITION = 0.30
@@ -49,6 +43,7 @@ SELL2_RSI = 86
 SELL2_MIN_PROFIT = 22
 SELL3_RSI = 90
 SELL3_MIN_PROFIT = 25
+
 STOP_L1 = -22
 STOP_L2 = -20
 STOP_L3 = -15
@@ -180,9 +175,6 @@ def prepare_data(df):
     df = df.copy()
     close = df["Close"]
 
-    df["EMA20"] = close.ewm(span=EMA20_PERIOD, adjust=False).mean()
-    df["EMA30"] = close.ewm(span=EMA30_PERIOD, adjust=False).mean()
-    df["EMA50"] = close.ewm(span=EMA50_PERIOD, adjust=False).mean()
     df["EMA75"] = close.ewm(span=EMA75_PERIOD, adjust=False).mean()
     df["RSI"] = rsi(close, RSI_PERIOD)
 
@@ -706,9 +698,6 @@ result = {
     "data_file": DB_FILE,
     "parameters": {
         "rsi_period": RSI_PERIOD,
-        "ema20_period": EMA20_PERIOD,
-        "ema30_period": EMA30_PERIOD,
-        "ema50_period": EMA50_PERIOD,
         "ema75_period": EMA75_PERIOD,
         "runup_lookback": RUNUP_LOOKBACK,
         "max_runup_percent": MAX_RUNUP_PERCENT,
@@ -716,8 +705,6 @@ result = {
         "buy1_rsi": BUY1_RSI,
         "buy2_rsi": BUY2_RSI,
         "buy3_rsi": BUY3_RSI,
-        "buy2_min_drop_from_avg": BUY2_MIN_DROP_FROM_AVG,
-        "buy3_min_drop_from_avg": BUY3_MIN_DROP_FROM_AVG,
         "sell1_rsi": SELL1_RSI,
         "sell1_min_profit": SELL1_MIN_PROFIT,
         "sell2_rsi": SELL2_RSI,
@@ -728,10 +715,7 @@ result = {
         "stop_l2": STOP_L2,
         "stop_l3": STOP_L3,
         "trailing_trigger": TRAILING_TRIGGER,
-        "trailing_giveback": TRAILING_GIVEBACK,
-        "tranche_1": TRANCHE_1,
-        "tranche_2": TRANCHE_2,
-        "tranche_3": TRANCHE_3
+        "trailing_giveback": TRAILING_GIVEBACK
     },
     "statistics": {
         "total_closed_trades": total_trades,
