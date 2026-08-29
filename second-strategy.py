@@ -191,7 +191,7 @@ for name, ticker in symbols.items():
         df["EMA100"].iloc[-1] > df["EMA100"].iloc[-5]
         and df["EMA100"].iloc[-5] > df["EMA100"].iloc[-10]
         and df["EMA100"].iloc[-1] > df["EMA100"].iloc[-10] * 1.002
-        and price <= df["EMA75"].iloc[-1] * 1.08
+        and price <= df["EMA100"].iloc[-1] * 1.08
     )
     
     buy1 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 53
