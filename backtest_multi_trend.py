@@ -698,7 +698,7 @@ result = {
     "data_file": DB_FILE,
     "parameters": {
         "rsi_period": RSI_PERIOD,
-        "ema75_period": EMA75_PERIOD,
+        "ema100_period": EMA100_PERIOD,
         "runup_lookback": RUNUP_LOOKBACK,
         "max_runup_percent": MAX_RUNUP_PERCENT,
         "max_gap_down_percent": MAX_GAP_DOWN_PERCENT,
