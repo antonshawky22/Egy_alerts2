@@ -5,9 +5,6 @@
   "data_file": "egx_history_database_v2.json",
   "parameters": {
     "rsi_period": 14,
-    "ema20_period": 20,
-    "ema30_period": 30,
-    "ema50_period": 50,
     "ema75_period": 100,
     "runup_lookback": 120,
     "max_runup_percent": 80,
@@ -15,8 +12,6 @@
     "buy1_rsi": 53,
     "buy2_rsi": 33,
     "buy3_rsi": 28,
-    "buy2_min_drop_from_avg": 12,
-    "buy3_min_drop_from_avg": 17,
     "sell1_rsi": 66,
     "sell1_min_profit": 15,
     "sell2_rsi": 86,
@@ -27,10 +22,7 @@
     "stop_l2": -20,
     "stop_l3": -15,
     "trailing_trigger": 40,
-    "trailing_giveback": 13,
-    "tranche_1": 0.33,
-    "tranche_2": 0.33,
-    "tranche_3": 0.34
+    "trailing_giveback": 13
   },
   "statistics": {
     "total_closed_trades": 36,
