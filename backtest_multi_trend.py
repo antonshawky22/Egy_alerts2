@@ -21,9 +21,6 @@ STOCK_SUMMARY_FILE = "ladder_backtest_summary_by_stock.json"
 
 INITIAL_CAPITAL = 100000.0
 
-TRANCHE_1 = 0.33
-TRANCHE_2 = 0.33
-TRANCHE_3 = 0.34
 # ============================================================
 # LIVE PARAMETERS - OPTIMIZED MATCH
 # ============================================================
@@ -43,8 +40,6 @@ MAX_PRICE_ABOVE_EMA75 = 1.10
 BUY1_RSI = 53
 BUY2_RSI = 33
 BUY3_RSI = 28
-BUY2_MIN_DROP_FROM_AVG = 12
-BUY3_MIN_DROP_FROM_AVG = 17
 SELL1_MIN_POSITION = 0.70
 SELL1_RSI = 66
 SELL1_MIN_PROFIT = 15
