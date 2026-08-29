@@ -136,13 +136,13 @@ for name, ticker in symbols.items():
     df["EMA20"] = close.ewm(span=20, adjust=False).mean()
     df["EMA30"] = close.ewm(span=30, adjust=False).mean()
     df["EMA50"] = close.ewm(span=50, adjust=False).mean()
-    df["EMA75"] = close.ewm(span=100, adjust=False).mean()
+    df["EMA100"] = close.ewm(span=100, adjust=False).mean()
     df["RSI"] = rsi(close)
 
     last = df.iloc[-1]
     
     # حماية من القيم الفارغة في أحدث شمعة
-    if df[["Open", "Close", "EMA75", "RSI"]].iloc[-1].isna().any():
+    if df[["Open", "Close", "EMA100", "RSI"]].iloc[-1].isna().any():
         continue
 
     current_date = str(df.index[-1].strftime("%Y-%m-%d"))
@@ -188,9 +188,9 @@ for name, ticker in symbols.items():
     no_gap_down = (gap1 > -3.0) and (gap2 > -3.0) and (gap3 > -3.0)
 
     ema_up = (
-        df["EMA75"].iloc[-1] > df["EMA75"].iloc[-5]
-        and df["EMA75"].iloc[-5] > df["EMA75"].iloc[-10]
-        and df["EMA75"].iloc[-1] > df["EMA75"].iloc[-10] * 1.002
+        df["EMA100"].iloc[-1] > df["EMA100"].iloc[-5]
+        and df["EMA100"].iloc[-5] > df["EMA100"].iloc[-10]
+        and df["EMA100"].iloc[-1] > df["EMA100"].iloc[-10] * 1.002
         and price <= df["EMA75"].iloc[-1] * 1.08
     )
     
@@ -239,7 +239,7 @@ for name, ticker in symbols.items():
         }
         trades_history[name].append(new_trade)
 
-    elif 0.32 < s["position"] < 0.5 and buy2 and price < s["avg_price"] * 0.88:
+    elif 0.32 < s["position"] < 0.5 and buy2 and price < s["avg_price"] * 0.95:
         old_pos = s["position"]
         s["position"] = 0.66
         s["avg_price"] = update_avg(s["avg_price"], old_pos, price, s["position"])
@@ -251,7 +251,7 @@ for name, ticker in symbols.items():
             active_trade["second_entry"] = f"{current_date} with price {price:.2f}"
             active_trade["last_totally_average_price"] = round(s["avg_price"], 2)
 
-    elif 0.65 < s["position"] < 1 and buy3 and price < s["avg_price"] * 0.83:
+    elif 0.65 < s["position"] < 1 and buy3 and price < s["avg_price"] * 0.91:
         old_pos = s["position"]
         s["position"] = 1.0
         s["avg_price"] = update_avg(s["avg_price"], old_pos, price, s["position"])
