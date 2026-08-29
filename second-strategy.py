@@ -136,7 +136,7 @@ for name, ticker in symbols.items():
     df["EMA20"] = close.ewm(span=20, adjust=False).mean()
     df["EMA30"] = close.ewm(span=30, adjust=False).mean()
     df["EMA50"] = close.ewm(span=50, adjust=False).mean()
-    df["EMA75"] = close.ewm(span=75, adjust=False).mean()
+    df["EMA75"] = close.ewm(span=100, adjust=False).mean()
     df["RSI"] = rsi(close)
 
     last = df.iloc[-1]
@@ -194,18 +194,18 @@ for name, ticker in symbols.items():
         and price <= df["EMA75"].iloc[-1] * 1.08
     )
     
-    buy1 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 58
-    buy2 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 50
-    buy3 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 42
+    buy1 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 53
+    buy2 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 33
+    buy3 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 28
 
     # حساب الربح اللحظي الحالي
     profit = 0.0
     if s["avg_price"] > 0:
         profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
 
-    sell1 = s["position"] > 0.70 and rsi_val >= 68 and profit > 3.0
-    sell2 = 0.30 < s["position"] <= 0.70 and rsi_val >= 74 and profit > 5.0
-    sell3 = s["position"] > 0.00 and rsi_val >= 80 and profit > 7.0
+    sell1 = s["position"] > 0.70 and rsi_val >= 66 and profit > 15
+    sell2 = 0.30 < s["position"] <= 0.70 and rsi_val >= 82 and profit > 22
+    sell3 = s["position"] > 0.00 and rsi_val >= 86 and profit > 25
     action = None
 
     if name not in trades_history:
@@ -239,7 +239,7 @@ for name, ticker in symbols.items():
         }
         trades_history[name].append(new_trade)
 
-    elif 0.32 < s["position"] < 0.5 and buy2 and price < s["avg_price"] * 0.97:
+    elif 0.32 < s["position"] < 0.5 and buy2 and price < s["avg_price"] * 0.88:
         old_pos = s["position"]
         s["position"] = 0.66
         s["avg_price"] = update_avg(s["avg_price"], old_pos, price, s["position"])
@@ -251,7 +251,7 @@ for name, ticker in symbols.items():
             active_trade["second_entry"] = f"{current_date} with price {price:.2f}"
             active_trade["last_totally_average_price"] = round(s["avg_price"], 2)
 
-    elif 0.65 < s["position"] < 1 and buy3 and price < s["avg_price"] * 0.96:
+    elif 0.65 < s["position"] < 1 and buy3 and price < s["avg_price"] * 0.83:
         old_pos = s["position"]
         s["position"] = 1.0
         s["avg_price"] = update_avg(s["avg_price"], old_pos, price, s["position"])
@@ -273,14 +273,14 @@ for name, ticker in symbols.items():
 
         stop_triggered = False
 
-        if s["position"] <= 0.33 and profit <= -8:
+        if s["position"] <= 0.33 and profit <= -22:
             stop_triggered = True
-        elif s["position"] <= 0.66 and profit <= -5:
+        elif s["position"] <= 0.66 and profit <= -20:
             stop_triggered = True
-        elif s["position"] == 1.0 and profit <= -4:
+        elif s["position"] == 1.0 and profit <= -15:
             stop_triggered = True
 
-        if s["peak_profit"] > 10 and (s["peak_profit"] - profit) >= 4:
+        if s["peak_profit"] > 40 and (s["peak_profit"] - profit) >= 13:
             stop_triggered = True
 
         # دالة مساعدة لحساب إجمالي الربح الموزون
