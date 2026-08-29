@@ -621,19 +621,15 @@
       "price": 23.13,
       "position_added": 0.33
     },
-    "second_entry": {
-      "date": "2026-05-18",
-      "price": 22.08,
-      "position_added": 0.33
-    },
+    "second_entry": null,
     "third_entry": null,
     "exits": [],
-    "last_average_price": 22.605,
+    "last_average_price": 23.13,
     "final_exit_price": 25.6,
     "exit_date": "2026-08-26",
-    "profit_pct": 13.25,
-    "max_position": 0.66,
-    "peak_profit": 18.55784118557843,
+    "profit_pct": 10.68,
+    "max_position": 0.33,
+    "peak_profit": 15.86683960224817,
     "exit_reason": "END_OF_DATA"
   },
   {
@@ -1120,7 +1116,7 @@
   {
     "symbol": "MCQE",
     "cycle": 2,
-    "status": "OPEN",
+    "status": "CLOSED",
     "first_entry": {
       "date": "2026-06-08",
       "price": 189.98,
@@ -1131,34 +1127,30 @@
       "price": 180.0,
       "position_added": 0.33
     },
-    "third_entry": {
-      "date": "2026-06-11",
-      "price": 174.2,
-      "position_added": 0.34
-    },
+    "third_entry": null,
     "exits": [
       {
         "date": "2026-08-11",
-        "type": "SELL L1",
+        "type": "SELL L2",
         "price": 243.6,
         "position_sold": 0.33,
-        "profit": 34.35
+        "profit": 31.68
       },
       {
         "date": "2026-08-12",
         "type": "SELL L2",
         "price": 252.0,
         "position_sold": 0.33,
-        "profit": 38.98
+        "profit": 36.22
       }
     ],
-    "last_average_price": 181.3214,
-    "final_exit_price": 233.0,
-    "exit_date": "2026-08-26",
-    "profit_pct": 33.89,
-    "max_position": 1.0,
-    "peak_profit": 38.97973432810467,
-    "exit_reason": "END_OF_DATA"
+    "last_average_price": 184.99,
+    "final_exit_price": 252.0,
+    "exit_date": "2026-08-12",
+    "profit_pct": 33.95,
+    "max_position": 0.66,
+    "peak_profit": 36.22357965295421,
+    "exit_reason": "SELL L2"
   },
   {
     "symbol": "TMGH",
@@ -1214,26 +1206,14 @@
       "price": 287.33,
       "position_added": 0.33
     },
-    "third_entry": {
-      "date": "2026-06-24",
-      "price": 282.87,
-      "position_added": 0.34
-    },
-    "exits": [
-      {
-        "date": "2026-08-16",
-        "type": "SELL L1",
-        "price": 348.06,
-        "position_sold": 0.33,
-        "profit": 19.0
-      }
-    ],
-    "last_average_price": 292.4862,
+    "third_entry": null,
+    "exits": [],
+    "last_average_price": 297.44,
     "final_exit_price": 365.0,
     "exit_date": "2026-08-26",
-    "profit_pct": 22.88,
-    "max_position": 1.0,
-    "peak_profit": 24.792212418910704,
+    "profit_pct": 22.71,
+    "max_position": 0.66,
+    "peak_profit": 22.71382463690156,
     "exit_reason": "END_OF_DATA"
   },
   {
