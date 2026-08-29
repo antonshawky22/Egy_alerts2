@@ -156,6 +156,19 @@
       "exit_price": null,
       "exit_date": null,
       "profit_pct": null
+    },
+    {
+      "symbol": "RAYA",
+      "cycle": 2,
+      "status": "OPEN",
+      "first_entry": "2026-08-26 with price 7.39",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 7.39,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
     }
   ],
   "EEII": [],
