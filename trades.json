@@ -210,7 +210,10 @@
     "symbol": "ABUK",
     "entry_trend": "↗️",
     "entry_price": 74.76,
-    "entry_date": "2026-08-12"
+    "entry_date": "2026-08-12",
+    "exit_price": 79.01,
+    "exit_date": "2026-08-30",
+    "profit_pct": 5.68
   },
   {
     "symbol": "SUGR",
@@ -225,7 +228,10 @@
     "symbol": "EAST",
     "entry_trend": "🔛",
     "entry_price": 36.26,
-    "entry_date": "2026-08-13"
+    "entry_date": "2026-08-13",
+    "exit_price": 35.21,
+    "exit_date": "2026-08-30",
+    "profit_pct": -2.9
   },
   {
     "symbol": "RAYA",
@@ -276,7 +282,10 @@
     "symbol": "MTIE",
     "entry_trend": "🔛",
     "entry_price": 8.95,
-    "entry_date": "2026-08-18"
+    "entry_date": "2026-08-18",
+    "exit_price": 8.48,
+    "exit_date": "2026-08-30",
+    "profit_pct": -5.25
   },
   {
     "symbol": "MCQE",
@@ -319,5 +328,17 @@
     "entry_trend": "🔛",
     "entry_price": 28.4,
     "entry_date": "2026-08-25"
+  },
+  {
+    "symbol": "ORWE",
+    "entry_trend": "↗️",
+    "entry_price": 26.19,
+    "entry_date": "2026-08-30"
+  },
+  {
+    "symbol": "ELSH",
+    "entry_trend": "↗️",
+    "entry_price": 13.71,
+    "entry_date": "2026-08-30"
   }
 ]

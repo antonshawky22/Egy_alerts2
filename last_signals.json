@@ -20,9 +20,9 @@
     "entry_price": 99.0
   },
   "EAST": {
-    "trend": "🔛",
-    "in_position": true,
-    "entry_price": 36.26
+    "trend": "🔻",
+    "in_position": false,
+    "entry_price": null
   },
   "EFIH": {
     "trend": "↗️",
@@ -31,8 +31,8 @@
   },
   "ABUK": {
     "trend": "🔛",
-    "in_position": true,
-    "entry_price": 74.76
+    "in_position": false,
+    "entry_price": null
   },
   "OIH": {
     "trend": "↗️",
@@ -55,9 +55,9 @@
     "entry_price": null
   },
   "MTIE": {
-    "trend": "🔛",
-    "in_position": true,
-    "entry_price": 8.95
+    "trend": "🔻",
+    "in_position": false,
+    "entry_price": null
   },
   "ELEC": {
     "trend": "🔻",
@@ -70,9 +70,9 @@
     "entry_price": 27.55
   },
   "ORWE": {
-    "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 26.19
   },
   "JUFO": {
     "trend": "🔛",
@@ -90,9 +90,9 @@
     "entry_price": null
   },
   "ELSH": {
-    "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 13.71
   },
   "RMDA": {
     "trend": "🔛",
@@ -100,7 +100,7 @@
     "entry_price": 6.51
   },
   "RAYA": {
-    "trend": "🔛",
+    "trend": "🔻",
     "in_position": false,
     "entry_price": null
   },
