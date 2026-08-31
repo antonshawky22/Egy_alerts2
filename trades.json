@@ -195,7 +195,10 @@
     "symbol": "HRHO",
     "entry_trend": "↗️",
     "entry_price": 27.55,
-    "entry_date": "2026-08-09"
+    "entry_date": "2026-08-09",
+    "exit_price": 25.59,
+    "exit_date": "2026-08-31",
+    "profit_pct": -7.11
   },
   {
     "symbol": "FWRY",
@@ -255,7 +258,10 @@
     "symbol": "RMDA",
     "entry_trend": "↗️",
     "entry_price": 6.51,
-    "entry_date": "2026-08-16"
+    "entry_date": "2026-08-16",
+    "exit_price": 6.0,
+    "exit_date": "2026-08-31",
+    "profit_pct": -7.83
   },
   {
     "symbol": "SKPC",
