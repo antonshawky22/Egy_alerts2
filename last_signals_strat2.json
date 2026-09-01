@@ -10,7 +10,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 11.74,
-    "peak_profit": 10.732538330494036,
+    "peak_profit": 16.695059625212938,
     "realized_pnl_tracker": []
   },
   "ETEL": {
@@ -38,7 +38,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 75.52,
-    "peak_profit": 7.1239406779661145,
+    "peak_profit": 16.525423728813564,
     "realized_pnl_tracker": []
   },
   "OIH": {
@@ -87,7 +87,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 25.36,
-    "peak_profit": 4.692429022082024,
+    "peak_profit": 6.0725552050473155,
     "realized_pnl_tracker": []
   },
   "JUFO": {
