@@ -10,7 +10,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 11.74,
-    "peak_profit": 16.695059625212938,
+    "peak_profit": 17.546848381601365,
     "realized_pnl_tracker": []
   },
   "ETEL": {
@@ -35,10 +35,10 @@
     "realized_pnl_tracker": []
   },
   "ABUK": {
-    "cycle": 1,
-    "position": 0.33,
-    "avg_price": 75.52,
-    "peak_profit": 16.525423728813564,
+    "cycle": 2,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
   "OIH": {

@@ -50,15 +50,17 @@
     {
       "symbol": "ABUK",
       "cycle": 1,
-      "status": "OPEN",
+      "status": "CLOSED",
       "first_entry": "2026-08-20 with price 75.52",
       "second_entry": null,
       "third_entry": null,
       "last_totally_average_price": 75.52,
-      "exits": [],
-      "exit_price": null,
-      "exit_date": null,
-      "profit_pct": null
+      "exits": [
+        "2026-09-02: Sold 33% at price 94.00 (Profit: +24.47%)"
+      ],
+      "exit_price": 94.0,
+      "exit_date": "2026-09-02",
+      "profit_pct": 24.47
     }
   ],
   "OIH": [],
