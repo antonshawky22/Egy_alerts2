@@ -351,6 +351,15 @@
     "symbol": "HRHO",
     "entry_trend": "🔛",
     "entry_price": 25.59,
-    "entry_date": "2026-08-31"
+    "entry_date": "2026-08-31",
+    "exit_price": 25.94,
+    "exit_date": "2026-09-03",
+    "profit_pct": 1.37
+  },
+  {
+    "symbol": "RMDA",
+    "entry_trend": "↗️",
+    "entry_price": 6.05,
+    "entry_date": "2026-09-03"
   }
 ]
