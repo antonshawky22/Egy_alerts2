@@ -7,10 +7,10 @@
     "realized_pnl_tracker": []
   },
   "EMFD": {
-    "cycle": 1,
-    "position": 0.33,
-    "avg_price": 11.74,
-    "peak_profit": 17.546848381601365,
+    "cycle": 2,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
   "ETEL": {
@@ -129,7 +129,7 @@
     "cycle": 2,
     "position": 0.33,
     "avg_price": 7.39,
-    "peak_profit": 0.0,
+    "peak_profit": 1.488497970230045,
     "realized_pnl_tracker": []
   },
   "EEII": {
@@ -164,7 +164,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 40.9,
-    "peak_profit": 3.8630806845965733,
+    "peak_profit": 4.645476772616133,
     "realized_pnl_tracker": []
   },
   "AMOC": {
@@ -185,7 +185,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 139.27,
-    "peak_profit": 1.2134702376678377,
+    "peak_profit": 1.2421914267250591,
     "realized_pnl_tracker": []
   },
   "ADIB": {

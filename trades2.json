@@ -18,15 +18,17 @@
     {
       "symbol": "EMFD",
       "cycle": 1,
-      "status": "OPEN",
+      "status": "CLOSED",
       "first_entry": "2026-08-13 with price 11.74",
       "second_entry": null,
       "third_entry": null,
       "last_totally_average_price": 11.74,
-      "exits": [],
-      "exit_price": null,
-      "exit_date": null,
-      "profit_pct": null
+      "exits": [
+        "2026-09-03: Sold 33% at price 14.38 (Profit: +22.49%)"
+      ],
+      "exit_price": 14.38,
+      "exit_date": "2026-09-03",
+      "profit_pct": 22.49
     }
   ],
   "ETEL": [],
