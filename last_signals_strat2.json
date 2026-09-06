@@ -87,7 +87,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 25.36,
-    "peak_profit": 9.424290220820192,
+    "peak_profit": 14.471608832807577,
     "realized_pnl_tracker": []
   },
   "JUFO": {
@@ -157,14 +157,14 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 97.8,
-    "peak_profit": 1.0736196319018376,
+    "peak_profit": 2.24948875255624,
     "realized_pnl_tracker": []
   },
   "ORHD": {
     "cycle": 1,
     "position": 0.33,
     "avg_price": 40.9,
-    "peak_profit": 5.036674816625922,
+    "peak_profit": 5.134474327628365,
     "realized_pnl_tracker": []
   },
   "AMOC": {
@@ -178,14 +178,14 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 19.01,
-    "peak_profit": 2.104155707522349,
+    "peak_profit": 2.31457127827458,
     "realized_pnl_tracker": []
   },
   "COMI": {
     "cycle": 1,
     "position": 0.33,
     "avg_price": 139.27,
-    "peak_profit": 1.6730092625834594,
+    "peak_profit": 1.960221153155733,
     "realized_pnl_tracker": []
   },
   "ADIB": {
