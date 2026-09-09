@@ -105,9 +105,9 @@
     "entry_price": null
   },
   "EEII": {
-    "trend": "🔛",
-    "in_position": true,
-    "entry_price": 2.35
+    "trend": "🔻",
+    "in_position": false,
+    "entry_price": null
   },
   "MPCO": {
     "trend": "↗️",

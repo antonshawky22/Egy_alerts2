@@ -369,7 +369,10 @@
     "symbol": "EEII",
     "entry_trend": "🔛",
     "entry_price": 2.35,
-    "entry_date": "2026-09-03"
+    "entry_date": "2026-09-03",
+    "exit_price": 2.37,
+    "exit_date": "2026-09-09",
+    "profit_pct": 0.85
   },
   {
     "symbol": "EAST",
