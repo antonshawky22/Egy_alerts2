@@ -14,7 +14,7 @@ import pandas as pd
 # CONFIG
 # ============================================================
 
-DB_FILE = "egx_history_database_v2.json"
+DB_FILE = "egx_tradingview_daily_v1.json"
 RESULT_FILE = "backtest_results.json"
 TRADES_FILE = "backtest_trades.json"
 STOCK_SUMMARY_FILE = "ladder_backtest_summary_by_stock.json"
