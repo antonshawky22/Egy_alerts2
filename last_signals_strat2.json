@@ -127,8 +127,8 @@
   },
   "RAYA": {
     "cycle": 2,
-    "position": 0.33,
-    "avg_price": 7.39,
+    "position": 0.66,
+    "avg_price": 7.2749999999999995,
     "peak_profit": 2.5710419485791665,
     "realized_pnl_tracker": []
   },
