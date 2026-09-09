@@ -369,7 +369,7 @@ if auto_refresh_tickers:
         x=gap_report.get(name,{})
         print(f"{name:<8} Gap: {x.get('gap_percent','N/A')}% | Previous close: {x.get('previous_close','N/A')} | Open: {x.get('today_open','N/A')}")
 
-print("\n"+"="*70+"\n📊 DATABASE OVERVIEW\n"+"="*70")
+print("\n"+"="*70+"\n📊 DATABASE OVERVIEW\n"+"="*70)
 for name in symbols:
     df=database.get(name,pd.DataFrame())
     print(f"{name:<8} {len(df):>5} bars   {df.index[0]} → {df.index[-1]}" if not df.empty else f"{name:<8} ❌ NOT AVAILABLE")
