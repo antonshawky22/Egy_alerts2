@@ -382,5 +382,11 @@
     "exit_price": 35.23,
     "exit_date": "2026-09-10",
     "profit_pct": -0.34
+  },
+  {
+    "symbol": "JUFO",
+    "entry_trend": "↗️",
+    "entry_price": 27.35,
+    "entry_date": "2026-09-10"
   }
 ]

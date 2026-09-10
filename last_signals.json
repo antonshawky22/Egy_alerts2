@@ -76,8 +76,8 @@
   },
   "JUFO": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 27.35
   },
   "DSCW": {
     "trend": "🔛",
@@ -145,7 +145,7 @@
     "entry_price": null
   },
   "ADIB": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": true,
     "entry_price": 51.9
   },
