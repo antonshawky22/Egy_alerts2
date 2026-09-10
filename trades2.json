@@ -39,9 +39,9 @@
       "cycle": 1,
       "status": "OPEN",
       "first_entry": "2026-08-24 with price 24.26",
-      "second_entry": null,
+      "second_entry": "2026-09-09 with price 23.51",
       "third_entry": null,
-      "last_totally_average_price": 24.26,
+      "last_totally_average_price": 23.89,
       "exits": [],
       "exit_price": null,
       "exit_date": null,
@@ -142,6 +142,19 @@
       "exit_price": 1.86,
       "exit_date": "2026-08-25",
       "profit_pct": -4.25
+    },
+    {
+      "symbol": "DSCW",
+      "cycle": 2,
+      "status": "OPEN",
+      "first_entry": "2026-09-09 with price 1.91",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 1.91,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
     }
   ],
   "SUGR": [],
