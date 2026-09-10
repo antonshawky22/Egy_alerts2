@@ -31,7 +31,7 @@
     "cycle": 1,
     "position": 0.66,
     "avg_price": 23.885,
-    "peak_profit": 0.0,
+    "peak_profit": 0.4396064475612178,
     "realized_pnl_tracker": []
   },
   "ABUK": {
@@ -192,7 +192,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 52.01,
-    "peak_profit": 0.0,
+    "peak_profit": 0.9228994424149279,
     "realized_pnl_tracker": []
   },
   "PHDC": {
