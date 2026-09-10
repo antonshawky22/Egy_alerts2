@@ -378,6 +378,9 @@
     "symbol": "EAST",
     "entry_trend": "🔛",
     "entry_price": 35.35,
-    "entry_date": "2026-09-08"
+    "entry_date": "2026-09-08",
+    "exit_price": 35.23,
+    "exit_date": "2026-09-10",
+    "profit_pct": -0.34
   }
 ]

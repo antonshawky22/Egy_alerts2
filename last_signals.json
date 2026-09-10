@@ -20,9 +20,9 @@
     "entry_price": 99.0
   },
   "EAST": {
-    "trend": "🔛",
-    "in_position": true,
-    "entry_price": 35.35
+    "trend": "🔻",
+    "in_position": false,
+    "entry_price": null
   },
   "EFIH": {
     "trend": "↗️",
@@ -30,7 +30,7 @@
     "entry_price": 22.33
   },
   "ABUK": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -55,7 +55,7 @@
     "entry_price": null
   },
   "MTIE": {
-    "trend": "🔻",
+    "trend": "↗️",
     "in_position": false,
     "entry_price": null
   },
@@ -75,7 +75,7 @@
     "entry_price": 26.19
   },
   "JUFO": {
-    "trend": "🔻",
+    "trend": "↗️",
     "in_position": false,
     "entry_price": null
   },
@@ -105,7 +105,7 @@
     "entry_price": null
   },
   "EEII": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -165,7 +165,7 @@
     "entry_price": 16.96
   },
   "EGAL": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": false,
     "entry_price": null
   }
