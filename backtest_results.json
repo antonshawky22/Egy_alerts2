@@ -1,25 +1,36 @@
 {
-  "total_trades": 0,
-  "wins": 0,
-  "losses": 0,
-  "win_rate": 0,
-  "total_profit": 0,
-  "avg_profit": 0,
-  "avg_win": 0,
-  "avg_loss": 0,
-  "profit_factor": 0,
-  "best_trade": 0,
-  "worst_trade": 0,
-  "ladder_l1": 0,
-  "ladder_l2": 0,
-  "ladder_l3": 0,
-  "exit_statistics": {},
-  "portfolio_simulation": {
-    "initial_capital": 100000,
-    "position_size_percent": 12.5,
-    "final_capital": 100000,
-    "total_return_percent": 0.0
+  "parameters": {
+    "EMA_PERIOD": 95,
+    "RSI_PERIOD": 14,
+    "BUY1_RSI": 60,
+    "BUY2_RSI": 55,
+    "BUY3_RSI": 48,
+    "SELL1_RSI": 66,
+    "SELL2_RSI": 84,
+    "SELL3_RSI": 86,
+    "STOP_L1": -18,
+    "STOP_L2": -17,
+    "STOP_L3": -13,
+    "TRAILING_TRIGGER": 36,
+    "TRAILING_GIVEBACK": 11,
+    "RUNUP_LOOKBACK": 160,
+    "MAX_RUNUP_PERCENT": 80,
+    "MAX_GAP_DOWN_PERCENT": -5,
+    "EXECUTION": "NEXT DAY OPEN"
   },
-  "symbols_tested": 0,
-  "symbols_skipped": 32
+  "overall": {
+    "trades": 71,
+    "wins": 61,
+    "losses": 10,
+    "win_rate": 85.92,
+    "total_profit": 2390.97,
+    "avg_profit": 33.68,
+    "avg_win": 42.17,
+    "avg_loss": -18.13,
+    "profit_factor": 14.19,
+    "best_trade": 124.37,
+    "worst_trade": -21.3
+  },
+  "valid_symbols": 32,
+  "invalid_symbols": []
 }
