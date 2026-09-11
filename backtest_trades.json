@@ -1,6 +1,7 @@
 [
   {
     "symbol": "OLFI",
+    "cycle_id": 1,
     "entry_date": "2024-09-19",
     "entry_price": 10.71,
     "position": 0.33,
@@ -18,6 +19,7 @@
   },
   {
     "symbol": "OLFI",
+    "cycle_id": 2,
     "entry_date": "2025-05-27",
     "entry_price": 18.05,
     "position": 0.33,
@@ -35,6 +37,7 @@
   },
   {
     "symbol": "OLFI",
+    "cycle_id": 3,
     "entry_date": "2025-07-30",
     "entry_price": 21.0,
     "position": 0.66,
@@ -52,6 +55,7 @@
   },
   {
     "symbol": "EMFD",
+    "cycle_id": 1,
     "entry_date": "2024-09-19",
     "entry_price": 7.4,
     "position": 0.33,
@@ -69,6 +73,7 @@
   },
   {
     "symbol": "EMFD",
+    "cycle_id": 2,
     "entry_date": "2025-11-23",
     "entry_price": 9.4,
     "position": 0.66,
@@ -86,6 +91,7 @@
   },
   {
     "symbol": "EMFD",
+    "cycle_id": 3,
     "entry_date": "2026-07-29",
     "entry_price": 11.53,
     "position": 0.33,
@@ -103,6 +109,7 @@
   },
   {
     "symbol": "ETEL",
+    "cycle_id": 1,
     "entry_date": "2024-09-19",
     "entry_price": 35.05,
     "position": 1.0,
@@ -120,6 +127,7 @@
   },
   {
     "symbol": "ETEL",
+    "cycle_id": 1,
     "entry_date": "2024-09-19",
     "entry_price": 35.05,
     "position": 0.67,
@@ -137,6 +145,7 @@
   },
   {
     "symbol": "EAST",
+    "cycle_id": 1,
     "entry_date": "2024-11-14",
     "entry_price": 27.0,
     "position": 0.33,
@@ -154,6 +163,7 @@
   },
   {
     "symbol": "EAST",
+    "cycle_id": 2,
     "entry_date": "2026-02-16",
     "entry_price": 40.55,
     "position": 0.66,
@@ -171,6 +181,7 @@
   },
   {
     "symbol": "EFIH",
+    "cycle_id": 1,
     "entry_date": "2025-05-11",
     "entry_price": 12.3,
     "position": 0.66,
@@ -188,6 +199,7 @@
   },
   {
     "symbol": "EFIH",
+    "cycle_id": 2,
     "entry_date": "2026-06-28",
     "entry_price": 20.78,
     "position": 0.33,
@@ -205,6 +217,7 @@
   },
   {
     "symbol": "ABUK",
+    "cycle_id": 1,
     "entry_date": "2024-09-23",
     "entry_price": 60.5,
     "position": 0.33,
@@ -222,6 +235,7 @@
   },
   {
     "symbol": "ABUK",
+    "cycle_id": 2,
     "entry_date": "2025-02-16",
     "entry_price": 56.75,
     "position": 0.33,
@@ -239,6 +253,7 @@
   },
   {
     "symbol": "ABUK",
+    "cycle_id": 3,
     "entry_date": "2025-08-19",
     "entry_price": 52.4,
     "position": 0.66,
@@ -256,6 +271,7 @@
   },
   {
     "symbol": "ABUK",
+    "cycle_id": 3,
     "entry_date": "2025-08-19",
     "entry_price": 52.4,
     "position": 0.33,
@@ -273,6 +289,7 @@
   },
   {
     "symbol": "OIH",
+    "cycle_id": 1,
     "entry_date": "2024-10-02",
     "entry_price": 0.42,
     "position": 0.33,
@@ -290,6 +307,7 @@
   },
   {
     "symbol": "OIH",
+    "cycle_id": 2,
     "entry_date": "2025-01-15",
     "entry_price": 0.5,
     "position": 0.33,
@@ -307,6 +325,7 @@
   },
   {
     "symbol": "OIH",
+    "cycle_id": 3,
     "entry_date": "2026-01-20",
     "entry_price": 1.15,
     "position": 0.33,
@@ -324,6 +343,7 @@
   },
   {
     "symbol": "OIH",
+    "cycle_id": 4,
     "entry_date": "2026-06-09",
     "entry_price": 1.41,
     "position": 0.66,
@@ -341,6 +361,7 @@
   },
   {
     "symbol": "OIH",
+    "cycle_id": 4,
     "entry_date": "2026-06-09",
     "entry_price": 1.41,
     "position": 0.33,
@@ -358,6 +379,7 @@
   },
   {
     "symbol": "SWDY",
+    "cycle_id": 1,
     "entry_date": "2025-10-27",
     "entry_price": 76.2,
     "position": 0.33,
@@ -375,6 +397,7 @@
   },
   {
     "symbol": "ISPH",
+    "cycle_id": 1,
     "entry_date": "2025-11-13",
     "entry_price": 10.51,
     "position": 0.33,
@@ -392,6 +415,7 @@
   },
   {
     "symbol": "ISPH",
+    "cycle_id": 2,
     "entry_date": "2026-08-31",
     "entry_price": 12.9,
     "position": 0.33,
@@ -409,6 +433,7 @@
   },
   {
     "symbol": "ATQA",
+    "cycle_id": 1,
     "entry_date": "2024-10-15",
     "entry_price": 4.35,
     "position": 0.33,
@@ -426,6 +451,7 @@
   },
   {
     "symbol": "ATQA",
+    "cycle_id": 2,
     "entry_date": "2026-05-11",
     "entry_price": 9.81,
     "position": 0.66,
@@ -443,6 +469,7 @@
   },
   {
     "symbol": "ATQA",
+    "cycle_id": 2,
     "entry_date": "2026-05-11",
     "entry_price": 9.81,
     "position": 0.33,
@@ -460,6 +487,7 @@
   },
   {
     "symbol": "MTIE",
+    "cycle_id": 1,
     "entry_date": "2024-11-20",
     "entry_price": 4.75,
     "position": 0.66,
@@ -477,6 +505,7 @@
   },
   {
     "symbol": "MTIE",
+    "cycle_id": 2,
     "entry_date": "2026-03-04",
     "entry_price": 6.52,
     "position": 0.66,
@@ -494,6 +523,7 @@
   },
   {
     "symbol": "MTIE",
+    "cycle_id": 2,
     "entry_date": "2026-03-04",
     "entry_price": 6.52,
     "position": 0.33,
@@ -511,6 +541,7 @@
   },
   {
     "symbol": "HRHO",
+    "cycle_id": 1,
     "entry_date": "2024-10-10",
     "entry_price": 23.75,
     "position": 0.66,
@@ -528,6 +559,7 @@
   },
   {
     "symbol": "HRHO",
+    "cycle_id": 2,
     "entry_date": "2025-06-18",
     "entry_price": 25.23,
     "position": 0.33,
@@ -545,6 +577,7 @@
   },
   {
     "symbol": "ORWE",
+    "cycle_id": 1,
     "entry_date": "2024-11-17",
     "entry_price": 27.89,
     "position": 0.66,
@@ -562,6 +595,7 @@
   },
   {
     "symbol": "ORWE",
+    "cycle_id": 2,
     "entry_date": "2025-07-10",
     "entry_price": 23.0,
     "position": 0.66,
@@ -579,6 +613,7 @@
   },
   {
     "symbol": "JUFO",
+    "cycle_id": 1,
     "entry_date": "2024-10-15",
     "entry_price": 17.38,
     "position": 0.33,
@@ -596,6 +631,7 @@
   },
   {
     "symbol": "JUFO",
+    "cycle_id": 2,
     "entry_date": "2025-03-10",
     "entry_price": 22.46,
     "position": 0.66,
@@ -613,6 +649,7 @@
   },
   {
     "symbol": "JUFO",
+    "cycle_id": 3,
     "entry_date": "2025-10-26",
     "entry_price": 19.19,
     "position": 0.66,
@@ -630,6 +667,7 @@
   },
   {
     "symbol": "DSCW",
+    "cycle_id": 1,
     "entry_date": "2024-09-19",
     "entry_price": 1.16,
     "position": 0.33,
@@ -647,6 +685,7 @@
   },
   {
     "symbol": "DSCW",
+    "cycle_id": 2,
     "entry_date": "2025-08-06",
     "entry_price": 1.97,
     "position": 1.0,
@@ -664,6 +703,7 @@
   },
   {
     "symbol": "DSCW",
+    "cycle_id": 3,
     "entry_date": "2025-10-27",
     "entry_price": 1.86,
     "position": 1.0,
@@ -681,6 +721,7 @@
   },
   {
     "symbol": "DSCW",
+    "cycle_id": 3,
     "entry_date": "2025-10-27",
     "entry_price": 1.86,
     "position": 0.67,
@@ -698,6 +739,7 @@
   },
   {
     "symbol": "SUGR",
+    "cycle_id": 1,
     "entry_date": "2024-10-10",
     "entry_price": 66.5,
     "position": 0.66,
@@ -715,6 +757,7 @@
   },
   {
     "symbol": "SUGR",
+    "cycle_id": 2,
     "entry_date": "2025-06-10",
     "entry_price": 50.37,
     "position": 0.66,
@@ -732,6 +775,7 @@
   },
   {
     "symbol": "ELSH",
+    "cycle_id": 1,
     "entry_date": "2024-09-19",
     "entry_price": 6.37,
     "position": 0.66,
@@ -749,6 +793,7 @@
   },
   {
     "symbol": "ELSH",
+    "cycle_id": 2,
     "entry_date": "2025-11-30",
     "entry_price": 8.27,
     "position": 0.66,
@@ -766,6 +811,7 @@
   },
   {
     "symbol": "RMDA",
+    "cycle_id": 1,
     "entry_date": "2024-09-19",
     "entry_price": 1.93,
     "position": 0.33,
@@ -783,6 +829,7 @@
   },
   {
     "symbol": "RMDA",
+    "cycle_id": 2,
     "entry_date": "2024-11-26",
     "entry_price": 2.57,
     "position": 0.66,
@@ -800,6 +847,7 @@
   },
   {
     "symbol": "RMDA",
+    "cycle_id": 3,
     "entry_date": "2025-06-18",
     "entry_price": 3.2,
     "position": 0.33,
@@ -817,6 +865,7 @@
   },
   {
     "symbol": "RMDA",
+    "cycle_id": 4,
     "entry_date": "2026-06-30",
     "entry_price": 4.9,
     "position": 0.33,
@@ -834,6 +883,7 @@
   },
   {
     "symbol": "RAYA",
+    "cycle_id": 1,
     "entry_date": "2024-11-27",
     "entry_price": 3.04,
     "position": 0.66,
@@ -851,6 +901,7 @@
   },
   {
     "symbol": "RAYA",
+    "cycle_id": 2,
     "entry_date": "2025-05-13",
     "entry_price": 2.82,
     "position": 0.66,
@@ -868,6 +919,7 @@
   },
   {
     "symbol": "RAYA",
+    "cycle_id": 2,
     "entry_date": "2025-05-13",
     "entry_price": 2.82,
     "position": 0.33,
@@ -885,6 +937,7 @@
   },
   {
     "symbol": "EEII",
+    "cycle_id": 1,
     "entry_date": "2024-10-01",
     "entry_price": 1.1,
     "position": 0.33,
@@ -902,6 +955,7 @@
   },
   {
     "symbol": "EEII",
+    "cycle_id": 2,
     "entry_date": "2025-09-21",
     "entry_price": 1.53,
     "position": 0.33,
@@ -919,6 +973,7 @@
   },
   {
     "symbol": "EEII",
+    "cycle_id": 3,
     "entry_date": "2026-06-15",
     "entry_price": 1.98,
     "position": 0.33,
@@ -936,6 +991,7 @@
   },
   {
     "symbol": "MPCO",
+    "cycle_id": 1,
     "entry_date": "2025-08-17",
     "entry_price": 1.14,
     "position": 0.66,
@@ -953,6 +1009,7 @@
   },
   {
     "symbol": "MPCO",
+    "cycle_id": 1,
     "entry_date": "2025-08-17",
     "entry_price": 1.14,
     "position": 0.33,
@@ -970,6 +1027,7 @@
   },
   {
     "symbol": "MPCO",
+    "cycle_id": 2,
     "entry_date": "2026-05-25",
     "entry_price": 1.6,
     "position": 0.33,
@@ -987,6 +1045,7 @@
   },
   {
     "symbol": "GBCO",
+    "cycle_id": 1,
     "entry_date": "2024-10-07",
     "entry_price": 15.01,
     "position": 0.66,
@@ -1004,6 +1063,7 @@
   },
   {
     "symbol": "GBCO",
+    "cycle_id": 2,
     "entry_date": "2025-05-21",
     "entry_price": 21.26,
     "position": 0.33,
@@ -1021,6 +1081,7 @@
   },
   {
     "symbol": "GBCO",
+    "cycle_id": 3,
     "entry_date": "2026-03-01",
     "entry_price": 28.55,
     "position": 1.0,
@@ -1038,6 +1099,7 @@
   },
   {
     "symbol": "GBCO",
+    "cycle_id": 3,
     "entry_date": "2026-03-01",
     "entry_price": 28.55,
     "position": 0.67,
@@ -1055,6 +1117,7 @@
   },
   {
     "symbol": "TMGH",
+    "cycle_id": 1,
     "entry_date": "2024-09-19",
     "entry_price": 57.5,
     "position": 0.33,
@@ -1072,6 +1135,7 @@
   },
   {
     "symbol": "TMGH",
+    "cycle_id": 2,
     "entry_date": "2025-06-16",
     "entry_price": 54.0,
     "position": 0.66,
@@ -1089,6 +1153,7 @@
   },
   {
     "symbol": "TMGH",
+    "cycle_id": 2,
     "entry_date": "2025-06-16",
     "entry_price": 54.0,
     "position": 0.33,
@@ -1106,6 +1171,7 @@
   },
   {
     "symbol": "TMGH",
+    "cycle_id": 3,
     "entry_date": "2026-06-30",
     "entry_price": 92.36,
     "position": 0.33,
@@ -1123,6 +1189,7 @@
   },
   {
     "symbol": "ORHD",
+    "cycle_id": 1,
     "entry_date": "2024-09-19",
     "entry_price": 14.0,
     "position": 0.66,
@@ -1140,6 +1207,7 @@
   },
   {
     "symbol": "ORHD",
+    "cycle_id": 2,
     "entry_date": "2025-01-27",
     "entry_price": 17.4,
     "position": 0.33,
@@ -1157,6 +1225,7 @@
   },
   {
     "symbol": "ORHD",
+    "cycle_id": 3,
     "entry_date": "2025-08-06",
     "entry_price": 22.41,
     "position": 0.33,
@@ -1174,6 +1243,7 @@
   },
   {
     "symbol": "AMOC",
+    "cycle_id": 1,
     "entry_date": "2025-07-23",
     "entry_price": 7.52,
     "position": 0.66,
@@ -1191,6 +1261,7 @@
   },
   {
     "symbol": "AMOC",
+    "cycle_id": 1,
     "entry_date": "2025-07-23",
     "entry_price": 7.52,
     "position": 0.33,
@@ -1208,6 +1279,7 @@
   },
   {
     "symbol": "FWRY",
+    "cycle_id": 1,
     "entry_date": "2024-10-15",
     "entry_price": 7.9,
     "position": 0.66,
@@ -1225,6 +1297,7 @@
   },
   {
     "symbol": "FWRY",
+    "cycle_id": 2,
     "entry_date": "2026-01-06",
     "entry_price": 15.25,
     "position": 0.33,
@@ -1242,6 +1315,7 @@
   },
   {
     "symbol": "FWRY",
+    "cycle_id": 3,
     "entry_date": "2026-05-21",
     "entry_price": 19.25,
     "position": 0.66,
@@ -1259,6 +1333,7 @@
   },
   {
     "symbol": "COMI",
+    "cycle_id": 1,
     "entry_date": "2025-04-08",
     "entry_price": 71.05,
     "position": 0.33,
@@ -1276,6 +1351,7 @@
   },
   {
     "symbol": "COMI",
+    "cycle_id": 2,
     "entry_date": "2026-03-10",
     "entry_price": 123.0,
     "position": 0.66,
@@ -1293,6 +1369,7 @@
   },
   {
     "symbol": "ADIB",
+    "cycle_id": 1,
     "entry_date": "2024-11-20",
     "entry_price": 18.46,
     "position": 0.66,
@@ -1310,6 +1387,7 @@
   },
   {
     "symbol": "PHDC",
+    "cycle_id": 1,
     "entry_date": "2024-10-14",
     "entry_price": 5.71,
     "position": 0.33,
@@ -1327,6 +1405,7 @@
   },
   {
     "symbol": "PHDC",
+    "cycle_id": 2,
     "entry_date": "2025-08-06",
     "entry_price": 8.26,
     "position": 0.66,
@@ -1344,6 +1423,7 @@
   },
   {
     "symbol": "PHDC",
+    "cycle_id": 2,
     "entry_date": "2025-08-06",
     "entry_price": 8.26,
     "position": 0.33,
@@ -1361,6 +1441,7 @@
   },
   {
     "symbol": "MCQE",
+    "cycle_id": 1,
     "entry_date": "2026-07-30",
     "entry_price": 183.02,
     "position": 0.33,
@@ -1378,6 +1459,7 @@
   },
   {
     "symbol": "SKPC",
+    "cycle_id": 1,
     "entry_date": "2025-03-10",
     "entry_price": 17.84,
     "position": 0.66,
@@ -1395,6 +1477,7 @@
   },
   {
     "symbol": "SKPC",
+    "cycle_id": 2,
     "entry_date": "2025-10-16",
     "entry_price": 15.6,
     "position": 0.33,
@@ -1412,6 +1495,7 @@
   },
   {
     "symbol": "EGAL",
+    "cycle_id": 1,
     "entry_date": "2024-10-03",
     "entry_price": 118.1,
     "position": 0.66,
@@ -1429,6 +1513,7 @@
   },
   {
     "symbol": "EGAL",
+    "cycle_id": 1,
     "entry_date": "2024-10-03",
     "entry_price": 118.1,
     "position": 0.33,
@@ -1446,6 +1531,7 @@
   },
   {
     "symbol": "EGAL",
+    "cycle_id": 2,
     "entry_date": "2025-02-23",
     "entry_price": 147.08,
     "position": 0.33,
@@ -1463,6 +1549,7 @@
   },
   {
     "symbol": "EGAL",
+    "cycle_id": 3,
     "entry_date": "2025-11-27",
     "entry_price": 183.0,
     "position": 0.33,
@@ -1480,6 +1567,7 @@
   },
   {
     "symbol": "EGAL",
+    "cycle_id": 4,
     "entry_date": "2026-08-04",
     "entry_price": 297.01,
     "position": 0.33,
