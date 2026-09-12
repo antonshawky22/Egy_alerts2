@@ -14,7 +14,7 @@
     "max_gap_down_percent": -5.0,
     "buy1_rsi": 65,
     "buy2_rsi": 57,
-    "buy3_rsi": 44,
+    "buy3_rsi": 57,
     "buy2_min_drop_from_avg": 6,
     "buy3_min_drop_from_avg": 8,
     "sell1_rsi": 66,
