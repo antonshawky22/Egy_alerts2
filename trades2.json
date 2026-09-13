@@ -96,6 +96,19 @@
       "exit_price": 8.72,
       "exit_date": "2026-08-19",
       "profit_pct": -5.53
+    },
+    {
+      "symbol": "MTIE",
+      "cycle": 2,
+      "status": "OPEN",
+      "first_entry": "2026-09-13 with price 8.45",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 8.45,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
     }
   ],
   "HRHO": [
@@ -188,7 +201,21 @@
       "profit_pct": null
     }
   ],
-  "EEII": [],
+  "EEII": [
+    {
+      "symbol": "EEII",
+      "cycle": 1,
+      "status": "OPEN",
+      "first_entry": "2026-09-13 with price 2.29",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 2.29,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
+    }
+  ],
   "MPCO": [],
   "GBCO": [
     {
@@ -203,6 +230,19 @@
       "exit_price": 28.56,
       "exit_date": "2026-08-25",
       "profit_pct": -5.79
+    },
+    {
+      "symbol": "GBCO",
+      "cycle": 2,
+      "status": "OPEN",
+      "first_entry": "2026-09-13 with price 30.34",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 30.34,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
     }
   ],
   "TMGH": [

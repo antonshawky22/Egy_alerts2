@@ -71,8 +71,8 @@
   },
   "MTIE": {
     "cycle": 2,
-    "position": 0.0,
-    "avg_price": 0.0,
+    "position": 0.33,
+    "avg_price": 8.45,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
@@ -134,8 +134,8 @@
   },
   "EEII": {
     "cycle": 1,
-    "position": 0.0,
-    "avg_price": 0.0,
+    "position": 0.33,
+    "avg_price": 2.29,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
@@ -148,8 +148,8 @@
   },
   "GBCO": {
     "cycle": 2,
-    "position": 0.0,
-    "avg_price": 0.0,
+    "position": 0.33,
+    "avg_price": 30.34,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
