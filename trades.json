@@ -183,7 +183,10 @@
     "symbol": "ISPH",
     "entry_trend": "↗️",
     "entry_price": 13.45,
-    "entry_date": "2026-08-06"
+    "entry_date": "2026-08-06",
+    "exit_price": 12.48,
+    "exit_date": "2026-09-14",
+    "profit_pct": -7.21
   },
   {
     "symbol": "JUFO",
@@ -394,5 +397,17 @@
     "entry_trend": "🔛",
     "entry_price": 1.87,
     "entry_date": "2026-09-13"
+  },
+  {
+    "symbol": "FWRY",
+    "entry_trend": "🔛",
+    "entry_price": 18.92,
+    "entry_date": "2026-09-14"
+  },
+  {
+    "symbol": "COMI",
+    "entry_trend": "🔛",
+    "entry_price": 133.99,
+    "entry_date": "2026-09-14"
   }
 ]
