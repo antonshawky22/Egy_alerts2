@@ -57,8 +57,8 @@
   },
   "ISPH": {
     "cycle": 1,
-    "position": 0.33,
-    "avg_price": 13.0,
+    "position": 0.66,
+    "avg_price": 12.76,
     "peak_profit": 3.6923076923076956,
     "realized_pnl_tracker": []
   },
@@ -148,8 +148,8 @@
   },
   "GBCO": {
     "cycle": 2,
-    "position": 0.33,
-    "avg_price": 30.34,
+    "position": 0.66,
+    "avg_price": 29.875,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
@@ -183,8 +183,8 @@
   },
   "COMI": {
     "cycle": 1,
-    "position": 0.33,
-    "avg_price": 139.27,
+    "position": 0.66,
+    "avg_price": 136.88500000000002,
     "peak_profit": 1.960221153155733,
     "realized_pnl_tracker": []
   },
@@ -197,8 +197,8 @@
   },
   "PHDC": {
     "cycle": 1,
-    "position": 0.66,
-    "avg_price": 15.02,
+    "position": 1.0,
+    "avg_price": 14.6732,
     "peak_profit": 3.077930582842179,
     "realized_pnl_tracker": []
   },
@@ -211,8 +211,8 @@
   },
   "SKPC": {
     "cycle": 1,
-    "position": 0.0,
-    "avg_price": 0.0,
+    "position": 0.33,
+    "avg_price": 17.81,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
