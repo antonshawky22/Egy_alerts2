@@ -134,8 +134,8 @@
   },
   "EEII": {
     "cycle": 1,
-    "position": 0.33,
-    "avg_price": 2.29,
+    "position": 0.66,
+    "avg_price": 2.23,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
