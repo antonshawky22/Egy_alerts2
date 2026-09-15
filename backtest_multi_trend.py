@@ -324,7 +324,7 @@ def backtest_stock(symbol, df):
         if avg_price > 0:
             profit = ((price - avg_price) / avg_price) * 100
 
-        sell1 = (position > 0.70 and rsi_val >= SELL1_RSI and profit > SELL1_MIN_PROFIT)
+        sell1 = (position > 0 and rsi_val >= SELL1_RSI and profit > SELL1_MIN_PROFIT)
         sell2 = (position > SELL2_MIN_POSITION and position <= SELL2_MAX_POSITION and rsi_val >= SELL2_RSI and profit > SELL2_MIN_PROFIT)
         sell3 = (position > 0 and rsi_val >= SELL3_RSI and profit > SELL3_MIN_PROFIT)
 
