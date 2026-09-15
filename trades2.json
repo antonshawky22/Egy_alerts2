@@ -336,7 +336,21 @@
       "profit_pct": null
     }
   ],
-  "MCQE": [],
+  "MCQE": [
+    {
+      "symbol": "MCQE",
+      "cycle": 1,
+      "status": "OPEN",
+      "first_entry": "2026-09-15 with price 215.78",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 215.78,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
+    }
+  ],
   "SKPC": [
     {
       "symbol": "SKPC",
