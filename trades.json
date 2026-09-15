@@ -409,5 +409,17 @@
     "entry_trend": "🔛",
     "entry_price": 133.99,
     "entry_date": "2026-09-14"
+  },
+  {
+    "symbol": "ABUK",
+    "entry_trend": "↗️",
+    "entry_price": 88.94,
+    "entry_date": "2026-09-15"
+  },
+  {
+    "symbol": "SUGR",
+    "entry_trend": "↗️",
+    "entry_price": 61.11,
+    "entry_date": "2026-09-15"
   }
 ]
