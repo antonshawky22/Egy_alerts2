@@ -80,9 +80,9 @@
     "entry_price": 27.35
   },
   "DSCW": {
-    "trend": "🔛",
-    "in_position": true,
-    "entry_price": 1.87
+    "trend": "🔻",
+    "in_position": false,
+    "entry_price": null
   },
   "SUGR": {
     "trend": "↗️",
@@ -91,8 +91,8 @@
   },
   "ELSH": {
     "trend": "🔛",
-    "in_position": true,
-    "entry_price": 13.71
+    "in_position": false,
+    "entry_price": null
   },
   "RMDA": {
     "trend": "↗️",
@@ -101,8 +101,8 @@
   },
   "RAYA": {
     "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 7.08
   },
   "EEII": {
     "trend": "🔛",
@@ -166,7 +166,7 @@
   },
   "EGAL": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 362.57
   }
 }

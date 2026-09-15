@@ -351,7 +351,10 @@
     "symbol": "ELSH",
     "entry_trend": "↗️",
     "entry_price": 13.71,
-    "entry_date": "2026-08-30"
+    "entry_date": "2026-08-30",
+    "exit_price": 12.71,
+    "exit_date": "2026-09-15",
+    "profit_pct": -7.29
   },
   {
     "symbol": "HRHO",
@@ -396,7 +399,10 @@
     "symbol": "DSCW",
     "entry_trend": "🔛",
     "entry_price": 1.87,
-    "entry_date": "2026-09-13"
+    "entry_date": "2026-09-13",
+    "exit_price": 1.8,
+    "exit_date": "2026-09-15",
+    "profit_pct": -3.74
   },
   {
     "symbol": "FWRY",
@@ -420,6 +426,18 @@
     "symbol": "SUGR",
     "entry_trend": "↗️",
     "entry_price": 61.11,
+    "entry_date": "2026-09-15"
+  },
+  {
+    "symbol": "RAYA",
+    "entry_trend": "🔛",
+    "entry_price": 7.08,
+    "entry_date": "2026-09-15"
+  },
+  {
+    "symbol": "EGAL",
+    "entry_trend": "↗️",
+    "entry_price": 362.57,
     "entry_date": "2026-09-15"
   }
 ]
