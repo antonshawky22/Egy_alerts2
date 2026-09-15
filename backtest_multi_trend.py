@@ -250,8 +250,8 @@ def close_trade(trade, date, price, final_profit, reason):
     trade["exit_date"] = date
     trade["profit_pct"] = round(final_profit, 2)
     trade["exit_reason"] = reason
+    trade["days_in_trade"] = (pd.to_datetime(date) - pd.to_datetime(trade["first_entry"]["date"])).days
     return trade
-
 
 # ============================================================
 # BACKTEST ONE STOCK
@@ -562,7 +562,10 @@ closed_trades = [
 ]
 
 open_trades = [t for t in all_trades if t["status"] == "OPEN"]
-
+trade_days = [t["days_in_trade"] for t in closed_trades if "days_in_trade" in t]
+long_60 = [t for t in closed_trades if t.get("days_in_trade", 0) >= 60]
+long_90 = [t for t in closed_trades if t.get("days_in_trade", 0) >= 90]
+long_180 = [t for t in closed_trades if t.get("days_in_trade", 0) >= 180]
 
 # ============================================================
 # BASIC STATISTICS
@@ -633,7 +636,16 @@ for trade in closed_trades:
     reason = trade["exit_reason"]
     exit_analysis[reason] = exit_analysis.get(reason, 0) + 1
 
-
+print("\n" + "=" * 80)
+print("SIDEWAYS / LONG TRADE ANALYSIS")
+print("=" * 80)
+print(f"Average Days       : {np.mean(trade_days):.1f}" if trade_days else "Average Days       : 0")
+print(f">= 60 Days         : {len(long_60)}")
+print(f">= 90 Days         : {len(long_90)}")
+print(f">= 180 Days        : {len(long_180)}")
+if trade_days:
+    longest = max(closed_trades, key=lambda x: x.get("days_in_trade", 0))
+    print(f"Longest Trade      : {longest['symbol']} | {longest['days_in_trade']} days | {longest['profit_pct']:.2f}%")
 # ============================================================
 # LADDER ANALYSIS
 # ============================================================
