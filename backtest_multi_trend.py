@@ -26,7 +26,7 @@ INITIAL_CAPITAL = 100000.0
 # ============================================================
 
 RSI_PERIOD = 14
-EMA100_PERIOD = 95
+EMA100_PERIOD = 60
 RUNUP_LOOKBACK = 160
 MAX_RUNUP_PERCENT = 80
 MAX_GAP_DOWN_PERCENT = -5
