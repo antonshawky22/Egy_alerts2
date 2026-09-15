@@ -25,7 +25,8 @@
     "profit_pct": 16.33,
     "max_position": 0.33,
     "peak_profit": 16.32653061224489,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 6
   },
   {
     "symbol": "EGAL",
@@ -45,7 +46,8 @@
     "profit_pct": 28.23,
     "max_position": 0.33,
     "peak_profit": 28.230088495575227,
-    "exit_reason": "EXIT FULL"
+    "exit_reason": "EXIT FULL",
+    "days_in_trade": 85
   },
   {
     "symbol": "FWRY",
@@ -73,7 +75,8 @@
     "profit_pct": 15.84,
     "max_position": 0.33,
     "peak_profit": 15.842839036755398,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 144
   },
   {
     "symbol": "GBCO",
@@ -112,7 +115,8 @@
     "profit_pct": 17.24,
     "max_position": 0.66,
     "peak_profit": 19.182282793867106,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 63
   },
   {
     "symbol": "EAST",
@@ -140,7 +144,8 @@
     "profit_pct": 15.57,
     "max_position": 0.33,
     "peak_profit": 15.567765567765568,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 105
   },
   {
     "symbol": "TMGH",
@@ -161,6 +166,7 @@
     "max_position": 0.33,
     "peak_profit": 5.31645569620253,
     "exit_reason": "STOP LOSS",
+    "days_in_trade": 71,
     "stop_trigger_profit": -17.81
   },
   {
@@ -189,7 +195,8 @@
     "profit_pct": 17.34,
     "max_position": 0.33,
     "peak_profit": 17.33931240657697,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 243
   },
   {
     "symbol": "ORWE",
@@ -218,6 +225,7 @@
     "max_position": 1.0,
     "peak_profit": 0.0,
     "exit_reason": "STOP LOSS",
+    "days_in_trade": 62,
     "stop_trigger_profit": -15.19
   },
   {
@@ -243,6 +251,7 @@
     "max_position": 0.66,
     "peak_profit": 0.061312078479470046,
     "exit_reason": "STOP LOSS",
+    "days_in_trade": 86,
     "stop_trigger_profit": -18.09
   },
   {
@@ -300,7 +309,8 @@
     "profit_pct": 15.7,
     "max_position": 1.0,
     "peak_profit": 16.32825719120136,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 42
   },
   {
     "symbol": "HRHO",
@@ -328,7 +338,8 @@
     "profit_pct": 15.47,
     "max_position": 0.33,
     "peak_profit": 15.469369766416913,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 106
   },
   {
     "symbol": "RAYA",
@@ -357,6 +368,7 @@
     "max_position": 1.0,
     "peak_profit": 9.999999999999995,
     "exit_reason": "STOP LOSS",
+    "days_in_trade": 57,
     "stop_trigger_profit": -14.7
   },
   {
@@ -414,7 +426,8 @@
     "profit_pct": 16.31,
     "max_position": 1.0,
     "peak_profit": 17.918241261976064,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 189
   },
   {
     "symbol": "RMDA",
@@ -453,7 +466,8 @@
     "profit_pct": 22.62,
     "max_position": 0.66,
     "peak_profit": 23.412698412698408,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 99
   },
   {
     "symbol": "ORHD",
@@ -481,7 +495,8 @@
     "profit_pct": 19.41,
     "max_position": 0.33,
     "peak_profit": 19.408121128699257,
-    "exit_reason": "SELL L2"
+    "exit_reason": "SELL L2",
+    "days_in_trade": 15
   },
   {
     "symbol": "JUFO",
@@ -520,7 +535,8 @@
     "profit_pct": 17.3,
     "max_position": 0.66,
     "peak_profit": 17.322257512826784,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 76
   },
   {
     "symbol": "EEII",
@@ -544,7 +560,8 @@
     "profit_pct": 27.59,
     "max_position": 0.66,
     "peak_profit": 27.586206896551708,
-    "exit_reason": "EXIT FULL"
+    "exit_reason": "EXIT FULL",
+    "days_in_trade": 112
   },
   {
     "symbol": "OIH",
@@ -583,7 +600,8 @@
     "profit_pct": 17.44,
     "max_position": 0.66,
     "peak_profit": 18.6046511627907,
-    "exit_reason": "SELL L2"
+    "exit_reason": "SELL L2",
+    "days_in_trade": 14
   },
   {
     "symbol": "ADIB",
@@ -622,7 +640,8 @@
     "profit_pct": 15.34,
     "max_position": 0.66,
     "peak_profit": 15.340126686863123,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 209
   },
   {
     "symbol": "ATQA",
@@ -661,7 +680,8 @@
     "profit_pct": 16.09,
     "max_position": 0.66,
     "peak_profit": 16.28352490421457,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 76
   },
   {
     "symbol": "DSCW",
@@ -689,7 +709,8 @@
     "profit_pct": 16.11,
     "max_position": 0.33,
     "peak_profit": 16.10738255033557,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 24
   },
   {
     "symbol": "COMI",
@@ -728,7 +749,8 @@
     "profit_pct": 17.8,
     "max_position": 0.66,
     "peak_profit": 17.851781083663163,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 217
   },
   {
     "symbol": "PHDC",
@@ -756,7 +778,8 @@
     "profit_pct": 15.32,
     "max_position": 0.33,
     "peak_profit": 15.322580645161294,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 14
   },
   {
     "symbol": "MTIE",
@@ -813,7 +836,8 @@
     "profit_pct": 15.96,
     "max_position": 1.0,
     "peak_profit": 20.904046336425118,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 192
   },
   {
     "symbol": "OIH",
@@ -852,7 +876,8 @@
     "profit_pct": 15.69,
     "max_position": 0.66,
     "peak_profit": 15.686274509803914,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 67
   },
   {
     "symbol": "GBCO",
@@ -891,7 +916,8 @@
     "profit_pct": 15.19,
     "max_position": 0.66,
     "peak_profit": 15.193026151930269,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 59
   },
   {
     "symbol": "ORHD",
@@ -919,7 +945,8 @@
     "profit_pct": 15.52,
     "max_position": 0.33,
     "peak_profit": 15.517241379310361,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 38
   },
   {
     "symbol": "PHDC",
@@ -947,7 +974,8 @@
     "profit_pct": 18.1,
     "max_position": 0.33,
     "peak_profit": 18.098159509202464,
-    "exit_reason": "SELL L2"
+    "exit_reason": "SELL L2",
+    "days_in_trade": 134
   },
   {
     "symbol": "ABUK",
@@ -975,7 +1003,8 @@
     "profit_pct": 15.17,
     "max_position": 0.33,
     "peak_profit": 15.168539325842701,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 37
   },
   {
     "symbol": "AMOC",
@@ -1011,7 +1040,8 @@
     "profit_pct": 22.9,
     "max_position": 1.0,
     "peak_profit": 25.114228887813795,
-    "exit_reason": "EXIT FULL"
+    "exit_reason": "EXIT FULL",
+    "days_in_trade": 399
   },
   {
     "symbol": "EGAL",
@@ -1050,7 +1080,8 @@
     "profit_pct": 19.18,
     "max_position": 0.66,
     "peak_profit": 22.794636556104457,
-    "exit_reason": "SELL L2"
+    "exit_reason": "SELL L2",
+    "days_in_trade": 30
   },
   {
     "symbol": "SKPC",
@@ -1089,7 +1120,8 @@
     "profit_pct": 18.59,
     "max_position": 0.66,
     "peak_profit": 20.31250000000003,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 389
   },
   {
     "symbol": "JUFO",
@@ -1114,6 +1146,7 @@
     "max_position": 0.66,
     "peak_profit": 5.932932072226994,
     "exit_reason": "STOP LOSS",
+    "days_in_trade": 76,
     "stop_trigger_profit": -20.99
   },
   {
@@ -1142,7 +1175,8 @@
     "profit_pct": 17.46,
     "max_position": 0.33,
     "peak_profit": 17.455138662316482,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 148
   },
   {
     "symbol": "ABUK",
@@ -1167,6 +1201,7 @@
     "max_position": 0.66,
     "peak_profit": 0.8002724331687485,
     "exit_reason": "STOP LOSS",
+    "days_in_trade": 94,
     "stop_trigger_profit": -17.77
   },
   {
@@ -1206,7 +1241,8 @@
     "profit_pct": 16.54,
     "max_position": 0.66,
     "peak_profit": 16.85116851168513,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 58
   },
   {
     "symbol": "HRHO",
@@ -1234,7 +1270,8 @@
     "profit_pct": 15.87,
     "max_position": 0.33,
     "peak_profit": 15.869980879541117,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 44
   },
   {
     "symbol": "EEII",
@@ -1262,7 +1299,8 @@
     "profit_pct": 21.88,
     "max_position": 0.33,
     "peak_profit": 21.875000000000004,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 8
   },
   {
     "symbol": "FWRY",
@@ -1290,7 +1328,8 @@
     "profit_pct": 17.53,
     "max_position": 0.33,
     "peak_profit": 17.530319735391398,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 23
   },
   {
     "symbol": "GBCO",
@@ -1329,7 +1368,8 @@
     "profit_pct": 17.38,
     "max_position": 0.66,
     "peak_profit": 18.5669329460179,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 31
   },
   {
     "symbol": "FWRY",
@@ -1357,7 +1397,8 @@
     "profit_pct": 17.35,
     "max_position": 0.33,
     "peak_profit": 17.346938775510196,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 11
   },
   {
     "symbol": "RAYA",
@@ -1396,7 +1437,8 @@
     "profit_pct": 18.69,
     "max_position": 0.66,
     "peak_profit": 19.62616822429908,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 47
   },
   {
     "symbol": "EFIH",
@@ -1435,7 +1477,8 @@
     "profit_pct": 16.19,
     "max_position": 0.66,
     "peak_profit": 16.73640167364017,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 83
   },
   {
     "symbol": "RMDA",
@@ -1474,7 +1517,8 @@
     "profit_pct": 16.29,
     "max_position": 0.66,
     "peak_profit": 17.488789237668144,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 273
   },
   {
     "symbol": "TMGH",
@@ -1502,7 +1546,8 @@
     "profit_pct": 19.25,
     "max_position": 0.33,
     "peak_profit": 19.249999999999996,
-    "exit_reason": "SELL L2"
+    "exit_reason": "SELL L2",
+    "days_in_trade": 168
   },
   {
     "symbol": "OLFI",
@@ -1530,7 +1575,8 @@
     "profit_pct": 21.12,
     "max_position": 0.33,
     "peak_profit": 21.122112211221122,
-    "exit_reason": "SELL L2"
+    "exit_reason": "SELL L2",
+    "days_in_trade": 29
   },
   {
     "symbol": "HRHO",
@@ -1559,6 +1605,7 @@
     "max_position": 1.0,
     "peak_profit": 2.778707733511879,
     "exit_reason": "STOP LOSS",
+    "days_in_trade": 17,
     "stop_trigger_profit": -13.26
   },
   {
@@ -1583,7 +1630,8 @@
     "profit_pct": 23.99,
     "max_position": 0.66,
     "peak_profit": 23.991376655374197,
-    "exit_reason": "EXIT FULL"
+    "exit_reason": "EXIT FULL",
+    "days_in_trade": 447
   },
   {
     "symbol": "EMFD",
@@ -1622,7 +1670,8 @@
     "profit_pct": 16.02,
     "max_position": 0.66,
     "peak_profit": 16.840373011519475,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 328
   },
   {
     "symbol": "ELSH",
@@ -1661,7 +1710,8 @@
     "profit_pct": 15.66,
     "max_position": 0.66,
     "peak_profit": 16.026105873821617,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 80
   },
   {
     "symbol": "GBCO",
@@ -1689,7 +1739,8 @@
     "profit_pct": 16.82,
     "max_position": 0.33,
     "peak_profit": 16.81943171402382,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 46
   },
   {
     "symbol": "FWRY",
@@ -1717,7 +1768,8 @@
     "profit_pct": 16.06,
     "max_position": 0.33,
     "peak_profit": 16.05504587155963,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 9
   },
   {
     "symbol": "PHDC",
@@ -1745,7 +1797,8 @@
     "profit_pct": 17.51,
     "max_position": 0.33,
     "peak_profit": 17.509727626459153,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 8
   },
   {
     "symbol": "ORWE",
@@ -1784,7 +1837,8 @@
     "profit_pct": 15.79,
     "max_position": 0.66,
     "peak_profit": 16.567131165671334,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 395
   },
   {
     "symbol": "ADIB",
@@ -1812,7 +1866,8 @@
     "profit_pct": 15.1,
     "max_position": 0.33,
     "peak_profit": 15.102040816326515,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 111
   },
   {
     "symbol": "ETEL",
@@ -1840,7 +1895,8 @@
     "profit_pct": 18.82,
     "max_position": 0.33,
     "peak_profit": 18.818791946308718,
-    "exit_reason": "SELL L2"
+    "exit_reason": "SELL L2",
+    "days_in_trade": 24
   },
   {
     "symbol": "MTIE",
@@ -1868,7 +1924,8 @@
     "profit_pct": 15.54,
     "max_position": 0.33,
     "peak_profit": 15.535714285714288,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 198
   },
   {
     "symbol": "JUFO",
@@ -1896,7 +1953,8 @@
     "profit_pct": 15.35,
     "max_position": 0.33,
     "peak_profit": 15.350389321468286,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 97
   },
   {
     "symbol": "OLFI",
@@ -1924,7 +1982,8 @@
     "profit_pct": 15.76,
     "max_position": 0.33,
     "peak_profit": 15.757000474608448,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 112
   },
   {
     "symbol": "ABUK",
@@ -1963,7 +2022,8 @@
     "profit_pct": 18.25,
     "max_position": 0.66,
     "peak_profit": 18.38907301396003,
-    "exit_reason": "SELL L2"
+    "exit_reason": "SELL L2",
+    "days_in_trade": 186
   },
   {
     "symbol": "RAYA",
@@ -2002,7 +2062,8 @@
     "profit_pct": 15.94,
     "max_position": 0.66,
     "peak_profit": 15.94202898550725,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 162
   },
   {
     "symbol": "DSCW",
@@ -2027,6 +2088,7 @@
     "max_position": 0.66,
     "peak_profit": 0.0,
     "exit_reason": "STOP LOSS",
+    "days_in_trade": 41,
     "stop_trigger_profit": -17.09
   },
   {
@@ -2055,7 +2117,8 @@
     "profit_pct": 16.08,
     "max_position": 0.33,
     "peak_profit": 16.08,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 64
   },
   {
     "symbol": "EGAL",
@@ -2087,7 +2150,8 @@
     "profit_pct": 20.86,
     "max_position": 0.66,
     "peak_profit": 23.542350920541175,
-    "exit_reason": "EXIT FULL"
+    "exit_reason": "EXIT FULL",
+    "days_in_trade": 84
   },
   {
     "symbol": "ORHD",
@@ -2115,7 +2179,8 @@
     "profit_pct": 19.08,
     "max_position": 0.33,
     "peak_profit": 19.079837618403232,
-    "exit_reason": "SELL L2"
+    "exit_reason": "SELL L2",
+    "days_in_trade": 92
   },
   {
     "symbol": "PHDC",
@@ -2154,7 +2219,8 @@
     "profit_pct": 15.81,
     "max_position": 0.66,
     "peak_profit": 16.30502169869807,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 196
   },
   {
     "symbol": "GBCO",
@@ -2182,7 +2248,8 @@
     "profit_pct": 16.03,
     "max_position": 0.33,
     "peak_profit": 16.02643535729037,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 102
   },
   {
     "symbol": "MPCO",
@@ -2214,7 +2281,8 @@
     "profit_pct": 30.36,
     "max_position": 0.66,
     "peak_profit": 41.96428571428571,
-    "exit_reason": "EXIT FULL"
+    "exit_reason": "EXIT FULL",
+    "days_in_trade": 46
   },
   {
     "symbol": "EAST",
@@ -2242,7 +2310,8 @@
     "profit_pct": 15.01,
     "max_position": 0.33,
     "peak_profit": 15.005476451259575,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 33
   },
   {
     "symbol": "SWDY",
@@ -2270,7 +2339,8 @@
     "profit_pct": 17.75,
     "max_position": 0.33,
     "peak_profit": 17.754467754467765,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 259
   },
   {
     "symbol": "COMI",
@@ -2309,7 +2379,8 @@
     "profit_pct": 16.03,
     "max_position": 0.66,
     "peak_profit": 16.754017162932673,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 76
   },
   {
     "symbol": "EFIH",
@@ -2348,7 +2419,8 @@
     "profit_pct": 17.54,
     "max_position": 0.66,
     "peak_profit": 17.915557246101198,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 71
   },
   {
     "symbol": "HRHO",
@@ -2376,7 +2448,8 @@
     "profit_pct": 15.87,
     "max_position": 0.33,
     "peak_profit": 15.869311551925314,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 44
   },
   {
     "symbol": "ETEL",
@@ -2404,7 +2477,8 @@
     "profit_pct": 15.18,
     "max_position": 0.33,
     "peak_profit": 15.177777777777774,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 57
   },
   {
     "symbol": "ELSH",
@@ -2443,7 +2517,8 @@
     "profit_pct": 17.38,
     "max_position": 0.66,
     "peak_profit": 18.235681369321917,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 63
   },
   {
     "symbol": "EEII",
@@ -2471,7 +2546,8 @@
     "profit_pct": 15.58,
     "max_position": 0.33,
     "peak_profit": 15.584415584415584,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 39
   },
   {
     "symbol": "EEII",
@@ -2510,7 +2586,8 @@
     "profit_pct": 17.43,
     "max_position": 0.66,
     "peak_profit": 18.0428134556575,
-    "exit_reason": "SELL L2"
+    "exit_reason": "SELL L2",
+    "days_in_trade": 44
   },
   {
     "symbol": "HRHO",
@@ -2534,7 +2611,8 @@
     "profit_pct": -8.42,
     "max_position": 0.66,
     "peak_profit": 9.62699822380107,
-    "exit_reason": "END_OF_DATA"
+    "exit_reason": "END_OF_DATA",
+    "days_in_trade": 320
   },
   {
     "symbol": "ISPH",
@@ -2562,7 +2640,8 @@
     "profit_pct": 19.83,
     "max_position": 0.33,
     "peak_profit": 19.830827067669166,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 86
   },
   {
     "symbol": "JUFO",
@@ -2601,7 +2680,8 @@
     "profit_pct": 16.51,
     "max_position": 0.66,
     "peak_profit": 16.81957186544343,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 76
   },
   {
     "symbol": "DSCW",
@@ -2640,7 +2720,8 @@
     "profit_pct": 16.4,
     "max_position": 0.66,
     "peak_profit": 17.741935483870943,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 273
   },
   {
     "symbol": "ORHD",
@@ -2679,7 +2760,8 @@
     "profit_pct": 18.71,
     "max_position": 0.66,
     "peak_profit": 18.726899383983568,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 151
   },
   {
     "symbol": "OLFI",
@@ -2707,7 +2789,8 @@
     "profit_pct": 18.2,
     "max_position": 0.33,
     "peak_profit": 18.198037466547717,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 63
   },
   {
     "symbol": "COMI",
@@ -2735,7 +2818,8 @@
     "profit_pct": 18.33,
     "max_position": 0.33,
     "peak_profit": 18.330420479078853,
-    "exit_reason": "SELL L2"
+    "exit_reason": "SELL L2",
+    "days_in_trade": 55
   },
   {
     "symbol": "EGAL",
@@ -2774,7 +2858,8 @@
     "profit_pct": 17.29,
     "max_position": 0.66,
     "peak_profit": 17.28829462819612,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 33
   },
   {
     "symbol": "ELSH",
@@ -2795,6 +2880,7 @@
     "max_position": 0.33,
     "peak_profit": 1.3173652694610924,
     "exit_reason": "STOP LOSS",
+    "days_in_trade": 64,
     "stop_trigger_profit": -18.68
   },
   {
@@ -2823,7 +2909,8 @@
     "profit_pct": 16.89,
     "max_position": 0.33,
     "peak_profit": 16.887417218543042,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 13
   },
   {
     "symbol": "GBCO",
@@ -2862,7 +2949,8 @@
     "profit_pct": 19.4,
     "max_position": 0.66,
     "peak_profit": 22.504361310331458,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 61
   },
   {
     "symbol": "FWRY",
@@ -2890,7 +2978,8 @@
     "profit_pct": 20.89,
     "max_position": 0.33,
     "peak_profit": 20.88974854932302,
-    "exit_reason": "SELL L2"
+    "exit_reason": "SELL L2",
+    "days_in_trade": 30
   },
   {
     "symbol": "TMGH",
@@ -2918,7 +3007,8 @@
     "profit_pct": 15.61,
     "max_position": 0.33,
     "peak_profit": 15.607843137254898,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 20
   },
   {
     "symbol": "OIH",
@@ -2946,7 +3036,8 @@
     "profit_pct": 18.42,
     "max_position": 0.33,
     "peak_profit": 18.421052631578966,
-    "exit_reason": "SELL L2"
+    "exit_reason": "SELL L2",
+    "days_in_trade": 70
   },
   {
     "symbol": "OLFI",
@@ -2974,7 +3065,8 @@
     "profit_pct": -5.1,
     "max_position": 1.0,
     "peak_profit": 9.6948103300198,
-    "exit_reason": "END_OF_DATA"
+    "exit_reason": "END_OF_DATA",
+    "days_in_trade": 232
   },
   {
     "symbol": "GBCO",
@@ -2999,6 +3091,7 @@
     "max_position": 0.66,
     "peak_profit": 5.723905723905721,
     "exit_reason": "STOP LOSS",
+    "days_in_trade": 36,
     "stop_trigger_profit": -17.42
   },
   {
@@ -3038,7 +3131,8 @@
     "profit_pct": 20.52,
     "max_position": 0.66,
     "peak_profit": 20.788530465949822,
-    "exit_reason": "SELL L2"
+    "exit_reason": "SELL L2",
+    "days_in_trade": 170
   },
   {
     "symbol": "EAST",
@@ -3062,7 +3156,8 @@
     "profit_pct": -14.86,
     "max_position": 0.66,
     "peak_profit": 6.893106893106888,
-    "exit_reason": "END_OF_DATA"
+    "exit_reason": "END_OF_DATA",
+    "days_in_trade": 208
   },
   {
     "symbol": "ISPH",
@@ -3101,7 +3196,8 @@
     "profit_pct": 18.7,
     "max_position": 0.66,
     "peak_profit": 21.90064794816415,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 166
   },
   {
     "symbol": "MTIE",
@@ -3125,7 +3221,8 @@
     "profit_pct": 23.92,
     "max_position": 0.66,
     "peak_profit": 23.924528301886806,
-    "exit_reason": "EXIT FULL"
+    "exit_reason": "EXIT FULL",
+    "days_in_trade": 70
   },
   {
     "symbol": "FWRY",
@@ -3164,7 +3261,8 @@
     "profit_pct": 16.52,
     "max_position": 0.66,
     "peak_profit": 16.983209468758606,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 78
   },
   {
     "symbol": "PHDC",
@@ -3196,7 +3294,8 @@
     "profit_pct": 26.88,
     "max_position": 0.66,
     "peak_profit": 29.870129870129862,
-    "exit_reason": "EXIT FULL"
+    "exit_reason": "EXIT FULL",
+    "days_in_trade": 56
   },
   {
     "symbol": "COMI",
@@ -3224,7 +3323,8 @@
     "profit_pct": 16.48,
     "max_position": 0.33,
     "peak_profit": 16.479370027069155,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 42
   },
   {
     "symbol": "SKPC",
@@ -3248,7 +3348,8 @@
     "profit_pct": 5.2,
     "max_position": 0.66,
     "peak_profit": 10.258645742516714,
-    "exit_reason": "END_OF_DATA"
+    "exit_reason": "END_OF_DATA",
+    "days_in_trade": 183
   },
   {
     "symbol": "RMDA",
@@ -3276,7 +3377,8 @@
     "profit_pct": 15.5,
     "max_position": 0.33,
     "peak_profit": 15.496368038740913,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 38
   },
   {
     "symbol": "AMOC",
@@ -3315,7 +3417,8 @@
     "profit_pct": 17.31,
     "max_position": 0.66,
     "peak_profit": 18.417799752781214,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 134
   },
   {
     "symbol": "GBCO",
@@ -3354,7 +3457,8 @@
     "profit_pct": 17.46,
     "max_position": 0.66,
     "peak_profit": 17.55868544600939,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 58
   },
   {
     "symbol": "COMI",
@@ -3374,7 +3478,8 @@
     "profit_pct": -1.85,
     "max_position": 0.33,
     "peak_profit": 6.303703703703698,
-    "exit_reason": "END_OF_DATA"
+    "exit_reason": "END_OF_DATA",
+    "days_in_trade": 138
   },
   {
     "symbol": "ATQA",
@@ -3413,7 +3518,8 @@
     "profit_pct": 16.59,
     "max_position": 0.66,
     "peak_profit": 18.04472178887155,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 106
   },
   {
     "symbol": "FWRY",
@@ -3437,7 +3543,8 @@
     "profit_pct": -1.49,
     "max_position": 0.66,
     "peak_profit": 4.168784951703084,
-    "exit_reason": "END_OF_DATA"
+    "exit_reason": "END_OF_DATA",
+    "days_in_trade": 121
   },
   {
     "symbol": "EMFD",
@@ -3476,7 +3583,8 @@
     "profit_pct": 15.78,
     "max_position": 0.66,
     "peak_profit": 16.119549240568347,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 15
   },
   {
     "symbol": "OIH",
@@ -3508,7 +3616,8 @@
     "profit_pct": 21.18,
     "max_position": 0.66,
     "peak_profit": 23.611111111111118,
-    "exit_reason": "EXIT FULL"
+    "exit_reason": "EXIT FULL",
+    "days_in_trade": 84
   },
   {
     "symbol": "MTIE",
@@ -3536,7 +3645,8 @@
     "profit_pct": 16.58,
     "max_position": 0.33,
     "peak_profit": 16.576086956521735,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 76
   },
   {
     "symbol": "EEII",
@@ -3564,7 +3674,8 @@
     "profit_pct": 18.95,
     "max_position": 0.33,
     "peak_profit": 18.947368421052627,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 46
   },
   {
     "symbol": "SWDY",
@@ -3588,7 +3699,8 @@
     "profit_pct": 26.42,
     "max_position": 0.66,
     "peak_profit": 26.42198643242303,
-    "exit_reason": "EXIT FULL"
+    "exit_reason": "EXIT FULL",
+    "days_in_trade": 58
   },
   {
     "symbol": "EMFD",
@@ -3616,7 +3728,8 @@
     "profit_pct": 15.97,
     "max_position": 0.33,
     "peak_profit": 15.967885816235494,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 81
   },
   {
     "symbol": "RMDA",
@@ -3636,7 +3749,8 @@
     "profit_pct": 26.56,
     "max_position": 0.33,
     "peak_profit": 26.559356136820934,
-    "exit_reason": "EXIT FULL"
+    "exit_reason": "EXIT FULL",
+    "days_in_trade": 53
   },
   {
     "symbol": "MPCO",
@@ -3664,7 +3778,8 @@
     "profit_pct": 16.96,
     "max_position": 0.33,
     "peak_profit": 16.959064327485383,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 4
   },
   {
     "symbol": "TMGH",
@@ -3684,7 +3799,8 @@
     "profit_pct": 0.83,
     "max_position": 0.33,
     "peak_profit": 7.062532842879662,
-    "exit_reason": "END_OF_DATA"
+    "exit_reason": "END_OF_DATA",
+    "days_in_trade": 83
   },
   {
     "symbol": "MPCO",
@@ -3712,7 +3828,8 @@
     "profit_pct": 19.21,
     "max_position": 0.33,
     "peak_profit": 19.20903954802259,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 42
   },
   {
     "symbol": "GBCO",
@@ -3732,7 +3849,8 @@
     "profit_pct": -0.56,
     "max_position": 0.33,
     "peak_profit": 9.581824168587422,
-    "exit_reason": "END_OF_DATA"
+    "exit_reason": "END_OF_DATA",
+    "days_in_trade": 69
   },
   {
     "symbol": "EFIH",
@@ -3752,7 +3870,8 @@
     "profit_pct": 7.54,
     "max_position": 0.33,
     "peak_profit": 14.266117969821662,
-    "exit_reason": "END_OF_DATA"
+    "exit_reason": "END_OF_DATA",
+    "days_in_trade": 63
   },
   {
     "symbol": "MCQE",
@@ -3772,7 +3891,8 @@
     "profit_pct": 33.1,
     "max_position": 0.33,
     "peak_profit": 33.100207627581675,
-    "exit_reason": "EXIT FULL"
+    "exit_reason": "EXIT FULL",
+    "days_in_trade": 13
   },
   {
     "symbol": "ISPH",
@@ -3796,7 +3916,8 @@
     "profit_pct": -1.02,
     "max_position": 0.66,
     "peak_profit": 3.1345565749235487,
-    "exit_reason": "END_OF_DATA"
+    "exit_reason": "END_OF_DATA",
+    "days_in_trade": 30
   },
   {
     "symbol": "DSCW",
@@ -3820,7 +3941,8 @@
     "profit_pct": -9.09,
     "max_position": 0.66,
     "peak_profit": 0.0,
-    "exit_reason": "END_OF_DATA"
+    "exit_reason": "END_OF_DATA",
+    "days_in_trade": 29
   },
   {
     "symbol": "MTIE",
@@ -3840,7 +3962,8 @@
     "profit_pct": -2.35,
     "max_position": 0.33,
     "peak_profit": 3.990610328638496,
-    "exit_reason": "END_OF_DATA"
+    "exit_reason": "END_OF_DATA",
+    "days_in_trade": 27
   },
   {
     "symbol": "ORWE",
@@ -3860,7 +3983,8 @@
     "profit_pct": 3.75,
     "max_position": 0.33,
     "peak_profit": 13.398437499999998,
-    "exit_reason": "END_OF_DATA"
+    "exit_reason": "END_OF_DATA",
+    "days_in_trade": 20
   },
   {
     "symbol": "JUFO",
@@ -3880,7 +4004,8 @@
     "profit_pct": 1.89,
     "max_position": 0.33,
     "peak_profit": 4.15094339622642,
-    "exit_reason": "END_OF_DATA"
+    "exit_reason": "END_OF_DATA",
+    "days_in_trade": 15
   },
   {
     "symbol": "MPCO",
@@ -3908,6 +4033,7 @@
     "profit_pct": 23.22,
     "max_position": 0.33,
     "peak_profit": 23.22274881516589,
-    "exit_reason": "SELL L1"
+    "exit_reason": "SELL L1",
+    "days_in_trade": 10
   }
 ]
