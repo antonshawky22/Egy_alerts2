@@ -57,41 +57,11 @@ MIN_BARS = 40
 # ============================================================
 
 SYMBOLS = {
-    "OLFI": "OLFI",
-    "EMFD": "EMFD",
-    "ETEL": "ETEL",
-    "EAST": "EAST",
-    "EFIH": "EFIH",
-    "ABUK": "ABUK",
-    "OIH": "OIH",
-    "SWDY": "SWDY",
-    "ISPH": "ISPH",
-    "ATQA": "ATQA",
-    "MTIE": "MTIE",
-    "HRHO": "HRHO",
-    "ORWE": "ORWE",
-    "JUFO": "JUFO",
-    "DSCW": "DSCW",
-    "SUGR": "SUGR",
-    "ELSH": "ELSH",
-    "RMDA": "RMDA",
-    "RAYA": "RAYA",
-    "EEII": "EEII",
-    "MPCO": "MPCO",
-    "GBCO": "GBCO",
-    "TMGH": "TMGH",
-    "ORHD": "ORHD",
-    "AMOC": "AMOC",
-    "FWRY": "FWRY",
-    "COMI": "COMI",
-    "ADIB": "ADIB",
-    "PHDC": "PHDC",
-    "MCQE": "MCQE",
-    "SKPC": "SKPC",
-    "EGAL": "EGAL"
+    "OLFI": "OLFI","EMFD": "EMFD","ETEL": "ETEL","EAST": "EAST",
+    "EFIH": "EFIH","ABUK": "ABUK","OIH": "OIH","SWDY": "SWDY","ISPH": "ISPH","ATQA": "ATQA","MTIE": "MTIE","HRHO": "HRHO","ORWE": "ORWE","JUFO": "JUFO","DSCW": "DSCW",
+    "SUGR": "SUGR","ELSH": "ELSH","RMDA": "RMDA","RAYA": "RAYA",
+    "EEII": "EEII","MPCO": "MPCO","GBCO": "GBCO","TMGH": "TMGH","ORHD": "ORHD","AMOC": "AMOC","FWRY": "FWRY","COMI": "COMI","ADIB": "ADIB","PHDC": "PHDC","MCQE": "MCQE","SKPC": "SKPC","EGAL": "EGAL"
 }
-
-
 # ============================================================
 # LOAD DATABASE
 # ============================================================
@@ -324,7 +294,7 @@ def backtest_stock(symbol, df):
         if avg_price > 0:
             profit = ((price - avg_price) / avg_price) * 100
 
-        sell1 = (position > 0 and rsi_val >= SELL1_RSI and profit > SELL1_MIN_PROFIT)
+        sell1 = (position > 0.65 and rsi_val >= SELL1_RSI and profit > SELL1_MIN_PROFIT)
         sell2 = (position > SELL2_MIN_POSITION and position <= SELL2_MAX_POSITION and rsi_val >= SELL2_RSI and profit > SELL2_MIN_PROFIT)
         sell3 = (position > 0 and rsi_val >= SELL3_RSI and profit > SELL3_MIN_PROFIT)
 
