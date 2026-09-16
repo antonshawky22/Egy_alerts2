@@ -150,7 +150,7 @@
     "cycle": 2,
     "position": 0.66,
     "avg_price": 29.875,
-    "peak_profit": 1.0878661087866086,
+    "peak_profit": 2.2594142259414247,
     "realized_pnl_tracker": []
   },
   "TMGH": {
@@ -206,14 +206,14 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 215.78,
-    "peak_profit": 1.3856705904161688,
+    "peak_profit": 2.419130595977384,
     "realized_pnl_tracker": []
   },
   "SKPC": {
     "cycle": 1,
     "position": 0.33,
     "avg_price": 17.81,
-    "peak_profit": 1.6282987085906946,
+    "peak_profit": 2.470522178551383,
     "realized_pnl_tracker": []
   },
   "EGAL": {
