@@ -136,7 +136,7 @@ for name, ticker in symbols.items():
     df["EMA20"] = close.ewm(span=20, adjust=False).mean()
     df["EMA30"] = close.ewm(span=30, adjust=False).mean()
     df["EMA50"] = close.ewm(span=50, adjust=False).mean()
-    df["EMA100"] = close.ewm(span=100, adjust=False).mean()
+    df["EMA100"] = close.ewm(span=80, adjust=False).mean()
     df["RSI"] = rsi(close)
 
     last = df.iloc[-1]
