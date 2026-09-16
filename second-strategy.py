@@ -194,18 +194,18 @@ for name, ticker in symbols.items():
         and price <= df["EMA100"].iloc[-1] * 1.07
     )
     
-    buy1 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 60
-    buy2 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 55
-    buy3 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 48
+    buy1 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 50
+    buy2 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 45
+    buy3 = safe_to_buy and ema_up and no_gap_down and rsi_val <= 40
 
     # حساب الربح اللحظي الحالي
     profit = 0.0
     if s["avg_price"] > 0:
         profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
 
-    sell1 = s["position"] > 0.70 and rsi_val >= 66 and profit > 15
-    sell2 = 0.30 < s["position"] <= 0.70 and rsi_val >= 82 and profit > 22
-    sell3 = s["position"] > 0.00 and rsi_val >= 86 and profit > 25
+    sell1 = s["position"] > 0.65 and rsi_val >= 60 and profit > 15
+    sell2 = 0.30 < s["position"] <= 0.70 and rsi_val >= 72 and profit > 18
+    sell3 = s["position"] > 0.00 and rsi_val >= 82 and profit > 20
     action = None
 
     if name not in trades_history:
