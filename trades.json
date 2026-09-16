@@ -90,7 +90,10 @@
     "symbol": "PHDC",
     "entry_trend": "🔛",
     "entry_price": 14.6,
-    "entry_date": "2026-07-28"
+    "entry_date": "2026-07-28",
+    "exit_price": 13.81,
+    "exit_date": "2026-09-16",
+    "profit_pct": -5.41
   },
   {
     "symbol": "AMOC",
@@ -439,5 +442,11 @@
     "entry_trend": "↗️",
     "entry_price": 362.57,
     "entry_date": "2026-09-15"
+  },
+  {
+    "symbol": "ELSH",
+    "entry_trend": "🔛",
+    "entry_price": 12.8,
+    "entry_date": "2026-09-16"
   }
 ]
