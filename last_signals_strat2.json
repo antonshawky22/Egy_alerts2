@@ -150,7 +150,7 @@
     "cycle": 2,
     "position": 0.66,
     "avg_price": 29.875,
-    "peak_profit": 2.2594142259414247,
+    "peak_profit": 3.765690376569038,
     "realized_pnl_tracker": []
   },
   "TMGH": {
@@ -164,7 +164,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 40.9,
-    "peak_profit": 5.623471882640597,
+    "peak_profit": 6.283618581907091,
     "realized_pnl_tracker": []
   },
   "AMOC": {
@@ -192,7 +192,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 52.01,
-    "peak_profit": 0.9228994424149279,
+    "peak_profit": 3.8261872716785272,
     "realized_pnl_tracker": []
   },
   "PHDC": {
