@@ -414,7 +414,8 @@ period_results={}
 print("\nRUNNING PERIOD STABILITY TEST...\n")
 
 for start_date,end_date in PERIODS:
-    label=f"{start_date[:7]} -> {end_date[:7] if end_date[:4]!="2099" else "NOW"}"
+    end_label = "NOW" if end_date.startswith("2099") else end_date[:7]
+    label = f"{start_date[:7]} -> {end_label}"
     period_trades=[]
     period_signals=[]
 
