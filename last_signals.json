@@ -156,8 +156,8 @@
   },
   "MCQE": {
     "trend": "↗️",
-    "in_position": true,
-    "entry_price": 224.52
+    "in_position": false,
+    "entry_price": null
   },
   "SKPC": {
     "trend": "↗️",

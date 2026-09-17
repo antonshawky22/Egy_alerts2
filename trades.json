@@ -306,7 +306,10 @@
     "symbol": "MCQE",
     "entry_trend": "↗️",
     "entry_price": 224.52,
-    "entry_date": "2026-08-19"
+    "entry_date": "2026-08-19",
+    "exit_price": 221.01,
+    "exit_date": "2026-09-17",
+    "profit_pct": -1.56
   },
   {
     "symbol": "SWDY",
