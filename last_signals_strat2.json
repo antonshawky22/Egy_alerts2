@@ -73,7 +73,7 @@
     "cycle": 2,
     "position": 0.33,
     "avg_price": 8.45,
-    "peak_profit": 0.0,
+    "peak_profit": 0.5917159763313694,
     "realized_pnl_tracker": []
   },
   "HRHO": {
@@ -206,14 +206,14 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 215.78,
-    "peak_profit": 2.419130595977384,
+    "peak_profit": 2.8779312262489607,
     "realized_pnl_tracker": []
   },
   "SKPC": {
     "cycle": 1,
     "position": 0.33,
     "avg_price": 17.81,
-    "peak_profit": 2.470522178551383,
+    "peak_profit": 3.87422796181921,
     "realized_pnl_tracker": []
   },
   "EGAL": {
