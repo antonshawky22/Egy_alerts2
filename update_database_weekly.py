@@ -131,10 +131,12 @@ def main():
   if r and not df.empty:
    old=df.iloc[-1]
    if float(r["Volume"])>0 and any(abs(float(r[c])-float(old[c]))>0.000001 for c in ["Open","High","Low","Close"]):pulse=True;break
- if not pulse and not MANUAL_REFRESH_HISTORY:
+ missing=[n for n in SYMBOLS if db.get(n,pd.DataFrame()).empty]
+ if not pulse and not MANUAL_REFRESH_HISTORY and not missing:
     print("ℹ️ No real market activity detected. Safe exit.")
     return
- updated=[];gaps=[];auto_refresh_tickers=[];live_dates={}
+ updated=[];gaps=[];auto_refresh_tickers=[];live_dates=[]
+ live_dates={}
  for name in SYMBOLS:
   r,candle_date=bulk_row(bulk,name)
   if not r or not candle_date or not valid_row(r):
@@ -152,7 +154,9 @@ def main():
   df.loc[candle_date,COLUMNS]=[r[c] for c in COLUMNS];db[name]=normalize(df);updated.append(name)
  check_date=max(live_dates.values()) if live_dates else pd.Timestamp.now().normalize()
  if MANUAL_REFRESH_HISTORY:targets=SYMBOLS;bars=INITIAL_REFRESH_BARS
- elif auto_refresh_tickers:targets=auto_refresh_tickers;bars=GAP_REFRESH_BARS
+ elif auto_refresh_tickers:
+  targets=auto_refresh_tickers
+  bars=INITIAL_REFRESH_BARS if any(db.get(n,pd.DataFrame()).empty for n in auto_refresh_tickers) else GAP_REFRESH_BARS
  else:targets=[];bars=GAP_REFRESH_BARS
  hist_ok=[];hist_fail=[]
  if targets:
