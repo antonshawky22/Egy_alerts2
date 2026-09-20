@@ -42,9 +42,8 @@ jobs:
       # ==========================================
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install tradingview-ta requests pandas curl_cffi tradingviewApiPython
-
+          python -m pip install --upgrade pip        
+          pip install tradingview-ta requests pandas curl_cffi tradingview-api-python
           if [ -f requirements.txt ]; then
             pip install -r requirements.txt
           fi
