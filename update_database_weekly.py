@@ -71,8 +71,13 @@ def historical(name,bars):
   start=time.time()
   while not state["done"] and time.time()-start<30:time.sleep(0.2)
   if not state["done"]:
-   print(f"⚠️ {name}: historical timeout ({len(chart.periods)} bars)")
-   return pd.DataFrame(columns=COLUMNS)
+   count=len(chart.periods)
+   if count>0:
+    state["data"]=chart.periods[:count]
+    print(f"⚠️ {name}: historical timeout ({count} bars) - using available data")
+   else:
+    print(f"⚠️ {name}: historical timeout (0 bars)")
+    return pd.DataFrame(columns=COLUMNS)
   rows=[]
   for b in state["data"]:
    try:
