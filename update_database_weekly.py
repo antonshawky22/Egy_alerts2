@@ -132,7 +132,8 @@ def main():
    old=df.iloc[-1]
    if float(r["Volume"])>0 and any(abs(float(r[c])-float(old[c]))>0.000001 for c in ["Open","High","Low","Close"]):pulse=True;break
  if not pulse and not MANUAL_REFRESH_HISTORY:
-  print("ℹ️ No real market activity detected. Safe exit.");return
+    print("ℹ️ No real market activity detected. Safe exit.")
+    return
  updated=[];gaps=[];auto_refresh_tickers=[];live_dates={}
  for name in SYMBOLS:
   r,candle_date=bulk_row(bulk,name)
