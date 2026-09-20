@@ -73,7 +73,7 @@
     "cycle": 2,
     "position": 0.33,
     "avg_price": 8.45,
-    "peak_profit": 0.5917159763313694,
+    "peak_profit": 0.9467455621301784,
     "realized_pnl_tracker": []
   },
   "HRHO": {
@@ -136,7 +136,7 @@
     "cycle": 1,
     "position": 0.66,
     "avg_price": 2.23,
-    "peak_profit": 0.0,
+    "peak_profit": 5.381165919282516,
     "realized_pnl_tracker": []
   },
   "MPCO": {
@@ -150,7 +150,7 @@
     "cycle": 2,
     "position": 0.66,
     "avg_price": 29.875,
-    "peak_profit": 3.765690376569038,
+    "peak_profit": 5.33891213389121,
     "realized_pnl_tracker": []
   },
   "TMGH": {
@@ -213,7 +213,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 17.81,
-    "peak_profit": 3.87422796181921,
+    "peak_profit": 5.5586749017406065,
     "realized_pnl_tracker": []
   },
   "EGAL": {
