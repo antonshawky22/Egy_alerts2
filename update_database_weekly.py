@@ -94,15 +94,6 @@ def historical(name,bars):
   try:
    if client:client.end()
   except:pass
-   try:
-    d=pd.to_datetime(int(b["time"]),unit="s").normalize()
-    r={"Open":float(b["open"]),"High":float(b["max"]),"Low":float(b["min"]),"Close":float(b["close"]),"Volume":float(b.get("volume",0))}
-    if valid_row(r):rows.append((d,r))
-   except:continue
-  if not rows:return pd.DataFrame(columns=COLUMNS)
-  df=pd.DataFrame([r for _,r in rows],index=[d for d,_ in rows]);df=df[~df.index.duplicated(keep="last")].sort_index();return df[COLUMNS]
- except Exception as e:
-  print(f"❌ {name} historical error: {e}");return pd.DataFrame(columns=COLUMNS)
 def normalize(df):
  if df.empty:return df
  df=df.copy();df.index=pd.to_datetime(df.index).normalize()
