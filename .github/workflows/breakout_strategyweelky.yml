@@ -57,6 +57,7 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           python update_database_weekly.py
+          --refresh-history
 
       # ==========================================
       # 5️⃣ الاستراتيجية الأسبوعية
