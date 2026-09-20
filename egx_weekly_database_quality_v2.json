@@ -52,14 +52,14 @@
       "historical_refresh": "not_requested"
     },
     "EFIH": {
-      "bars": 80,
-      "start": "2025-03-16",
+      "bars": 1,
+      "start": "2026-09-20",
       "end": "2026-09-20",
       "bad_ohlc": 0,
-      "large_moves_10pct": 4,
+      "large_moves_10pct": 0,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "failed"
     },
     "ABUK": {
       "bars": 300,
