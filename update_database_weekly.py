@@ -59,10 +59,41 @@ def valid_row(r):
  except:return False
 def historical(name,bars):
  if not HISTORICAL_API_AVAILABLE:return pd.DataFrame(columns=COLUMNS)
+ client=None;chart=None
  try:
-  chart=Client().Session.Chart();chart.set_market(f"EGX:{name}",{"timeframe":"W","range":bars})
+  client=Client();chart=client.Session.Chart()
+  state={"done":False,"data":[]}
+  chart.set_market(f"EGX:{name}",{"timeframe":"W","range":bars})
+  @chart.on_update
+  def on_update(changes):
+   if len(chart.periods)>=bars and not state["done"]:
+    state["data"]=chart.periods[:bars];state["done"]=True
+  start=time.time()
+  while not state["done"] and time.time()-start<15:time.sleep(0.2)
+  if not state["done"]:
+   print(f"⚠️ {name}: historical timeout ({len(chart.periods)} bars)")
+   return pd.DataFrame(columns=COLUMNS)
   rows=[]
-  for b in chart.periods:
+  for b in state["data"]:
+   try:
+    d=pd.to_datetime(int(b["time"]),unit="s").normalize()
+    r={"Open":float(b["open"]),"High":float(b["max"]),"Low":float(b["min"]),"Close":float(b["close"]),"Volume":float(b.get("volume",0))}
+    if valid_row(r):rows.append((d,r))
+   except:continue
+  if not rows:return pd.DataFrame(columns=COLUMNS)
+  df=pd.DataFrame([r for _,r in rows],index=[d for d,_ in rows])
+  df=df[~df.index.duplicated(keep="last")].sort_index()
+  return df[COLUMNS]
+ except Exception as e:
+  print(f"❌ {name} historical error: {e}")
+  return pd.DataFrame(columns=COLUMNS)
+ finally:
+  try:
+   if chart:chart.delete()
+  except:pass
+  try:
+   if client:client.end()
+  except:pass
    try:
     d=pd.to_datetime(int(b["time"]),unit="s").normalize()
     r={"Open":float(b["open"]),"High":float(b["max"]),"Low":float(b["min"]),"Close":float(b["close"]),"Volume":float(b.get("volume",0))}
