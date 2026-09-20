@@ -9,7 +9,7 @@
       "large_moves_10pct": 1,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     },
     "OLFI": {
       "bars": 300,
@@ -19,7 +19,7 @@
       "large_moves_10pct": 19,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     },
     "EMFD": {
       "bars": 300,
@@ -29,7 +29,7 @@
       "large_moves_10pct": 17,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     },
     "ETEL": {
       "bars": 300,
@@ -39,7 +39,7 @@
       "large_moves_10pct": 16,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     },
     "EAST": {
       "bars": 300,
@@ -49,17 +49,17 @@
       "large_moves_10pct": 19,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     },
     "EFIH": {
-      "bars": 1,
-      "start": "2026-09-20",
+      "bars": 255,
+      "start": "2021-10-17",
       "end": "2026-09-20",
       "bad_ohlc": 0,
-      "large_moves_10pct": 0,
+      "large_moves_10pct": 19,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "failed"
+      "historical_refresh": "success"
     },
     "ABUK": {
       "bars": 300,
@@ -69,7 +69,7 @@
       "large_moves_10pct": 18,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     },
     "OIH": {
       "bars": 300,
@@ -79,7 +79,7 @@
       "large_moves_10pct": 34,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     },
     "SWDY": {
       "bars": 300,
@@ -89,7 +89,7 @@
       "large_moves_10pct": 26,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     },
     "ISPH": {
       "bars": 300,
@@ -99,7 +99,7 @@
       "large_moves_10pct": 32,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     },
     "ATQA": {
       "bars": 300,
@@ -109,7 +109,7 @@
       "large_moves_10pct": 33,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     },
     "MTIE": {
       "bars": 300,
@@ -119,7 +119,7 @@
       "large_moves_10pct": 37,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     },
     "HRHO": {
       "bars": 300,
@@ -129,7 +129,7 @@
       "large_moves_10pct": 19,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     },
     "ORWE": {
       "bars": 300,
@@ -139,7 +139,7 @@
       "large_moves_10pct": 17,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     },
     "JUFO": {
       "bars": 300,
@@ -149,7 +149,7 @@
       "large_moves_10pct": 25,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     },
     "DSCW": {
       "bars": 300,
@@ -159,7 +159,7 @@
       "large_moves_10pct": 42,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     },
     "SUGR": {
       "bars": 300,
@@ -169,7 +169,7 @@
       "large_moves_10pct": 31,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     },
     "ELSH": {
       "bars": 300,
@@ -179,7 +179,7 @@
       "large_moves_10pct": 38,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     },
     "RMDA": {
       "bars": 300,
@@ -189,7 +189,7 @@
       "large_moves_10pct": 19,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     },
     "RAYA": {
       "bars": 300,
@@ -199,7 +199,7 @@
       "large_moves_10pct": 39,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     },
     "EEII": {
       "bars": 300,
@@ -209,7 +209,7 @@
       "large_moves_10pct": 52,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     },
     "MPCO": {
       "bars": 300,
@@ -219,7 +219,7 @@
       "large_moves_10pct": 43,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     },
     "GBCO": {
       "bars": 300,
@@ -229,7 +229,7 @@
       "large_moves_10pct": 29,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     },
     "TMGH": {
       "bars": 300,
@@ -239,7 +239,7 @@
       "large_moves_10pct": 19,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     },
     "ORHD": {
       "bars": 300,
@@ -249,7 +249,7 @@
       "large_moves_10pct": 22,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     },
     "AMOC": {
       "bars": 300,
@@ -259,7 +259,7 @@
       "large_moves_10pct": 25,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     },
     "FWRY": {
       "bars": 300,
@@ -269,7 +269,7 @@
       "large_moves_10pct": 24,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     },
     "COMI": {
       "bars": 300,
@@ -279,7 +279,7 @@
       "large_moves_10pct": 12,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     },
     "ADIB": {
       "bars": 300,
@@ -289,7 +289,7 @@
       "large_moves_10pct": 21,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     },
     "PHDC": {
       "bars": 300,
@@ -299,7 +299,7 @@
       "large_moves_10pct": 33,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     },
     "MCQE": {
       "bars": 300,
@@ -309,7 +309,7 @@
       "large_moves_10pct": 33,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     },
     "SKPC": {
       "bars": 300,
@@ -319,7 +319,7 @@
       "large_moves_10pct": 25,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     },
     "EGAL": {
       "bars": 300,
@@ -329,7 +329,7 @@
       "large_moves_10pct": 34,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "not_requested"
+      "historical_refresh": "success"
     }
   }
 }
