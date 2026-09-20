@@ -69,7 +69,7 @@ def historical(name,bars):
    if len(chart.periods)>=bars and not state["done"]:
     state["data"]=chart.periods[:bars];state["done"]=True
   start=time.time()
-  while not state["done"] and time.time()-start<15:time.sleep(0.2)
+  while not state["done"] and time.time()-start<30:time.sleep(0.2)
   if not state["done"]:
    print(f"⚠️ {name}: historical timeout ({len(chart.periods)} bars)")
    return pd.DataFrame(columns=COLUMNS)
