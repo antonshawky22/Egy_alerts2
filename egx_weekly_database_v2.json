@@ -1,0 +1,134 @@
+{
+  "EGX30": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":55551.2,"High":55896.9,"Low":55275.5,"Close":55371.5,"Volume":332003000.0}}
+  },
+  "OLFI": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":22.93,"High":23.25,"Low":22.5,"Close":22.62,"Volume":468123.0}}
+  },
+  "EMFD": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":14.36,"High":14.4,"Low":13.83,"Close":13.98,"Volume":5457913.0}}
+  },
+  "ETEL": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":133.0,"High":134.95,"Low":130.05,"Close":131.51,"Volume":555243.0}}
+  },
+  "EAST": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":32.02,"High":32.79,"Low":32.01,"Close":32.05,"Volume":1198321.0}}
+  },
+  "EFIH": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":23.99,"High":23.99,"Low":23.23,"Close":23.25,"Volume":2759002.0}}
+  },
+  "ABUK": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":92.55,"High":96.13,"Low":92.55,"Close":94.0,"Volume":3184454.0}}
+  },
+  "OIH": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":2.17,"High":2.19,"Low":2.16,"Close":2.17,"Volume":43593134.0}}
+  },
+  "SWDY": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":127.0,"High":128.74,"Low":127.0,"Close":127.5,"Volume":172175.0}}
+  },
+  "ISPH": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":12.16,"High":12.27,"Low":12.03,"Close":12.12,"Volume":5167344.0}}
+  },
+  "ATQA": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":12.69,"High":13.33,"Low":12.69,"Close":13.18,"Volume":11248741.0}}
+  },
+  "MTIE": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":8.47,"High":8.6,"Low":8.47,"Close":8.49,"Volume":1471465.0}}
+  },
+  "HRHO": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":25.39,"High":25.59,"Low":25.3,"Close":25.33,"Volume":3174274.0}}
+  },
+  "ORWE": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":28.0,"High":28.61,"Low":27.91,"Close":28.05,"Volume":1855130.0}}
+  },
+  "JUFO": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":27.0,"High":27.44,"Low":26.84,"Close":26.9,"Volume":399549.0}}
+  },
+  "DSCW": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":1.85,"High":1.86,"Low":1.82,"Close":1.83,"Volume":16725949.0}}
+  },
+  "SUGR": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":60.0,"High":60.51,"Low":58.8,"Close":59.62,"Volume":175577.0}}
+  },
+  "ELSH": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":13.25,"High":13.46,"Low":13.12,"Close":13.12,"Volume":2628600.0}}
+  },
+  "RMDA": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":6.22,"High":6.28,"Low":6.07,"Close":6.1,"Volume":3121659.0}}
+  },
+  "RAYA": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":7.26,"High":7.32,"Low":7.1,"Close":7.12,"Volume":5033104.0}}
+  },
+  "EEII": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":2.2,"High":2.47,"Low":2.2,"Close":2.34,"Volume":7546197.0}}
+  },
+  "MPCO": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":2.75,"High":3.02,"Low":2.72,"Close":2.94,"Volume":148592126.0}}
+  },
+  "GBCO": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":31.0,"High":32.0,"Low":30.6,"Close":31.39,"Volume":5282912.0}}
+  },
+  "TMGH": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":95.8,"High":96.29,"Low":93.2,"Close":94.7,"Volume":2472476.0}}
+  },
+  "ORHD": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":43.47,"High":44.0,"Low":42.5,"Close":42.5,"Volume":3968933.0}}
+  },
+  "AMOC": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":13.8,"High":14.27,"Low":13.8,"Close":14.09,"Volume":10610201.0}}
+  },
+  "FWRY": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":18.95,"High":19.15,"Low":18.81,"Close":18.99,"Volume":1976851.0}}
+  },
+  "COMI": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":132.5,"High":134.5,"Low":132.5,"Close":133.69,"Volume":1156524.0}}
+  },
+  "ADIB": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":54.0,"High":54.3,"Low":52.5,"Close":52.8,"Volume":1747030.0}}
+  },
+  "PHDC": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":13.7,"High":13.73,"Low":13.16,"Close":13.25,"Volume":14653040.0}}
+  },
+  "MCQE": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":218.98,"High":222.99,"Low":215.0,"Close":218.89,"Volume":64734.0}}
+  },
+  "SKPC": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":18.5,"High":18.96,"Low":18.5,"Close":18.55,"Volume":5661210.0}}
+  },
+  "EGAL": {
+    "columns": ["Open", "High", "Low", "Close", "Volume"],
+    "data": {"2026-09-20":{"Open":370.0,"High":376.0,"Low":370.0,"Close":372.01,"Volume":75432.0}}
+  }
+}

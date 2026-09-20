@@ -1,0 +1,335 @@
+{
+  "check_date": "2026-09-20 00:00:00",
+  "symbols": {
+    "EGX30": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "OLFI": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "EMFD": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "ETEL": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "EAST": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "EFIH": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "ABUK": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "OIH": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "SWDY": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "ISPH": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "ATQA": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "MTIE": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "HRHO": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "ORWE": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "JUFO": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "DSCW": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "SUGR": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "ELSH": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "RMDA": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "RAYA": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "EEII": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "MPCO": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "GBCO": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "TMGH": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "ORHD": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "AMOC": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "FWRY": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "COMI": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "ADIB": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "PHDC": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "MCQE": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "SKPC": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    },
+    "EGAL": {
+      "bars": 1,
+      "start": "2026-09-20",
+      "end": "2026-09-20",
+      "bad_ohlc": 0,
+      "large_moves_10pct": 0,
+      "date_gaps_over_14d": 0,
+      "automatic_gap_trigger": false,
+      "historical_refresh": "failed"
+    }
+  }
+}
