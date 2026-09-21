@@ -141,7 +141,21 @@
       "profit_pct": null
     }
   ],
-  "JUFO": [],
+  "JUFO": [
+    {
+      "symbol": "JUFO",
+      "cycle": 1,
+      "status": "OPEN",
+      "first_entry": "2026-09-21 with price 26.67",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 26.67,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
+    }
+  ],
   "DSCW": [
     {
       "symbol": "DSCW",
@@ -172,7 +186,21 @@
   ],
   "SUGR": [],
   "ELSH": [],
-  "RMDA": [],
+  "RMDA": [
+    {
+      "symbol": "RMDA",
+      "cycle": 1,
+      "status": "OPEN",
+      "first_entry": "2026-09-21 with price 6.00",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 6.0,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
+    }
+  ],
   "RAYA": [
     {
       "symbol": "RAYA",
