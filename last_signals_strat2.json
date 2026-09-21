@@ -94,7 +94,7 @@
     "cycle": 1,
     "position": 0.33,
     "avg_price": 26.67,
-    "peak_profit": 0.0,
+    "peak_profit": 2.1747281589801206,
     "realized_pnl_tracker": []
   },
   "DSCW": {
@@ -204,8 +204,8 @@
   },
   "MCQE": {
     "cycle": 1,
-    "position": 0.33,
-    "avg_price": 215.78,
+    "position": 0.66,
+    "avg_price": 212.39,
     "peak_profit": 2.8779312262489607,
     "realized_pnl_tracker": []
   },
