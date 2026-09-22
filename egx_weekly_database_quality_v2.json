@@ -1,335 +1,335 @@
 {
-  "check_date": "2026-09-20 00:00:00",
+  "check_date": "2026-09-22 00:00:00",
   "symbols": {
     "EGX30": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 1,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "not_requested"
     },
     "OLFI": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 19,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "not_requested"
     },
     "EMFD": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 17,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "not_requested"
     },
     "ETEL": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 16,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "not_requested"
     },
     "EAST": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 19,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "not_requested"
     },
     "EFIH": {
-      "bars": 255,
+      "bars": 256,
       "start": "2021-10-17",
-      "end": "2026-09-20",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 19,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "not_requested"
     },
     "ABUK": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 18,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "not_requested"
     },
     "OIH": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 34,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "not_requested"
     },
     "SWDY": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 26,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "not_requested"
     },
     "ISPH": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 32,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "not_requested"
     },
     "ATQA": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 33,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "not_requested"
     },
     "MTIE": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 37,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "not_requested"
     },
     "HRHO": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 19,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "not_requested"
     },
     "ORWE": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 17,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "not_requested"
     },
     "JUFO": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 25,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "not_requested"
     },
     "DSCW": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
-      "large_moves_10pct": 42,
+      "large_moves_10pct": 41,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "not_requested"
     },
     "SUGR": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 31,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "not_requested"
     },
     "ELSH": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 38,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "not_requested"
     },
     "RMDA": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 19,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "not_requested"
     },
     "RAYA": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 39,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "not_requested"
     },
     "EEII": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 52,
       "date_gaps_over_14d": 0,
-      "automatic_gap_trigger": false,
+      "automatic_gap_trigger": true,
       "historical_refresh": "success"
     },
     "MPCO": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 43,
       "date_gaps_over_14d": 0,
-      "automatic_gap_trigger": false,
+      "automatic_gap_trigger": true,
       "historical_refresh": "success"
     },
     "GBCO": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 29,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "not_requested"
     },
     "TMGH": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 19,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "not_requested"
     },
     "ORHD": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 22,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "not_requested"
     },
     "AMOC": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 25,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "not_requested"
     },
     "FWRY": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 24,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "not_requested"
     },
     "COMI": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 12,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "not_requested"
     },
     "ADIB": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 21,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "not_requested"
     },
     "PHDC": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 33,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "not_requested"
     },
     "MCQE": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 33,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "not_requested"
     },
     "SKPC": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 25,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "not_requested"
     },
     "EGAL": {
       "bars": 300,
-      "start": "2020-12-06",
-      "end": "2026-09-20",
+      "start": "2020-12-13",
+      "end": "2026-09-22",
       "bad_ohlc": 0,
       "large_moves_10pct": 34,
       "date_gaps_over_14d": 0,
       "automatic_gap_trigger": false,
-      "historical_refresh": "success"
+      "historical_refresh": "not_requested"
     }
   }
 }
