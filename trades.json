@@ -451,5 +451,11 @@
     "entry_trend": "🔛",
     "entry_price": 12.8,
     "entry_date": "2026-09-16"
+  },
+  {
+    "symbol": "EMFD",
+    "entry_trend": "↗️",
+    "entry_price": 13.48,
+    "entry_date": "2026-09-22"
   }
 ]
