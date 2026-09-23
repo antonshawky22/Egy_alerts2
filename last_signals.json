@@ -95,7 +95,7 @@
     "entry_price": 12.8
   },
   "RMDA": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -160,7 +160,7 @@
     "entry_price": null
   },
   "SKPC": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 16.96
   },
