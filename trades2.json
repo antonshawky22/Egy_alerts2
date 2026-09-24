@@ -29,6 +29,19 @@
       "exit_price": 14.38,
       "exit_date": "2026-09-03",
       "profit_pct": 22.49
+    },
+    {
+      "symbol": "EMFD",
+      "cycle": 2,
+      "status": "OPEN",
+      "first_entry": "2026-09-24 with price 13.22",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 13.22,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
     }
   ],
   "ETEL": [],
@@ -192,9 +205,9 @@
       "cycle": 1,
       "status": "OPEN",
       "first_entry": "2026-09-21 with price 6.00",
-      "second_entry": null,
+      "second_entry": "2026-09-24 with price 5.80",
       "third_entry": null,
-      "last_totally_average_price": 6.0,
+      "last_totally_average_price": 5.9,
       "exits": [],
       "exit_price": null,
       "exit_date": null,

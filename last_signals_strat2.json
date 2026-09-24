@@ -8,8 +8,8 @@
   },
   "EMFD": {
     "cycle": 2,
-    "position": 0.0,
-    "avg_price": 0.0,
+    "position": 0.33,
+    "avg_price": 13.22,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
@@ -120,8 +120,8 @@
   },
   "RMDA": {
     "cycle": 1,
-    "position": 0.33,
-    "avg_price": 6.0,
+    "position": 0.66,
+    "avg_price": 5.9,
     "peak_profit": 1.1666666666666714,
     "realized_pnl_tracker": []
   },
