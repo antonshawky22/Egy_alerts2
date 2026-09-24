@@ -183,7 +183,10 @@
     "symbol": "ADIB",
     "entry_trend": "↗️",
     "entry_price": 51.9,
-    "entry_date": "2026-08-05"
+    "entry_date": "2026-08-05",
+    "exit_price": 50.97,
+    "exit_date": "2026-09-24",
+    "profit_pct": -1.79
   },
   {
     "symbol": "ISPH",
@@ -279,7 +282,10 @@
     "symbol": "SKPC",
     "entry_trend": "↗️",
     "entry_price": 16.96,
-    "entry_date": "2026-08-16"
+    "entry_date": "2026-08-16",
+    "exit_price": 17.36,
+    "exit_date": "2026-09-24",
+    "profit_pct": 2.36
   },
   {
     "symbol": "ORWE",
@@ -294,7 +300,10 @@
     "symbol": "MPCO",
     "entry_trend": "↗️",
     "entry_price": 2.14,
-    "entry_date": "2026-08-18"
+    "entry_date": "2026-08-18",
+    "exit_price": 2.63,
+    "exit_date": "2026-09-24",
+    "profit_pct": 22.9
   },
   {
     "symbol": "MTIE",
@@ -318,7 +327,10 @@
     "symbol": "SWDY",
     "entry_trend": "↗️",
     "entry_price": 118.19,
-    "entry_date": "2026-08-20"
+    "entry_date": "2026-08-20",
+    "exit_price": 121.69,
+    "exit_date": "2026-09-24",
+    "profit_pct": 2.96
   },
   {
     "symbol": "EGAL",
@@ -342,19 +354,28 @@
     "symbol": "TMGH",
     "entry_trend": "↗️",
     "entry_price": 98.0,
-    "entry_date": "2026-08-24"
+    "entry_date": "2026-08-24",
+    "exit_price": 91.94,
+    "exit_date": "2026-09-24",
+    "profit_pct": -6.18
   },
   {
     "symbol": "GBCO",
     "entry_trend": "🔛",
     "entry_price": 28.4,
-    "entry_date": "2026-08-25"
+    "entry_date": "2026-08-25",
+    "exit_price": 30.14,
+    "exit_date": "2026-09-24",
+    "profit_pct": 6.13
   },
   {
     "symbol": "ORWE",
     "entry_trend": "↗️",
     "entry_price": 26.19,
-    "entry_date": "2026-08-30"
+    "entry_date": "2026-08-30",
+    "exit_price": 27.5,
+    "exit_date": "2026-09-24",
+    "profit_pct": 5.0
   },
   {
     "symbol": "ELSH",
@@ -405,7 +426,10 @@
     "symbol": "JUFO",
     "entry_trend": "↗️",
     "entry_price": 27.35,
-    "entry_date": "2026-09-10"
+    "entry_date": "2026-09-10",
+    "exit_price": 26.13,
+    "exit_date": "2026-09-24",
+    "profit_pct": -4.46
   },
   {
     "symbol": "DSCW",
@@ -420,48 +444,72 @@
     "symbol": "FWRY",
     "entry_trend": "🔛",
     "entry_price": 18.92,
-    "entry_date": "2026-09-14"
+    "entry_date": "2026-09-14",
+    "exit_price": 18.78,
+    "exit_date": "2026-09-24",
+    "profit_pct": -0.74
   },
   {
     "symbol": "COMI",
     "entry_trend": "🔛",
     "entry_price": 133.99,
-    "entry_date": "2026-09-14"
+    "entry_date": "2026-09-14",
+    "exit_price": 127.61,
+    "exit_date": "2026-09-24",
+    "profit_pct": -4.76
   },
   {
     "symbol": "ABUK",
     "entry_trend": "↗️",
     "entry_price": 88.94,
-    "entry_date": "2026-09-15"
+    "entry_date": "2026-09-15",
+    "exit_price": 91.86,
+    "exit_date": "2026-09-24",
+    "profit_pct": 3.28
   },
   {
     "symbol": "SUGR",
     "entry_trend": "↗️",
     "entry_price": 61.11,
-    "entry_date": "2026-09-15"
+    "entry_date": "2026-09-15",
+    "exit_price": 58.37,
+    "exit_date": "2026-09-24",
+    "profit_pct": -4.48
   },
   {
     "symbol": "RAYA",
     "entry_trend": "🔛",
     "entry_price": 7.08,
-    "entry_date": "2026-09-15"
+    "entry_date": "2026-09-15",
+    "exit_price": 7.02,
+    "exit_date": "2026-09-24",
+    "profit_pct": -0.85
   },
   {
     "symbol": "EGAL",
     "entry_trend": "↗️",
     "entry_price": 362.57,
-    "entry_date": "2026-09-15"
+    "entry_date": "2026-09-15",
+    "exit_price": 356.99,
+    "exit_date": "2026-09-24",
+    "profit_pct": -1.54
   },
   {
     "symbol": "ELSH",
     "entry_trend": "🔛",
     "entry_price": 12.8,
-    "entry_date": "2026-09-16"
+    "entry_date": "2026-09-16",
+    "exit_price": 12.36,
+    "exit_date": "2026-09-24",
+    "profit_pct": -3.44
   },
   {
     "symbol": "EMFD",
     "entry_trend": "↗️",
     "entry_price": 13.48,
-    "entry_date": "2026-09-22"
+    "entry_date": "2026-09-22",
+    "exit_price": 13.2,
+    "exit_date": "2026-09-24",
+    "profit_pct": -2.08
   }
 ]
