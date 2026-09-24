@@ -10,7 +10,7 @@
     "cycle": 2,
     "position": 0.33,
     "avg_price": 13.22,
-    "peak_profit": 0.0,
+    "peak_profit": 1.3615733736762459,
     "realized_pnl_tracker": []
   },
   "ETEL": {
@@ -211,8 +211,8 @@
   },
   "SKPC": {
     "cycle": 1,
-    "position": 0.33,
-    "avg_price": 17.81,
+    "position": 0.66,
+    "avg_price": 17.479999999999997,
     "peak_profit": 5.5586749017406065,
     "realized_pnl_tracker": []
   },
