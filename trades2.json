@@ -35,9 +35,9 @@
       "cycle": 2,
       "status": "OPEN",
       "first_entry": "2026-09-24 with price 13.22",
-      "second_entry": null,
+      "second_entry": "2026-09-27 with price 12.79",
       "third_entry": null,
-      "last_totally_average_price": 13.22,
+      "last_totally_average_price": 13.01,
       "exits": [],
       "exit_price": null,
       "exit_date": null,
@@ -85,9 +85,9 @@
       "cycle": 1,
       "status": "OPEN",
       "first_entry": "2026-09-27 with price 117.00",
-      "second_entry": null,
+      "second_entry": "2026-09-27 with price 113.45",
       "third_entry": null,
-      "last_totally_average_price": 117.0,
+      "last_totally_average_price": 115.22,
       "exits": [],
       "exit_price": null,
       "exit_date": null,
@@ -211,7 +211,21 @@
       "profit_pct": null
     }
   ],
-  "SUGR": [],
+  "SUGR": [
+    {
+      "symbol": "SUGR",
+      "cycle": 1,
+      "status": "OPEN",
+      "first_entry": "2026-09-27 with price 55.24",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 55.24,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
+    }
+  ],
   "ELSH": [],
   "RMDA": [
     {
@@ -220,8 +234,8 @@
       "status": "OPEN",
       "first_entry": "2026-09-21 with price 6.00",
       "second_entry": "2026-09-24 with price 5.80",
-      "third_entry": null,
-      "last_totally_average_price": 5.9,
+      "third_entry": "2026-09-27 with price 5.41",
+      "last_totally_average_price": 5.73,
       "exits": [],
       "exit_price": null,
       "exit_date": null,
@@ -321,9 +335,9 @@
       "cycle": 1,
       "status": "OPEN",
       "first_entry": "2026-08-20 with price 40.90",
-      "second_entry": null,
+      "second_entry": "2026-09-27 with price 39.50",
       "third_entry": null,
-      "last_totally_average_price": 40.9,
+      "last_totally_average_price": 40.2,
       "exits": [],
       "exit_price": null,
       "exit_date": null,
@@ -413,13 +427,27 @@
       "status": "OPEN",
       "first_entry": "2026-09-14 with price 17.81",
       "second_entry": "2026-09-24 with price 17.15",
-      "third_entry": null,
-      "last_totally_average_price": 17.48,
+      "third_entry": "2026-09-27 with price 16.34",
+      "last_totally_average_price": 17.09,
       "exits": [],
       "exit_price": null,
       "exit_date": null,
       "profit_pct": null
     }
   ],
-  "EGAL": []
+  "EGAL": [
+    {
+      "symbol": "EGAL",
+      "cycle": 1,
+      "status": "OPEN",
+      "first_entry": "2026-09-27 with price 350.00",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 350.0,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
+    }
+  ]
 }
