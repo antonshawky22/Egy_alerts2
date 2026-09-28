@@ -29,8 +29,8 @@
   },
   "EFIH": {
     "cycle": 1,
-    "position": 0.66,
-    "avg_price": 23.885,
+    "position": 1.0,
+    "avg_price": 23.2441,
     "peak_profit": 0.4396064475612178,
     "realized_pnl_tracker": []
   },
@@ -190,8 +190,8 @@
   },
   "ADIB": {
     "cycle": 1,
-    "position": 0.33,
-    "avg_price": 52.01,
+    "position": 0.66,
+    "avg_price": 51.22,
     "peak_profit": 3.8261872716785272,
     "realized_pnl_tracker": []
   },
