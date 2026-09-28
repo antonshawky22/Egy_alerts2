@@ -78,7 +78,21 @@
       "profit_pct": 24.47
     }
   ],
-  "OIH": [],
+  "OIH": [
+    {
+      "symbol": "OIH",
+      "cycle": 1,
+      "status": "OPEN",
+      "first_entry": "2026-09-28 with price 1.90",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 1.9,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
+    }
+  ],
   "SWDY": [
     {
       "symbol": "SWDY",
@@ -109,7 +123,21 @@
       "profit_pct": null
     }
   ],
-  "ATQA": [],
+  "ATQA": [
+    {
+      "symbol": "ATQA",
+      "cycle": 1,
+      "status": "OPEN",
+      "first_entry": "2026-09-28 with price 11.86",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 11.86,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
+    }
+  ],
   "MTIE": [
     {
       "symbol": "MTIE",
@@ -217,9 +245,9 @@
       "cycle": 1,
       "status": "OPEN",
       "first_entry": "2026-09-27 with price 55.24",
-      "second_entry": null,
+      "second_entry": "2026-09-28 with price 53.11",
       "third_entry": null,
-      "last_totally_average_price": 55.24,
+      "last_totally_average_price": 54.17,
       "exits": [],
       "exit_price": null,
       "exit_date": null,
@@ -394,15 +422,15 @@
     {
       "symbol": "PHDC",
       "cycle": 1,
-      "status": "OPEN",
+      "status": "CLOSED",
       "first_entry": "2026-08-16 with price 15.27",
       "second_entry": "2026-08-24 with price 14.77",
       "third_entry": "2026-09-14 with price 14.00",
       "last_totally_average_price": 14.67,
       "exits": [],
-      "exit_price": null,
-      "exit_date": null,
-      "profit_pct": null
+      "exit_price": 12.69,
+      "exit_date": "2026-09-28",
+      "profit_pct": -13.52
     }
   ],
   "MCQE": [

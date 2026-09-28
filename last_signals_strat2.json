@@ -43,8 +43,8 @@
   },
   "OIH": {
     "cycle": 1,
-    "position": 0.0,
-    "avg_price": 0.0,
+    "position": 0.33,
+    "avg_price": 1.9,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
@@ -64,8 +64,8 @@
   },
   "ATQA": {
     "cycle": 1,
-    "position": 0.0,
-    "avg_price": 0.0,
+    "position": 0.33,
+    "avg_price": 11.86,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
@@ -106,8 +106,8 @@
   },
   "SUGR": {
     "cycle": 1,
-    "position": 0.33,
-    "avg_price": 55.24,
+    "position": 0.66,
+    "avg_price": 54.175,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
@@ -196,10 +196,10 @@
     "realized_pnl_tracker": []
   },
   "PHDC": {
-    "cycle": 1,
-    "position": 1.0,
-    "avg_price": 14.6732,
-    "peak_profit": 3.077930582842179,
+    "cycle": 2,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
   "MCQE": {
