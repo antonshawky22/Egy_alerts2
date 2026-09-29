@@ -50,8 +50,8 @@
   },
   "SWDY": {
     "cycle": 1,
-    "position": 0.66,
-    "avg_price": 115.225,
+    "position": 1.0,
+    "avg_price": 112.7685,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
@@ -64,8 +64,8 @@
   },
   "ATQA": {
     "cycle": 1,
-    "position": 0.33,
-    "avg_price": 11.86,
+    "position": 0.66,
+    "avg_price": 11.655,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
