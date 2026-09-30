@@ -36,8 +36,8 @@
   },
   "ABUK": {
     "cycle": 2,
-    "position": 0.0,
-    "avg_price": 0.0,
+    "position": 0.33,
+    "avg_price": 85.0,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
@@ -218,8 +218,8 @@
   },
   "EGAL": {
     "cycle": 1,
-    "position": 0.33,
-    "avg_price": 350.0,
+    "position": 0.66,
+    "avg_price": 342.025,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   }

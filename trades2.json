@@ -76,6 +76,19 @@
       "exit_price": 94.0,
       "exit_date": "2026-09-02",
       "profit_pct": 24.47
+    },
+    {
+      "symbol": "ABUK",
+      "cycle": 2,
+      "status": "OPEN",
+      "first_entry": "2026-09-30 with price 85.00",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 85.0,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
     }
   ],
   "OIH": [
@@ -469,9 +482,9 @@
       "cycle": 1,
       "status": "OPEN",
       "first_entry": "2026-09-27 with price 350.00",
-      "second_entry": null,
+      "second_entry": "2026-09-30 with price 334.05",
       "third_entry": null,
-      "last_totally_average_price": 350.0,
+      "last_totally_average_price": 342.02,
       "exits": [],
       "exit_price": null,
       "exit_date": null,
