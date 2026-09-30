@@ -10,7 +10,7 @@
     "cycle": 2,
     "position": 0.66,
     "avg_price": 13.005,
-    "peak_profit": 1.3615733736762459,
+    "peak_profit": 4.267589388696653,
     "realized_pnl_tracker": []
   },
   "ETEL": {
@@ -38,7 +38,7 @@
     "cycle": 2,
     "position": 0.33,
     "avg_price": 85.0,
-    "peak_profit": 0.0,
+    "peak_profit": 0.9176470588235307,
     "realized_pnl_tracker": []
   },
   "OIH": {
