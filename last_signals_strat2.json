@@ -31,28 +31,28 @@
     "cycle": 1,
     "position": 1.0,
     "avg_price": 23.2441,
-    "peak_profit": 0.4396064475612178,
+    "peak_profit": 0.6707078355367557,
     "realized_pnl_tracker": []
   },
   "ABUK": {
     "cycle": 2,
     "position": 0.33,
     "avg_price": 85.0,
-    "peak_profit": 2.0000000000000036,
+    "peak_profit": 2.3764705882352892,
     "realized_pnl_tracker": []
   },
   "OIH": {
     "cycle": 1,
     "position": 0.66,
     "avg_price": 1.8599999999999999,
-    "peak_profit": 0.0,
+    "peak_profit": 0.5376344086021629,
     "realized_pnl_tracker": []
   },
   "SWDY": {
     "cycle": 1,
     "position": 1.0,
     "avg_price": 112.7685,
-    "peak_profit": 1.579785135033271,
+    "peak_profit": 6.412695034517616,
     "realized_pnl_tracker": []
   },
   "ISPH": {
