@@ -38,7 +38,7 @@
     "cycle": 2,
     "position": 0.33,
     "avg_price": 85.0,
-    "peak_profit": 0.9176470588235307,
+    "peak_profit": 2.0000000000000036,
     "realized_pnl_tracker": []
   },
   "OIH": {
@@ -52,7 +52,7 @@
     "cycle": 1,
     "position": 1.0,
     "avg_price": 112.7685,
-    "peak_profit": 0.0,
+    "peak_profit": 1.579785135033271,
     "realized_pnl_tracker": []
   },
   "ISPH": {
@@ -220,7 +220,7 @@
     "cycle": 1,
     "position": 0.66,
     "avg_price": 342.025,
-    "peak_profit": 0.0,
+    "peak_profit": 0.5949857466559535,
     "realized_pnl_tracker": []
   }
 }
