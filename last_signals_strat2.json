@@ -31,14 +31,14 @@
     "cycle": 1,
     "position": 1.0,
     "avg_price": 23.2441,
-    "peak_profit": 0.6707078355367557,
+    "peak_profit": 2.606682986220167,
     "realized_pnl_tracker": []
   },
   "ABUK": {
     "cycle": 2,
     "position": 0.33,
     "avg_price": 85.0,
-    "peak_profit": 2.3764705882352892,
+    "peak_profit": 4.352941176470591,
     "realized_pnl_tracker": []
   },
   "OIH": {
@@ -52,7 +52,7 @@
     "cycle": 1,
     "position": 1.0,
     "avg_price": 112.7685,
-    "peak_profit": 6.412695034517616,
+    "peak_profit": 6.829478090069474,
     "realized_pnl_tracker": []
   },
   "ISPH": {
@@ -108,7 +108,7 @@
     "cycle": 1,
     "position": 0.66,
     "avg_price": 54.175,
-    "peak_profit": 0.0,
+    "peak_profit": 2.1873557914167097,
     "realized_pnl_tracker": []
   },
   "ELSH": {
@@ -150,7 +150,7 @@
     "cycle": 2,
     "position": 0.66,
     "avg_price": 29.875,
-    "peak_profit": 5.33891213389121,
+    "peak_profit": 8.45188284518828,
     "realized_pnl_tracker": []
   },
   "TMGH": {
@@ -220,7 +220,7 @@
     "cycle": 1,
     "position": 0.66,
     "avg_price": 342.025,
-    "peak_profit": 0.5949857466559535,
+    "peak_profit": 1.9808493531174722,
     "realized_pnl_tracker": []
   }
 }
