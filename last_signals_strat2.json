@@ -38,7 +38,7 @@
     "cycle": 2,
     "position": 0.33,
     "avg_price": 85.0,
-    "peak_profit": 5.1764705882353015,
+    "peak_profit": 5.88235294117647,
     "realized_pnl_tracker": []
   },
   "OIH": {
@@ -66,7 +66,7 @@
     "cycle": 1,
     "position": 0.66,
     "avg_price": 11.655,
-    "peak_profit": 3.732303732303737,
+    "peak_profit": 5.10510510510511,
     "realized_pnl_tracker": []
   },
   "MTIE": {
