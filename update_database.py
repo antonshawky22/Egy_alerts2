@@ -59,19 +59,39 @@ def valid_row(r):
  except:return False
 def historical(name,bars):
  if not HISTORICAL_API_AVAILABLE:return pd.DataFrame(columns=COLUMNS)
+ chart=None
  try:
-  chart=Client().Session.Chart();chart.set_market(f"EGX:{name}",{"timeframe":"D","range":bars})
+  chart=Client().Session.Chart()
+  chart.set_market(f"EGX:{name}",{"timeframe":"D","range":bars})
+  deadline=time.time()+15
+  while time.time()<deadline:
+   periods=getattr(chart,"periods",None)
+   if periods and len(periods)>0:break
+   time.sleep(0.5)
+  periods=getattr(chart,"periods",None)
+  if not periods:
+   print(f"⚠️ {name}: TradingView returned no historical bars")
+   return pd.DataFrame(columns=COLUMNS)
   rows=[]
-  for b in chart.periods:
+  for b in periods:
    try:
     d=pd.to_datetime(int(b["time"]),unit="s").normalize()
     r={"Open":float(b["open"]),"High":float(b["max"]),"Low":float(b["min"]),"Close":float(b["close"]),"Volume":float(b.get("volume",0))}
     if valid_row(r):rows.append((d,r))
-   except:continue
-  if not rows:return pd.DataFrame(columns=COLUMNS)
-  df=pd.DataFrame([r for _,r in rows],index=[d for d,_ in rows]);df=df[~df.index.duplicated(keep="last")].sort_index();return df[COLUMNS]
+   except Exception:continue
+  if not rows:
+   print(f"⚠️ {name}: no valid historical bars")
+   return pd.DataFrame(columns=COLUMNS)
+  df=pd.DataFrame([r for _,r in rows],index=[d for d,_ in rows])
+  df=df[~df.index.duplicated(keep="last")].sort_index()
+  return df[COLUMNS]
  except Exception as e:
-  print(f"❌ {name} historical error: {e}");return pd.DataFrame(columns=COLUMNS)
+  print(f"❌ {name} historical error: {e}")
+  return pd.DataFrame(columns=COLUMNS)
+ finally:
+  try:
+   if chart:chart.delete()
+  except Exception:pass
 def normalize(df):
  if df.empty:return df
  df=df.copy();df.index=pd.to_datetime(df.index).normalize()
