@@ -38,7 +38,7 @@
     "cycle": 2,
     "position": 0.33,
     "avg_price": 85.0,
-    "peak_profit": 4.705882352941177,
+    "peak_profit": 5.1764705882353015,
     "realized_pnl_tracker": []
   },
   "OIH": {
@@ -108,7 +108,7 @@
     "cycle": 1,
     "position": 0.66,
     "avg_price": 54.175,
-    "peak_profit": 2.7411167512690344,
+    "peak_profit": 3.147208121827421,
     "realized_pnl_tracker": []
   },
   "ELSH": {
