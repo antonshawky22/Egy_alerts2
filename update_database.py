@@ -131,15 +131,11 @@ def main():
    if float(r["Volume"])>0 and any(abs(float(r[c])-float(old[c]))>0.000001 for c in ["Open","High","Low","Close"]):pulse=True;break
  updated=[];gaps=[];auto_refresh_tickers=[];live_dates={}
  for name in SYMBOLS:
-  r,candle_date=bulk_row(bulk,name)
-  if not r or not candle_date or not valid_row(r):
-   print(f"⚠️ Invalid live data: {name}");continue
-  live_dates[name]=candle_date
   df=db.get(name,pd.DataFrame(columns=COLUMNS)).copy()
   if df.empty:
    auto_refresh_tickers.append(name);print(f"🆕 {name}: new symbol -> {INITIAL_REFRESH_BARS} bars")
-  df.loc[candle_date,COLUMNS]=[r[c] for c in COLUMNS];db[name]=normalize(df);updated.append(name)
-  recent=db[name].tail(7)
+   continue
+  recent=df.tail(7)
   if len(recent)>=2:
    prev_close=recent["Close"].shift(1)
    gap=((recent["Open"]-prev_close)/prev_close*100).dropna()
@@ -150,9 +146,23 @@ def main():
     if name not in auto_refresh_tickers:auto_refresh_tickers.append(name)
     gaps.append((name,round(gap_value,2)))
     print(f"⚠️ {name}: recent 7-session gap {gap_value:.2f}% -> {GAP_REFRESH_BARS} bars")
- check_date=max(live_dates.values()) if live_dates else pd.Timestamp.now().normalize()
+ check_date=pd.Timestamp.now().normalize()
  if not pulse and not MANUAL_REFRESH_HISTORY and not gaps and not auto_refresh_tickers:
   print("ℹ️ No real market activity or recent gap detected. Safe exit.");return
+ if pulse or MANUAL_REFRESH_HISTORY:
+  for name in SYMBOLS:
+   r,candle_date=bulk_row(bulk,name)
+   if not r or not candle_date or not valid_row(r):
+    print(f"⚠️ Invalid live data: {name}");continue
+   live_dates[name]=candle_date
+   df=db.get(name,pd.DataFrame(columns=COLUMNS)).copy()
+   if df.empty:
+    auto_refresh_tickers.append(name);print(f"🆕 {name}: new symbol -> {INITIAL_REFRESH_BARS} bars")
+   df.loc[candle_date,COLUMNS]=[r[c] for c in COLUMNS];db[name]=normalize(df);updated.append(name)
+   if candle_date>check_date:check_date=candle_date
+ if not live_dates and bulk:
+  dates=[bulk_row(bulk,name)[1] for name in SYMBOLS if bulk_row(bulk,name)[1] is not None]
+  if dates:check_date=max(dates)
  if MANUAL_REFRESH_HISTORY:targets=SYMBOLS;bars=INITIAL_REFRESH_BARS
  elif auto_refresh_tickers:targets=auto_refresh_tickers;bars=GAP_REFRESH_BARS
  else:targets=[];bars=GAP_REFRESH_BARS
