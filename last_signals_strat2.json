@@ -108,7 +108,7 @@
     "cycle": 1,
     "position": 0.66,
     "avg_price": 54.175,
-    "peak_profit": 3.147208121827421,
+    "peak_profit": 3.368712505768349,
     "realized_pnl_tracker": []
   },
   "ELSH": {
@@ -141,8 +141,8 @@
   },
   "MPCO": {
     "cycle": 1,
-    "position": 0.0,
-    "avg_price": 0.0,
+    "position": 0.33,
+    "avg_price": 2.36,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
