@@ -8,8 +8,8 @@
   },
   "EMFD": {
     "cycle": 2,
-    "position": 0.66,
-    "avg_price": 13.005,
+    "position": 1.0,
+    "avg_price": 12.738100000000001,
     "peak_profit": 4.267589388696653,
     "realized_pnl_tracker": []
   },
@@ -126,10 +126,10 @@
     "realized_pnl_tracker": []
   },
   "RAYA": {
-    "cycle": 2,
-    "position": 0.66,
-    "avg_price": 7.2749999999999995,
-    "peak_profit": 2.5710419485791665,
+    "cycle": 3,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
   "EEII": {
@@ -141,8 +141,8 @@
   },
   "MPCO": {
     "cycle": 1,
-    "position": 0.33,
-    "avg_price": 2.36,
+    "position": 0.66,
+    "avg_price": 2.2800000000000002,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },

@@ -36,8 +36,8 @@
       "status": "OPEN",
       "first_entry": "2026-09-24 with price 13.22",
       "second_entry": "2026-09-27 with price 12.79",
-      "third_entry": null,
-      "last_totally_average_price": 13.01,
+      "third_entry": "2026-10-12 with price 12.22",
+      "last_totally_average_price": 12.74,
       "exits": [],
       "exit_price": null,
       "exit_date": null,
@@ -300,15 +300,15 @@
     {
       "symbol": "RAYA",
       "cycle": 2,
-      "status": "OPEN",
+      "status": "CLOSED",
       "first_entry": "2026-08-26 with price 7.39",
       "second_entry": "2026-09-09 with price 7.16",
       "third_entry": null,
       "last_totally_average_price": 7.27,
       "exits": [],
-      "exit_price": null,
-      "exit_date": null,
-      "profit_pct": null
+      "exit_price": 6.03,
+      "exit_date": "2026-10-12",
+      "profit_pct": -17.11
     }
   ],
   "EEII": [
@@ -332,9 +332,9 @@
       "cycle": 1,
       "status": "OPEN",
       "first_entry": "2026-10-11 with price 2.36",
-      "second_entry": null,
+      "second_entry": "2026-10-12 with price 2.20",
       "third_entry": null,
-      "last_totally_average_price": 2.36,
+      "last_totally_average_price": 2.28,
       "exits": [],
       "exit_price": null,
       "exit_date": null,
