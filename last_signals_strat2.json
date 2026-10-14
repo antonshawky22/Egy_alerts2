@@ -203,10 +203,10 @@
     "realized_pnl_tracker": []
   },
   "MCQE": {
-    "cycle": 1,
-    "position": 0.66,
-    "avg_price": 212.39,
-    "peak_profit": 3.5783228965582294,
+    "cycle": 2,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
   "SKPC": {
