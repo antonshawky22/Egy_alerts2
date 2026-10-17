@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
 
   schedule:
-    # تشغيل تلقائي كل يوم جمعة الساعة 6:00 مساءً بتوقيت مصر
-    - cron: '0 15 * * 5'
+    # تشغيل تلقائي كل يوم جمعة الساعة 2:00 مساءً بتوقيت مصر
+    - cron: '15 11 * * 5'
 
 permissions:
   contents: write
