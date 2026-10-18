@@ -64,8 +64,8 @@
   },
   "ATQA": {
     "cycle": 1,
-    "position": 0.66,
-    "avg_price": 11.655,
+    "position": 1.0,
+    "avg_price": 11.3371,
     "peak_profit": 5.10510510510511,
     "realized_pnl_tracker": []
   },
@@ -119,10 +119,10 @@
     "realized_pnl_tracker": []
   },
   "RMDA": {
-    "cycle": 1,
-    "position": 1.0,
-    "avg_price": 5.7334000000000005,
-    "peak_profit": 1.1666666666666714,
+    "cycle": 2,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
   "RAYA": {
@@ -133,16 +133,16 @@
     "realized_pnl_tracker": []
   },
   "EEII": {
-    "cycle": 1,
-    "position": 0.66,
-    "avg_price": 2.23,
-    "peak_profit": 5.381165919282516,
+    "cycle": 2,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
   "MPCO": {
-    "cycle": 1,
-    "position": 1.0,
-    "avg_price": 2.2222,
+    "cycle": 2,
+    "position": 0.0,
+    "avg_price": 0.0,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
@@ -210,17 +210,17 @@
     "realized_pnl_tracker": []
   },
   "SKPC": {
-    "cycle": 1,
-    "position": 1.0,
-    "avg_price": 17.092399999999998,
-    "peak_profit": 5.5586749017406065,
+    "cycle": 2,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
   "EGAL": {
-    "cycle": 1,
-    "position": 0.66,
-    "avg_price": 342.025,
-    "peak_profit": 1.9808493531174722,
+    "cycle": 2,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0,
     "realized_pnl_tracker": []
   }
 }

@@ -143,8 +143,8 @@
       "status": "OPEN",
       "first_entry": "2026-09-28 with price 11.86",
       "second_entry": "2026-09-29 with price 11.45",
-      "third_entry": null,
-      "last_totally_average_price": 11.65,
+      "third_entry": "2026-10-18 with price 10.72",
+      "last_totally_average_price": 11.34,
       "exits": [],
       "exit_price": null,
       "exit_date": null,
@@ -272,15 +272,15 @@
     {
       "symbol": "RMDA",
       "cycle": 1,
-      "status": "OPEN",
+      "status": "CLOSED",
       "first_entry": "2026-09-21 with price 6.00",
       "second_entry": "2026-09-24 with price 5.80",
       "third_entry": "2026-09-27 with price 5.41",
       "last_totally_average_price": 5.73,
       "exits": [],
-      "exit_price": null,
-      "exit_date": null,
-      "profit_pct": null
+      "exit_price": 4.91,
+      "exit_date": "2026-10-18",
+      "profit_pct": -14.36
     }
   ],
   "RAYA": [
@@ -302,30 +302,30 @@
     {
       "symbol": "EEII",
       "cycle": 1,
-      "status": "OPEN",
+      "status": "CLOSED",
       "first_entry": "2026-09-13 with price 2.29",
       "second_entry": "2026-09-14 with price 2.17",
       "third_entry": null,
       "last_totally_average_price": 2.23,
       "exits": [],
-      "exit_price": null,
-      "exit_date": null,
-      "profit_pct": null
+      "exit_price": 1.8,
+      "exit_date": "2026-10-18",
+      "profit_pct": -19.28
     }
   ],
   "MPCO": [
     {
       "symbol": "MPCO",
       "cycle": 1,
-      "status": "OPEN",
+      "status": "CLOSED",
       "first_entry": "2026-10-11 with price 2.36",
       "second_entry": "2026-10-12 with price 2.20",
       "third_entry": "2026-10-13 with price 2.11",
       "last_totally_average_price": 2.22,
       "exits": [],
-      "exit_price": null,
-      "exit_date": null,
-      "profit_pct": null
+      "exit_price": 1.87,
+      "exit_date": "2026-10-18",
+      "profit_pct": -15.85
     }
   ],
   "GBCO": [
@@ -466,30 +466,30 @@
     {
       "symbol": "SKPC",
       "cycle": 1,
-      "status": "OPEN",
+      "status": "CLOSED",
       "first_entry": "2026-09-14 with price 17.81",
       "second_entry": "2026-09-24 with price 17.15",
       "third_entry": "2026-09-27 with price 16.34",
       "last_totally_average_price": 17.09,
       "exits": [],
-      "exit_price": null,
-      "exit_date": null,
-      "profit_pct": null
+      "exit_price": 14.81,
+      "exit_date": "2026-10-18",
+      "profit_pct": -13.35
     }
   ],
   "EGAL": [
     {
       "symbol": "EGAL",
       "cycle": 1,
-      "status": "OPEN",
+      "status": "CLOSED",
       "first_entry": "2026-09-27 with price 350.00",
       "second_entry": "2026-09-30 with price 334.05",
       "third_entry": null,
       "last_totally_average_price": 342.02,
       "exits": [],
-      "exit_price": null,
-      "exit_date": null,
-      "profit_pct": null
+      "exit_price": 281.9,
+      "exit_date": "2026-10-18",
+      "profit_pct": -17.58
     }
   ]
 }
