@@ -1,9 +1,9 @@
 {
   "OLFI": {
-    "cycle": 1,
-    "position": 0.66,
-    "avg_price": 24.065000000000005,
-    "peak_profit": 1.1822258459029724,
+    "cycle": 2,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
   "EMFD": {
@@ -38,7 +38,7 @@
     "cycle": 2,
     "position": 0.33,
     "avg_price": 85.0,
-    "peak_profit": 10.0,
+    "peak_profit": 12.647058823529411,
     "realized_pnl_tracker": []
   },
   "OIH": {
@@ -56,10 +56,10 @@
     "realized_pnl_tracker": []
   },
   "ISPH": {
-    "cycle": 1,
-    "position": 0.66,
-    "avg_price": 12.76,
-    "peak_profit": 3.6923076923076956,
+    "cycle": 2,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
   "ATQA": {

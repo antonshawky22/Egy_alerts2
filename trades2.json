@@ -3,15 +3,15 @@
     {
       "symbol": "OLFI",
       "cycle": 1,
-      "status": "OPEN",
+      "status": "CLOSED",
       "first_entry": "2026-08-18 with price 24.53",
       "second_entry": "2026-08-24 with price 23.60",
       "third_entry": null,
       "last_totally_average_price": 24.07,
       "exits": [],
-      "exit_price": null,
-      "exit_date": null,
-      "profit_pct": null
+      "exit_price": 19.91,
+      "exit_date": "2026-10-21",
+      "profit_pct": -17.27
     }
   ],
   "EMFD": [
@@ -125,15 +125,15 @@
     {
       "symbol": "ISPH",
       "cycle": 1,
-      "status": "OPEN",
+      "status": "CLOSED",
       "first_entry": "2026-08-19 with price 13.00",
       "second_entry": "2026-09-14 with price 12.52",
       "third_entry": null,
       "last_totally_average_price": 12.76,
       "exits": [],
-      "exit_price": null,
-      "exit_date": null,
-      "profit_pct": null
+      "exit_price": 10.56,
+      "exit_date": "2026-10-21",
+      "profit_pct": -17.24
     }
   ],
   "ATQA": [
