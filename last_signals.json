@@ -15,7 +15,7 @@
     "entry_price": null
   },
   "ETEL": {
-    "trend": "🔻",
+    "trend": "↗️",
     "in_position": false,
     "entry_price": null
   },
@@ -25,12 +25,12 @@
     "entry_price": null
   },
   "EFIH": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
   "ABUK": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -50,7 +50,7 @@
     "entry_price": null
   },
   "ATQA": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -65,12 +65,12 @@
     "entry_price": null
   },
   "HRHO": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
   "ORWE": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -85,7 +85,7 @@
     "entry_price": null
   },
   "SUGR": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -105,9 +105,9 @@
     "entry_price": null
   },
   "EEII": {
-    "trend": "🔻",
-    "in_position": false,
-    "entry_price": null
+    "trend": "🔛",
+    "in_position": true,
+    "entry_price": 1.85
   },
   "MPCO": {
     "trend": "🔻",
@@ -115,9 +115,9 @@
     "entry_price": null
   },
   "GBCO": {
-    "trend": "🔻",
-    "in_position": false,
-    "entry_price": null
+    "trend": "🔛",
+    "in_position": true,
+    "entry_price": 27.15
   },
   "TMGH": {
     "trend": "🔻",
@@ -130,12 +130,12 @@
     "entry_price": null
   },
   "AMOC": {
-    "trend": "🔻",
+    "trend": "↗️",
     "in_position": false,
     "entry_price": null
   },
   "FWRY": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -145,7 +145,7 @@
     "entry_price": null
   },
   "ADIB": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -155,7 +155,7 @@
     "entry_price": null
   },
   "MCQE": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
