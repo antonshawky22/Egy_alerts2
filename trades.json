@@ -516,12 +516,18 @@
     "symbol": "EEII",
     "entry_trend": "🔛",
     "entry_price": 1.85,
-    "entry_date": "2026-10-21"
+    "entry_date": "2026-10-21",
+    "exit_price": 1.78,
+    "exit_date": "2026-10-22",
+    "profit_pct": -3.78
   },
   {
     "symbol": "GBCO",
     "entry_trend": "🔛",
     "entry_price": 27.15,
-    "entry_date": "2026-10-21"
+    "entry_date": "2026-10-21",
+    "exit_price": 25.8,
+    "exit_date": "2026-10-22",
+    "profit_pct": -4.97
   }
 ]
