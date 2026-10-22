@@ -345,15 +345,15 @@
     {
       "symbol": "GBCO",
       "cycle": 2,
-      "status": "OPEN",
+      "status": "CLOSED",
       "first_entry": "2026-09-13 with price 30.34",
       "second_entry": "2026-09-14 with price 29.41",
       "third_entry": null,
       "last_totally_average_price": 29.88,
       "exits": [],
-      "exit_price": null,
-      "exit_date": null,
-      "profit_pct": null
+      "exit_price": 24.6,
+      "exit_date": "2026-10-22",
+      "profit_pct": -17.66
     }
   ],
   "TMGH": [
