@@ -15,8 +15,8 @@
   },
   "ETEL": {
     "cycle": 1,
-    "position": 0.33,
-    "avg_price": 128.0,
+    "position": 0.66,
+    "avg_price": 126.03,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
@@ -70,10 +70,10 @@
     "realized_pnl_tracker": []
   },
   "MTIE": {
-    "cycle": 2,
-    "position": 0.66,
-    "avg_price": 8.31,
-    "peak_profit": 0.9467455621301784,
+    "cycle": 3,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
   "HRHO": {
@@ -91,10 +91,10 @@
     "realized_pnl_tracker": []
   },
   "JUFO": {
-    "cycle": 1,
-    "position": 0.66,
-    "avg_price": 26.215000000000003,
-    "peak_profit": 2.1747281589801206,
+    "cycle": 2,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
   "DSCW": {

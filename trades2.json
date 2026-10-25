@@ -50,9 +50,9 @@
       "cycle": 1,
       "status": "OPEN",
       "first_entry": "2026-10-25 with price 128.00",
-      "second_entry": null,
+      "second_entry": "2026-10-25 with price 124.06",
       "third_entry": null,
-      "last_totally_average_price": 128.0,
+      "last_totally_average_price": 126.03,
       "exits": [],
       "exit_price": null,
       "exit_date": null,
@@ -182,15 +182,15 @@
     {
       "symbol": "MTIE",
       "cycle": 2,
-      "status": "OPEN",
+      "status": "CLOSED",
       "first_entry": "2026-09-13 with price 8.45",
       "second_entry": "2026-09-22 with price 8.17",
       "third_entry": null,
       "last_totally_average_price": 8.31,
       "exits": [],
-      "exit_price": null,
-      "exit_date": null,
-      "profit_pct": null
+      "exit_price": 6.23,
+      "exit_date": "2026-10-25",
+      "profit_pct": -25.03
     }
   ],
   "HRHO": [
@@ -227,15 +227,15 @@
     {
       "symbol": "JUFO",
       "cycle": 1,
-      "status": "OPEN",
+      "status": "CLOSED",
       "first_entry": "2026-09-21 with price 26.67",
       "second_entry": "2026-09-27 with price 25.76",
       "third_entry": null,
       "last_totally_average_price": 26.22,
       "exits": [],
-      "exit_price": null,
-      "exit_date": null,
-      "profit_pct": null
+      "exit_price": 21.08,
+      "exit_date": "2026-10-25",
+      "profit_pct": -19.59
     }
   ],
   "DSCW": [
