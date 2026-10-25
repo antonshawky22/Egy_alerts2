@@ -44,7 +44,21 @@
       "profit_pct": null
     }
   ],
-  "ETEL": [],
+  "ETEL": [
+    {
+      "symbol": "ETEL",
+      "cycle": 1,
+      "status": "OPEN",
+      "first_entry": "2026-10-25 with price 128.00",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 128.0,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
+    }
+  ],
   "EAST": [],
   "EFIH": [
     {
@@ -140,15 +154,15 @@
     {
       "symbol": "ATQA",
       "cycle": 1,
-      "status": "OPEN",
+      "status": "CLOSED",
       "first_entry": "2026-09-28 with price 11.86",
       "second_entry": "2026-09-29 with price 11.45",
       "third_entry": "2026-10-18 with price 10.72",
       "last_totally_average_price": 11.34,
       "exits": [],
-      "exit_price": null,
-      "exit_date": null,
-      "profit_pct": null
+      "exit_price": 9.26,
+      "exit_date": "2026-10-25",
+      "profit_pct": -18.32
     }
   ],
   "MTIE": [
