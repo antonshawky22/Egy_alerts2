@@ -51,8 +51,8 @@
       "status": "OPEN",
       "first_entry": "2026-10-25 with price 128.00",
       "second_entry": "2026-10-25 with price 124.06",
-      "third_entry": null,
-      "last_totally_average_price": 126.03,
+      "third_entry": "2026-10-26 with price 117.00",
+      "last_totally_average_price": 122.96,
       "exits": [],
       "exit_price": null,
       "exit_date": null,
@@ -109,15 +109,15 @@
     {
       "symbol": "OIH",
       "cycle": 1,
-      "status": "OPEN",
+      "status": "CLOSED",
       "first_entry": "2026-09-28 with price 1.90",
       "second_entry": "2026-09-29 with price 1.82",
       "third_entry": null,
       "last_totally_average_price": 1.86,
       "exits": [],
-      "exit_price": null,
-      "exit_date": null,
-      "profit_pct": null
+      "exit_price": 1.52,
+      "exit_date": "2026-10-26",
+      "profit_pct": -18.28
     }
   ],
   "SWDY": [

@@ -15,8 +15,8 @@
   },
   "ETEL": {
     "cycle": 1,
-    "position": 0.66,
-    "avg_price": 126.03,
+    "position": 1.0,
+    "avg_price": 122.9598,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
@@ -42,10 +42,10 @@
     "realized_pnl_tracker": []
   },
   "OIH": {
-    "cycle": 1,
-    "position": 0.66,
-    "avg_price": 1.8599999999999999,
-    "peak_profit": 2.1505376344086042,
+    "cycle": 2,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
   "SWDY": {
