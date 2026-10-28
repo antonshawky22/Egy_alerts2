@@ -374,15 +374,15 @@
     {
       "symbol": "TMGH",
       "cycle": 1,
-      "status": "OPEN",
+      "status": "CLOSED",
       "first_entry": "2026-08-13 with price 97.80",
       "second_entry": null,
       "third_entry": null,
       "last_totally_average_price": 97.8,
       "exits": [],
-      "exit_price": null,
-      "exit_date": null,
-      "profit_pct": null
+      "exit_price": 80.15,
+      "exit_date": "2026-10-28",
+      "profit_pct": -18.05
     }
   ],
   "ORHD": [

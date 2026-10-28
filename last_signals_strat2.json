@@ -154,10 +154,10 @@
     "realized_pnl_tracker": []
   },
   "TMGH": {
-    "cycle": 1,
-    "position": 0.33,
-    "avg_price": 97.8,
-    "peak_profit": 2.24948875255624,
+    "cycle": 2,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },
   "ORHD": {
