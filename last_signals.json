@@ -168,5 +168,15 @@
     "trend": "🔻",
     "in_position": false,
     "entry_price": null
+  },
+  "NIPH": {
+    "trend": "🔻",
+    "in_position": false,
+    "entry_price": null
+  },
+  "MPCI": {
+    "trend": "🔻",
+    "in_position": false,
+    "entry_price": null
   }
 }
