@@ -222,5 +222,19 @@
     "avg_price": 0.0,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
+  },
+  "NIPH": {
+    "cycle": 1,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0,
+    "realized_pnl_tracker": []
+  },
+  "MPCI": {
+    "cycle": 1,
+    "position": 0.0,
+    "avg_price": 0.0,
+    "peak_profit": 0.0,
+    "realized_pnl_tracker": []
   }
 }
