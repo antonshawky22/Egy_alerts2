@@ -145,7 +145,7 @@ def main():
     gap_value=float(gap.loc[max_gap])
     if name not in auto_refresh_tickers:auto_refresh_tickers.append(name)
     gaps.append((name,round(gap_value,2)))
-    print(f"⚠️ {name}: recent 7-session gap {gap_value:.2f}% -> {GAP_REFRESH_BARS} bars")
+    print(f"⚠️ {name}: recent 30-session gap {gap_value:.2f}% -> {GAP_REFRESH_BARS} bars")
  check_date=pd.Timestamp.now().normalize()
  if not pulse and not MANUAL_REFRESH_HISTORY and not gaps and not auto_refresh_tickers:
   print("ℹ️ No real market activity or recent gap detected. Safe exit.");return
