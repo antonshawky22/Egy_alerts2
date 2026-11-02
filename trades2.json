@@ -96,9 +96,9 @@
       "cycle": 2,
       "status": "OPEN",
       "first_entry": "2026-09-30 with price 85.00",
-      "second_entry": null,
+      "second_entry": "2026-11-02 with price 80.79",
       "third_entry": null,
-      "last_totally_average_price": 85.0,
+      "last_totally_average_price": 82.89,
       "exits": [],
       "exit_price": null,
       "exit_date": null,
@@ -405,15 +405,15 @@
     {
       "symbol": "FWRY",
       "cycle": 1,
-      "status": "OPEN",
+      "status": "CLOSED",
       "first_entry": "2026-08-13 with price 19.01",
       "second_entry": null,
       "third_entry": null,
       "last_totally_average_price": 19.01,
       "exits": [],
-      "exit_price": null,
-      "exit_date": null,
-      "profit_pct": null
+      "exit_price": 15.64,
+      "exit_date": "2026-11-02",
+      "profit_pct": -17.73
     }
   ],
   "COMI": [
