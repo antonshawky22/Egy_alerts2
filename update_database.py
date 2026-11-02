@@ -129,11 +129,11 @@ def main():
   if r and not df.empty:
    old=df.iloc[-1]
    if float(r["Volume"])>0 and any(abs(float(r[c])-float(old[c]))>0.000001 for c in ["Open","High","Low","Close"]):pulse=True;break
- updated=[];gaps=[];auto_refresh_tickers=[];live_dates={}
+ updated=[];gaps=[];auto_refresh_tickers=[];new_symbols=[];live_dates={}
  for name in SYMBOLS:
   df=db.get(name,pd.DataFrame(columns=COLUMNS)).copy()
   if df.empty:
-   auto_refresh_tickers.append(name);print(f"🆕 {name}: new symbol -> {INITIAL_REFRESH_BARS} bars")
+   auto_refresh_tickers.append(name);new_symbols.append(name);print(f"🆕 {name}: new symbol -> {INITIAL_REFRESH_BARS} bars")
    continue
   recent=df.tail(7)
   if len(recent)>=2:
