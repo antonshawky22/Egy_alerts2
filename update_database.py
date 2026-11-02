@@ -157,7 +157,7 @@ def main():
    live_dates[name]=candle_date
    df=db.get(name,pd.DataFrame(columns=COLUMNS)).copy()
    if df.empty:
-    auto_refresh_tickers.append(name);print(f"🆕 {name}: new symbol -> {INITIAL_REFRESH_BARS} bars")
+    if name not in auto_refresh_tickers:auto_refresh_tickers.append(name)
    df.loc[candle_date,COLUMNS]=[r[c] for c in COLUMNS];db[name]=normalize(df);updated.append(name)
    if candle_date>check_date:check_date=candle_date
  if not live_dates and bulk:
@@ -167,16 +167,16 @@ def main():
  elif auto_refresh_tickers:targets=auto_refresh_tickers;bars=GAP_REFRESH_BARS
  else:targets=[];bars=GAP_REFRESH_BARS
  hist_ok=[];hist_fail=[]
-if targets:
- if not HISTORICAL_API_AVAILABLE:hist_fail=targets.copy();print("❌ Historical API unavailable")
- else:
-  print(f"🔄 Historical refresh: {len(targets)} symbols × {bars} bars")
+ if targets:
+  if not HISTORICAL_API_AVAILABLE:hist_fail=targets.copy();print("❌ Historical API unavailable")
+  else:
+   print(f"🔄 Historical refresh: {len(targets)} symbols × {bars} bars")
    for name in targets:
-   symbol_bars=INITIAL_REFRESH_BARS if MANUAL_REFRESH_HISTORY or name in new_symbols else GAP_REFRESH_BARS
-   print(f"📥 {name}... ({symbol_bars} bars)");h=historical(name,symbol_bars)
-   if h.empty:hist_fail.append(name);print(f"❌ {name}: refresh failed");continue
-   df=db.get(name,pd.DataFrame(columns=COLUMNS)).copy()
-   if df.empty:df=h
+    symbol_bars=INITIAL_REFRESH_BARS if MANUAL_REFRESH_HISTORY or name in new_symbols else GAP_REFRESH_BARS
+    print(f"📥 {name}... ({symbol_bars} bars)");h=historical(name,symbol_bars)
+    if h.empty:hist_fail.append(name);print(f"❌ {name}: refresh failed");continue
+    df=db.get(name,pd.DataFrame(columns=COLUMNS)).copy()
+    if df.empty:df=h
     else:df=pd.concat([df,h]);df=df[~df.index.duplicated(keep="last")].sort_index()
     df=normalize(df)
     if name in live_dates and live_dates[name] in df.index:
