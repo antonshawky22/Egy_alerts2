@@ -7,7 +7,7 @@ except ImportError:
  HISTORICAL_API_AVAILABLE=False
 TOKEN=os.getenv("TELEGRAM_TOKEN");CHAT_ID=os.getenv("TELEGRAM_CHAT_ID")
 DB_FILE="egx_history_database_v2.json";REPORT_FILE="egx_history_database_quality_v2.json";TEMP_DB_FILE=DB_FILE+".tmp"
-INITIAL_REFRESH_BARS=500;GAP_REFRESH_BARS=150;MAX_DATABASE_BARS=500;GAP_REFRESH_PERCENT=5.0;MAX_RETRIES=3;RETRY_DELAY=5;REQUEST_DELAY=2
+INITIAL_REFRESH_BARS=500;GAP_REFRESH_BARS=500;MAX_DATABASE_BARS=500;GAP_REFRESH_PERCENT=5.0;MAX_RETRIES=3;RETRY_DELAY=5;REQUEST_DELAY=2
 SYMBOLS="EGX30 OLFI EMFD ETEL EAST EFIH ABUK OIH SWDY ISPH ATQA MTIE HRHO ORWE JUFO DSCW SUGR ELSH RMDA RAYA EEII MPCO GBCO TMGH ORHD AMOC FWRY COMI ADIB PHDC MCQE SKPC EGAL NIPH MPCI".split()
 COLUMNS=["Open","High","Low","Close","Volume"]
 p=argparse.ArgumentParser();p.add_argument("--refresh-history",action="store_true");args=p.parse_args()
@@ -135,7 +135,7 @@ def main():
   if df.empty:
    auto_refresh_tickers.append(name);new_symbols.append(name);print(f"🆕 {name}: new symbol -> {INITIAL_REFRESH_BARS} bars")
    continue
-  recent=df.tail(7)
+  recent=df.tail(30)
   if len(recent)>=2:
    prev_close=recent["Close"].shift(1)
    gap=((recent["Open"]-prev_close)/prev_close*100).dropna()
