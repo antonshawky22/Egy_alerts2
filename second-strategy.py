@@ -203,9 +203,9 @@ for name, ticker in symbols.items():
     if s["avg_price"] > 0:
         profit = ((price - s["avg_price"]) / s["avg_price"]) * 100
 
-    sell1 = s["position"] > 0.65 and rsi_val >= 60 and profit > 15
-    sell2 = 0.30 < s["position"] <= 0.70 and rsi_val >= 72 and profit > 18
-    sell3 = s["position"] > 0.00 and rsi_val >= 82 and profit > 20
+    sell1 = s["position"] > 0.30 and rsi_val >= 50 and profit > 15
+    sell2 = 0.30 < s["position"] <= 0.70 and rsi_val >= 66 and profit > 18
+    sell3 = s["position"] > 0.00 and rsi_val >= 77 and profit > 20
     action = None
 
     if name not in trades_history:
@@ -239,7 +239,7 @@ for name, ticker in symbols.items():
         }
         trades_history[name].append(new_trade)
 
-    elif 0.32 < s["position"] < 0.5 and buy2 and price < s["avg_price"] * 0.97:
+    elif 0.32 < s["position"] < 0.5 and buy2 and price < s["avg_price"] * 0.90:
         old_pos = s["position"]
         s["position"] = 0.66
         s["avg_price"] = update_avg(s["avg_price"], old_pos, price, s["position"])
@@ -251,7 +251,7 @@ for name, ticker in symbols.items():
             active_trade["second_entry"] = f"{current_date} with price {price:.2f}"
             active_trade["last_totally_average_price"] = round(s["avg_price"], 2)
 
-    elif 0.65 < s["position"] < 1 and buy3 and price < s["avg_price"] * 0.94:
+    elif 0.65 < s["position"] < 1 and buy3 and price < s["avg_price"] * 0.85:
         old_pos = s["position"]
         s["position"] = 1.0
         s["avg_price"] = update_avg(s["avg_price"], old_pos, price, s["position"])
