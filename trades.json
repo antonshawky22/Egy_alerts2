@@ -529,5 +529,17 @@
     "exit_price": 25.8,
     "exit_date": "2026-10-22",
     "profit_pct": -4.97
+  },
+  {
+    "symbol": "EAST",
+    "entry_trend": "↗️",
+    "entry_price": 33.19,
+    "entry_date": "2026-11-04"
+  },
+  {
+    "symbol": "GBCO",
+    "entry_trend": "🔛",
+    "entry_price": 22.08,
+    "entry_date": "2026-11-04"
   }
 ]
