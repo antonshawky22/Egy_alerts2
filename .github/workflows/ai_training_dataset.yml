@@ -1,5 +1,4 @@
 name: AI Training Dataset
-
 on:
   workflow_dispatch:
 
@@ -30,8 +29,13 @@ jobs:
       - name: Build Training Dataset
         run: python ai_training_dataset.py
 
-      - name: Upload Training Dataset
+      - name: Analyze Training Dataset
+        run: python ai_dataset_analysis.py
+
+      - name: Upload AI Dataset and Analysis
         uses: actions/upload-artifact@v4
         with:
-          name: ai-training-dataset
-          path: ai_training_dataset.json
+          name: ai-training-analysis
+          path: |
+            ai_training_dataset.json
+            ai_dataset_analysis_report.json
