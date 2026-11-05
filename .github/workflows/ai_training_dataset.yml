@@ -17,6 +17,11 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas scikit-learn joblib xgboost
+
       - name: Build AI Features
         run: python ai_feature_engine.py
 
@@ -32,10 +37,8 @@ jobs:
       - name: Analyze Training Dataset
         run: python ai_dataset_analysis.py
 
-      # --- أضف هذه الخطوة هنا ---
       - name: Train AI Model
         run: python ai_model_train.py
-      # ---------------------------
 
       - name: Upload AI Dataset and Analysis
         uses: actions/upload-artifact@v4
@@ -44,4 +47,4 @@ jobs:
           path: |
             ai_training_dataset.json
             ai_dataset_analysis_report.json
-            ai_stock_model.pkl    # <--- أضفنا هذا السطر أيضاً ليحفظ النموذج المدرب
+            ai_stock_model.pkl
