@@ -18,7 +18,6 @@ def load_dataset(file_path="ai_training_dataset.json"):
     with open(file_path, "r", encoding="utf-8") as f:
         data = json.load(f)
     
-    # معالجة مرنة للـ JSON بغض النظر عن طريقة حفظه لضمان عدم حدوث خطأ الأطوال
     if isinstance(data, list):
         df = pd.DataFrame(data)
     elif isinstance(data, dict):
@@ -36,10 +35,15 @@ def train_model():
     print("-> جاري تحميل بيانات التدريب...")
     df = load_dataset()
     
-    if "target" not in df.columns:
-        raise ValueError("عمود الهدف (Target/Label) غير موجود في ملف البيانات.")
+    # تحويل العائد المستقبلي إلى إشارة تصنيف (1 للصعود، 0 للهبوط) بناءً على بياناتك
+    if "Future_Return_Pct" in df.columns:
+        df["target"] = (df["Future_Return_Pct"] > 0).astype(int)
+        print("-> تم إنشاء عمود الهدف (target) بنجاح من عمود Future_Return_Pct.")
+    elif "target" not in df.columns:
+        raise ValueError("لم يتم العثور لا على عمود target ولا على Future_Return_Pct في ملف البيانات.")
     
-    exclude_cols = ["target", "date", "ticker", "symbol"]
+    # استبعاد أعمدة الأهداف والمعلومات غير المستخدمة في الميزات
+    exclude_cols = ["target", "Future_Return_Pct", "Max_Gain_Pct", "Max_Drawdown_Pct", "Sessions_To_Max", "Sessions_To_Min", "date", "ticker", "symbol"]
     feature_cols = [col for col in df.columns if col not in exclude_cols]
     
     X = df[feature_cols]
