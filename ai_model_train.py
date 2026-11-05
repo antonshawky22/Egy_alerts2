@@ -18,7 +18,18 @@ def load_dataset(file_path="ai_training_dataset.json"):
     with open(file_path, "r", encoding="utf-8") as f:
         data = json.load(f)
     
-    df = pd.DataFrame(data)
+    # معالجة مرنة للـ JSON بغض النظر عن طريقة حفظه لضمان عدم حدوث خطأ الأطوال
+    if isinstance(data, list):
+        df = pd.DataFrame(data)
+    elif isinstance(data, dict):
+        try:
+            df = pd.DataFrame(data)
+        except ValueError:
+            print("-> تنبيه: صيغة الـ JSON تحتاج معالجة خاصة، جاري ضبط البيانات...")
+            df = pd.DataFrame.from_dict(data, orient='index').T
+    else:
+        raise ValueError("صيغة ملف الـ JSON غير مدعومة.")
+        
     return df
 
 def train_model():
