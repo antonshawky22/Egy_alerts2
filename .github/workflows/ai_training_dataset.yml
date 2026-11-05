@@ -32,6 +32,11 @@ jobs:
       - name: Analyze Training Dataset
         run: python ai_dataset_analysis.py
 
+      # --- أضف هذه الخطوة هنا ---
+      - name: Train AI Model
+        run: python ai_model_train.py
+      # ---------------------------
+
       - name: Upload AI Dataset and Analysis
         uses: actions/upload-artifact@v4
         with:
@@ -39,3 +44,4 @@ jobs:
           path: |
             ai_training_dataset.json
             ai_dataset_analysis_report.json
+            ai_stock_model.pkl    # <--- أضفنا هذا السطر أيضاً ليحفظ النموذج المدرب
