@@ -18,10 +18,19 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Run dataset builder
+      - name: Build AI Features
+        run: python ai_feature_engine.py
+
+      - name: Build AI Labels
+        run: python ai_label_engine.py
+
+      - name: Build Market Regime
+        run: python ai_market_regime.py
+
+      - name: Build Training Dataset
         run: python ai_training_dataset.py
 
-      - name: Upload training dataset
+      - name: Upload Training Dataset
         uses: actions/upload-artifact@v4
         with:
           name: ai-training-dataset
