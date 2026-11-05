@@ -1,0 +1,28 @@
+name: AI Training Dataset
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-dataset:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run dataset builder
+        run: python ai_training_dataset.py
+
+      - name: Upload training dataset
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-training-dataset
+          path: ai_training_dataset.json
