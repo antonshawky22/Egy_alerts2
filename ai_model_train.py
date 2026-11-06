@@ -49,9 +49,9 @@ def train_model():
     df["date"] = pd.to_datetime(df["date"])
     df = df.sort_values("date").reset_index(drop=True)
 
-  # 3. تحديد عمود الهدف بدقة (مع مراعاة تكاليف التداول: العائد > 0.5% مثلاً لتغطية العمولة)
-  # هنا سنعتبر النجاح عائداً يحقق أكثر من 0.5% لتفادي الصفقات الوهمية ذات العائد الصفري
-  PROFIT_THRESHOLD = 0.005 
+  # 3. تحديد عمود الهدف بدقة (مع مراعاة تكاليف التداول: العائد > .3% مثلاً لتغطية العمولة)
+  # هنا سنعتبر النجاح عائداً يحقق أكثر من 0.03% لتفادي الصفقات الوهمية ذات العائد الصفري
+  PROFIT_THRESHOLD = 0.03
   if "Future_Return_Pct" in df.columns:
     df["target"] = (df["Future_Return_Pct"] > PROFIT_THRESHOLD).astype(int)
     target_col = "target"
