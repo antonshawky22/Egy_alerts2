@@ -6,11 +6,11 @@ import pandas as pd
 import numpy as np
 import requests
 
-=====================
+#=====================
 
 Telegram Settings
 
-=====================
+#=====================
 
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
@@ -49,11 +49,11 @@ TRADES_FILE = "ai_trades.json"
 CONFIDENCE_THRESHOLD = 0.70
 TRAILING_STOP_PCT = 0.05
 
-=====================
+#=====================
 
 Trade Logging Functions
 
-=====================
+#=====================
 
 def log_buy(symbol, price, date, confidence):
 trade = {
@@ -104,11 +104,11 @@ for trade in reversed(data):
 with open(TRADES_FILE, "w", encoding="utf-8") as f:
     json.dump(data, f, indent=2, ensure_ascii=False)
 
-=====================
+#=====================
 
 Load AI Model & Databases
 
-=====================
+#=====================
 
 if not os.path.exists(MODEL_FILE) or not os.path.exists(META_FILE):
 raise FileNotFoundError(
@@ -195,11 +195,11 @@ regime_mapping = {
 trend_mapping = {"DOWN": -1, "MIXED": 0, "UP": 1}
 momentum_mapping = {"NEGATIVE": -1, "MIXED": 0, "POSITIVE": 1}
 
-=====================
+#=====================
 
 Main Loop
 
-=====================
+#=====================
 
 for symbol, stock_content in raw_database.items():
 
@@ -515,11 +515,11 @@ new_signals[symbol] = {
 
 processed_dates.append(last_candle_date)
 
-=====================
+#=====================
 
 Telegram Report Dispatch
 
-=====================
+#=====================
 
 global_last_date = (
 max(processed_dates) if processed_dates else "Unknown Date"
