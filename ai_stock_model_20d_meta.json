@@ -1,0 +1,41 @@
+{
+  "model_file": "ai_stock_model_20d.pkl",
+  "horizon": 20,
+  "profit_threshold": 2.0,
+  "feature_columns": [
+    "RSI14",
+    "ATR14_Pct",
+    "Volume_Ratio20",
+    "Return_5",
+    "Return_10",
+    "Return_20",
+    "Return_50",
+    "Return_100",
+    "Distance_EMA20_Pct",
+    "Distance_EMA50_Pct",
+    "Distance_EMA100_Pct",
+    "Distance_Resistance20_Pct",
+    "Distance_Support20_Pct",
+    "Trend_20_50",
+    "Trend_50_100",
+    "Market_Score",
+    "Market_Volatility",
+    "Market_Regime",
+    "Market_Trend",
+    "Market_Momentum"
+  ],
+  "classes": [
+    0,
+    1
+  ],
+  "trained_at": "2026-11-06T22:26:52",
+  "model_type": "XGBoost",
+  "train_ratio": 0.8,
+  "purged_sessions": 20,
+  "train_start_date": "2025-03-06",
+  "train_end_date": "2026-05-13",
+  "test_start_date": "2026-06-17",
+  "test_end_date": "2026-10-07",
+  "train_samples": 9622,
+  "test_samples": 2618
+}

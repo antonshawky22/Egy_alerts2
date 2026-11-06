@@ -1,0 +1,274 @@
+{
+  "OLFI": {
+    "in_position": true,
+    "entry_price": 19.58,
+    "highest_price": 19.75,
+    "last_prediction": 0.9389650821685791,
+    "last_price": 19.58,
+    "last_date": "2026-11-05"
+  },
+  "EMFD": {
+    "in_position": false,
+    "entry_price": 0.0,
+    "highest_price": 0.0,
+    "last_prediction": 0.6931554675102234,
+    "last_price": 12.25,
+    "last_date": "2026-11-05"
+  },
+  "ETEL": {
+    "in_position": false,
+    "entry_price": 0.0,
+    "highest_price": 0.0,
+    "last_prediction": 0.6022616624832153,
+    "last_price": 128.55,
+    "last_date": "2026-11-05"
+  },
+  "EAST": {
+    "in_position": true,
+    "entry_price": 33.33,
+    "highest_price": 33.33,
+    "last_prediction": 0.7078629732131958,
+    "last_price": 33.33,
+    "last_date": "2026-11-05"
+  },
+  "EFIH": {
+    "in_position": false,
+    "entry_price": 0.0,
+    "highest_price": 0.0,
+    "last_prediction": 0.6293321251869202,
+    "last_price": 23.5,
+    "last_date": "2026-11-05"
+  },
+  "ABUK": {
+    "in_position": false,
+    "entry_price": 0.0,
+    "highest_price": 0.0,
+    "last_prediction": 0.6136768460273743,
+    "last_price": 80.98,
+    "last_date": "2026-11-05"
+  },
+  "OIH": {
+    "in_position": false,
+    "entry_price": 0.0,
+    "highest_price": 0.0,
+    "last_prediction": 0.6730931997299194,
+    "last_price": 1.81,
+    "last_date": "2026-11-05"
+  },
+  "SWDY": {
+    "in_position": true,
+    "entry_price": 116.11,
+    "highest_price": 120.0,
+    "last_prediction": 0.7374443411827087,
+    "last_price": 116.11,
+    "last_date": "2026-11-05"
+  },
+  "ISPH": {
+    "in_position": true,
+    "entry_price": 10.27,
+    "highest_price": 10.47,
+    "last_prediction": 0.8219342231750488,
+    "last_price": 10.27,
+    "last_date": "2026-11-05"
+  },
+  "ATQA": {
+    "in_position": true,
+    "entry_price": 9.73,
+    "highest_price": 9.82,
+    "last_prediction": 0.8373580574989319,
+    "last_price": 9.73,
+    "last_date": "2026-11-05"
+  },
+  "MTIE": {
+    "in_position": true,
+    "entry_price": 7.13,
+    "highest_price": 7.15,
+    "last_prediction": 0.7627975344657898,
+    "last_price": 7.13,
+    "last_date": "2026-11-05"
+  },
+  "HRHO": {
+    "in_position": true,
+    "entry_price": 23.78,
+    "highest_price": 23.92,
+    "last_prediction": 0.8811753988265991,
+    "last_price": 23.78,
+    "last_date": "2026-11-05"
+  },
+  "ORWE": {
+    "in_position": true,
+    "entry_price": 25.03,
+    "highest_price": 25.66,
+    "last_prediction": 0.7220767736434937,
+    "last_price": 25.03,
+    "last_date": "2026-11-05"
+  },
+  "JUFO": {
+    "in_position": true,
+    "entry_price": 23.83,
+    "highest_price": 24.42,
+    "last_prediction": 0.750934898853302,
+    "last_price": 23.83,
+    "last_date": "2026-11-05"
+  },
+  "DSCW": {
+    "in_position": true,
+    "entry_price": 1.48,
+    "highest_price": 1.48,
+    "last_prediction": 0.9178511500358582,
+    "last_price": 1.48,
+    "last_date": "2026-11-05"
+  },
+  "SUGR": {
+    "in_position": true,
+    "entry_price": 47.87,
+    "highest_price": 49.2,
+    "last_prediction": 0.8402907252311707,
+    "last_price": 47.87,
+    "last_date": "2026-11-05"
+  },
+  "ELSH": {
+    "in_position": true,
+    "entry_price": 10.56,
+    "highest_price": 10.59,
+    "last_prediction": 0.8324106335639954,
+    "last_price": 10.56,
+    "last_date": "2026-11-05"
+  },
+  "RMDA": {
+    "in_position": false,
+    "entry_price": 0.0,
+    "highest_price": 0.0,
+    "last_prediction": 0.686739981174469,
+    "last_price": 5.5,
+    "last_date": "2026-11-05"
+  },
+  "RAYA": {
+    "in_position": true,
+    "entry_price": 5.6,
+    "highest_price": 5.65,
+    "last_prediction": 0.9068635702133179,
+    "last_price": 5.6,
+    "last_date": "2026-11-05"
+  },
+  "EEII": {
+    "in_position": true,
+    "entry_price": 1.79,
+    "highest_price": 1.83,
+    "last_prediction": 0.8833981156349182,
+    "last_price": 1.79,
+    "last_date": "2026-11-05"
+  },
+  "MPCO": {
+    "in_position": true,
+    "entry_price": 1.9,
+    "highest_price": 1.94,
+    "last_prediction": 0.8687353730201721,
+    "last_price": 1.9,
+    "last_date": "2026-11-05"
+  },
+  "GBCO": {
+    "in_position": true,
+    "entry_price": 22.46,
+    "highest_price": 22.87,
+    "last_prediction": 0.9016355276107788,
+    "last_price": 22.46,
+    "last_date": "2026-11-05"
+  },
+  "TMGH": {
+    "in_position": true,
+    "entry_price": 83.25,
+    "highest_price": 84.5,
+    "last_prediction": 0.8661985397338867,
+    "last_price": 83.25,
+    "last_date": "2026-11-05"
+  },
+  "ORHD": {
+    "in_position": true,
+    "entry_price": 10.34,
+    "highest_price": 10.62,
+    "last_prediction": 0.8709020614624023,
+    "last_price": 10.34,
+    "last_date": "2026-11-05"
+  },
+  "AMOC": {
+    "in_position": true,
+    "entry_price": 13.27,
+    "highest_price": 13.4,
+    "last_prediction": 0.7991957664489746,
+    "last_price": 13.27,
+    "last_date": "2026-11-05"
+  },
+  "FWRY": {
+    "in_position": true,
+    "entry_price": 17.36,
+    "highest_price": 17.49,
+    "last_prediction": 0.8745798468589783,
+    "last_price": 17.36,
+    "last_date": "2026-11-05"
+  },
+  "COMI": {
+    "in_position": false,
+    "entry_price": 0.0,
+    "highest_price": 0.0,
+    "last_prediction": 0.5408881306648254,
+    "last_price": 128.0,
+    "last_date": "2026-11-05"
+  },
+  "ADIB": {
+    "in_position": true,
+    "entry_price": 49.01,
+    "highest_price": 50.49,
+    "last_prediction": 0.8268138766288757,
+    "last_price": 49.01,
+    "last_date": "2026-11-05"
+  },
+  "PHDC": {
+    "in_position": true,
+    "entry_price": 11.91,
+    "highest_price": 12.1,
+    "last_prediction": 0.7939911484718323,
+    "last_price": 11.91,
+    "last_date": "2026-11-05"
+  },
+  "MCQE": {
+    "in_position": true,
+    "entry_price": 171.47,
+    "highest_price": 171.8,
+    "last_prediction": 0.881778359413147,
+    "last_price": 171.47,
+    "last_date": "2026-11-05"
+  },
+  "SKPC": {
+    "in_position": true,
+    "entry_price": 15.01,
+    "highest_price": 15.17,
+    "last_prediction": 0.9000486135482788,
+    "last_price": 15.01,
+    "last_date": "2026-11-05"
+  },
+  "EGAL": {
+    "in_position": true,
+    "entry_price": 321.08,
+    "highest_price": 328.0,
+    "last_prediction": 0.8268539905548096,
+    "last_price": 321.08,
+    "last_date": "2026-11-05"
+  },
+  "NIPH": {
+    "in_position": true,
+    "entry_price": 281.0,
+    "highest_price": 285.0,
+    "last_prediction": 0.7981412410736084,
+    "last_price": 281.0,
+    "last_date": "2026-11-05"
+  },
+  "MPCI": {
+    "in_position": false,
+    "entry_price": 0.0,
+    "highest_price": 0.0,
+    "last_prediction": 0.6703769564628601,
+    "last_price": 317.0,
+    "last_date": "2026-11-05"
+  }
+}
