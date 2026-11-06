@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 import os
 import joblib
@@ -24,12 +25,16 @@ def send_telegram(text):
         print(f"❌ Telegram send exception: {e}")
 
 # =====================
-# Files & Model
+# Files & Model Configuration
 # =====================
+TARGET_HORIZON = 20
 DB_FILE = "egx_history_database_v2.json"
-MODEL_FILE = "ai_stock_model.pkl"
-SIGNALS_FILE = "ai_last_signals.json"
-TRADES_FILE = "ai_trades.json"
+FEATURES_FILE = "ai_features_database.json"
+MARKET_FILE = "ai_market_regime_database.json"
+MODEL_FILE = f"ai_stock_model_{TARGET_HORIZON}d.pkl"
+META_FILE = f"ai_stock_model_{TARGET_HORIZON}d_meta.json"
+SIGNALS_FILE = f"ai_last_signals_{TARGET_HORIZON}d.json"
+TRADES_FILE = f"ai_trades_{TARGET_HORIZON}d.json"
 
 # إعدادات عتبة الثقة وقواعد حماية الأرباح
 CONFIDENCE_THRESHOLD = 0.70  # نسبة الثقة المطلوبة للدخول (70%)
@@ -70,7 +75,6 @@ def log_sell(symbol, price, date, exit_reason):
         except:
             data = []
 
-    # البحث عن آخر صفقة مفتوحة لهذا السهم لإغلاقها
     for trade in reversed(data):
         if trade["symbol"] == symbol and "exit_price" not in trade:
             entry_price = trade["entry_price"]
@@ -89,20 +93,29 @@ def log_sell(symbol, price, date, exit_reason):
         json.dump(data, f, indent=2, ensure_ascii=False)
 
 # =====================
-# Load AI Model & Database
+# Load AI Model & Databases
 # =====================
-if not os.path.exists(MODEL_FILE):
-    raise FileNotFoundError(f"❌ ملف نموذج الذكاء الاصطناعي {MODEL_FILE} غير موجود!")
+if not os.path.exists(MODEL_FILE) or not os.path.exists(META_FILE):
+    raise FileNotFoundError(f"❌ نموذج أو ملف مواصفات الأفق {TARGET_HORIZON}d غير موجود! تأكد من تدريب النموذج أولاً.")
 
 model = joblib.load(MODEL_FILE)
 print(f"🤖 AI Model loaded successfully from {MODEL_FILE}")
 
+with open(META_FILE, "r", encoding="utf-8") as f:
+    metadata = json.load(f)
+expected_features = metadata.get("feature_columns", [])
+print(f"-> تم تحميل مواصفات النموذج بعدد ميزات: {len(expected_features)}")
+
 try:
     with open(DB_FILE, "r", encoding="utf-8") as f:
         raw_database = json.load(f)
-    print(f"💾 Market database loaded successfully from {DB_FILE}")
+    with open(FEATURES_FILE, "r", encoding="utf-8") as f:
+        features_db = json.load(f)
+    with open(MARKET_FILE, "r", encoding="utf-8") as f:
+        market_db = json.load(f)
+    print(f"💾 Databases (History, Features, Market) loaded successfully.")
 except Exception as e:
-    raise FileNotFoundError(f"❌ تعذر قراءة قاعدة البيانات {DB_FILE}: {e}")
+    raise FileNotFoundError(f"❌ تعذر قراءة قواعد البيانات: {e}")
 
 try:
     with open(SIGNALS_FILE, "r", encoding="utf-8") as f:
@@ -116,17 +129,13 @@ sell_alerts = []
 data_failures = []
 global_last_date = "Unknown Date"
 
-# مساعدة حساب الـ RSI
-def calculate_rsi(series, period=14):
-    if len(series) < period:
-        return pd.Series(50, index=series.index)
-    delta = series.diff()
-    gain = delta.clip(lower=0)
-    loss = -delta.clip(upper=0)
-    avg_gain = gain.ewm(com=period - 1, adjust=False).mean()
-    avg_loss = loss.ewm(com=period - 1, adjust=False).mean()
-    rs = avg_gain / avg_loss
-    return 100 - (100 / (1 + rs))
+stock_features_db = features_db.get("symbols", {})
+market_data_db = market_db.get("data", {})
+
+# خرائط ترميز ميزات السوق (نفس التي استخدمناها في التدريب تماماً)
+regime_mapping = {"BEARISH": -1, "NEUTRAL": 0, "BULLISH": 1, "INSUFFICIENT_DATA": 0}
+trend_mapping = {"DOWN": -1, "MIXED": 0, "UP": 1}
+momentum_mapping = {"NEGATIVE": -1, "MIXED": 0, "POSITIVE": 1}
 
 # =====================
 # Main Loop
@@ -135,63 +144,72 @@ for symbol, stock_content in raw_database.items():
     if symbol == "EGX30":
         continue
         
+    if symbol not in stock_features_db:
+        data_failures.append(symbol)
+        continue
+
+    # استخراج أسعار الشموع من قاعدة التاريخ الأساسية لمعرفة السعر الحالي وأعلى سعر
     if not stock_content or "data" not in stock_content or "columns" not in stock_content:
         data_failures.append(symbol)
         continue
 
-    df = pd.DataFrame.from_dict(stock_content["data"], orient="index", columns=stock_content["columns"])
-    df.index = pd.to_datetime(df.index)
-    df = df.sort_index(ascending=True)
+    df_price = pd.DataFrame.from_dict(stock_content["data"], orient="index", columns=stock_content["columns"])
+    df_price.index = pd.to_datetime(df_price.index)
+    df_price = df_price.sort_index(ascending=True)
 
-    if len(df) < 50:
+    if len(df_price) < 10:
         data_failures.append(symbol)
         continue
 
-    last_candle_date = df.index[-1].strftime('%Y-%m-%d')
+    last_candle_date = df_price.index[-1].strftime('%Y-%m-%d')
     global_last_date = last_candle_date
-    last_close = df["Close"].iloc[-1]
-    last_high = df["High"].iloc[-1]
+    last_close = df_price["Close"].iloc[-1]
+    last_high = df_price["High"].iloc[-1]
 
-    # حساب الميزات التقنية
-    df["RSI14"] = calculate_rsi(df["Close"], 14)
-    df["ATR14"] = (df["High"] - df["Low"]).rolling(14).mean()
-    df["ATR14_Pct"] = df["ATR14"] / df["Close"]
-    df["Volume_Ratio20"] = df["Volume"] / df["Volume"].rolling(20).mean()
+    # جلب ميزات هذا السهم الجاهزة لنفس التاريخ الأخير من ai_features_database.json لمنع Train-Serving Skew
+    symbol_features_data = stock_features_db[symbol].get("data", {})
+    if last_candle_date not in symbol_features_data:
+        # البحث عن أقرب تاريخ متاح إذا لم يكن التاريخ متطابقاً بحذافيره
+        available_dates = sorted(list(symbol_features_data.keys()))
+        if not available_dates:
+            data_failures.append(symbol)
+            continue
+        last_candle_date = available_dates[-1]
+
+    latest_features = symbol_features_data[last_candle_date].copy()
+
+    # جلب بيانات السوق لنفس التاريخ وربطها
+    market_info = market_data_db.get(last_candle_date, {})
+    latest_features["Market_Score"] = market_info.get("score", 0.0)
+    latest_features["Market_Volatility"] = market_info.get("volatility", 0.0)
     
-    for p in [5, 10, 20, 50, 100]:
-        df[f"Return_{p}"] = df["Close"].pct_change(p) * 100
+    # ترميز ميزات السوق النصية نفس التدريب
+    regime_val = market_info.get("regime", "NEUTRAL")
+    trend_val = market_info.get("trend", "MIXED")
+    momentum_val = market_info.get("momentum", "MIXED")
 
-    for span in [20, 50, 100]:
-        ema = df["Close"].ewm(span=span, adjust=False).mean()
-        df[f"Distance_EMA{span}_Pct"] = ((df["Close"] - ema) / ema) * 100
+    latest_features["Market_Regime"] = regime_mapping.get(regime_val, 0)
+    latest_features["Market_Trend"] = trend_mapping.get(trend_val, 0)
+    latest_features["Market_Momentum"] = momentum_mapping.get(momentum_val, 0)
 
-    rolling_high20 = df["High"].rolling(20).max()
-    rolling_low20 = df["Low"].rolling(20).min()
-    df["Distance_Resistance20_Pct"] = ((rolling_high20 - df["Close"]) / df["Close"]) * 100
-    df["Distance_Support20_Pct"] = ((df["Close"] - rolling_low20) / rolling_low20) * 100
+    # تجهيز صف التنبؤ وترتيب الميزات بدقة حسب ما تدرّب عليه النموذج
+    row_df = pd.DataFrame([latest_features])
+    
+    for feat in expected_features:
+        if feat not in row_df.columns:
+            row_df[feat] = 0.0
 
-    ema20 = df["Close"].ewm(span=20, adjust=False).mean()
-    ema50 = df["Close"].ewm(span=50, adjust=False).mean()
-    ema100 = df["Close"].ewm(span=100, adjust=False).mean()
-    df["Trend_20_50"] = (ema20 > ema50).astype(int)
-    df["Trend_50_100"] = (ema50 > ema100).astype(int)
+    X_pred = row_df[expected_features].select_dtypes(include=['number', 'bool'])
 
-    latest_row = df.iloc[[-1]].copy()
-
-    if hasattr(model, "feature_names_in_"):
-        expected_features = model.feature_names_in_
-        for feat in expected_features:
-            if feat not in latest_row.columns:
-                latest_row[feat] = 0.0
-        X_pred = latest_row[expected_features].select_dtypes(include=['number', 'bool'])
-    else:
-        exclude = ["date", "ticker", "symbol", "target", "Future_Return_Pct"]
-        X_pred = latest_row[[c for c in latest_row.columns if c not in exclude]].select_dtypes(include=['number', 'bool'])
-
-    # حساب احتمالية التنبؤ (Probabilities)
+    # حساب احتمالية الشراء بدقة باستخدام model.classes_
     try:
         probs = model.predict_proba(X_pred)[0]
-        prob_buy = probs[1] if len(probs) > 1 else 0.5
+        classes = list(model.classes_)
+        if 1 in classes:
+            buy_class_idx = classes.index(1)
+            prob_buy = probs[buy_class_idx]
+        else:
+            prob_buy = probs[1] if len(probs) > 1 else 0.5
     except Exception as e:
         print(f"⚠️ Prediction error for {symbol}: {e}")
         continue
@@ -201,7 +219,7 @@ for symbol, stock_content in raw_database.items():
     entry_price = prev_data.get("entry_price", last_close)
     highest_price = prev_data.get("highest_price", last_high)
 
-    # تحديث أعلى سعر وصل إليه السهم أثناء الصفقة
+    # تحديث أعلى سعر وصل إليه السهم أثناء الصفقة (Trailing Stop tracking)
     if in_position:
         if last_high > highest_price:
             highest_price = last_high
@@ -210,7 +228,7 @@ for symbol, stock_content in raw_database.items():
     sell_signal = False
     exit_reason = ""
 
-    # منطق الدخول الصارم (برشاقة الثقة المطلوبة)
+    # منطق الدخول الصارم بعتبة الثقة المحددة
     if prob_buy >= CONFIDENCE_THRESHOLD and not in_position:
         buy_signal = True
         in_position = True
@@ -219,9 +237,8 @@ for symbol, stock_content in raw_database.items():
         buy_alerts.append(f"🟢 {symbol} | السعر: {last_close:.2f} | الثقة: {prob_buy*100:.1f}%")
         log_buy(symbol, last_close, last_candle_date, prob_buy)
 
-    # منطق الخروج (إما بانقلاب إشارة النموذج < 50% أو بتفعيل حماية الأرباح Trailing Stop)
+    # منطق الخروج (انعكاس النموذج < 50% أو تفعيل Trailing Stop)
     elif in_position:
-        # حساب نسبة التراجع من أعلى قمة وصل لها السهم
         drawdown_from_peak = (highest_price - last_close) / highest_price if highest_price > 0 else 0
         
         if prob_buy < 0.50:
@@ -252,7 +269,7 @@ for symbol, stock_content in raw_database.items():
 # =====================
 # Telegram Report Dispatch
 # =====================
-report = [f"🤖 AI Stock Model Pro Report ({global_last_date}):\n"]
+report = [f"🤖 AI Stock Model Pro Report ({TARGET_HORIZON} Days Horizon - {global_last_date}):\n"]
 
 if buy_alerts:
     report.append("🚀 إشارات شراء جديدة (AI BUY - High Confidence):")
@@ -273,4 +290,4 @@ with open(SIGNALS_FILE, "w", encoding="utf-8") as f:
 
 final_message = "\n".join(report)
 send_telegram(final_message)
-print("🏁 AI Prediction & Alert Dispatch Complete with Pro Rules.")
+print("🏁 AI Prediction & Alert Dispatch Complete with Pro Rules & Feature Store Alignment.")
