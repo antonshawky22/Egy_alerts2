@@ -18,50 +18,37 @@ def load_dataset(file_path="ai_training_dataset.json"):
     with open(file_path, "r", encoding="utf-8") as f:
         data = json.load(f)
     
-    if isinstance(data, list):
+    # التحقق من وجود مفتاح samples الذي يحتوي على البيانات الفعلية للأسهم
+    if isinstance(data, dict) and "samples" in data:
+        print("-> تم العثور على بيانات التدريب داخل مفتاح 'samples'.")
+        df = pd.DataFrame(data["samples"])
+    elif isinstance(data, list):
         df = pd.DataFrame(data)
-    elif isinstance(data, dict):
-        print("-> مفاتيح ملف الـ JSON الموجودة هي:", list(data.keys()))
-        
-        # البحث عن المفتاح الذي يحمل البيانات الفعلية داخل القاموس
-        possible_data_keys = ["data", "records", "rows", "dataset", "items"]
-        found_key = None
-        for key in possible_data_keys:
-            if key in data and isinstance(data[key], list):
-                found_key = key
-                break
-        
-        if found_key:
-            print(f"-> تم العثور على بيانات التدريب تحت المفتاح: '{found_key}'")
-            df = pd.DataFrame(data[found_key])
-        else:
-            # إذا لم يجد مفتاحاً معروفاً، نحاول تحويل القاموس مباشرة بحذر
-            try:
-                df = pd.DataFrame(data)
-            except ValueError:
-                print("-> تنبيه: جاري تحويل الـ JSON بطريقة بديلة...")
-                df = pd.DataFrame.from_dict(data, orient='index').T
     else:
-        raise ValueError("صيغة ملف الـ JSON غير مدعومة.")
-        
+        # محاولة أخيرة بديلة
+        try:
+            df = pd.DataFrame(data)
+        except Exception:
+            raise ValueError("لم يتم العثور على جدول البيانات بالصيغة المتوقعة في ملف الـ JSON.")
+            
     return df
 
 def train_model():
     print("-> جاري تحميل بيانات التدريب...")
     df = load_dataset()
     
-    print("-> الأعمدة المتوفرة في الجدول هي:", list(df.columns))
+    print(f"-> عدد العينات (الصفوص) المحملة للتدريب: {df.shape[0]}")
+    print("-> الأعمدة المتوفرة في البيانات:", list(df.columns))
     
-    # البحث عن عمود الهدف (سواء كان target أو يحتوي على Future_Return_Pct)
+    # تحديد عمود الهدف بدقة
     target_col = None
     if "target" in df.columns:
         target_col = "target"
     elif "Future_Return_Pct" in df.columns:
         df["target"] = (df["Future_Return_Pct"] > 0).astype(int)
         target_col = "target"
-        print("-> تم إنشاء عمود الهدف (target) بنجاح من عمود Future_Return_Pct.")
+        print("-> تم إنشاء عمود الهدف (target) من Future_Return_Pct.")
     else:
-        # البحث عن أي عمود شبيه بالأهداف
         for col in df.columns:
             if "return" in col.lower() or "target" in col.lower() or "label" in col.lower():
                 target_col = col
