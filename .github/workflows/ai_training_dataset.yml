@@ -3,10 +3,10 @@ name: AI Training Dataset & Alerts Pipeline
 on:
   workflow_dispatch:
   # schedule:
-  #   - cron: '30 15 * * 1-5' # يمكنك تفعيل الجدولة الزمنية لاحقاً إذا أردت
+  #   - cron: '30 15 * * 1-5' # تفعيل الجدولة لاحقاً
 
 permissions:
-  contents: read
+  contents: write # ⚠️ مهم جداً: منح صلاحية الكتابة للسماح بحفظ الملفات في المستودع
 
 jobs:
   build-dataset:
@@ -43,14 +43,23 @@ jobs:
       - name: Train AI Model
         run: python ai_model_train.py
 
-      # 🤖 الخطوة الجديدة: تشغيل التنبؤ والتليجرام وإدارة الصفقات
+      # 🤖 تشغيل التنبؤ والتليجرام وإدارة الصفقات
       - name: Run AI Prediction and Telegram Alerts
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python ai_predict_and_alert.py
 
-      - name: Upload AI Dataset, Model and Results
+      # 💾 خطوة حفظ ملفات الإشارات والصفقات والنموذج في المستودع تلقائياً
+      - name: Commit and Push Updated Files
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+          git add ai_last_signals.json ai_trades.json ai_stock_model.pkl || true
+          git commit -m "🤖 AI Pipeline: Update signals and trades automatically [skip ci]" || true
+          git push || true
+
+      - name: Upload AI Dataset, Model and Results to Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: ai-training-analysis-and-trades
