@@ -18,14 +18,12 @@ def load_dataset(file_path="ai_training_dataset.json"):
     with open(file_path, "r", encoding="utf-8") as f:
         data = json.load(f)
     
-    # التحقق من وجود مفتاح samples الذي يحتوي على البيانات الفعلية للأسهم
     if isinstance(data, dict) and "samples" in data:
         print("-> تم العثور على بيانات التدريب داخل مفتاح 'samples'.")
         df = pd.DataFrame(data["samples"])
     elif isinstance(data, list):
         df = pd.DataFrame(data)
     else:
-        # محاولة أخيرة بديلة
         try:
             df = pd.DataFrame(data)
         except Exception:
@@ -37,8 +35,7 @@ def train_model():
     print("-> جاري تحميل بيانات التدريب...")
     df = load_dataset()
     
-    print(f"-> عدد العينات (الصفوص) المحملة للتدريب: {df.shape[0]}")
-    print("-> الأعمدة المتوفرة في البيانات:", list(df.columns))
+    print(f"-> عدد العينات (الصفوف) المحملة للتدريب: {df.shape[0]}")
     
     # تحديد عمود الهدف بدقة
     target_col = None
@@ -62,8 +59,11 @@ def train_model():
     exclude_cols = [target_col, "Future_Return_Pct", "Max_Gain_Pct", "Max_Drawdown_Pct", "Sessions_To_Max", "Sessions_To_Min", "date", "ticker", "symbol"]
     feature_cols = [col for col in df.columns if col not in exclude_cols]
     
-    X = df[feature_cols]
+    # اختيار الميزات الرقمية والمنطقية فقط لتجنب أخطاء النصوص مع XGBoost
+    X = df[feature_cols].select_dtypes(include=['number', 'bool'])
     y = df[target_col]
+    
+    print(f"-> عدد الميزات الرقمية المستخدمة في التدريب: {X.shape[1]}")
     
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, shuffle=False)
     
