@@ -31,14 +31,19 @@ MODEL_FILE = "ai_stock_model.pkl"
 SIGNALS_FILE = "ai_last_signals.json"
 TRADES_FILE = "ai_trades.json"
 
+# إعدادات عتبة الثقة وقواعد حماية الأرباح
+CONFIDENCE_THRESHOLD = 0.70  # نسبة الثقة المطلوبة للدخول (70%)
+TRAILING_STOP_PCT = 0.05     # نسبة التراجع المسموحة من أعلى سعر قمة لحماية الأرباح (5%)
+
 # =====================
-# Trade Logging Functions (مأخوذة من استراتيجيتك)
+# Trade Logging Functions
 # =====================
-def log_buy(symbol, price, date):
+def log_buy(symbol, price, date, confidence):
     trade = {
         "symbol": symbol,
         "entry_price": price,
         "entry_date": date,
+        "entry_confidence": round(float(confidence) * 100, 2),
         "signal_type": "AI_BUY"
     }
 
@@ -55,7 +60,7 @@ def log_buy(symbol, price, date):
     with open(TRADES_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
-def log_sell(symbol, price, date):
+def log_sell(symbol, price, date, exit_reason):
     if not os.path.exists(TRADES_FILE):
         return
 
@@ -65,7 +70,7 @@ def log_sell(symbol, price, date):
         except:
             data = []
 
-    # البحث عن آخر صفقة مفتوحة لهذا السهم لتحديثها وإغلاقها
+    # البحث عن آخر صفقة مفتوحة لهذا السهم لإغلاقها
     for trade in reversed(data):
         if trade["symbol"] == symbol and "exit_price" not in trade:
             entry_price = trade["entry_price"]
@@ -76,6 +81,7 @@ def log_sell(symbol, price, date):
                 
             trade["exit_price"] = price
             trade["exit_date"] = date
+            trade["exit_reason"] = exit_reason
             trade["profit_pct"] = round(profit_pct, 2)
             break 
 
@@ -86,7 +92,7 @@ def log_sell(symbol, price, date):
 # Load AI Model & Database
 # =====================
 if not os.path.exists(MODEL_FILE):
-    raise FileNotFoundError(f"❌ ملف نموذج الذكاء الاصطناعي {MODEL_FILE} غير موجود! تأكد من تشغيل التدريب أولاً.")
+    raise FileNotFoundError(f"❌ ملف نموذج الذكاء الاصطناعي {MODEL_FILE} غير موجود!")
 
 model = joblib.load(MODEL_FILE)
 print(f"🤖 AI Model loaded successfully from {MODEL_FILE}")
@@ -98,7 +104,6 @@ try:
 except Exception as e:
     raise FileNotFoundError(f"❌ تعذر قراءة قاعدة البيانات {DB_FILE}: {e}")
 
-# تحميل الإشارات السابقة لتفادي التكرار وتتبع الحالة
 try:
     with open(SIGNALS_FILE, "r", encoding="utf-8") as f:
         last_signals = json.load(f)
@@ -111,7 +116,7 @@ sell_alerts = []
 data_failures = []
 global_last_date = "Unknown Date"
 
-# مساعدة حساب الـ RSI للتطابق
+# مساعدة حساب الـ RSI
 def calculate_rsi(series, period=14):
     if len(series) < period:
         return pd.Series(50, index=series.index)
@@ -124,7 +129,7 @@ def calculate_rsi(series, period=14):
     return 100 - (100 / (1 + rs))
 
 # =====================
-# Main Loop (تحليل وتنبؤ الأسهم بالذكاء الاصطناعي)
+# Main Loop
 # =====================
 for symbol, stock_content in raw_database.items():
     if symbol == "EGX30":
@@ -138,15 +143,16 @@ for symbol, stock_content in raw_database.items():
     df.index = pd.to_datetime(df.index)
     df = df.sort_index(ascending=True)
 
-    if len(df) < 50: # تأمين الحد الأدنى للمؤشرات
+    if len(df) < 50:
         data_failures.append(symbol)
         continue
 
     last_candle_date = df.index[-1].strftime('%Y-%m-%d')
     global_last_date = last_candle_date
     last_close = df["Close"].iloc[-1]
+    last_high = df["High"].iloc[-1]
 
-    # حساب نفس الميزات التقنية التي تدرب عليها النموذج لضمان التطابق التام
+    # حساب الميزات التقنية
     df["RSI14"] = calculate_rsi(df["Close"], 14)
     df["ATR14"] = (df["High"] - df["Low"]).rolling(14).mean()
     df["ATR14_Pct"] = df["ATR14"] / df["Close"]
@@ -159,7 +165,6 @@ for symbol, stock_content in raw_database.items():
         ema = df["Close"].ewm(span=span, adjust=False).mean()
         df[f"Distance_EMA{span}_Pct"] = ((df["Close"] - ema) / ema) * 100
 
-    # المستويات
     rolling_high20 = df["High"].rolling(20).max()
     rolling_low20 = df["Low"].rolling(20).min()
     df["Distance_Resistance20_Pct"] = ((rolling_high20 - df["Close"]) / df["Close"]) * 100
@@ -171,68 +176,90 @@ for symbol, stock_content in raw_database.items():
     df["Trend_20_50"] = (ema20 > ema50).astype(int)
     df["Trend_50_100"] = (ema50 > ema100).astype(int)
 
-    # أخذ أحدث شمعة فقط للتنبؤ
     latest_row = df.iloc[[-1]].copy()
 
-    # استخراج الميزات بنفس ترتيب تدريب النموذج (model.feature_names_in_)
     if hasattr(model, "feature_names_in_"):
         expected_features = model.feature_names_in_
-        # التأكد من توفر جميع الأعمدة المطلوبة
         for feat in expected_features:
             if feat not in latest_row.columns:
                 latest_row[feat] = 0.0
         X_pred = latest_row[expected_features].select_dtypes(include=['number', 'bool'])
     else:
-        # احتياطياً لو الخاصية غير موجودة
         exclude = ["date", "ticker", "symbol", "target", "Future_Return_Pct"]
         X_pred = latest_row[[c for c in latest_row.columns if c not in exclude]].select_dtypes(include=['number', 'bool'])
 
-    # توقع الذكاء الاصطناعي (1 = فرصة شراء صاعدة، 0 = لا توجد إشارة / خروج)
+    # حساب احتمالية التنبؤ (Probabilities)
     try:
-        ai_pred = model.predict(X_pred)[0]
+        probs = model.predict_proba(X_pred)[0]
+        prob_buy = probs[1] if len(probs) > 1 else 0.5
     except Exception as e:
         print(f"⚠️ Prediction error for {symbol}: {e}")
         continue
 
-    # حالة السهم السابقة من الملف
     prev_data = last_signals.get(symbol, {})
     in_position = prev_data.get("in_position", False)
+    entry_price = prev_data.get("entry_price", last_close)
+    highest_price = prev_data.get("highest_price", last_high)
+
+    # تحديث أعلى سعر وصل إليه السهم أثناء الصفقة
+    if in_position:
+        if last_high > highest_price:
+            highest_price = last_high
 
     buy_signal = False
     sell_signal = False
+    exit_reason = ""
 
-    # منطق اتخاذ القرار المستقل للـ AI
-    if ai_pred == 1 and not in_position:
+    # منطق الدخول الصارم (برشاقة الثقة المطلوبة)
+    if prob_buy >= CONFIDENCE_THRESHOLD and not in_position:
         buy_signal = True
         in_position = True
-        buy_alerts.append(f"🟢 {symbol} | السعر: {last_close:.2f} | التاريخ: {last_candle_date}")
-        log_buy(symbol, last_close, last_candle_date)
+        entry_price = last_close
+        highest_price = last_high
+        buy_alerts.append(f"🟢 {symbol} | السعر: {last_close:.2f} | الثقة: {prob_buy*100:.1f}%")
+        log_buy(symbol, last_close, last_candle_date, prob_buy)
 
-    elif ai_pred == 0 and in_position:
-        sell_signal = True
-        in_position = False
-        sell_alerts.append(f"🔴 {symbol} | خروج عند: {last_close:.2f} | التاريخ: {last_candle_date}")
-        log_sell(symbol, last_close, last_candle_date)
+    # منطق الخروج (إما بانقلاب إشارة النموذج < 50% أو بتفعيل حماية الأرباح Trailing Stop)
+    elif in_position:
+        # حساب نسبة التراجع من أعلى قمة وصل لها السهم
+        drawdown_from_peak = (highest_price - last_close) / highest_price if highest_price > 0 else 0
+        
+        if prob_buy < 0.50:
+            sell_signal = True
+            in_position = False
+            exit_reason = "AI_Model_Inversion (انعكاس النموذج)"
+        elif drawdown_from_peak >= TRAILING_STOP_PCT:
+            sell_signal = True
+            in_position = False
+            exit_reason = f"Trailing_Stop (حماية الأرباح بتراجع {drawdown_from_peak*100:.1f}%)"
 
-    # تحديث حالة الإشارات لهذا السهم
+        if sell_signal:
+            profit_calc = ((last_close - entry_price) / entry_price) * 100
+            emoji = "🟢" if profit_calc >= 0 else "🔴"
+            sell_alerts.append(f"🔻 {symbol} | خروج عند: {last_close:.2f} | النتيجة: {emoji} {profit_calc:.2f}% | السبب: {exit_reason}")
+            log_sell(symbol, last_close, last_candle_date, exit_reason)
+
+    # حفظ الحالة الحالية
     new_signals[symbol] = {
         "in_position": in_position,
-        "last_prediction": int(ai_pred),
+        "entry_price": float(entry_price) if in_position else 0.0,
+        "highest_price": float(highest_price) if in_position else 0.0,
+        "last_prediction": float(prob_buy),
         "last_price": float(last_close),
         "last_date": last_candle_date
     }
 
 # =====================
-# Build & Send Telegram Report
+# Telegram Report Dispatch
 # =====================
-report = [f"🤖 AI Stock Model Daily Signals Report ({global_last_date}):\n"]
+report = [f"🤖 AI Stock Model Pro Report ({global_last_date}):\n"]
 
 if buy_alerts:
-    report.append("🚀 إشارات شراء جديدة (AI BUY):")
+    report.append("🚀 إشارات شراء جديدة (AI BUY - High Confidence):")
     report.extend(buy_alerts)
 
 if sell_alerts:
-    report.append("\n🔻 إشارات خروج/بيع (AI SELL):")
+    report.append("\n🔻 إشارات خروج / جني أرباح / Stop Loss:")
     report.extend(sell_alerts)
 
 if not buy_alerts and not sell_alerts:
@@ -241,11 +268,9 @@ if not buy_alerts and not sell_alerts:
 if data_failures:
     report.append(f"\n⚠️ تعذر قراءة بيانات بعض الأسهم: {len(data_failures)}")
 
-# حفظ الحالة الحالية في ملف الإشارات لتفادي التكرار غداً
 with open(SIGNALS_FILE, "w", encoding="utf-8") as f:
     json.dump(new_signals, f, indent=2, ensure_ascii=False)
 
-# إرسال التقرير النهائي عبر التليجرام
 final_message = "\n".join(report)
 send_telegram(final_message)
-print("🏁 AI Prediction & Alert Dispatch Complete.")
+print("🏁 AI Prediction & Alert Dispatch Complete with Pro Rules.")
