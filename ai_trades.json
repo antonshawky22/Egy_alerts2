@@ -1,1 +1,51 @@
-
+[
+  {
+    "symbol": "SWDY",
+    "entry_price": 116.11,
+    "entry_date": "2026-11-05",
+    "entry_confidence": 73.73,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "MTIE",
+    "entry_price": 7.13,
+    "entry_date": "2026-11-05",
+    "entry_confidence": 72.18,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "TMGH",
+    "entry_price": 83.25,
+    "entry_date": "2026-11-05",
+    "entry_confidence": 72.98,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "ORHD",
+    "entry_price": 10.34,
+    "entry_date": "2026-11-05",
+    "entry_confidence": 70.32,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "MCQE",
+    "entry_price": 171.47,
+    "entry_date": "2026-11-05",
+    "entry_confidence": 79.36,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "SKPC",
+    "entry_price": 15.01,
+    "entry_date": "2026-11-05",
+    "entry_confidence": 71.49,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "EGAL",
+    "entry_price": 321.08,
+    "entry_date": "2026-11-05",
+    "entry_confidence": 72.14,
+    "signal_type": "AI_BUY"
+  }
+]
