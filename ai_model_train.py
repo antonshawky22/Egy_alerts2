@@ -21,11 +21,26 @@ def load_dataset(file_path="ai_training_dataset.json"):
     if isinstance(data, list):
         df = pd.DataFrame(data)
     elif isinstance(data, dict):
-        try:
-            df = pd.DataFrame(data)
-        except ValueError:
-            print("-> تنبيه: صيغة الـ JSON تحتاج معالجة خاصة، جاري ضبط البيانات...")
-            df = pd.DataFrame.from_dict(data, orient='index').T
+        print("-> مفاتيح ملف الـ JSON الموجودة هي:", list(data.keys()))
+        
+        # البحث عن المفتاح الذي يحمل البيانات الفعلية داخل القاموس
+        possible_data_keys = ["data", "records", "rows", "dataset", "items"]
+        found_key = None
+        for key in possible_data_keys:
+            if key in data and isinstance(data[key], list):
+                found_key = key
+                break
+        
+        if found_key:
+            print(f"-> تم العثور على بيانات التدريب تحت المفتاح: '{found_key}'")
+            df = pd.DataFrame(data[found_key])
+        else:
+            # إذا لم يجد مفتاحاً معروفاً، نحاول تحويل القاموس مباشرة بحذر
+            try:
+                df = pd.DataFrame(data)
+            except ValueError:
+                print("-> تنبيه: جاري تحويل الـ JSON بطريقة بديلة...")
+                df = pd.DataFrame.from_dict(data, orient='index').T
     else:
         raise ValueError("صيغة ملف الـ JSON غير مدعومة.")
         
@@ -35,19 +50,33 @@ def train_model():
     print("-> جاري تحميل بيانات التدريب...")
     df = load_dataset()
     
-    # تحويل العائد المستقبلي إلى إشارة تصنيف (1 للصعود، 0 للهبوط) بناءً على بياناتك
-    if "Future_Return_Pct" in df.columns:
-        df["target"] = (df["Future_Return_Pct"] > 0).astype(int)
-        print("-> تم إنشاء عمود الهدف (target) بنجاح من عمود Future_Return_Pct.")
-    elif "target" not in df.columns:
-        raise ValueError("لم يتم العثور لا على عمود target ولا على Future_Return_Pct في ملف البيانات.")
+    print("-> الأعمدة المتوفرة في الجدول هي:", list(df.columns))
     
-    # استبعاد أعمدة الأهداف والمعلومات غير المستخدمة في الميزات
-    exclude_cols = ["target", "Future_Return_Pct", "Max_Gain_Pct", "Max_Drawdown_Pct", "Sessions_To_Max", "Sessions_To_Min", "date", "ticker", "symbol"]
+    # البحث عن عمود الهدف (سواء كان target أو يحتوي على Future_Return_Pct)
+    target_col = None
+    if "target" in df.columns:
+        target_col = "target"
+    elif "Future_Return_Pct" in df.columns:
+        df["target"] = (df["Future_Return_Pct"] > 0).astype(int)
+        target_col = "target"
+        print("-> تم إنشاء عمود الهدف (target) بنجاح من عمود Future_Return_Pct.")
+    else:
+        # البحث عن أي عمود شبيه بالأهداف
+        for col in df.columns:
+            if "return" in col.lower() or "target" in col.lower() or "label" in col.lower():
+                target_col = col
+                break
+                
+    if not target_col:
+        raise ValueError(f"لم يتم العثور على عمود الهدف. الأعمدة الموجودة: {list(df.columns)}")
+    
+    print(f"-> اعتماد عمود الهدف: '{target_col}'")
+    
+    exclude_cols = [target_col, "Future_Return_Pct", "Max_Gain_Pct", "Max_Drawdown_Pct", "Sessions_To_Max", "Sessions_To_Min", "date", "ticker", "symbol"]
     feature_cols = [col for col in df.columns if col not in exclude_cols]
     
     X = df[feature_cols]
-    y = df["target"]
+    y = df[target_col]
     
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, shuffle=False)
     
