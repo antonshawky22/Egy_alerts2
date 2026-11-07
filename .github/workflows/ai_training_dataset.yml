@@ -1,117 +1,117 @@
 name: AI Training Dataset & Alerts Pipeline
 
 on:
-workflow_dispatch:
-schedule:
-- cron: '30 15 * * 1-5'
+  workflow_dispatch:
+  schedule:
+    - cron: '30 15 * * 1-5'
 
 permissions:
-contents: write
+  contents: write
 
 jobs:
-build-dataset:
-runs-on: ubuntu-latest
-steps:
-- name: Checkout repository
-uses: actions/checkout@v4
+  build-dataset:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-  - name: Setup Python
-    uses: actions/setup-python@v5
-    with:
-      python-version: "3.11"
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
 
-  - name: Install Dependencies
-    run: |
-      python -m pip install --upgrade pip
-      pip install pandas scikit-learn joblib xgboost requests
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas scikit-learn joblib xgboost requests
 
-  - name: Build AI Features
-    run: python ai_feature_engine.py
+      - name: Build AI Features
+        run: python ai_feature_engine.py
 
-  - name: Build AI Labels
-    run: python ai_label_engine.py
+      - name: Build AI Labels
+        run: python ai_label_engine.py
 
-  - name: Build Market Regime
-    run: python ai_market_regime.py
+      - name: Build Market Regime
+        run: python ai_market_regime.py
 
-  - name: Build Training Dataset
-    run: python ai_training_dataset.py
+      - name: Build Training Dataset
+        run: python ai_training_dataset.py
 
-  - name: Analyze Training Dataset
-    run: python ai_dataset_analysis.py
+      - name: Analyze Training Dataset
+        run: python ai_dataset_analysis.py
 
-  - name: Train AI Model
-    run: python ai_model_train.py
+      - name: Train AI Model
+        run: python ai_model_train.py
 
-  - name: Run AI Prediction and Telegram Alerts
-    env:
-      TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-    run: python ai_predict_and_alert.py
+      - name: Run AI Prediction and Telegram Alerts
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python ai_predict_and_alert.py
 
-  # فحص الملفات قبل الحفظ
-  - name: Check AI Output Files
-    run: |
-      echo "========== AI OUTPUT FILES =========="
-      for file in \
-        ai_last_signals.json \
-        ai_trades.json \
-        ai_stock_model_20d.pkl \
-        ai_stock_model_20d_meta.json \
-        ai_test_results.csv
-      do
-        if [ -f "$file" ]; then
-          echo "FOUND: $file"
-          ls -lh "$file"
-        else
-          echo "NOT FOUND: $file"
-        fi
-      done
-      echo "====================================="
+      # فحص الملفات قبل الحفظ
+      - name: Check AI Output Files
+        run: |
+          echo "========== AI OUTPUT FILES =========="
+          for file in \
+            ai_last_signals.json \
+            ai_trades.json \
+            ai_stock_model_20d.pkl \
+            ai_stock_model_20d_meta.json \
+            ai_test_results.csv
+          do
+            if [ -f "$file" ]; then
+              echo "FOUND: $file"
+              ls -lh "$file"
+            else
+              echo "NOT FOUND: $file"
+            fi
+          done
+          echo "====================================="
 
-  # حفظ الملفات في GitHub
-  - name: Commit and Push Updated Files
-    run: |
-      git config user.name "GitHub Actions Bot"
-      git config user.email "actions@github.com"
+      # حفظ الملفات في GitHub
+      - name: Commit and Push Updated Files
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
 
-      for file in \
-        ai_last_signals.json \
-        ai_trades.json \
-        ai_stock_model_20d.pkl \
-        ai_stock_model_20d_meta.json
-      do
-        if [ -f "$file" ]; then
-          git add -f "$file"
-          echo "Added: $file"
-        else
-          echo "Skipped missing file: $file"
-        fi
-      done
+          for file in \
+            ai_last_signals.json \
+            ai_trades.json \
+            ai_stock_model_20d.pkl \
+            ai_stock_model_20d_meta.json
+          do
+            if [ -f "$file" ]; then
+              git add -f "$file"
+              echo "Added: $file"
+            else
+              echo "Skipped missing file: $file"
+            fi
+          done
 
-      echo "========== GIT STATUS =========="
-      git status --short
+          echo "========== GIT STATUS =========="
+          git status --short
 
-      if ! git diff --cached --quiet; then
-        git commit -m "AI Pipeline: Update signals trades and model [skip ci]"
-        git push
-        echo "Files committed and pushed successfully"
-      else
-        echo "No file changes to commit"
-      fi
+          if ! git diff --cached --quiet; then
+            git commit -m "AI Pipeline: Update signals trades and model [skip ci]"
+            git push
+            echo "Files committed and pushed successfully"
+          else
+            echo "No file changes to commit"
+          fi
 
-  # رفع الملفات كـ Artifacts
-  - name: Upload AI Dataset, Model and Results to Artifacts
-    uses: actions/upload-artifact@v4
-    if: always()
-    with:
-      name: ai-training-analysis-and-trades
-      if-no-files-found: warn
-      path: |
-        ai_training_dataset.json
-        ai_dataset_analysis_report.json
-        ai_stock_model_20d.pkl
-        ai_stock_model_20d_meta.json
-        ai_trades.json
-        ai_last_signals.json
-        ai_test_results.csv
+      # رفع الملفات كـ Artifacts
+      - name: Upload AI Dataset, Model and Results to Artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ai-training-analysis-and-trades
+          if-no-files-found: warn
+          path: |
+            ai_training_dataset.json
+            ai_dataset_analysis_report.json
+            ai_stock_model_20d.pkl
+            ai_stock_model_20d_meta.json
+            ai_trades.json
+            ai_last_signals.json
+            ai_test_results.csv
