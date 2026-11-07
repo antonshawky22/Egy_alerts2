@@ -40,7 +40,7 @@ jobs:
       - name: Analyze Training Dataset
         run: python ai_dataset_analysis.py
 
-      - name: Train AI Model
+      - name: Train AI Models
         run: python ai_model_train.py
 
       - name: Run AI Prediction and Telegram Alerts
@@ -49,16 +49,27 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python ai_predict_and_alert.py
 
-      # فحص الملفات قبل الحفظ
+      # فحص ملفات النماذج الثلاثة ونتائج الاختبار
       - name: Check AI Output Files
         run: |
           echo "========== AI OUTPUT FILES =========="
+
           for file in \
-            ai_last_signals.json \
-            ai_trades.json \
             ai_stock_model_20d.pkl \
             ai_stock_model_20d_meta.json \
-            ai_test_results.csv
+            ai_stock_model_40d.pkl \
+            ai_stock_model_40d_meta.json \
+            ai_stock_model_60d.pkl \
+            ai_stock_model_60d_meta.json \
+            ai_model_report_20d.json \
+            ai_model_report_40d.json \
+            ai_model_report_60d.json \
+            ai_test_results_20d.csv \
+            ai_test_results_40d.csv \
+            ai_test_results_60d.csv \
+            ai_test_results.csv \
+            ai_last_signals.json \
+            ai_trades.json
           do
             if [ -f "$file" ]; then
               echo "FOUND: $file"
@@ -67,9 +78,25 @@ jobs:
               echo "NOT FOUND: $file"
             fi
           done
+
           echo "====================================="
 
-      # حفظ الملفات في GitHub
+          # التأكد من وجود النماذج الثلاثة وملفات Metadata
+          for file in \
+            ai_stock_model_20d.pkl \
+            ai_stock_model_20d_meta.json \
+            ai_stock_model_40d.pkl \
+            ai_stock_model_40d_meta.json \
+            ai_stock_model_60d.pkl \
+            ai_stock_model_60d_meta.json
+          do
+            if [ ! -f "$file" ]; then
+              echo "ERROR: Required file missing: $file"
+              exit 1
+            fi
+          done
+
+      # حفظ نموذج AI-20 المستخدم حاليًا في التوقعات
       - name: Commit and Push Updated Files
         run: |
           git config user.name "GitHub Actions Bot"
@@ -100,8 +127,8 @@ jobs:
             echo "No file changes to commit"
           fi
 
-      # رفع الملفات كـ Artifacts
-      - name: Upload AI Dataset, Model and Results to Artifacts
+      # رفع النماذج الثلاثة وتقارير التدريب ونتائج الاختبار
+      - name: Upload AI Dataset, Models and Results
         uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -110,8 +137,22 @@ jobs:
           path: |
             ai_training_dataset.json
             ai_dataset_analysis_report.json
+
             ai_stock_model_20d.pkl
             ai_stock_model_20d_meta.json
+            ai_model_report_20d.json
+            ai_test_results_20d.csv
+
+            ai_stock_model_40d.pkl
+            ai_stock_model_40d_meta.json
+            ai_model_report_40d.json
+            ai_test_results_40d.csv
+
+            ai_stock_model_60d.pkl
+            ai_stock_model_60d_meta.json
+            ai_model_report_60d.json
+            ai_test_results_60d.csv
+
+            ai_test_results.csv
             ai_trades.json
             ai_last_signals.json
-            ai_test_results.csv
