@@ -1,7 +1,8 @@
 {
   "model_file": "ai_stock_model_20d.pkl",
   "horizon": 20,
-  "profit_threshold": 2.0,
+  "profit_threshold": 8.0,
+  "target_definition": "Future_Return_Pct >= 8.0",
   "feature_columns": [
     "RSI14",
     "ATR14_Pct",
@@ -24,12 +25,8 @@
     "Market_Trend",
     "Market_Momentum"
   ],
-  "classes": [
-    0,
-    1
-  ],
-  "trained_at": "2026-11-07T19:22:11",
   "model_type": "XGBoost",
+  "trained_at": "2026-11-07T20:26:48",
   "train_ratio": 0.8,
   "purged_sessions": 20,
   "train_start_date": "2025-03-06",

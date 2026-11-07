@@ -11,14 +11,22 @@
     "entry_price": 33.33,
     "entry_date": "2026-11-05",
     "entry_confidence": 70.79,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 33.33,
+    "exit_date": "2026-11-05",
+    "exit_reason": "AI_Model_Inversion (انعكاس النموذج)",
+    "profit_pct": 0.0
   },
   {
     "symbol": "SWDY",
     "entry_price": 116.11,
     "entry_date": "2026-11-05",
     "entry_confidence": 73.74,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 116.11,
+    "exit_date": "2026-11-05",
+    "exit_reason": "AI_Model_Inversion (انعكاس النموذج)",
+    "profit_pct": 0.0
   },
   {
     "symbol": "ISPH",
