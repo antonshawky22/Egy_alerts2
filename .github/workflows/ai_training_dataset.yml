@@ -2,9 +2,7 @@ name: AI Training Dataset & Alerts Pipeline
 
 on:
 workflow_dispatch:
-
 schedule:
-
 - cron: '30 15 * * 1-5'
 
 permissions:
@@ -63,10 +61,10 @@ uses: actions/checkout@v4
         ai_test_results.csv
       do
         if [ -f "$file" ]; then
-          echo "✅ FOUND: $file"
+          echo "FOUND: $file"
           ls -lh "$file"
         else
-          echo "⚠️ NOT FOUND: $file"
+          echo "NOT FOUND: $file"
         fi
       done
       echo "====================================="
@@ -85,9 +83,9 @@ uses: actions/checkout@v4
       do
         if [ -f "$file" ]; then
           git add -f "$file"
-          echo "📦 Added: $file"
+          echo "Added: $file"
         else
-          echo "⚠️ Skipped missing file: $file"
+          echo "Skipped missing file: $file"
         fi
       done
 
@@ -97,9 +95,9 @@ uses: actions/checkout@v4
       if ! git diff --cached --quiet; then
         git commit -m "AI Pipeline: Update signals trades and model [skip ci]"
         git push
-        echo "✅ Files committed and pushed successfully"
+        echo "Files committed and pushed successfully"
       else
-        echo "ℹ️ No file changes to commit"
+        echo "No file changes to commit"
       fi
 
   # رفع الملفات كـ Artifacts
