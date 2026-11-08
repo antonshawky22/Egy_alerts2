@@ -2,8 +2,8 @@ name: AI Training Dataset & Alerts Pipeline
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '30 15 * * 1-5'
+  # schedule:
+  #   - cron: '30 15 * * 1-5'
 
 permissions:
   contents: write
@@ -40,7 +40,7 @@ jobs:
       - name: Analyze Training Dataset
         run: python ai_dataset_analysis.py
 
-      - name: Train AI Models
+      - name: Train AI Model
         run: python ai_model_train.py
 
       - name: Run AI Prediction and Telegram Alerts
@@ -49,54 +49,26 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python ai_predict_and_alert.py
 
-      # فحص ملفات النماذج الثلاثة ونتائج الاختبار
+      # فحص الملفات قبل الحفظ
       - name: Check AI Output Files
         run: |
           echo "========== AI OUTPUT FILES =========="
-
           for file in \
-            ai_stock_model_20d.pkl \
-            ai_stock_model_20d_meta.json \
-            ai_stock_model_40d.pkl \
-            ai_stock_model_40d_meta.json \
-            ai_stock_model_60d.pkl \
-            ai_stock_model_60d_meta.json \
-            ai_model_report_20d.json \
-            ai_model_report_40d.json \
-            ai_model_report_60d.json \
-            ai_test_results_20d.csv \
-            ai_test_results_40d.csv \
-            ai_test_results_60d.csv \
-            ai_test_results.csv \
             ai_last_signals.json \
-            ai_trades.json
+            ai_trades.json \
+            ai_stock_model_20d.pkl \
+            ai_stock_model_20d_meta.json
           do
             if [ -f "$file" ]; then
-              echo "FOUND: $file"
+              echo "✅ FOUND: $file"
               ls -lh "$file"
             else
-              echo "NOT FOUND: $file"
+              echo "⚠️ NOT FOUND: $file"
             fi
           done
-
           echo "====================================="
 
-          # التأكد من وجود النماذج الثلاثة وملفات Metadata
-          for file in \
-            ai_stock_model_20d.pkl \
-            ai_stock_model_20d_meta.json \
-            ai_stock_model_40d.pkl \
-            ai_stock_model_40d_meta.json \
-            ai_stock_model_60d.pkl \
-            ai_stock_model_60d_meta.json
-          do
-            if [ ! -f "$file" ]; then
-              echo "ERROR: Required file missing: $file"
-              exit 1
-            fi
-          done
-
-      # حفظ نموذج AI-20 المستخدم حاليًا في التوقعات
+      # حفظ الملفات في GitHub
       - name: Commit and Push Updated Files
         run: |
           git config user.name "GitHub Actions Bot"
@@ -110,9 +82,9 @@ jobs:
           do
             if [ -f "$file" ]; then
               git add -f "$file"
-              echo "Added: $file"
+              echo "📦 Added: $file"
             else
-              echo "Skipped missing file: $file"
+              echo "⚠️ Skipped missing file: $file"
             fi
           done
 
@@ -122,13 +94,13 @@ jobs:
           if ! git diff --cached --quiet; then
             git commit -m "AI Pipeline: Update signals trades and model [skip ci]"
             git push
-            echo "Files committed and pushed successfully"
+            echo "✅ Files committed and pushed successfully"
           else
-            echo "No file changes to commit"
+            echo "ℹ️ No file changes to commit"
           fi
 
-      # رفع النماذج الثلاثة وتقارير التدريب ونتائج الاختبار
-      - name: Upload AI Dataset, Models and Results
+      # رفع الملفات كـ Artifacts
+      - name: Upload AI Dataset, Model and Results to Artifacts
         uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -137,22 +109,7 @@ jobs:
           path: |
             ai_training_dataset.json
             ai_dataset_analysis_report.json
-
             ai_stock_model_20d.pkl
             ai_stock_model_20d_meta.json
-            ai_model_report_20d.json
-            ai_test_results_20d.csv
-
-            ai_stock_model_40d.pkl
-            ai_stock_model_40d_meta.json
-            ai_model_report_40d.json
-            ai_test_results_40d.csv
-
-            ai_stock_model_60d.pkl
-            ai_stock_model_60d_meta.json
-            ai_model_report_60d.json
-            ai_test_results_60d.csv
-
-            ai_test_results.csv
             ai_trades.json
             ai_last_signals.json
