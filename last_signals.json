@@ -15,7 +15,7 @@
     "entry_price": null
   },
   "ETEL": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -90,7 +90,7 @@
     "entry_price": null
   },
   "ELSH": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -130,7 +130,7 @@
     "entry_price": null
   },
   "AMOC": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": false,
     "entry_price": null
   },
@@ -175,7 +175,7 @@
     "entry_price": null
   },
   "MPCI": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   }
