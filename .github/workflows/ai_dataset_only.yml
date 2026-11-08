@@ -1,0 +1,57 @@
+name: AI Dataset Builder Only
+
+on:
+workflow_dispatch:
+
+permissions:
+contents: write
+
+jobs:
+build-dataset:
+runs-on: ubuntu-latest
+
+steps:
+  - name: Checkout repository
+    uses: actions/checkout@v4
+
+  - name: Setup Python
+    uses: actions/setup-python@v5
+    with:
+      python-version: "3.11"
+
+  - name: Install Dependencies
+    run: |
+      python -m pip install --upgrade pip
+      pip install pandas numpy
+
+  - name: Build Training Dataset Only
+    run: python ai_training_dataset.py
+
+  - name: Verify Dataset
+    run: |
+      if [ ! -f ai_training_dataset.json ]; then
+        echo "❌ Dataset file was not generated."
+        exit 1
+      fi
+
+      echo "✅ Dataset generated successfully."
+      ls -lh ai_training_dataset.json
+
+      python - <<'PY'
+      import json
+
+      with open("ai_training_dataset.json", encoding="utf-8") as f:
+          data = json.load(f)
+
+      print("Total Samples:", data.get("total_samples"))
+      print("Target Distribution:", data.get("target_distribution"))
+      print("Source Files:", data.get("source_files"))
+      PY
+
+  - name: Upload Dataset Artifact
+    uses: actions/upload-artifact@v4
+    with:
+      name: ai-training-dataset-new
+      if-no-files-found: error
+      path: ai_training_dataset.json
+      retention-days: 14
