@@ -31,11 +31,11 @@
   },
   "ABUK": {
     "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 77.5
   },
   "OIH": {
-    "trend": "🔛",
+    "trend": "🔻",
     "in_position": false,
     "entry_price": null
   },
@@ -130,7 +130,7 @@
     "entry_price": null
   },
   "AMOC": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -165,7 +165,7 @@
     "entry_price": null
   },
   "EGAL": {
-    "trend": "🔛",
+    "trend": "🔻",
     "in_position": false,
     "entry_price": null
   },
