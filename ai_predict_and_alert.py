@@ -28,7 +28,7 @@ def send_telegram(text):
 # Files & Model Configuration
 # =====================
 TARGET_HORIZON = 20
-TARGET_THRESHOLD = 8.0
+TARGET_THRESHOLD = 2.0
 
 DB_FILE = "egx_history_database_v2.json"
 FEATURES_FILE = "ai_features_database.json"
@@ -39,7 +39,6 @@ SIGNALS_FILE = "ai_last_signals.json"
 TRADES_FILE = "ai_trades.json"
 
 # إعدادات عتبة الثقة وقواعد حماية الأرباح
-# تظل هذه القيم مؤقتة لحين تقييم نتائج الاختبار
 CONFIDENCE_THRESHOLD = 0.70
 TRAILING_STOP_PCT = 0.05
 
@@ -60,8 +59,6 @@ def log_buy(symbol, price, date, confidence):
         with open(TRADES_FILE, "r", encoding="utf-8") as f:
             try:
                 data = json.load(f)
-                if not isinstance(data, list):
-                    data = []
             except:
                 data = []
 
@@ -77,19 +74,12 @@ def log_sell(symbol, price, date, exit_reason):
     with open(TRADES_FILE, "r", encoding="utf-8") as f:
         try:
             data = json.load(f)
-            if not isinstance(data, list):
-                return
         except:
-            return
+            data = []
 
     for trade in reversed(data):
-        if (
-            isinstance(trade, dict)
-            and trade.get("symbol") == symbol
-            and "exit_price" not in trade
-        ):
-            entry_price = trade.get("entry_price", 0)
-
+        if trade["symbol"] == symbol and "exit_price" not in trade:
+            entry_price = trade["entry_price"]
             if entry_price and entry_price != 0:
                 profit_pct = ((price - entry_price) / entry_price) * 100
             else:
@@ -119,78 +109,31 @@ print(f"🤖 AI Model loaded successfully from {MODEL_FILE}")
 with open(META_FILE, "r", encoding="utf-8") as f:
     metadata = json.load(f)
 
-if not isinstance(metadata, dict):
-    raise ValueError("❌ ملف Metadata غير صالح.")
-
-# =====================
-# Validate Model Configuration
-# =====================
+# التأكد من توافق النموذج مع إعدادات التنبؤ
 if metadata.get("horizon") != TARGET_HORIZON:
-    raise ValueError(
-        "❌ أفق النموذج المحفوظ لا يتطابق مع أفق التنبؤ."
-    )
+    raise ValueError("❌ أفق النموذج المحفوظ لا يتطابق مع أفق التنبؤ.")
 
-try:
-    saved_threshold = float(metadata.get("profit_threshold"))
-except (TypeError, ValueError):
-    raise ValueError("❌ حد الربحية في Metadata غير صالح.")
-
-if saved_threshold != TARGET_THRESHOLD:
-    raise ValueError(
-        f"❌ حد الربحية غير متطابق! "
-        f"النموذج: {saved_threshold}% | "
-        f"التوقعات: {TARGET_THRESHOLD}%. "
-        "أعد تدريب النموذج."
-    )
+if metadata.get("profit_threshold") != TARGET_THRESHOLD:
+    raise ValueError("❌ حد الربحية في النموذج لا يتطابق مع حد التنبؤ. أعد تدريب النموذج.")
 
 expected_features = metadata.get("feature_columns", [])
 
-if (
-    not isinstance(expected_features, list)
-    or not expected_features
-    or not all(isinstance(x, str) for x in expected_features)
-):
-    raise ValueError(
-        "❌ قائمة خصائص النموذج غير موجودة أو غير صالحة."
-    )
+if not expected_features or not isinstance(expected_features, list):
+    raise ValueError("❌ قائمة خصائص النموذج غير موجودة أو غير صالحة.")
 
 if len(expected_features) != len(set(expected_features)):
     raise ValueError("❌ توجد أسماء خصائص مكررة في Metadata.")
 
-# التأكد من توافق عدد الخصائص مع النموذج
-model_feature_count = getattr(model, "n_features_in_", None)
-
-if (
-    model_feature_count is not None
-    and model_feature_count != len(expected_features)
-):
-    raise ValueError(
-        f"❌ عدد خصائص النموذج غير متطابق! "
-        f"النموذج: {model_feature_count} | "
-        f"Metadata: {len(expected_features)}"
-    )
-
-print(f"-> Horizon: {TARGET_HORIZON}")
-print(f"-> Target Return: {TARGET_THRESHOLD}%")
-print(f"-> Model Features: {len(expected_features)}")
+print(f"-> تم تحميل مواصفات النموذج بعدد ميزات: {len(expected_features)}")
 
 # التأكد من وجود احتمالية فئة النجاح
-if not hasattr(model, "classes_"):
-    raise ValueError("❌ النموذج لا يحتوي على classes_.")
-
 model_classes = list(model.classes_)
 
 if 1 not in model_classes:
-    raise ValueError(
-        "❌ النموذج لا يحتوي على فئة النجاح (1). "
-        "يجب إعادة تدريب النموذج."
-    )
+    raise ValueError("❌ النموذج لا يحتوي على فئة النجاح (1). يجب إعادة تدريب النموذج.")
 
 buy_class_idx = model_classes.index(1)
 
-# =====================
-# Load Databases
-# =====================
 try:
     with open(DB_FILE, "r", encoding="utf-8") as f:
         raw_database = json.load(f)
@@ -204,32 +147,17 @@ try:
     print("💾 Databases (History, Features, Market) loaded successfully.")
 
 except Exception as e:
-    raise FileNotFoundError(
-        f"❌ تعذر قراءة قواعد البيانات: {e}"
-    )
+    raise FileNotFoundError(f"❌ تعذر قراءة قواعد البيانات: {e}")
 
-if not all(
-    isinstance(x, dict)
-    for x in [raw_database, features_db, market_db]
-):
-    raise ValueError("❌ أحد ملفات قواعد البيانات ليس بصيغة Dictionary.")
-
-# =====================
-# Load Previous Signals
-# =====================
 try:
     with open(SIGNALS_FILE, "r", encoding="utf-8") as f:
         last_signals = json.load(f)
-
     if not isinstance(last_signals, dict):
         raise ValueError("ملف الإشارات ليس بصيغة Dictionary.")
-
-except Exception as e:
-    print(f"⚠️ Previous signals could not be loaded: {e}")
+except:
     last_signals = {}
 
 new_signals = last_signals.copy()
-
 buy_alerts = []
 sell_alerts = []
 data_failures = []
@@ -239,31 +167,17 @@ stock_features_db = features_db.get("symbols", {})
 market_data_db = market_db.get("data", {})
 
 if not isinstance(stock_features_db, dict) or not isinstance(market_data_db, dict):
-    raise ValueError(
-        "❌ بنية ملفات الخصائص أو السوق غير صحيحة."
-    )
+    raise ValueError("❌ بنية ملفات الخصائص أو السوق غير صحيحة.")
 
-# =====================
-# Market Feature Mappings
-# =====================
+# خرائط ترميز ميزات السوق (نفس التي استخدمناها في التدريب)
 regime_mapping = {
     "BEARISH": -1,
     "NEUTRAL": 0,
     "BULLISH": 1,
     "INSUFFICIENT_DATA": 0
 }
-
-trend_mapping = {
-    "DOWN": -1,
-    "MIXED": 0,
-    "UP": 1
-}
-
-momentum_mapping = {
-    "NEGATIVE": -1,
-    "MIXED": 0,
-    "POSITIVE": 1
-}
+trend_mapping = {"DOWN": -1, "MIXED": 0, "UP": 1}
+momentum_mapping = {"NEGATIVE": -1, "MIXED": 0, "POSITIVE": 1}
 
 # =====================
 # Main Loop
@@ -280,14 +194,8 @@ for symbol, stock_content in raw_database.items():
     # =====================
     # 1. Validate Price Data
     # =====================
-    if (
-        not stock_content
-        or "data" not in stock_content
-        or "columns" not in stock_content
-    ):
-        data_failures.append(
-            f"{symbol}: Invalid Price Structure"
-        )
+    if not stock_content or "data" not in stock_content or "columns" not in stock_content:
+        data_failures.append(f"{symbol}: Invalid Price Structure")
         continue
 
     try:
@@ -300,68 +208,49 @@ for symbol, stock_content in raw_database.items():
         required_price_cols = ["Close", "High"]
 
         if not all(col in df_price.columns for col in required_price_cols):
-            data_failures.append(
-                f"{symbol}: Missing Price Columns"
-            )
+            data_failures.append(f"{symbol}: Missing Price Columns")
             continue
 
-        df_price.index = pd.to_datetime(
-            df_price.index,
-            errors="coerce"
-        )
+        df_price.index = pd.to_datetime(df_price.index, errors="coerce")
 
         if df_price.index.isna().any():
-            data_failures.append(
-                f"{symbol}: Invalid Price Dates"
-            )
+            data_failures.append(f"{symbol}: Invalid Price Dates")
             continue
 
         df_price = df_price.sort_index(ascending=True)
 
         if len(df_price) < 10:
-            data_failures.append(
-                f"{symbol}: Insufficient Price History"
-            )
+            data_failures.append(f"{symbol}: Insufficient Price History")
             continue
 
         last_candle_date = df_price.index[-1].strftime("%Y-%m-%d")
 
         last_close = pd.to_numeric(
-            df_price["Close"].iloc[-1],
-            errors="coerce"
+            df_price["Close"].iloc[-1], errors="coerce"
         )
 
         last_high = pd.to_numeric(
-            df_price["High"].iloc[-1],
-            errors="coerce"
+            df_price["High"].iloc[-1], errors="coerce"
         )
 
         if (
-            pd.isna(last_close)
-            or pd.isna(last_high)
+            pd.isna(last_close) or pd.isna(last_high)
             or not np.isfinite(last_close)
             or not np.isfinite(last_high)
-            or last_close <= 0
-            or last_high <= 0
+            or last_close <= 0 or last_high <= 0
         ):
-            data_failures.append(
-                f"{symbol}: Invalid Last Price"
-            )
+            data_failures.append(f"{symbol}: Invalid Last Price")
             continue
 
         last_close = float(last_close)
         last_high = float(last_high)
 
         if last_high < last_close:
-            data_failures.append(
-                f"{symbol}: Invalid High/Close"
-            )
+            data_failures.append(f"{symbol}: Invalid High/Close")
             continue
 
     except Exception as e:
-        data_failures.append(
-            f"{symbol}: Price Error ({e})"
-        )
+        data_failures.append(f"{symbol}: Price Error ({e})")
         continue
 
     # =====================
@@ -370,9 +259,7 @@ for symbol, stock_content in raw_database.items():
     symbol_features_data = stock_features_db[symbol].get("data", {})
 
     if not isinstance(symbol_features_data, dict):
-        data_failures.append(
-            f"{symbol}: Invalid Features Structure"
-        )
+        data_failures.append(f"{symbol}: Invalid Features Structure")
         continue
 
     # لا نستخدم أي تاريخ بديل
@@ -385,9 +272,7 @@ for symbol, stock_content in raw_database.items():
     latest_features = symbol_features_data[last_candle_date]
 
     if not isinstance(latest_features, dict):
-        data_failures.append(
-            f"{symbol}: Invalid Feature Row"
-        )
+        data_failures.append(f"{symbol}: Invalid Feature Row")
         continue
 
     latest_features = latest_features.copy()
@@ -404,51 +289,35 @@ for symbol, stock_content in raw_database.items():
     market_info = market_data_db[last_candle_date]
 
     if not isinstance(market_info, dict):
-        data_failures.append(
-            f"{symbol}: Invalid Market Data"
-        )
+        data_failures.append(f"{symbol}: Invalid Market Data")
         continue
 
+    # التأكد من اكتمال بيانات السوق
     required_market_fields = [
-        "score",
-        "volatility",
-        "regime",
-        "trend",
-        "momentum"
+        "score", "volatility", "regime", "trend", "momentum"
     ]
 
     if not all(
         field in market_info and market_info[field] is not None
         for field in required_market_fields
     ):
-        data_failures.append(
-            f"{symbol}: Incomplete Market Data"
-        )
+        data_failures.append(f"{symbol}: Incomplete Market Data")
         continue
 
     if market_info.get("regime") == "INSUFFICIENT_DATA":
-        data_failures.append(
-            f"{symbol}: Insufficient Market Regime"
-        )
+        data_failures.append(f"{symbol}: Insufficient Market Regime")
         continue
 
-    # =====================
-    # Validate Market Numeric Values
-    # =====================
+    # التحقق من القيم الرقمية للسوق
     try:
         market_score = float(market_info["score"])
         market_volatility = float(market_info["volatility"])
 
-        if (
-            not np.isfinite(market_score)
-            or not np.isfinite(market_volatility)
-        ):
+        if not np.isfinite(market_score) or not np.isfinite(market_volatility):
             raise ValueError("Non-finite market values")
 
     except Exception:
-        data_failures.append(
-            f"{symbol}: Invalid Market Numeric Values"
-        )
+        data_failures.append(f"{symbol}: Invalid Market Numeric Values")
         continue
 
     regime_val = market_info["regime"]
@@ -460,9 +329,7 @@ for symbol, stock_content in raw_database.items():
         or trend_val not in trend_mapping
         or momentum_val not in momentum_mapping
     ):
-        data_failures.append(
-            f"{symbol}: Unknown Market Categories"
-        )
+        data_failures.append(f"{symbol}: Unknown Market Categories")
         continue
 
     latest_features["Market_Score"] = market_score
@@ -497,9 +364,7 @@ for symbol, stock_content in raw_database.items():
             value = float(value)
 
             if not np.isfinite(value):
-                raise ValueError(
-                    f"Invalid feature: {feat}"
-                )
+                raise ValueError(f"Invalid feature: {feat}")
 
             feature_values[feat] = value
 
@@ -510,9 +375,7 @@ for symbol, stock_content in raw_database.items():
         )
 
     except Exception as e:
-        data_failures.append(
-            f"{symbol}: Feature Validation Error ({e})"
-        )
+        data_failures.append(f"{symbol}: Feature Validation Error ({e})")
         continue
 
     # =====================
@@ -526,9 +389,7 @@ for symbol, stock_content in raw_database.items():
             raise ValueError("Invalid prediction probability")
 
     except Exception as e:
-        data_failures.append(
-            f"{symbol}: Prediction Error ({e})"
-        )
+        data_failures.append(f"{symbol}: Prediction Error ({e})")
         print(f"⚠️ Prediction error for {symbol}: {e}")
         continue
 
@@ -536,12 +397,6 @@ for symbol, stock_content in raw_database.items():
     # 6. Previous Trade State
     # =====================
     prev_data = last_signals.get(symbol, {})
-
-    if not isinstance(prev_data, dict):
-        data_failures.append(
-            f"{symbol}: Invalid Previous Signal Structure"
-        )
-        continue
 
     in_position = prev_data.get("in_position", False)
     entry_price = prev_data.get("entry_price", last_close)
@@ -558,14 +413,10 @@ for symbol, stock_content in raw_database.items():
                 or entry_price <= 0
                 or highest_price <= 0
             ):
-                raise ValueError(
-                    "Invalid saved trade state"
-                )
+                raise ValueError("Invalid saved trade state")
 
         except Exception:
-            data_failures.append(
-                f"{symbol}: Invalid Previous Trade State"
-            )
+            data_failures.append(f"{symbol}: Invalid Previous Trade State")
             continue
 
     # تحديث أعلى سعر وصل إليه السهم أثناء الصفقة
@@ -588,16 +439,10 @@ for symbol, stock_content in raw_database.items():
         highest_price = last_high
 
         buy_alerts.append(
-            f"🟢 {symbol} | السعر: {last_close:.2f} | "
-            f"الثقة: {prob_buy*100:.1f}%"
+            f"🟢 {symbol} | السعر: {last_close:.2f} | الثقة: {prob_buy*100:.1f}%"
         )
 
-        log_buy(
-            symbol,
-            last_close,
-            last_candle_date,
-            prob_buy
-        )
+        log_buy(symbol, last_close, last_candle_date, prob_buy)
 
     # =====================
     # 8. Sell Logic
@@ -632,16 +477,10 @@ for symbol, stock_content in raw_database.items():
 
             sell_alerts.append(
                 f"🔻 {symbol} | خروج عند: {last_close:.2f} | "
-                f"النتيجة: {emoji} {profit_calc:.2f}% | "
-                f"السبب: {exit_reason}"
+                f"النتيجة: {emoji} {profit_calc:.2f}% | السبب: {exit_reason}"
             )
 
-            log_sell(
-                symbol,
-                last_close,
-                last_candle_date,
-                exit_reason
-            )
+            log_sell(symbol, last_close, last_candle_date, exit_reason)
 
     # =====================
     # 9. Save Current State
@@ -670,15 +509,11 @@ report = [
 ]
 
 if buy_alerts:
-    report.append(
-        "🚀 إشارات شراء جديدة (AI BUY - High Confidence):"
-    )
+    report.append("🚀 إشارات شراء جديدة (AI BUY - High Confidence):")
     report.extend(buy_alerts)
 
 if sell_alerts:
-    report.append(
-        "\n🔻 إشارات خروج / جني أرباح / Stop Loss:"
-    )
+    report.append("\n🔻 إشارات خروج / جني أرباح / Stop Loss:")
     report.extend(sell_alerts)
 
 if not buy_alerts and not sell_alerts:
@@ -693,26 +528,13 @@ if data_failures:
     )
     report.extend(data_failures[:15])
 
-# =====================
-# Save Signals
-# =====================
 with open(SIGNALS_FILE, "w", encoding="utf-8") as f:
-    json.dump(
-        new_signals,
-        f,
-        indent=2,
-        ensure_ascii=False
-    )
+    json.dump(new_signals, f, indent=2, ensure_ascii=False)
 
-# =====================
-# Send Telegram Report
-# =====================
 final_message = "\n".join(report)
 send_telegram(final_message)
 
 print("🏁 AI Prediction & Alert Dispatch Complete.")
-print(f"-> Horizon: {TARGET_HORIZON}")
-print(f"-> Target Return: {TARGET_THRESHOLD}%")
 print(f"-> Processed stocks: {len(processed_dates)}")
 print(f"-> Data failures: {len(data_failures)}")
 print(f"-> Buy signals: {len(buy_alerts)}")
