@@ -36,7 +36,7 @@
     0,
     1
   ],
-  "trained_at": "2026-11-08T14:12:09+00:00",
+  "trained_at": "2026-11-08T14:32:05+00:00",
   "model_type": "XGBoost",
   "train_ratio": 0.8,
   "purged_sessions": 20,
