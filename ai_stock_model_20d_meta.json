@@ -1,7 +1,15 @@
 {
   "model_file": "ai_stock_model_20d.pkl",
   "horizon": 20,
-  "profit_threshold": 2.0,
+  "profit_threshold": 8.0,
+  "target_column": "Target_Reach_8Pct",
+  "target_definition": {
+    "type": "max_gain_anytime",
+    "horizon": 20,
+    "threshold_pct": 8.0,
+    "target_column": "Target_Reach_8Pct",
+    "condition": "Max_Gain_Pct > 8.0"
+  },
   "feature_columns": [
     "RSI14",
     "ATR14_Pct",
@@ -28,14 +36,47 @@
     0,
     1
   ],
-  "trained_at": "2026-11-08T10:31:15",
+  "trained_at": "2026-11-08T12:48:20+00:00",
   "model_type": "XGBoost",
   "train_ratio": 0.8,
   "purged_sessions": 20,
-  "train_start_date": "2025-03-06",
-  "train_end_date": "2026-05-13",
-  "test_start_date": "2026-06-17",
-  "test_end_date": "2026-10-07",
+  "train_start_date": "2025-03-09",
+  "train_end_date": "2026-05-14",
+  "test_start_date": "2026-06-21",
+  "test_end_date": "2026-10-11",
   "train_samples": 9622,
-  "test_samples": 2618
+  "test_samples": 2618,
+  "train_positive_rate": 0.5072,
+  "test_positive_rate": 0.4423,
+  "evaluation": {
+    "roc_auc": 0.4819,
+    "pr_auc": 0.4377,
+    "brier_score": 0.2999,
+    "threshold_results": {
+      "0.5": {
+        "selected_samples": 1535,
+        "precision": 0.4313,
+        "recall": 0.5717,
+        "f1": 0.4916
+      },
+      "0.6": {
+        "selected_samples": 1023,
+        "precision": 0.4174,
+        "recall": 0.3687,
+        "f1": 0.3916
+      },
+      "0.7": {
+        "selected_samples": 668,
+        "precision": 0.4162,
+        "recall": 0.2401,
+        "f1": 0.3045
+      },
+      "0.8": {
+        "selected_samples": 318,
+        "precision": 0.4308,
+        "recall": 0.1183,
+        "f1": 0.1856
+      }
+    }
+  }
 }

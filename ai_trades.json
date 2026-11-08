@@ -180,5 +180,54 @@
     "entry_date": "2026-11-05",
     "entry_confidence": 79.81,
     "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "EMFD",
+    "entry_price": 12.15,
+    "entry_date": "2026-11-08",
+    "entry_confidence": 86.57,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "ETEL",
+    "entry_price": 129.35,
+    "entry_date": "2026-11-08",
+    "entry_confidence": 81.4,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "EFIH",
+    "entry_price": 23.42,
+    "entry_date": "2026-11-08",
+    "entry_confidence": 86.98,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "ABUK",
+    "entry_price": 77.5,
+    "entry_date": "2026-11-08",
+    "entry_confidence": 80.21,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "OIH",
+    "entry_price": 1.78,
+    "entry_date": "2026-11-08",
+    "entry_confidence": 87.28,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "RMDA",
+    "entry_price": 5.61,
+    "entry_date": "2026-11-08",
+    "entry_confidence": 84.46,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "MPCI",
+    "entry_price": 322.0,
+    "entry_date": "2026-11-08",
+    "entry_confidence": 89.84,
+    "signal_type": "AI_BUY"
   }
 ]
