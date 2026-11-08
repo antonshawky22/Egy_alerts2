@@ -36,7 +36,7 @@
     0,
     1
   ],
-  "trained_at": "2026-11-08T15:30:03+00:00",
+  "trained_at": "2026-11-08T17:24:00+00:00",
   "model_type": "XGBoost",
   "train_ratio": 0.8,
   "purged_sessions": 20,
@@ -86,6 +86,68 @@
   "diagnostics": {
     "test_results_file": "ai_test_results.csv",
     "feature_importance_file": "ai_feature_importance_20d.csv",
+    "market_regime_distribution": {
+      "TRAIN": {
+        "BULLISH": {
+          "samples": 7208,
+          "positive": 3441,
+          "negative": 3767,
+          "success_rate": 0.4774
+        },
+        "NEUTRAL": {
+          "samples": 2414,
+          "positive": 1439,
+          "negative": 975,
+          "success_rate": 0.5961
+        },
+        "BEARISH": {
+          "samples": 0,
+          "positive": 0,
+          "negative": 0,
+          "success_rate": null
+        }
+      },
+      "PURGED": {
+        "BULLISH": {
+          "samples": 136,
+          "positive": 41,
+          "negative": 95,
+          "success_rate": 0.3015
+        },
+        "NEUTRAL": {
+          "samples": 544,
+          "positive": 185,
+          "negative": 359,
+          "success_rate": 0.3401
+        },
+        "BEARISH": {
+          "samples": 0,
+          "positive": 0,
+          "negative": 0,
+          "success_rate": null
+        }
+      },
+      "TEST": {
+        "BULLISH": {
+          "samples": 1530,
+          "positive": 811,
+          "negative": 719,
+          "success_rate": 0.5301
+        },
+        "NEUTRAL": {
+          "samples": 850,
+          "positive": 311,
+          "negative": 539,
+          "success_rate": 0.3659
+        },
+        "BEARISH": {
+          "samples": 238,
+          "positive": 36,
+          "negative": 202,
+          "success_rate": 0.1513
+        }
+      }
+    },
     "market_regime_analysis": [
       {
         "group": "BEARISH",
