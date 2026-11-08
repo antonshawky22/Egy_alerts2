@@ -513,15 +513,148 @@ def analyze_feature_importance(model, feature_columns):
 
 
 # =====================
+# Market Regime Diagnostics
+# =====================
+
+def analyze_market_distribution(df, train_mask, purged_mask, test_mask):
+
+    print("\n")
+    print("=" * 65)
+    print("========== Market Regime Distribution ==========")
+    print("=" * 65)
+
+    periods = [
+        ("TRAIN", train_mask),
+        ("PURGED", purged_mask),
+        ("TEST", test_mask)
+    ]
+
+    regimes = [
+        "BULLISH",
+        "NEUTRAL",
+        "BEARISH"
+    ]
+
+    diagnostic_results = {}
+
+    for period_name, mask in periods:
+
+        subset = df.loc[mask].copy()
+
+        print(f"\n---------- {period_name} ----------")
+        print(f"Total Samples: {len(subset)}")
+
+        period_data = {}
+
+        if subset.empty:
+            print("⚠️ لا توجد عينات في هذه الفترة.")
+            diagnostic_results[period_name] = period_data
+            continue
+
+        grouped = subset.groupby(
+            "Market_Regime_Original",
+            dropna=False
+        )
+
+        for regime in regimes:
+
+            if regime in grouped.groups:
+                group = grouped.get_group(regime)
+
+                count = len(group)
+                success_rate = float(
+                    group[TARGET_COLUMN].mean()
+                )
+
+                positive_count = int(
+                    group[TARGET_COLUMN].sum()
+                )
+
+                negative_count = count - positive_count
+
+            else:
+                count = 0
+                success_rate = None
+                positive_count = 0
+                negative_count = 0
+
+            period_data[regime] = {
+                "samples": int(count),
+                "positive": int(positive_count),
+                "negative": int(negative_count),
+                "success_rate": (
+                    round(success_rate, 4)
+                    if success_rate is not None else None
+                )
+            }
+
+            if count > 0:
+                print(
+                    f"{regime} | "
+                    f"Samples: {count} | "
+                    f"Success: {positive_count} | "
+                    f"Failure: {negative_count} | "
+                    f"Success Rate: {success_rate:.2%}"
+                )
+            else:
+                print(
+                    f"{regime} | Samples: 0 | "
+                    "لا توجد بيانات لهذه الحالة."
+                )
+
+        diagnostic_results[period_name] = period_data
+
+    print("\n---------- DIAGNOSTIC SUMMARY ----------")
+
+    train_bearish = diagnostic_results.get(
+        "TRAIN", {}
+    ).get("BEARISH", {}).get("samples", 0)
+
+    test_bearish = diagnostic_results.get(
+        "TEST", {}
+    ).get("BEARISH", {}).get("samples", 0)
+
+    print(f"BEARISH samples in TRAIN: {train_bearish}")
+    print(f"BEARISH samples in TEST: {test_bearish}")
+
+    if train_bearish == 0 and test_bearish > 0:
+        print(
+            "\n⚠️ WARNING: لا توجد عينات BEARISH في التدريب، "
+            "بينما توجد عينات BEARISH في الاختبار."
+        )
+        print(
+            "النموذج لم يتدرب على أمثلة فعلية من السوق الهابط."
+        )
+
+    elif train_bearish > 0:
+        print(
+            "\n✅ توجد عينات BEARISH داخل بيانات التدريب."
+        )
+
+    else:
+        print(
+            "\n⚠️ لا توجد عينات BEARISH في التدريب أو الاختبار."
+        )
+
+    print("=" * 65)
+    print("========== End of Diagnostics ==========")
+    print("=" * 65)
+
+    return diagnostic_results
+
+
+# =====================
 # Training
 # =====================
 
 def train_model():
+
     print("-> جاري تحميل بيانات التدريب...")
 
     df, feature_columns = load_dataset()
 
     # 1. Validate horizon
+
     if "horizon" not in df.columns:
         raise ValueError(
             "عمود horizon غير موجود."
@@ -542,6 +675,7 @@ def train_model():
         )
 
     # 2. Validate dates
+
     if "date" not in df.columns:
         raise ValueError(
             "عمود date غير موجود."
@@ -558,6 +692,7 @@ def train_model():
         )
 
     # 3. Validate target column
+
     if TARGET_COLUMN not in df.columns:
         raise ValueError(
             f"عمود الهدف {TARGET_COLUMN} غير موجود."
@@ -585,6 +720,7 @@ def train_model():
     df[TARGET_COLUMN] = df[TARGET_COLUMN].astype(int)
 
     # 4. Verify target against raw future data
+
     if "Max_Gain_Pct" not in df.columns:
         raise ValueError(
             "Max_Gain_Pct غير موجود للتحقق من صحة الهدف."
@@ -611,6 +747,7 @@ def train_model():
         )
 
     # 5. Sort chronologically
+
     df = df.sort_values(
         "date"
     ).reset_index(drop=True)
@@ -625,6 +762,7 @@ def train_model():
     )
 
     # Preserve original market categories for analysis
+
     for column in (
         "Market_Regime",
         "Market_Trend",
@@ -633,9 +771,11 @@ def train_model():
         df[column + "_Original"] = df[column].copy()
 
     # 6. Encode market categories
+
     df = encode_market_features(df)
 
     # 7. Build features without future information
+
     forbidden_columns = {
         TARGET_COLUMN,
         "Future_Return_Pct",
@@ -678,6 +818,7 @@ def train_model():
     )
 
     if X.isna().any().any():
+
         invalid_columns = X.columns[
             X.isna().any()
         ].tolist()
@@ -702,6 +843,7 @@ def train_model():
     )
 
     # 8. Chronological split with purging
+
     unique_dates = sorted(
         df["date"].unique()
     )
@@ -751,6 +893,25 @@ def train_model():
         test_dates
     )
 
+    # =====================
+    # NEW: Market Regime Diagnostics
+    # =====================
+
+    purged_mask = df["date"].isin(
+        purged_dates
+    )
+
+    regime_diagnostics = analyze_market_distribution(
+        df,
+        train_mask,
+        purged_mask,
+        test_mask
+    )
+
+    # =====================
+    # Continue Training
+    # =====================
+
     X_train = X.loc[train_mask]
     X_test = X.loc[test_mask]
 
@@ -795,6 +956,7 @@ def train_model():
         )
 
     # 9. Validate classes
+
     if y_train.nunique() < 2:
         raise ValueError(
             "بيانات التدريب تحتوي على فئة واحدة فقط."
@@ -816,7 +978,9 @@ def train_model():
     )
 
     # 10. Create model
+
     if HAS_XGBOOST:
+
         print("-> استخدام نموذج XGBoost...")
 
         model = xgb.XGBClassifier(
@@ -828,6 +992,7 @@ def train_model():
         )
 
     else:
+
         print("-> استخدام نموذج RandomForest...")
 
         model = RandomForestClassifier(
@@ -838,6 +1003,7 @@ def train_model():
         )
 
     # 11. Train
+
     print("\n-> بدء تدريب النموذج...")
 
     model.fit(
@@ -846,6 +1012,7 @@ def train_model():
     )
 
     # 12. Evaluate
+
     evaluation = evaluate_model(
         model,
         X_test,
@@ -858,6 +1025,7 @@ def train_model():
     )
 
     # 13. Save detailed test results
+
     test_results = save_test_results(
         df,
         test_mask,
@@ -866,6 +1034,7 @@ def train_model():
     )
 
     # 14. Analyze performance by market regime
+
     regime_analysis = analyze_segment(
         test_results,
         "Market_Regime",
@@ -873,6 +1042,7 @@ def train_model():
     )
 
     # 15. Analyze performance by stock
+
     stock_analysis = analyze_segment(
         test_results,
         "Symbol",
@@ -880,12 +1050,14 @@ def train_model():
     )
 
     # 16. Feature importance
+
     feature_importance = analyze_feature_importance(
         model,
         list(X.columns)
     )
 
     # 17. Save model and metadata
+
     model_filename = (
         f"ai_stock_model_{TARGET_HORIZON}d.pkl"
     )
@@ -943,6 +1115,7 @@ def train_model():
         "diagnostics": {
             "test_results_file": TEST_RESULTS_FILE,
             "feature_importance_file": FEATURE_IMPORTANCE_FILE,
+            "market_regime_distribution": regime_diagnostics,
             "market_regime_analysis": regime_analysis,
             "stock_analysis": stock_analysis,
             "feature_importance": feature_importance
@@ -954,6 +1127,7 @@ def train_model():
         "w",
         encoding="utf-8"
     ) as f:
+
         json.dump(
             metadata,
             f,
