@@ -7,7 +7,10 @@ LABELS_FILE = "ai_labels_database.json"
 MARKET_FILE = "ai_market_regime_database.json"
 OUT_FILE = "ai_training_dataset.json"
 
-HORIZONS = (20, 40, 60)
+TARGET_HORIZON = 20
+TARGET_THRESHOLD = 8.0
+HORIZONS = (TARGET_HORIZON,)
+TARGET_COLUMN = "Target_Reach_8Pct"
 
 STOCK_FEATURES = [
     "RSI14",
@@ -27,13 +30,15 @@ STOCK_FEATURES = [
     "Trend_50_100"
 ]
 
-TARGET_COLUMNS = [
+RAW_TARGET_COLUMNS = [
     "Future_Return_Pct",
     "Max_Gain_Pct",
     "Max_Drawdown_Pct",
     "Sessions_To_Max",
     "Sessions_To_Min"
 ]
+
+TARGET_COLUMNS = RAW_TARGET_COLUMNS + [TARGET_COLUMN]
 
 MARKET_NUMERIC = ["Market_Score", "Market_Volatility"]
 
@@ -50,6 +55,29 @@ def safe_num(value):
     except (TypeError, ValueError):
         return None
 
+def validate_target_definition(labels_db):
+    definition = labels_db.get("target_definition", {})
+
+    if definition.get("type") != "max_gain_anytime":
+        raise ValueError(
+            "Invalid labels target definition. "
+            "Expected type: max_gain_anytime"
+        )
+
+    if definition.get("horizon") != TARGET_HORIZON:
+        raise ValueError(
+            f"Invalid target horizon. Expected {TARGET_HORIZON}"
+        )
+
+    threshold = safe_num(definition.get("threshold_pct"))
+
+    if threshold != TARGET_THRESHOLD:
+        raise ValueError(
+            f"Invalid target threshold. Expected {TARGET_THRESHOLD}%"
+        )
+
+    print("Target definition: VALID")
+
 def main():
     with open(FEATURES_FILE, encoding="utf-8") as f:
         features_db = json.load(f)
@@ -59,6 +87,8 @@ def main():
 
     with open(MARKET_FILE, encoding="utf-8") as f:
         market_db = json.load(f)
+
+    validate_target_definition(labels_db)
 
     stock_symbols = features_db["symbols"]
     stock_labels = labels_db["symbols"]
@@ -77,19 +107,16 @@ def main():
         "invalid_feature_values": 0,
         "invalid_features_by_name": {},
         "missing_market_values": 0,
-        "incomplete_labels": {},
-        "complete_labels": {},
-        "invalid_targets": {},
-        "samples_by_horizon": {},
-        "missing_symbols_labels": []
+        "incomplete_labels": {"20": 0},
+        "complete_labels": {"20": 0},
+        "invalid_targets": {"20": 0},
+        "samples_by_horizon": {"20": 0},
+        "missing_symbols_labels": [],
+        "excluded_invalid_features": 0,
+        "excluded_invalid_market": 0,
+        "excluded_invalid_labels": 0,
+        "target_counts": {"0": 0, "1": 0}
     }
-
-    for period in HORIZONS:
-        key = str(period)
-        stats["incomplete_labels"][key] = 0
-        stats["complete_labels"][key] = 0
-        stats["invalid_targets"][key] = 0
-        stats["samples_by_horizon"][key] = 0
 
     for symbol, block in stock_symbols.items():
         if symbol == "EGX30":
@@ -113,7 +140,7 @@ def main():
             if not labels_by_date:
                 stats["missing_label_dates"] += 1
 
-            # 1. Validate all stock features
+            # 1. Validate stock features
             stock_features = {}
             invalid_names = []
 
@@ -132,7 +159,7 @@ def main():
             if invalid_names:
                 stats["invalid_feature_dates"] += 1
 
-            # 2. Validate market data
+            # 2. Validate EGX30 market data
             market = market_data.get(date)
             market_features = {}
             market_invalid = False
@@ -162,18 +189,18 @@ def main():
                 if market_invalid:
                     stats["invalid_market_dates"] += 1
 
-            # 3. Validate labels independently for each horizon
-            valid_labels = {}
+            # 3. Validate labels for 20 sessions only
+            valid_labels = None
+            label = {}
 
             if labels_by_date:
-                for period in HORIZONS:
-                    key = str(period)
-                    label = labels_by_date.get(f"{period}_sessions", {})
+                label = labels_by_date.get(
+                    f"{TARGET_HORIZON}_sessions", {}
+                )
 
-                    if not label.get("complete"):
-                        stats["incomplete_labels"][key] += 1
-                        continue
-
+                if not label.get("complete"):
+                    stats["incomplete_labels"]["20"] += 1
+                else:
                     targets = {
                         name: safe_num(label.get(source))
                         for name, source in {
@@ -186,33 +213,68 @@ def main():
                     }
 
                     if any(v is None for v in targets.values()):
-                        stats["invalid_targets"][key] += 1
-                        continue
+                        stats["invalid_targets"]["20"] += 1
+                    else:
+                        valid_labels = targets
+                        stats["complete_labels"]["20"] += 1
 
-                    stats["complete_labels"][key] += 1
-                    valid_labels[period] = targets
+            # 4. Exclude invalid samples
+            if invalid_names:
+                stats["excluded_invalid_features"] += 1
 
-            # 4. Exclude dates with invalid features or market data
-            if invalid_names or market_invalid or not labels_by_date:
+            if market_invalid:
+                stats["excluded_invalid_market"] += 1
+
+            if valid_labels is None:
+                stats["excluded_invalid_labels"] += 1
+
+            if invalid_names or market_invalid or valid_labels is None:
                 continue
 
-            # 5. Build samples
-            for period in HORIZONS:
-                if period not in valid_labels:
-                    continue
+            # 5. Define the actual AI target
+            max_gain = valid_labels["Max_Gain_Pct"]
 
-                sample = {
-                    "symbol": symbol,
-                    "date": date,
-                    "horizon": period,
-                    **stock_features,
-                    **market_features,
-                    **valid_labels[period]
-                }
+            target_value = int(max_gain > TARGET_THRESHOLD)
 
-                samples.append(sample)
-                stats["processed"] += 1
-                stats["samples_by_horizon"][str(period)] += 1
+            # 6. Build final sample
+            sample = {
+                "symbol": symbol,
+                "date": date,
+                "horizon": TARGET_HORIZON,
+                **stock_features,
+                **market_features,
+                **valid_labels,
+                TARGET_COLUMN: target_value
+            }
+
+            samples.append(sample)
+
+            stats["processed"] += 1
+            stats["samples_by_horizon"]["20"] += 1
+            stats["target_counts"][str(target_value)] += 1
+
+    # 7. Calculate target distribution
+    total_samples = len(samples)
+    positive_count = stats["target_counts"]["1"]
+    negative_count = stats["target_counts"]["0"]
+
+    positive_pct = (
+        round(positive_count / total_samples * 100, 2)
+        if total_samples else 0
+    )
+
+    negative_pct = (
+        round(negative_count / total_samples * 100, 2)
+        if total_samples else 0
+    )
+
+    target_definition = {
+        "type": "max_gain_anytime",
+        "horizon": TARGET_HORIZON,
+        "threshold_pct": TARGET_THRESHOLD,
+        "target_column": TARGET_COLUMN,
+        "condition": "Max_Gain_Pct > 8.0"
+    }
 
     report = {
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -223,6 +285,7 @@ def main():
         ],
         "excluded_symbol": "EGX30",
         "horizons": list(HORIZONS),
+        "target_definition": target_definition,
         "feature_columns": STOCK_FEATURES,
         "market_feature_columns": [
             "Market_Score",
@@ -231,9 +294,16 @@ def main():
             "Market_Trend",
             "Market_Momentum"
         ],
+        "raw_target_columns": RAW_TARGET_COLUMNS,
         "target_columns": TARGET_COLUMNS,
         "statistics": stats,
-        "total_samples": len(samples),
+        "target_distribution": {
+            "positive_count": positive_count,
+            "negative_count": negative_count,
+            "positive_pct": positive_pct,
+            "negative_pct": negative_pct
+        },
+        "total_samples": total_samples,
         "samples": samples
     }
 
@@ -249,16 +319,17 @@ def main():
     print("\n========== AI TRAINING DATASET ==========")
     print(f"Stocks: {len(stock_symbols) - 1}")
     print(f"Dates checked: {stats['dates_checked']}")
-    print(f"Total samples: {len(samples)}")
+    print(f"Total samples: {total_samples}")
     print(f"Processed: {stats['processed']}")
 
-    print("\n--- Samples by Horizon ---")
-    for period in HORIZONS:
-        key = str(period)
-        print(
-            f"{period} sessions: "
-            f"{stats['samples_by_horizon'][key]}"
-        )
+    print("\n--- Target Definition ---")
+    print(f"Horizon: {TARGET_HORIZON} sessions")
+    print(f"Required gain: More than {TARGET_THRESHOLD}%")
+    print(f"Target column: {TARGET_COLUMN}")
+
+    print("\n--- Target Distribution ---")
+    print(f"Positive (1): {positive_count} ({positive_pct}%)")
+    print(f"Negative (0): {negative_count} ({negative_pct}%)")
 
     print("\n--- Data Quality ---")
     print(f"Missing label dates: {stats['missing_label_dates']}")
@@ -269,18 +340,22 @@ def main():
     print(f"Invalid feature values: {stats['invalid_feature_values']}")
     print(f"Missing market values: {stats['missing_market_values']}")
 
+    print("\n--- Excluded Samples ---")
+    print(f"Invalid features: {stats['excluded_invalid_features']}")
+    print(f"Invalid market: {stats['excluded_invalid_market']}")
+    print(f"Invalid labels: {stats['excluded_invalid_labels']}")
+
     print("\n--- Invalid Features ---")
     for name, count in sorted(stats["invalid_features_by_name"].items()):
         print(f"{name}: {count}")
 
-    print("\n--- Labels by Horizon ---")
-    for period in HORIZONS:
-        key = str(period)
-        print(
-            f"{period}: Complete={stats['complete_labels'][key]} | "
-            f"Incomplete={stats['incomplete_labels'][key]} | "
-            f"Invalid targets={stats['invalid_targets'][key]}"
-        )
+    print("\n--- Labels ---")
+    print(
+        f"20 sessions: "
+        f"Complete={stats['complete_labels']['20']} | "
+        f"Incomplete={stats['incomplete_labels']['20']} | "
+        f"Invalid targets={stats['invalid_targets']['20']}"
+    )
 
     print(f"\nOutput: {OUT_FILE}")
     print("Status: SUCCESS")
