@@ -11,12 +11,32 @@ TARGET_THRESHOLD = 8.0
 TARGET_COLUMN = "Target_Reach_8Pct"
 MIN_STOCK_SAMPLES = 20
 
+EXPECTED_TARGET_DEFINITION = {
+"type": "max_gain_anytime",
+"horizon": TARGET_HORIZON,
+"threshold_pct": TARGET_THRESHOLD,
+"target_column": TARGET_COLUMN,
+"condition": "Max_Gain_Pct > 8.0"
+}
+
+=====================
+
+Safe Number Conversion
+
+=====================
+
 def number(v):
 try:
 x = float(v)
 return x if math.isfinite(x) else None
 except (TypeError, ValueError):
 return None
+
+=====================
+
+Statistics
+
+=====================
 
 def stats(values):
 values = sorted(v for v in values if v is not None)
@@ -48,6 +68,12 @@ return {
     )
 }
 
+=====================
+
+Target Statistics
+
+=====================
+
 def target_stats(rows):
 if not rows:
 return {}
@@ -68,6 +94,12 @@ return {
     )
 }
 
+=====================
+
+Dataset Validation
+
+=====================
+
 def validate_dataset(dataset):
 if not isinstance(dataset, dict):
 raise ValueError("Invalid dataset format.")
@@ -75,20 +107,13 @@ raise ValueError("Invalid dataset format.")
 samples = dataset.get("samples")
 
 if not isinstance(samples, list):
-    raise ValueError("Dataset samples are missing or invalid.")
+    raise ValueError(
+        "Dataset samples are missing or invalid."
+    )
 
-metadata = dataset.get("metadata", {})
-definition = metadata.get("target_definition", {})
+definition = dataset.get("target_definition", {})
 
-expected = {
-    "type": "max_gain_anytime",
-    "horizon": TARGET_HORIZON,
-    "threshold_pct": TARGET_THRESHOLD,
-    "target_column": TARGET_COLUMN,
-    "condition": "Max_Gain_Pct > 8.0"
-}
-
-if definition and definition != expected:
+if definition != EXPECTED_TARGET_DEFINITION:
     raise ValueError(
         "Target definition mismatch between dataset and analysis."
     )
@@ -97,6 +122,10 @@ valid_samples = []
 invalid_samples = 0
 
 for sample in samples:
+    if not isinstance(sample, dict):
+        invalid_samples += 1
+        continue
+
     if number(sample.get("horizon")) != TARGET_HORIZON:
         continue
 
@@ -107,7 +136,9 @@ for sample in samples:
         invalid_samples += 1
         continue
 
-    expected_target = int(max_gain > TARGET_THRESHOLD)
+    expected_target = int(
+        max_gain > TARGET_THRESHOLD
+    )
 
     if int(target) != expected_target:
         raise ValueError(
@@ -119,6 +150,12 @@ for sample in samples:
     valid_samples.append(sample)
 
 return valid_samples, invalid_samples
+
+=====================
+
+Group Analysis
+
+=====================
 
 def analyze_groups(rows, group_field):
 groups = defaultdict(list)
@@ -154,6 +191,12 @@ for group, group_rows in sorted(groups.items()):
     results[group] = result
 
 return results
+
+=====================
+
+Stock Analysis
+
+=====================
 
 def analyze_stocks(rows):
 groups = defaultdict(list)
@@ -204,9 +247,17 @@ return {
     "worst_10": list(reversed(stock_results[-10:]))
 }
 
+=====================
+
+Main
+
+=====================
+
 def main():
+print("-> جاري تحميل Dataset...")
+
 with open(INPUT_FILE, encoding="utf-8") as f:
-dataset = json.load(f)
+    dataset = json.load(f)
 
 samples, invalid_samples = validate_dataset(dataset)
 
@@ -233,14 +284,10 @@ drawdowns = [
 ]
 
 report = {
-    "generated_at": datetime.now(timezone.utc).isoformat(),
-    "target_definition": {
-        "type": "max_gain_anytime",
-        "horizon": TARGET_HORIZON,
-        "threshold_pct": TARGET_THRESHOLD,
-        "target_column": TARGET_COLUMN,
-        "condition": "Max_Gain_Pct > 8.0"
-    },
+    "generated_at": datetime.now(
+        timezone.utc
+    ).isoformat(),
+    "target_definition": EXPECTED_TARGET_DEFINITION,
     "total_dataset_samples": len(dataset["samples"]),
     "analyzed_samples": len(samples),
     "invalid_samples": invalid_samples,
@@ -265,7 +312,11 @@ report = {
     }
 }
 
-with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
+with open(
+    OUTPUT_FILE,
+    "w",
+    encoding="utf-8"
+) as f:
     json.dump(
         report,
         f,
@@ -294,7 +345,9 @@ print(
 )
 
 print("\n--- Return Statistics ---")
+
 r = stats(returns)
+
 print(f"Average return: {r.get('mean', 'N/A')}%")
 print(f"Median return: {r.get('median', 'N/A')}%")
 print(f"Positive returns: {r.get('positive_pct', 'N/A')}%")
@@ -311,7 +364,9 @@ for regime, result in report["market_analysis"][
         f"({result['positive']}/{result['samples']})"
     )
 
-stock_report = report["stock_analysis"][str(TARGET_HORIZON)]
+stock_report = report["stock_analysis"][
+    str(TARGET_HORIZON)
+]
 
 print("\n--- Best 10 Stocks ---")
 
