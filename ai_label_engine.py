@@ -1,10 +1,13 @@
 import json
 import math
-from datetime import datetime
+from datetime import datetime, timezone
 
 DB_FILE = "egx_history_database_v2.json"
 OUT_FILE = "ai_labels_database.json"
-HORIZONS = (20, 40, 60)
+
+TARGET_HORIZON = 20
+TARGET_THRESHOLD = 8.0
+HORIZONS = (TARGET_HORIZON,)
 
 def round_value(x):
     return round(x, 4) if x is not None and math.isfinite(x) else None
@@ -49,14 +52,14 @@ def calculate_labels(symbol, block):
             max_index = future_high.index(max_high) + 1
             min_index = future_low.index(min_low) + 1
 
+            max_gain_pct = (max_high / entry - 1) * 100
+
             result[key] = {
                 "complete": True,
                 "future_return_pct": round_value(
                     (future_close / entry - 1) * 100
                 ),
-                "max_gain_pct": round_value(
-                    (max_high / entry - 1) * 100
-                ),
+                "max_gain_pct": round_value(max_gain_pct),
                 "max_drawdown_pct": round_value(
                     (min_low / entry - 1) * 100
                 ),
@@ -73,9 +76,15 @@ def main():
         db = json.load(f)
 
     report = {
-        "generated_at": datetime.utcnow().isoformat(timespec="seconds"),
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "source": DB_FILE,
         "method": "Future outcomes measured after each historical candle",
+        "target_definition": {
+            "type": "max_gain_anytime",
+            "horizon": TARGET_HORIZON,
+            "threshold_pct": TARGET_THRESHOLD,
+            "condition": "Max_Gain_Pct > 8.0"
+        },
         "horizons": list(HORIZONS),
         "total_symbols": len(db),
         "symbols": {},
@@ -115,6 +124,8 @@ def main():
     print("\n========== AI LABEL ENGINE ==========")
     print(f"Symbols: {len(db)}")
     print(f"Historical rows: {total_rows}")
+    print(f"Target: Max Gain > {TARGET_THRESHOLD}%")
+    print(f"Horizon: {TARGET_HORIZON} sessions")
 
     for p in HORIZONS:
         print(
