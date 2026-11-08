@@ -57,7 +57,9 @@ jobs:
             ai_last_signals.json \
             ai_trades.json \
             ai_stock_model_20d.pkl \
-            ai_stock_model_20d_meta.json
+            ai_stock_model_20d_meta.json \
+            ai_test_results.csv \
+            ai_feature_importance_20d.csv
           do
             if [ -f "$file" ]; then
               echo "✅ FOUND: $file"
@@ -78,7 +80,9 @@ jobs:
             ai_last_signals.json \
             ai_trades.json \
             ai_stock_model_20d.pkl \
-            ai_stock_model_20d_meta.json
+            ai_stock_model_20d_meta.json \
+            ai_test_results.csv \
+            ai_feature_importance_20d.csv
           do
             if [ -f "$file" ]; then
               git add -f "$file"
@@ -92,7 +96,7 @@ jobs:
           git status --short
 
           if ! git diff --cached --quiet; then
-            git commit -m "AI Pipeline: Update signals trades and model [skip ci]"
+            git commit -m "AI Pipeline: Update signals trades model and analysis [skip ci]"
             git push
             echo "✅ Files committed and pushed successfully"
           else
@@ -111,5 +115,7 @@ jobs:
             ai_dataset_analysis_report.json
             ai_stock_model_20d.pkl
             ai_stock_model_20d_meta.json
+            ai_test_results.csv
+            ai_feature_importance_20d.csv
             ai_trades.json
             ai_last_signals.json
