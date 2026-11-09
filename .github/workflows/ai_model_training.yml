@@ -1,0 +1,122 @@
+name: AI Model Training
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  train-model:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas numpy scikit-learn joblib xgboost
+
+      - name: Verify Required Files
+        run: |
+          if [ ! -f egx_history_database_v2.json ]; then
+            echo "Missing egx_history_database_v2.json"
+            exit 1
+          fi
+
+          if [ ! -f ai_features_database.json ]; then
+            echo "Missing ai_features_database.json"
+            exit 1
+          fi
+
+          if [ ! -f ai_label_engine.py ]; then
+            echo "Missing ai_label_engine.py"
+            exit 1
+          fi
+
+          if [ ! -f ai_market_regime.py ]; then
+            echo "Missing ai_market_regime.py"
+            exit 1
+          fi
+
+          if [ ! -f ai_training_dataset.py ]; then
+            echo "Missing ai_training_dataset.py"
+            exit 1
+          fi
+
+          if [ ! -f ai_model_train.py ]; then
+            echo "Missing ai_model_train.py"
+            exit 1
+          fi
+
+          echo "All required files are available."
+
+      - name: Build AI Labels
+        run: python ai_label_engine.py
+
+      - name: Build Market Regime
+        run: python ai_market_regime.py
+
+      - name: Build Training Dataset
+        run: python ai_training_dataset.py
+
+      - name: Verify Training Dataset
+        run: |
+          if [ ! -f ai_training_dataset.json ]; then
+            echo "Training dataset was not generated."
+            exit 1
+          fi
+
+          python - <<'PY'
+          import json
+
+          with open("ai_training_dataset.json", encoding="utf-8") as f:
+              data = json.load(f)
+
+          print("Total Samples:", data.get("total_samples"))
+          print("Target Distribution:", data.get("target_distribution"))
+          print("Source Files:", data.get("source_files"))
+
+          if not data.get("total_samples"):
+              raise SystemExit("Dataset is empty or invalid.")
+          PY
+
+      - name: Train AI Model
+        run: python ai_model_train.py
+
+      - name: Verify Training Outputs
+        run: |
+          files=(
+            "ai_stock_model_20d.pkl"
+            "ai_stock_model_20d_meta.json"
+            "ai_test_results.csv"
+            "ai_feature_importance_20d.csv"
+          )
+
+          for file in "${files[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "Missing training output: $file"
+              exit 1
+            fi
+            echo "Verified: $file"
+            ls -lh "$file"
+          done
+
+      - name: Upload Training Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-model-training-results
+          path: |
+            ai_stock_model_20d.pkl
+            ai_stock_model_20d_meta.json
+            ai_test_results.csv
+            ai_feature_importance_20d.csv
+          if-no-files-found: error
+          retention-days: 14
