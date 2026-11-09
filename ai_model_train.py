@@ -35,8 +35,14 @@ TRAIN_RATIO = 0.80
 
 CONFIDENCE_LEVELS = (0.50, 0.60, 0.70, 0.80)
 
+FEATURES_FILE = "ai_features_database.json"
+
 TEST_RESULTS_FILE = "ai_test_results.csv"
 FEATURE_IMPORTANCE_FILE = "ai_feature_importance_20d.csv"
+WALK_FORWARD_RESULTS_FILE = "ai_walk_forward_results.csv"
+
+WALK_FORWARD_FOLDS = 3
+MIN_TRAIN_SESSIONS = 100
 
 
 # =====================
@@ -57,6 +63,7 @@ EXPECTED_TARGET_DEFINITION = {
 # =====================
 
 def load_dataset(file_path="ai_training_dataset.json"):
+
     if not os.path.exists(file_path):
         raise FileNotFoundError(
             f"الملف {file_path} غير موجود. "
@@ -98,10 +105,81 @@ def load_dataset(file_path="ai_training_dataset.json"):
 
 
 # =====================
+# Load Actual EGX30 Trading Calendar
+# =====================
+
+def load_egx30_calendar(file_path=FEATURES_FILE):
+
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(
+            f"ملف المؤشرات {file_path} غير موجود. "
+            "لا يمكن حساب Purging دون تقويم جلسات EGX30."
+        )
+
+    with open(file_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    if not isinstance(data, dict):
+        raise ValueError(
+            "صيغة ai_features_database.json غير صحيحة."
+        )
+
+    symbols = data.get("symbols")
+
+    if not isinstance(symbols, dict):
+        raise ValueError(
+            "قسم symbols غير موجود في ملف المؤشرات."
+        )
+
+    egx30 = symbols.get("EGX30")
+
+    if not isinstance(egx30, dict):
+        raise ValueError(
+            "بيانات EGX30 غير موجودة في ملف المؤشرات."
+        )
+
+    egx30_data = egx30.get("data")
+
+    if not isinstance(egx30_data, dict) or not egx30_data:
+        raise ValueError(
+            "تقويم جلسات EGX30 فارغ أو غير صالح."
+        )
+
+    calendar = pd.to_datetime(
+        list(egx30_data.keys()),
+        errors="coerce"
+    )
+
+    calendar = pd.DatetimeIndex(
+        calendar
+    ).dropna().normalize().unique().sort_values()
+
+    if len(calendar) <= TARGET_HORIZON + 1:
+        raise ValueError(
+            "عدد جلسات EGX30 غير كافٍ لحساب Purging."
+        )
+
+    print(
+        f"-> تم تحميل تقويم EGX30: {len(calendar)} جلسة فعلية."
+    )
+
+    print(
+        f"-> بداية التقويم: {calendar[0].date()}"
+    )
+
+    print(
+        f"-> نهاية التقويم: {calendar[-1].date()}"
+    )
+
+    return calendar
+
+
+# =====================
 # Market Encoding
 # =====================
 
 def encode_market_features(df):
+
     regime_mapping = {
         "BEARISH": -1,
         "NEUTRAL": 0,
@@ -127,12 +205,14 @@ def encode_market_features(df):
     }
 
     for column, mapping in mappings.items():
+
         if column not in df.columns:
             raise ValueError(
                 f"عمود السوق {column} غير موجود."
             )
 
         original = df[column].copy()
+
         df[column] = original.map(mapping)
 
         if df[column].isna().any():
@@ -144,11 +224,37 @@ def encode_market_features(df):
 
 
 # =====================
+# Model Factory
+# =====================
+
+def create_model():
+
+    if HAS_XGBOOST:
+
+        return xgb.XGBClassifier(
+            n_estimators=100,
+            learning_rate=0.05,
+            max_depth=5,
+            random_state=42,
+            eval_metric="logloss"
+        )
+
+    return RandomForestClassifier(
+        n_estimators=100,
+        max_depth=10,
+        random_state=42,
+        n_jobs=-1
+    )
+
+
+# =====================
 # Positive Class Probability
 # =====================
 
 def get_positive_probabilities(model, X):
+
     probabilities = model.predict_proba(X)
+
     class_list = list(model.classes_)
 
     if 1 not in class_list:
@@ -157,6 +263,7 @@ def get_positive_probabilities(model, X):
         )
 
     positive_index = class_list.index(1)
+
     y_probability = probabilities[:, positive_index]
 
     if not np.isfinite(y_probability).all():
@@ -185,6 +292,7 @@ def evaluate_model(
     y_test,
     baseline_probability
 ):
+
     y_probability = get_positive_probabilities(
         model,
         X_test
@@ -195,6 +303,7 @@ def evaluate_model(
     print("\n========== نتائج تقييم النموذج ==========")
 
     print("\n--- Classification Report (50%) ---")
+
     print(
         classification_report(
             y_test,
@@ -205,6 +314,7 @@ def evaluate_model(
     )
 
     print("Confusion Matrix:")
+
     print(
         confusion_matrix(
             y_test,
@@ -214,14 +324,28 @@ def evaluate_model(
     )
 
     if y_test.nunique() == 2:
-        roc_auc = roc_auc_score(y_test, y_probability)
-        pr_auc = average_precision_score(y_test, y_probability)
-        brier = brier_score_loss(y_test, y_probability)
+
+        roc_auc = roc_auc_score(
+            y_test,
+            y_probability
+        )
+
+        pr_auc = average_precision_score(
+            y_test,
+            y_probability
+        )
+
+        brier = brier_score_loss(
+            y_test,
+            y_probability
+        )
 
         print(f"\nROC-AUC: {roc_auc:.4f}")
         print(f"PR-AUC: {pr_auc:.4f}")
         print(f"Brier Score: {brier:.4f}")
+
     else:
+
         roc_auc = None
         pr_auc = None
         brier = None
@@ -233,7 +357,9 @@ def evaluate_model(
 
     positive_rate = float(y_test.mean())
 
-    baseline_probability = float(baseline_probability)
+    baseline_probability = float(
+        baseline_probability
+    )
 
     if (
         not np.isfinite(baseline_probability)
@@ -253,22 +379,40 @@ def evaluate_model(
     )
 
     print("\n--- Baseline Comparison ---")
-    print(f"Train positive rate: {baseline_probability:.4f}")
-    print(f"Test positive rate: {positive_rate:.4f}")
-    print(f"Baseline PR-AUC: {positive_rate:.4f}")
-    print(f"Baseline Brier: {baseline_brier:.4f}")
+
+    print(
+        f"Train positive rate: {baseline_probability:.4f}"
+    )
+
+    print(
+        f"Test positive rate: {positive_rate:.4f}"
+    )
+
+    print(
+        f"Baseline PR-AUC: {positive_rate:.4f}"
+    )
+
+    print(
+        f"Baseline Brier: {baseline_brier:.4f}"
+    )
 
     if brier is not None:
+
         if brier < baseline_brier:
-            print("✅ النموذج أفضل من Baseline في Brier Score.")
+            print(
+                "✅ النموذج أفضل من Baseline في Brier Score."
+            )
         else:
-            print("⚠️ النموذج لم يتفوق على Baseline في Brier Score.")
+            print(
+                "⚠️ النموذج لم يتفوق على Baseline في Brier Score."
+            )
 
     threshold_results = {}
 
     print("\n--- Confidence Threshold Evaluation ---")
 
     for threshold in CONFIDENCE_LEVELS:
+
         predictions = (
             y_probability >= threshold
         ).astype(int)
@@ -349,6 +493,7 @@ def save_test_results(
     y_test,
     y_probability
 ):
+
     test_info = df.loc[test_mask].copy()
 
     if len(test_info) != len(y_test):
@@ -359,6 +504,7 @@ def save_test_results(
     symbol_column = None
 
     for column in ("symbol", "ticker"):
+
         if column in test_info.columns:
             symbol_column = column
             break
@@ -366,28 +512,50 @@ def save_test_results(
     if symbol_column is None:
         symbols = ["UNKNOWN"] * len(test_info)
     else:
-        symbols = test_info[symbol_column].astype(str).tolist()
+        symbols = (
+            test_info[symbol_column]
+            .astype(str)
+            .tolist()
+        )
 
     results = pd.DataFrame({
-        "Date": test_info["date"].dt.strftime("%Y-%m-%d").values,
+        "Date": test_info["date"].dt.strftime(
+            "%Y-%m-%d"
+        ).values,
         "Symbol": symbols,
-        "Market_Regime": test_info["Market_Regime_Original"].astype(str).values,
-        "Market_Trend": test_info["Market_Trend_Original"].astype(str).values,
-        "Market_Momentum": test_info["Market_Momentum_Original"].astype(str).values,
+        "Market_Regime": test_info[
+            "Market_Regime_Original"
+        ].astype(str).values,
+        "Market_Trend": test_info[
+            "Market_Trend_Original"
+        ].astype(str).values,
+        "Market_Momentum": test_info[
+            "Market_Momentum_Original"
+        ].astype(str).values,
         "Actual_Target": y_test.to_numpy(),
         "Predicted_Probability": y_probability,
-        "Predicted_50": (y_probability >= 0.50).astype(int),
-        "Predicted_60": (y_probability >= 0.60).astype(int),
-        "Predicted_70": (y_probability >= 0.70).astype(int),
-        "Predicted_80": (y_probability >= 0.80).astype(int)
+        "Predicted_50": (
+            y_probability >= 0.50
+        ).astype(int),
+        "Predicted_60": (
+            y_probability >= 0.60
+        ).astype(int),
+        "Predicted_70": (
+            y_probability >= 0.70
+        ).astype(int),
+        "Predicted_80": (
+            y_probability >= 0.80
+        ).astype(int)
     })
 
     results["Correct_50"] = (
-        results["Actual_Target"] == results["Predicted_50"]
+        results["Actual_Target"] ==
+        results["Predicted_50"]
     ).astype(int)
 
     results["Correct_70"] = (
-        results["Actual_Target"] == results["Predicted_70"]
+        results["Actual_Target"] ==
+        results["Predicted_70"]
     ).astype(int)
 
     results.to_csv(
@@ -411,7 +579,12 @@ def save_test_results(
 # Segment Analysis
 # =====================
 
-def analyze_segment(results, group_column, title):
+def analyze_segment(
+    results,
+    group_column,
+    title
+):
+
     print(f"\n========== {title} ==========")
 
     if group_column not in results.columns:
@@ -426,12 +599,14 @@ def analyze_segment(results, group_column, title):
     )
 
     for name, group in grouped:
+
         count = len(group)
 
         if count == 0:
             continue
 
         actual = group["Actual_Target"]
+
         predicted = group["Predicted_50"]
 
         precision = precision_score(
@@ -446,7 +621,9 @@ def analyze_segment(results, group_column, title):
             zero_division=0
         )
 
-        success_rate = float(actual.mean())
+        success_rate = float(
+            actual.mean()
+        )
 
         avg_probability = float(
             group["Predicted_Probability"].mean()
@@ -455,10 +632,18 @@ def analyze_segment(results, group_column, title):
         item = {
             "group": str(name),
             "samples": int(count),
-            "actual_success_rate": round(success_rate, 4),
-            "average_probability": round(avg_probability, 4),
-            "precision_50": round(float(precision), 4),
-            "recall_50": round(float(recall), 4)
+            "actual_success_rate": round(
+                success_rate, 4
+            ),
+            "average_probability": round(
+                avg_probability, 4
+            ),
+            "precision_50": round(
+                float(precision), 4
+            ),
+            "recall_50": round(
+                float(recall), 4
+            )
         }
 
         analysis.append(item)
@@ -482,7 +667,11 @@ def analyze_segment(results, group_column, title):
 # Feature Importance
 # =====================
 
-def analyze_feature_importance(model, feature_columns):
+def analyze_feature_importance(
+    model,
+    feature_columns
+):
+
     if not hasattr(model, "feature_importances_"):
         print(
             "\n⚠️ النموذج لا يوفر Feature Importance."
@@ -519,6 +708,7 @@ def analyze_feature_importance(model, feature_columns):
     print("\n========== Feature Importance ==========")
 
     for _, row in importance_df.iterrows():
+
         print(
             f"{row['Feature']}: "
             f"{row['Importance']:.6f}"
@@ -532,7 +722,9 @@ def analyze_feature_importance(model, feature_columns):
     return [
         {
             "feature": str(row["Feature"]),
-            "importance": round(float(row["Importance"]), 8)
+            "importance": round(
+                float(row["Importance"]), 8
+            )
         }
         for _, row in importance_df.iterrows()
     ]
@@ -542,7 +734,12 @@ def analyze_feature_importance(model, feature_columns):
 # Market Regime Diagnostics
 # =====================
 
-def analyze_market_distribution(df, train_mask, purged_mask, test_mask):
+def analyze_market_distribution(
+    df,
+    train_mask,
+    purged_mask,
+    test_mask
+):
 
     print("\n")
     print("=" * 65)
@@ -568,13 +765,17 @@ def analyze_market_distribution(df, train_mask, purged_mask, test_mask):
         subset = df.loc[mask].copy()
 
         print(f"\n---------- {period_name} ----------")
+
         print(f"Total Samples: {len(subset)}")
 
         period_data = {}
 
         if subset.empty:
+
             print("⚠️ لا توجد عينات في هذه الفترة.")
+
             diagnostic_results[period_name] = period_data
+
             continue
 
         grouped = subset.groupby(
@@ -585,9 +786,11 @@ def analyze_market_distribution(df, train_mask, purged_mask, test_mask):
         for regime in regimes:
 
             if regime in grouped.groups:
+
                 group = grouped.get_group(regime)
 
                 count = len(group)
+
                 success_rate = float(
                     group[TARGET_COLUMN].mean()
                 )
@@ -599,6 +802,7 @@ def analyze_market_distribution(df, train_mask, purged_mask, test_mask):
                 negative_count = count - positive_count
 
             else:
+
                 count = 0
                 success_rate = None
                 positive_count = 0
@@ -615,6 +819,7 @@ def analyze_market_distribution(df, train_mask, purged_mask, test_mask):
             }
 
             if count > 0:
+
                 print(
                     f"{regime} | "
                     f"Samples: {count} | "
@@ -622,7 +827,9 @@ def analyze_market_distribution(df, train_mask, purged_mask, test_mask):
                     f"Failure: {negative_count} | "
                     f"Success Rate: {success_rate:.2%}"
                 )
+
             else:
+
                 print(
                     f"{regime} | Samples: 0 | "
                     "لا توجد بيانات لهذه الحالة."
@@ -640,24 +847,33 @@ def analyze_market_distribution(df, train_mask, purged_mask, test_mask):
         "TEST", {}
     ).get("BEARISH", {}).get("samples", 0)
 
-    print(f"BEARISH samples in TRAIN: {train_bearish}")
-    print(f"BEARISH samples in TEST: {test_bearish}")
+    print(
+        f"BEARISH samples in TRAIN: {train_bearish}"
+    )
+
+    print(
+        f"BEARISH samples in TEST: {test_bearish}"
+    )
 
     if train_bearish == 0 and test_bearish > 0:
+
         print(
             "\n⚠️ WARNING: لا توجد عينات BEARISH في التدريب، "
             "بينما توجد عينات BEARISH في الاختبار."
         )
+
         print(
             "النموذج لم يتدرب على أمثلة فعلية من السوق الهابط."
         )
 
     elif train_bearish > 0:
+
         print(
             "\n✅ توجد عينات BEARISH داخل بيانات التدريب."
         )
 
     else:
+
         print(
             "\n⚠️ لا توجد عينات BEARISH في التدريب أو الاختبار."
         )
@@ -670,6 +886,408 @@ def analyze_market_distribution(df, train_mask, purged_mask, test_mask):
 
 
 # =====================
+# Walk-Forward Validation
+# =====================
+
+def run_walk_forward_validation(
+    df,
+    X,
+    y,
+    calendar,
+    final_test_start_index
+):
+
+    print("\n")
+    print("=" * 65)
+    print("========== WALK-FORWARD VALIDATION ==========")
+    print("=" * 65)
+
+    development_calendar = calendar[
+        :final_test_start_index
+    ]
+
+    development_sessions = len(
+        development_calendar
+    )
+
+    fold_size = (
+        development_sessions // 10
+    )
+
+    if fold_size <= 0:
+        raise ValueError(
+            "عدد جلسات التطوير غير كافٍ لإنشاء Walk-Forward."
+        )
+
+    fold_rows = []
+
+    fold_results = []
+
+    first_test_index = int(
+        development_sessions * 0.50
+    )
+
+    test_starts = [
+        first_test_index + i * fold_size
+        for i in range(WALK_FORWARD_FOLDS)
+    ]
+
+    for fold_number, test_start in enumerate(
+        test_starts,
+        start=1
+    ):
+
+        test_end = min(
+            test_start + fold_size,
+            development_sessions
+        )
+
+        train_end = (
+            test_start - TARGET_HORIZON
+        )
+
+        if train_end <= 0:
+            print(
+                f"⚠️ Fold {fold_number}: "
+                "عدد جلسات التدريب غير كافٍ."
+            )
+            continue
+
+        train_calendar = development_calendar[
+            :train_end
+        ]
+
+        purged_calendar = development_calendar[
+            train_end:test_start
+        ]
+
+        test_calendar = development_calendar[
+            test_start:test_end
+        ]
+
+        if len(train_calendar) < MIN_TRAIN_SESSIONS:
+            print(
+                f"⚠️ Fold {fold_number}: "
+                f"التدريب أقل من {MIN_TRAIN_SESSIONS} جلسة."
+            )
+            continue
+
+        if len(test_calendar) == 0:
+            continue
+
+        train_mask = df["date"].isin(
+            train_calendar
+        )
+
+        test_mask = df["date"].isin(
+            test_calendar
+        )
+
+        X_train = X.loc[train_mask]
+        X_test = X.loc[test_mask]
+
+        y_train = y.loc[train_mask]
+        y_test = y.loc[test_mask]
+
+        if X_train.empty or X_test.empty:
+            print(
+                f"⚠️ Fold {fold_number}: "
+                "بيانات التدريب أو الاختبار فارغة."
+            )
+            continue
+
+        if y_train.nunique() < 2:
+            print(
+                f"⚠️ Fold {fold_number}: "
+                "التدريب يحتوي على فئة واحدة."
+            )
+            continue
+
+        model = create_model()
+
+        model.fit(
+            X_train,
+            y_train
+        )
+
+        y_probability = get_positive_probabilities(
+            model,
+            X_test
+        )
+
+        predictions = (
+            y_probability >= 0.50
+        ).astype(int)
+
+        precision = precision_score(
+            y_test,
+            predictions,
+            zero_division=0
+        )
+
+        recall = recall_score(
+            y_test,
+            predictions,
+            zero_division=0
+        )
+
+        f1 = f1_score(
+            y_test,
+            predictions,
+            zero_division=0
+        )
+
+        positive_rate = float(
+            y_test.mean()
+        )
+
+        if y_test.nunique() == 2:
+
+            roc_auc = roc_auc_score(
+                y_test,
+                y_probability
+            )
+
+            pr_auc = average_precision_score(
+                y_test,
+                y_probability
+            )
+
+            brier = brier_score_loss(
+                y_test,
+                y_probability
+            )
+
+        else:
+
+            roc_auc = None
+            pr_auc = None
+            brier = brier_score_loss(
+                y_test,
+                y_probability
+            )
+
+        baseline_probability = float(
+            y_train.mean()
+        )
+
+        baseline_brier = brier_score_loss(
+            y_test,
+            np.full(
+                len(y_test),
+                baseline_probability,
+                dtype=float
+            )
+        )
+
+        result = {
+            "fold": fold_number,
+            "train_start": str(
+                train_calendar[0].date()
+            ),
+            "train_end": str(
+                train_calendar[-1].date()
+            ),
+            "purged_sessions": len(
+                purged_calendar
+            ),
+            "test_start": str(
+                test_calendar[0].date()
+            ),
+            "test_end": str(
+                test_calendar[-1].date()
+            ),
+            "train_samples": int(len(X_train)),
+            "test_samples": int(len(X_test)),
+            "train_positive_rate": round(
+                baseline_probability, 4
+            ),
+            "test_positive_rate": round(
+                positive_rate, 4
+            ),
+            "roc_auc": (
+                round(float(roc_auc), 4)
+                if roc_auc is not None else None
+            ),
+            "pr_auc": (
+                round(float(pr_auc), 4)
+                if pr_auc is not None else None
+            ),
+            "brier_score": round(
+                float(brier), 4
+            ),
+            "baseline_brier_score": round(
+                float(baseline_brier), 4
+            ),
+            "brier_better_than_baseline": bool(
+                brier < baseline_brier
+            ),
+            "precision_50": round(
+                float(precision), 4
+            ),
+            "recall_50": round(
+                float(recall), 4
+            ),
+            "f1_50": round(
+                float(f1), 4
+            ),
+            "signals_50": int(
+                predictions.sum()
+            )
+        }
+
+        fold_results.append(result)
+
+        fold_rows.append(result)
+
+        print(
+            f"\n---------- FOLD {fold_number} ----------"
+        )
+
+        print(
+            f"Train: {result['train_start']} "
+            f"-> {result['train_end']}"
+        )
+
+        print(
+            f"Purged Sessions: {result['purged_sessions']}"
+        )
+
+        print(
+            f"Test: {result['test_start']} "
+            f"-> {result['test_end']}"
+        )
+
+        print(
+            f"Train Samples: {result['train_samples']}"
+        )
+
+        print(
+            f"Test Samples: {result['test_samples']}"
+        )
+
+        print(
+            f"ROC-AUC: {result['roc_auc']}"
+        )
+
+        print(
+            f"PR-AUC: {result['pr_auc']}"
+        )
+
+        print(
+            f"Brier: {result['brier_score']}"
+        )
+
+        print(
+            f"Baseline Brier: "
+            f"{result['baseline_brier_score']}"
+        )
+
+        print(
+            f"Precision 50%: {result['precision_50']}"
+        )
+
+        print(
+            f"Recall 50%: {result['recall_50']}"
+        )
+
+    if not fold_rows:
+
+        raise ValueError(
+            "لم يتم إنشاء أي Fold صالح في Walk-Forward."
+        )
+
+    results_df = pd.DataFrame(
+        fold_rows
+    )
+
+    results_df.to_csv(
+        WALK_FORWARD_RESULTS_FILE,
+        index=False,
+        encoding="utf-8-sig"
+    )
+
+    valid_roc = results_df[
+        "roc_auc"
+    ].dropna()
+
+    valid_pr = results_df[
+        "pr_auc"
+    ].dropna()
+
+    summary = {
+        "folds_completed": int(
+            len(results_df)
+        ),
+        "walk_forward_results_file": (
+            WALK_FORWARD_RESULTS_FILE
+        ),
+        "average_roc_auc": (
+            round(float(valid_roc.mean()), 4)
+            if not valid_roc.empty else None
+        ),
+        "average_pr_auc": (
+            round(float(valid_pr.mean()), 4)
+            if not valid_pr.empty else None
+        ),
+        "average_brier_score": round(
+            float(results_df["brier_score"].mean()),
+            4
+        ),
+        "average_baseline_brier_score": round(
+            float(
+                results_df[
+                    "baseline_brier_score"
+                ].mean()
+            ),
+            4
+        ),
+        "folds_better_than_baseline": int(
+            results_df[
+                "brier_better_than_baseline"
+            ].sum()
+        )
+    }
+
+    print("\n========== WALK-FORWARD SUMMARY ==========")
+
+    print(
+        f"Completed Folds: {summary['folds_completed']}"
+    )
+
+    print(
+        f"Average ROC-AUC: {summary['average_roc_auc']}"
+    )
+
+    print(
+        f"Average PR-AUC: {summary['average_pr_auc']}"
+    )
+
+    print(
+        f"Average Brier: {summary['average_brier_score']}"
+    )
+
+    print(
+        f"Average Baseline Brier: "
+        f"{summary['average_baseline_brier_score']}"
+    )
+
+    print(
+        f"Folds Better Than Baseline: "
+        f"{summary['folds_better_than_baseline']}"
+    )
+
+    print(
+        f"✅ تم حفظ نتائج Walk-Forward: "
+        f"{WALK_FORWARD_RESULTS_FILE}"
+    )
+
+    print("=" * 65)
+
+    return summary
+
+
+# =====================
 # Training
 # =====================
 
@@ -679,7 +1297,11 @@ def train_model():
 
     df, feature_columns = load_dataset()
 
-    # 1. Validate horizon
+    # 1. Load actual EGX30 calendar
+
+    calendar = load_egx30_calendar()
+
+    # 2. Validate horizon
 
     if "horizon" not in df.columns:
         raise ValueError(
@@ -700,7 +1322,7 @@ def train_model():
             "لا توجد عينات متاحة للأفق الزمني المطلوب."
         )
 
-    # 2. Validate dates
+    # 3. Validate dates
 
     if "date" not in df.columns:
         raise ValueError(
@@ -717,7 +1339,9 @@ def train_model():
             "توجد تواريخ غير صالحة في Dataset."
         )
 
-    # 3. Validate target column
+    df["date"] = df["date"].dt.normalize()
+
+    # 4. Validate target column
 
     if TARGET_COLUMN not in df.columns:
         raise ValueError(
@@ -743,9 +1367,11 @@ def train_model():
             "قيم الهدف يجب أن تكون 0 أو 1 فقط."
         )
 
-    df[TARGET_COLUMN] = df[TARGET_COLUMN].astype(int)
+    df[TARGET_COLUMN] = df[
+        TARGET_COLUMN
+    ].astype(int)
 
-    # 4. Verify target against raw future data
+    # 5. Verify target against raw future data
 
     if "Max_Gain_Pct" not in df.columns:
         raise ValueError(
@@ -766,13 +1392,15 @@ def train_model():
         df["Max_Gain_Pct"] > TARGET_THRESHOLD
     ).astype(int)
 
-    if not expected_target.equals(df[TARGET_COLUMN]):
+    if not expected_target.equals(
+        df[TARGET_COLUMN]
+    ):
         raise ValueError(
             "عدم تطابق Target_Reach_8Pct مع Max_Gain_Pct. "
             "يجب مراجعة بناء Dataset."
         )
 
-    # 5. Sort chronologically
+    # 6. Sort chronologically
 
     df = df.sort_values(
         "date"
@@ -787,20 +1415,40 @@ def train_model():
         f"{df[TARGET_COLUMN].mean() * 100:.2f}%"
     )
 
-    # Preserve original market categories for analysis
+    # Validate dataset dates against EGX30 calendar
+
+    calendar_set = set(calendar)
+
+    unknown_dates = sorted(
+        set(df["date"].unique()) - calendar_set
+    )
+
+    if unknown_dates:
+
+        raise ValueError(
+            "توجد تواريخ في Dataset غير موجودة "
+            "في تقويم EGX30. "
+            f"عددها: {len(unknown_dates)}. "
+            "يجب التأكد من تطابق مصادر التواريخ."
+        )
+
+    # Preserve original market categories
 
     for column in (
         "Market_Regime",
         "Market_Trend",
         "Market_Momentum"
     ):
-        df[column + "_Original"] = df[column].copy()
 
-    # 6. Encode market categories
+        df[column + "_Original"] = df[
+            column
+        ].copy()
+
+    # 7. Encode market categories
 
     df = encode_market_features(df)
 
-    # 7. Build features without future information
+    # 8. Build features without future information
 
     forbidden_columns = {
         TARGET_COLUMN,
@@ -827,6 +1475,7 @@ def train_model():
     ]
 
     if missing_features:
+
         raise ValueError(
             f"Features مفقودة: {missing_features}"
         )
@@ -868,22 +1517,12 @@ def train_model():
         f"-> قائمة الميزات: {list(X.columns)}"
     )
 
-    # 8. Chronological split with purging
+    # 9. Final chronological split using EGX30 calendar
 
-    unique_dates = sorted(
-        df["date"].unique()
-    )
-
-    total_dates = len(unique_dates)
-
-    if total_dates <= TARGET_HORIZON + 1:
-        raise ValueError(
-            f"عدد التواريخ ({total_dates}) غير كافٍ "
-            "للتقسيم الزمني."
-        )
+    total_calendar_sessions = len(calendar)
 
     split_index = int(
-        total_dates * TRAIN_RATIO
+        total_calendar_sessions * TRAIN_RATIO
     )
 
     train_end_index = (
@@ -892,22 +1531,23 @@ def train_model():
 
     if (
         train_end_index <= 0
-        or split_index >= total_dates
+        or split_index >= total_calendar_sessions
     ):
+
         raise ValueError(
-            "عدد التواريخ غير كافٍ لإنشاء "
-            "مجموعتي التدريب والاختبار."
+            "عدد جلسات EGX30 غير كافٍ "
+            "لإنشاء مجموعتي التدريب والاختبار."
         )
 
-    train_dates = unique_dates[
+    train_dates = calendar[
         :train_end_index
     ]
 
-    purged_dates = unique_dates[
+    purged_dates = calendar[
         train_end_index:split_index
     ]
 
-    test_dates = unique_dates[
+    test_dates = calendar[
         split_index:
     ]
 
@@ -915,17 +1555,83 @@ def train_model():
         train_dates
     )
 
+    purged_mask = df["date"].isin(
+        purged_dates
+    )
+
     test_mask = df["date"].isin(
         test_dates
     )
 
-    # =====================
-    # Market Regime Diagnostics
-    # =====================
+    X_train = X.loc[train_mask]
 
-    purged_mask = df["date"].isin(
-        purged_dates
+    X_test = X.loc[test_mask]
+
+    y_train = y.loc[train_mask]
+
+    y_test = y.loc[test_mask]
+
+    print("\n========== التقسيم الزمني ==========")
+
+    print(
+        f"إجمالي جلسات EGX30: "
+        f"{total_calendar_sessions}"
     )
+
+    print(
+        f"جلسات التدريب: {len(train_dates)}"
+    )
+
+    print(
+        f"جلسات الاستبعاد Purged: "
+        f"{len(purged_dates)}"
+    )
+
+    print(
+        f"جلسات الاختبار: {len(test_dates)}"
+    )
+
+    print(
+        f"عينات التدريب: {len(X_train)}"
+    )
+
+    print(
+        f"عينات الاستبعاد: {int(purged_mask.sum())}"
+    )
+
+    print(
+        f"عينات الاختبار: {len(X_test)}"
+    )
+
+    print(
+        f"بداية التدريب: {train_dates[0].date()}"
+    )
+
+    print(
+        f"نهاية التدريب: {train_dates[-1].date()}"
+    )
+
+    print(
+        f"بداية الاختبار: {test_dates[0].date()}"
+    )
+
+    print(
+        f"نهاية الاختبار: {test_dates[-1].date()}"
+    )
+
+    print(
+        f"جلسات Purging الفعلية: {len(purged_dates)}"
+    )
+
+    print("====================================\n")
+
+    if X_train.empty or X_test.empty:
+
+        raise ValueError(
+            "بيانات التدريب أو الاختبار فارغة."
+        )
+
+    # 10. Market Regime Diagnostics
 
     regime_diagnostics = analyze_market_distribution(
         df,
@@ -934,63 +1640,28 @@ def train_model():
         test_mask
     )
 
-    # =====================
-    # Continue Training
-    # =====================
+    # 11. Walk-Forward Validation
 
-    X_train = X.loc[train_mask]
-    X_test = X.loc[test_mask]
-
-    y_train = y.loc[train_mask]
-    y_test = y.loc[test_mask]
-
-    print("\n========== التقسيم الزمني ==========")
-
-    print(f"إجمالي التواريخ: {total_dates}")
-    print(f"تواريخ التدريب: {len(train_dates)}")
-    print(f"تواريخ الاستبعاد: {len(purged_dates)}")
-    print(f"تواريخ الاختبار: {len(test_dates)}")
-
-    print(f"عينات التدريب: {len(X_train)}")
-    print(f"عينات الاختبار: {len(X_test)}")
-
-    print(
-        f"بداية التدريب: "
-        f"{pd.Timestamp(train_dates[0]).date()}"
+    walk_forward_summary = run_walk_forward_validation(
+        df,
+        X,
+        y,
+        calendar,
+        split_index
     )
 
-    print(
-        f"نهاية التدريب: "
-        f"{pd.Timestamp(train_dates[-1]).date()}"
-    )
-
-    print(
-        f"بداية الاختبار: "
-        f"{pd.Timestamp(test_dates[0]).date()}"
-    )
-
-    print(
-        f"نهاية الاختبار: "
-        f"{pd.Timestamp(test_dates[-1]).date()}"
-    )
-
-    print("====================================\n")
-
-    if X_train.empty or X_test.empty:
-        raise ValueError(
-            "بيانات التدريب أو الاختبار فارغة."
-        )
-
-    # 9. Validate classes
+    # 12. Validate classes
 
     if y_train.nunique() < 2:
+
         raise ValueError(
             "بيانات التدريب تحتوي على فئة واحدة فقط."
         )
 
     if y_test.nunique() < 2:
+
         print(
-            "⚠️ تحذير: الاختبار يحتوي على فئة واحدة فقط."
+            "⚠️ تحذير: الاختبار النهائي يحتوي على فئة واحدة فقط."
         )
 
     print(
@@ -1003,47 +1674,36 @@ def train_model():
         f"{dict(y_test.value_counts().sort_index())}"
     )
 
-    # 10. Create model
+    # 13. Create final model
 
     if HAS_XGBOOST:
 
         print("-> استخدام نموذج XGBoost...")
 
-        model = xgb.XGBClassifier(
-            n_estimators=100,
-            learning_rate=0.05,
-            max_depth=5,
-            random_state=42,
-            eval_metric="logloss"
-        )
-
     else:
 
         print("-> استخدام نموذج RandomForest...")
 
-        model = RandomForestClassifier(
-            n_estimators=100,
-            max_depth=10,
-            random_state=42,
-            n_jobs=-1
-        )
+    model = create_model()
 
-    # 11. Train
+    # 14. Train final model
 
-    print("\n-> بدء تدريب النموذج...")
+    print("\n-> بدء تدريب النموذج النهائي...")
 
     model.fit(
         X_train,
         y_train
     )
 
-    # 12. Evaluate
+    # 15. Evaluate final holdout test
 
     evaluation = evaluate_model(
         model,
         X_test,
         y_test,
-        baseline_probability=float(y_train.mean())
+        baseline_probability=float(
+            y_train.mean()
+        )
     )
 
     y_probability = get_positive_probabilities(
@@ -1051,7 +1711,7 @@ def train_model():
         X_test
     )
 
-    # 13. Save detailed test results
+    # 16. Save detailed test results
 
     test_results = save_test_results(
         df,
@@ -1060,7 +1720,7 @@ def train_model():
         y_probability
     )
 
-    # 14. Analyze performance by market regime
+    # 17. Analyze performance by market regime
 
     regime_analysis = analyze_segment(
         test_results,
@@ -1068,7 +1728,7 @@ def train_model():
         "تحليل الأداء حسب حالة السوق EGX30"
     )
 
-    # 15. Analyze performance by stock
+    # 18. Analyze performance by stock
 
     stock_analysis = analyze_segment(
         test_results,
@@ -1076,14 +1736,14 @@ def train_model():
         "تحليل الأداء حسب كل سهم"
     )
 
-    # 16. Feature importance
+    # 19. Feature importance
 
     feature_importance = analyze_feature_importance(
         model,
         list(X.columns)
     )
 
-    # 17. Save model and metadata
+    # 20. Save model and metadata
 
     model_filename = (
         f"ai_stock_model_{TARGET_HORIZON}d.pkl"
@@ -1118,20 +1778,29 @@ def train_model():
         ),
         "train_ratio": TRAIN_RATIO,
         "purged_sessions": TARGET_HORIZON,
+        "calendar_source": FEATURES_FILE,
+        "calendar_symbol": "EGX30",
+        "calendar_sessions": int(
+            total_calendar_sessions
+        ),
         "train_start_date": str(
-            pd.Timestamp(train_dates[0]).date()
+            train_dates[0].date()
         ),
         "train_end_date": str(
-            pd.Timestamp(train_dates[-1]).date()
+            train_dates[-1].date()
         ),
         "test_start_date": str(
-            pd.Timestamp(test_dates[0]).date()
+            test_dates[0].date()
         ),
         "test_end_date": str(
-            pd.Timestamp(test_dates[-1]).date()
+            test_dates[-1].date()
         ),
-        "train_samples": int(X_train.shape[0]),
-        "test_samples": int(X_test.shape[0]),
+        "train_samples": int(
+            X_train.shape[0]
+        ),
+        "test_samples": int(
+            X_test.shape[0]
+        ),
         "train_positive_rate": round(
             float(y_train.mean()), 4
         ),
@@ -1139,9 +1808,11 @@ def train_model():
             float(y_test.mean()), 4
         ),
         "evaluation": evaluation,
+        "walk_forward_validation": walk_forward_summary,
         "diagnostics": {
             "test_results_file": TEST_RESULTS_FILE,
             "feature_importance_file": FEATURE_IMPORTANCE_FILE,
+            "walk_forward_results_file": WALK_FORWARD_RESULTS_FILE,
             "market_regime_distribution": regime_diagnostics,
             "market_regime_analysis": regime_analysis,
             "stock_analysis": stock_analysis,
@@ -1162,11 +1833,31 @@ def train_model():
             indent=2
         )
 
-    print(f"\n-> تم حفظ النموذج: {model_filename}")
-    print(f"-> تم حفظ Metadata: {meta_filename}")
-    print(f"-> تم حفظ نتائج الاختبار: {TEST_RESULTS_FILE}")
-    print(f"-> تم حفظ أهمية المؤشرات: {FEATURE_IMPORTANCE_FILE}")
-    print("-> اكتملت عملية التدريب والتقييم والتحليل بنجاح.")
+    print(
+        f"\n-> تم حفظ النموذج: {model_filename}"
+    )
+
+    print(
+        f"-> تم حفظ Metadata: {meta_filename}"
+    )
+
+    print(
+        f"-> تم حفظ نتائج الاختبار: {TEST_RESULTS_FILE}"
+    )
+
+    print(
+        f"-> تم حفظ أهمية المؤشرات: "
+        f"{FEATURE_IMPORTANCE_FILE}"
+    )
+
+    print(
+        f"-> تم حفظ نتائج Walk-Forward: "
+        f"{WALK_FORWARD_RESULTS_FILE}"
+    )
+
+    print(
+        "-> اكتملت عملية التدريب والتقييم والتحليل بنجاح."
+    )
 
 
 if __name__ == "__main__":
