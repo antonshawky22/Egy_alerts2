@@ -40,9 +40,9 @@
     "entry_price": null
   },
   "SWDY": {
-    "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 120.36
   },
   "ISPH": {
     "trend": "🔻",
@@ -75,7 +75,7 @@
     "entry_price": null
   },
   "JUFO": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -86,8 +86,8 @@
   },
   "SUGR": {
     "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 47.24
   },
   "ELSH": {
     "trend": "🔛",
@@ -105,7 +105,7 @@
     "entry_price": null
   },
   "EEII": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -145,7 +145,7 @@
     "entry_price": null
   },
   "ADIB": {
-    "trend": "🔛",
+    "trend": "🔻",
     "in_position": false,
     "entry_price": null
   },

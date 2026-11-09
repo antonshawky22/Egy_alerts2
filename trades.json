@@ -547,5 +547,17 @@
     "entry_trend": "🔛",
     "entry_price": 77.5,
     "entry_date": "2026-11-08"
+  },
+  {
+    "symbol": "SWDY",
+    "entry_trend": "↗️",
+    "entry_price": 120.36,
+    "entry_date": "2026-11-09"
+  },
+  {
+    "symbol": "SUGR",
+    "entry_trend": "🔛",
+    "entry_price": 47.24,
+    "entry_date": "2026-11-09"
   }
 ]
