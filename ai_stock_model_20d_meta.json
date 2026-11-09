@@ -36,494 +36,508 @@
     0,
     1
   ],
-  "trained_at": "2026-11-08T17:24:00+00:00",
+  "trained_at": "2026-11-09T10:42:25+00:00",
   "model_type": "XGBoost",
   "train_ratio": 0.8,
   "purged_sessions": 20,
-  "train_start_date": "2025-03-09",
-  "train_end_date": "2026-05-14",
-  "test_start_date": "2026-06-21",
-  "test_end_date": "2026-10-11",
-  "train_samples": 9622,
-  "test_samples": 2618,
-  "train_positive_rate": 0.5072,
-  "test_positive_rate": 0.4423,
+  "calendar_source": "ai_features_database.json",
+  "calendar_symbol": "EGX30",
+  "calendar_sessions": 500,
+  "train_start_date": "2024-10-17",
+  "train_end_date": "2026-05-11",
+  "test_start_date": "2026-06-15",
+  "test_end_date": "2026-11-08",
+  "train_samples": 9520,
+  "test_samples": 2720,
+  "train_positive_rate": 0.5099,
+  "test_positive_rate": 0.4371,
   "evaluation": {
-    "roc_auc": 0.4819,
-    "pr_auc": 0.4377,
-    "brier_score": 0.2999,
-    "test_positive_rate": 0.4423,
-    "baseline_pr_auc": 0.4423,
-    "baseline_brier_score": 0.2467,
+    "roc_auc": 0.4981,
+    "pr_auc": 0.4512,
+    "brier_score": 0.2882,
+    "test_positive_rate": 0.4371,
+    "baseline_probability": 0.5099,
+    "baseline_pr_auc": 0.4371,
+    "baseline_brier_score": 0.2513,
     "brier_better_than_baseline": false,
     "threshold_results": {
       "0.5": {
-        "selected_samples": 1535,
-        "precision": 0.4313,
-        "recall": 0.5717,
-        "f1": 0.4916
+        "selected_samples": 1590,
+        "precision": 0.4214,
+        "recall": 0.5635,
+        "f1": 0.4822
       },
       "0.6": {
-        "selected_samples": 1023,
-        "precision": 0.4174,
-        "recall": 0.3687,
-        "f1": 0.3916
+        "selected_samples": 1038,
+        "precision": 0.4355,
+        "recall": 0.3802,
+        "f1": 0.4059
       },
       "0.7": {
-        "selected_samples": 668,
-        "precision": 0.4162,
-        "recall": 0.2401,
-        "f1": 0.3045
+        "selected_samples": 577,
+        "precision": 0.4627,
+        "recall": 0.2246,
+        "f1": 0.3024
       },
       "0.8": {
-        "selected_samples": 318,
-        "precision": 0.4308,
-        "recall": 0.1183,
-        "f1": 0.1856
+        "selected_samples": 225,
+        "precision": 0.4667,
+        "recall": 0.0883,
+        "f1": 0.1485
       }
     }
+  },
+  "walk_forward_validation": {
+    "folds_completed": 3,
+    "walk_forward_results_file": "ai_walk_forward_results.csv",
+    "average_roc_auc": 0.584,
+    "average_pr_auc": 0.5732,
+    "average_brier_score": 0.2654,
+    "average_baseline_brier_score": 0.2496,
+    "folds_better_than_baseline": 0
   },
   "diagnostics": {
     "test_results_file": "ai_test_results.csv",
     "feature_importance_file": "ai_feature_importance_20d.csv",
+    "walk_forward_results_file": "ai_walk_forward_results.csv",
     "market_regime_distribution": {
       "TRAIN": {
         "BULLISH": {
-          "samples": 7208,
-          "positive": 3441,
-          "negative": 3767,
-          "success_rate": 0.4774
+          "samples": 6222,
+          "positive": 3056,
+          "negative": 3166,
+          "success_rate": 0.4912
         },
         "NEUTRAL": {
-          "samples": 2414,
-          "positive": 1439,
-          "negative": 975,
-          "success_rate": 0.5961
+          "samples": 1496,
+          "positive": 767,
+          "negative": 729,
+          "success_rate": 0.5127
         },
         "BEARISH": {
-          "samples": 0,
-          "positive": 0,
-          "negative": 0,
-          "success_rate": null
+          "samples": 1802,
+          "positive": 1031,
+          "negative": 771,
+          "success_rate": 0.5721
         }
       },
       "PURGED": {
         "BULLISH": {
-          "samples": 136,
-          "positive": 41,
-          "negative": 95,
-          "success_rate": 0.3015
+          "samples": 102,
+          "positive": 25,
+          "negative": 77,
+          "success_rate": 0.2451
         },
         "NEUTRAL": {
-          "samples": 544,
-          "positive": 185,
-          "negative": 359,
-          "success_rate": 0.3401
+          "samples": 272,
+          "positive": 82,
+          "negative": 190,
+          "success_rate": 0.3015
         },
         "BEARISH": {
-          "samples": 0,
-          "positive": 0,
-          "negative": 0,
-          "success_rate": null
+          "samples": 306,
+          "positive": 114,
+          "negative": 192,
+          "success_rate": 0.3725
         }
       },
       "TEST": {
         "BULLISH": {
-          "samples": 1530,
-          "positive": 811,
-          "negative": 719,
-          "success_rate": 0.5301
+          "samples": 1462,
+          "positive": 762,
+          "negative": 700,
+          "success_rate": 0.5212
         },
         "NEUTRAL": {
-          "samples": 850,
-          "positive": 311,
-          "negative": 539,
-          "success_rate": 0.3659
+          "samples": 442,
+          "positive": 155,
+          "negative": 287,
+          "success_rate": 0.3507
         },
         "BEARISH": {
-          "samples": 238,
-          "positive": 36,
-          "negative": 202,
-          "success_rate": 0.1513
+          "samples": 816,
+          "positive": 272,
+          "negative": 544,
+          "success_rate": 0.3333
         }
       }
     },
     "market_regime_analysis": [
       {
         "group": "BEARISH",
-        "samples": 238,
-        "actual_success_rate": 0.1513,
-        "average_probability": 0.8063,
-        "precision_50": 0.1513,
-        "recall_50": 1.0
+        "samples": 816,
+        "actual_success_rate": 0.3333,
+        "average_probability": 0.6709,
+        "precision_50": 0.3543,
+        "recall_50": 0.9301
       },
       {
         "group": "BULLISH",
-        "samples": 1530,
-        "actual_success_rate": 0.5301,
-        "average_probability": 0.4723,
-        "precision_50": 0.541,
-        "recall_50": 0.4229
+        "samples": 1462,
+        "actual_success_rate": 0.5212,
+        "average_probability": 0.4752,
+        "precision_50": 0.5277,
+        "recall_50": 0.4121
       },
       {
         "group": "NEUTRAL",
-        "samples": 850,
-        "actual_success_rate": 0.3659,
-        "average_probability": 0.6257,
-        "precision_50": 0.4268,
-        "recall_50": 0.91
+        "samples": 442,
+        "actual_success_rate": 0.3507,
+        "average_probability": 0.5463,
+        "precision_50": 0.3665,
+        "recall_50": 0.6645
       }
     ],
     "stock_analysis": [
       {
         "group": "ABUK",
-        "samples": 77,
-        "actual_success_rate": 0.7403,
-        "average_probability": 0.6478,
-        "precision_50": 0.6984,
-        "recall_50": 0.7719
+        "samples": 80,
+        "actual_success_rate": 0.7125,
+        "average_probability": 0.6384,
+        "precision_50": 0.6812,
+        "recall_50": 0.8246
       },
       {
         "group": "ADIB",
-        "samples": 77,
-        "actual_success_rate": 0.3117,
-        "average_probability": 0.5425,
-        "precision_50": 0.25,
+        "samples": 80,
+        "actual_success_rate": 0.3,
+        "average_probability": 0.5119,
+        "precision_50": 0.2553,
         "recall_50": 0.5
       },
       {
         "group": "AMOC",
-        "samples": 77,
-        "actual_success_rate": 0.8961,
-        "average_probability": 0.6179,
+        "samples": 80,
+        "actual_success_rate": 0.9,
+        "average_probability": 0.6082,
         "precision_50": 0.8491,
-        "recall_50": 0.6522
+        "recall_50": 0.625
       },
       {
         "group": "ATQA",
-        "samples": 77,
-        "actual_success_rate": 0.6494,
-        "average_probability": 0.5604,
-        "precision_50": 0.5283,
-        "recall_50": 0.56
+        "samples": 80,
+        "actual_success_rate": 0.625,
+        "average_probability": 0.5407,
+        "precision_50": 0.4468,
+        "recall_50": 0.42
       },
       {
         "group": "COMI",
-        "samples": 77,
-        "actual_success_rate": 0.0649,
-        "average_probability": 0.346,
-        "precision_50": 0.2,
+        "samples": 80,
+        "actual_success_rate": 0.0625,
+        "average_probability": 0.3536,
+        "precision_50": 0.1667,
         "recall_50": 0.6
       },
       {
         "group": "DSCW",
-        "samples": 77,
-        "actual_success_rate": 0.3766,
-        "average_probability": 0.5453,
-        "precision_50": 0.2632,
+        "samples": 80,
+        "actual_success_rate": 0.3625,
+        "average_probability": 0.524,
+        "precision_50": 0.3226,
         "recall_50": 0.3448
       },
       {
         "group": "EAST",
-        "samples": 77,
-        "actual_success_rate": 0.1039,
-        "average_probability": 0.4983,
-        "precision_50": 0.3077,
+        "samples": 80,
+        "actual_success_rate": 0.1,
+        "average_probability": 0.4978,
+        "precision_50": 0.2667,
         "recall_50": 1.0
       },
       {
         "group": "EEII",
-        "samples": 77,
-        "actual_success_rate": 0.5584,
-        "average_probability": 0.5613,
-        "precision_50": 0.4651,
-        "recall_50": 0.4651
+        "samples": 80,
+        "actual_success_rate": 0.575,
+        "average_probability": 0.5628,
+        "precision_50": 0.4894,
+        "recall_50": 0.5
       },
       {
         "group": "EFIH",
-        "samples": 77,
-        "actual_success_rate": 0.5325,
-        "average_probability": 0.5217,
-        "precision_50": 0.6216,
-        "recall_50": 0.561
+        "samples": 80,
+        "actual_success_rate": 0.55,
+        "average_probability": 0.5158,
+        "precision_50": 0.6341,
+        "recall_50": 0.5909
       },
       {
         "group": "EGAL",
-        "samples": 77,
-        "actual_success_rate": 0.5325,
-        "average_probability": 0.5733,
-        "precision_50": 0.4151,
-        "recall_50": 0.5366
+        "samples": 80,
+        "actual_success_rate": 0.5125,
+        "average_probability": 0.5525,
+        "precision_50": 0.4107,
+        "recall_50": 0.561
       },
       {
         "group": "ELSH",
-        "samples": 77,
-        "actual_success_rate": 0.3506,
-        "average_probability": 0.6778,
-        "precision_50": 0.3731,
-        "recall_50": 0.9259
+        "samples": 80,
+        "actual_success_rate": 0.375,
+        "average_probability": 0.6945,
+        "precision_50": 0.4028,
+        "recall_50": 0.9667
       },
       {
         "group": "EMFD",
-        "samples": 77,
-        "actual_success_rate": 0.3506,
-        "average_probability": 0.572,
-        "precision_50": 0.3654,
-        "recall_50": 0.7037
+        "samples": 80,
+        "actual_success_rate": 0.3375,
+        "average_probability": 0.5571,
+        "precision_50": 0.3091,
+        "recall_50": 0.6296
       },
       {
         "group": "ETEL",
-        "samples": 77,
-        "actual_success_rate": 0.9221,
-        "average_probability": 0.5658,
-        "precision_50": 0.8936,
-        "recall_50": 0.5915
+        "samples": 80,
+        "actual_success_rate": 0.925,
+        "average_probability": 0.5575,
+        "precision_50": 0.898,
+        "recall_50": 0.5946
       },
       {
         "group": "FWRY",
-        "samples": 77,
+        "samples": 80,
         "actual_success_rate": 0.0,
-        "average_probability": 0.4253,
+        "average_probability": 0.4353,
         "precision_50": 0.0,
         "recall_50": 0.0
       },
       {
         "group": "GBCO",
-        "samples": 77,
-        "actual_success_rate": 0.4935,
-        "average_probability": 0.5541,
-        "precision_50": 0.5217,
-        "recall_50": 0.6316
+        "samples": 80,
+        "actual_success_rate": 0.5125,
+        "average_probability": 0.5332,
+        "precision_50": 0.5,
+        "recall_50": 0.5366
       },
       {
         "group": "HRHO",
-        "samples": 77,
-        "actual_success_rate": 0.1169,
-        "average_probability": 0.4025,
-        "precision_50": 0.4667,
-        "recall_50": 0.7778
+        "samples": 80,
+        "actual_success_rate": 0.1125,
+        "average_probability": 0.4052,
+        "precision_50": 0.4211,
+        "recall_50": 0.8889
       },
       {
         "group": "ISPH",
-        "samples": 77,
-        "actual_success_rate": 0.3377,
-        "average_probability": 0.5214,
-        "precision_50": 0.1389,
-        "recall_50": 0.1923
+        "samples": 80,
+        "actual_success_rate": 0.325,
+        "average_probability": 0.5135,
+        "precision_50": 0.1463,
+        "recall_50": 0.2308
       },
       {
         "group": "JUFO",
-        "samples": 77,
-        "actual_success_rate": 0.2727,
-        "average_probability": 0.5276,
-        "precision_50": 0.1489,
+        "samples": 80,
+        "actual_success_rate": 0.2625,
+        "average_probability": 0.5032,
+        "precision_50": 0.1591,
         "recall_50": 0.3333
       },
       {
         "group": "MCQE",
-        "samples": 77,
-        "actual_success_rate": 0.6494,
-        "average_probability": 0.6065,
-        "precision_50": 0.5714,
-        "recall_50": 0.56
+        "samples": 80,
+        "actual_success_rate": 0.625,
+        "average_probability": 0.6094,
+        "precision_50": 0.5424,
+        "recall_50": 0.64
       },
       {
         "group": "MPCI",
-        "samples": 77,
-        "actual_success_rate": 0.7922,
-        "average_probability": 0.7467,
-        "precision_50": 0.7838,
-        "recall_50": 0.9508
+        "samples": 80,
+        "actual_success_rate": 0.8,
+        "average_probability": 0.741,
+        "precision_50": 0.8,
+        "recall_50": 1.0
       },
       {
         "group": "MPCO",
-        "samples": 77,
-        "actual_success_rate": 0.7143,
-        "average_probability": 0.5814,
-        "precision_50": 0.5217,
-        "recall_50": 0.4364
+        "samples": 80,
+        "actual_success_rate": 0.6875,
+        "average_probability": 0.5873,
+        "precision_50": 0.4792,
+        "recall_50": 0.4182
       },
       {
         "group": "MTIE",
-        "samples": 77,
-        "actual_success_rate": 0.3896,
-        "average_probability": 0.5378,
-        "precision_50": 0.25,
-        "recall_50": 0.3
+        "samples": 80,
+        "actual_success_rate": 0.375,
+        "average_probability": 0.5189,
+        "precision_50": 0.2222,
+        "recall_50": 0.2667
       },
       {
         "group": "NIPH",
-        "samples": 77,
-        "actual_success_rate": 0.7403,
-        "average_probability": 0.702,
-        "precision_50": 0.75,
-        "recall_50": 0.8947
+        "samples": 80,
+        "actual_success_rate": 0.75,
+        "average_probability": 0.7177,
+        "precision_50": 0.7436,
+        "recall_50": 0.9667
       },
       {
         "group": "OIH",
-        "samples": 77,
-        "actual_success_rate": 0.5195,
-        "average_probability": 0.5956,
-        "precision_50": 0.3621,
-        "recall_50": 0.525
+        "samples": 80,
+        "actual_success_rate": 0.5,
+        "average_probability": 0.5973,
+        "precision_50": 0.3333,
+        "recall_50": 0.5
       },
       {
         "group": "OLFI",
-        "samples": 77,
-        "actual_success_rate": 0.3377,
-        "average_probability": 0.4555,
-        "precision_50": 0.04,
+        "samples": 80,
+        "actual_success_rate": 0.325,
+        "average_probability": 0.4499,
+        "precision_50": 0.0435,
         "recall_50": 0.0385
       },
       {
         "group": "ORHD",
-        "samples": 77,
-        "actual_success_rate": 0.2857,
-        "average_probability": 0.5901,
-        "precision_50": 0.2745,
-        "recall_50": 0.6364
+        "samples": 80,
+        "actual_success_rate": 0.3,
+        "average_probability": 0.5897,
+        "precision_50": 0.25,
+        "recall_50": 0.625
       },
       {
         "group": "ORWE",
-        "samples": 77,
-        "actual_success_rate": 0.5195,
-        "average_probability": 0.4609,
-        "precision_50": 0.3947,
-        "recall_50": 0.375
+        "samples": 80,
+        "actual_success_rate": 0.5,
+        "average_probability": 0.4374,
+        "precision_50": 0.3333,
+        "recall_50": 0.25
       },
       {
         "group": "PHDC",
-        "samples": 77,
-        "actual_success_rate": 0.1039,
-        "average_probability": 0.6084,
-        "precision_50": 0.0192,
+        "samples": 80,
+        "actual_success_rate": 0.1,
+        "average_probability": 0.6044,
+        "precision_50": 0.0182,
         "recall_50": 0.125
       },
       {
         "group": "RAYA",
-        "samples": 77,
-        "actual_success_rate": 0.2597,
-        "average_probability": 0.5743,
-        "precision_50": 0.3191,
-        "recall_50": 0.75
+        "samples": 80,
+        "actual_success_rate": 0.2875,
+        "average_probability": 0.5758,
+        "precision_50": 0.3673,
+        "recall_50": 0.7826
       },
       {
         "group": "RMDA",
-        "samples": 77,
-        "actual_success_rate": 0.4416,
-        "average_probability": 0.5911,
-        "precision_50": 0.3636,
-        "recall_50": 0.5882
+        "samples": 80,
+        "actual_success_rate": 0.425,
+        "average_probability": 0.5738,
+        "precision_50": 0.3273,
+        "recall_50": 0.5294
       },
       {
         "group": "SKPC",
-        "samples": 77,
-        "actual_success_rate": 0.3896,
-        "average_probability": 0.5261,
-        "precision_50": 0.2195,
-        "recall_50": 0.3
+        "samples": 80,
+        "actual_success_rate": 0.375,
+        "average_probability": 0.5045,
+        "precision_50": 0.0833,
+        "recall_50": 0.1
       },
       {
         "group": "SUGR",
-        "samples": 77,
-        "actual_success_rate": 0.5065,
-        "average_probability": 0.4329,
-        "precision_50": 0.3056,
-        "recall_50": 0.2821
+        "samples": 80,
+        "actual_success_rate": 0.4875,
+        "average_probability": 0.4163,
+        "precision_50": 0.2857,
+        "recall_50": 0.2564
       },
       {
         "group": "SWDY",
-        "samples": 77,
-        "actual_success_rate": 0.6753,
-        "average_probability": 0.6065,
-        "precision_50": 0.5862,
-        "recall_50": 0.6538
+        "samples": 80,
+        "actual_success_rate": 0.6625,
+        "average_probability": 0.6022,
+        "precision_50": 0.5455,
+        "recall_50": 0.566
       },
       {
         "group": "TMGH",
-        "samples": 77,
-        "actual_success_rate": 0.1039,
-        "average_probability": 0.5084,
-        "precision_50": 0.175,
-        "recall_50": 0.875
+        "samples": 80,
+        "actual_success_rate": 0.1125,
+        "average_probability": 0.5155,
+        "precision_50": 0.1778,
+        "recall_50": 0.8889
       }
     ],
     "feature_importance": [
       {
-        "feature": "Market_Score",
-        "importance": 0.08125003
+        "feature": "Trend_20_50",
+        "importance": 0.10417115
       },
       {
         "feature": "ATR14_Pct",
-        "importance": 0.07622249
+        "importance": 0.07991868
       },
       {
         "feature": "Market_Volatility",
-        "importance": 0.07605995
+        "importance": 0.07520164
       },
       {
         "feature": "Return_50",
-        "importance": 0.06726409
+        "importance": 0.07020719
       },
       {
-        "feature": "Market_Trend",
-        "importance": 0.06724984
-      },
-      {
-        "feature": "Distance_EMA50_Pct",
-        "importance": 0.05874728
-      },
-      {
-        "feature": "Trend_20_50",
-        "importance": 0.0550172
+        "feature": "Market_Score",
+        "importance": 0.06431217
       },
       {
         "feature": "Trend_50_100",
-        "importance": 0.05239737
+        "importance": 0.06205958
+      },
+      {
+        "feature": "Distance_EMA50_Pct",
+        "importance": 0.0549868
       },
       {
         "feature": "Distance_EMA100_Pct",
-        "importance": 0.05110246
+        "importance": 0.05377866
       },
       {
         "feature": "Return_100",
-        "importance": 0.05073131
-      },
-      {
-        "feature": "Distance_EMA20_Pct",
-        "importance": 0.05037019
+        "importance": 0.05225823
       },
       {
         "feature": "Distance_Support20_Pct",
-        "importance": 0.04927377
+        "importance": 0.0501578
       },
       {
         "feature": "Distance_Resistance20_Pct",
-        "importance": 0.04421828
-      },
-      {
-        "feature": "Return_5",
-        "importance": 0.04418169
+        "importance": 0.04158666
       },
       {
         "feature": "Return_20",
-        "importance": 0.03967905
+        "importance": 0.04048466
       },
       {
-        "feature": "Market_Momentum",
-        "importance": 0.03931448
-      },
-      {
-        "feature": "Return_10",
-        "importance": 0.03816746
+        "feature": "Return_5",
+        "importance": 0.03972069
       },
       {
         "feature": "RSI14",
-        "importance": 0.03476406
+        "importance": 0.03865607
+      },
+      {
+        "feature": "Distance_EMA20_Pct",
+        "importance": 0.03818104
+      },
+      {
+        "feature": "Market_Momentum",
+        "importance": 0.03816492
+      },
+      {
+        "feature": "Return_10",
+        "importance": 0.03543979
+      },
+      {
+        "feature": "Market_Trend",
+        "importance": 0.03497083
       },
       {
         "feature": "Volume_Ratio20",
-        "importance": 0.02398907
+        "importance": 0.02574344
       },
       {
         "feature": "Market_Regime",
