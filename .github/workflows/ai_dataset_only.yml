@@ -52,22 +52,10 @@ jobs:
       - name: Analyze Training Dataset
         run: python ai_dataset_analysis.py
 
-      - name: Verify Analysis Output
-        run: |
-          if [ ! -f ai_dataset_analysis.json ]; then
-            echo "Analysis output file was not generated."
-            exit 1
-          fi
-
-          echo "Dataset analysis completed successfully."
-          ls -lh ai_dataset_analysis.json
-
-      - name: Upload Dataset and Analysis
+      - name: Upload Training Dataset
         uses: actions/upload-artifact@v4
         with:
-          name: ai-training-dataset-and-analysis
-          path: |
-            ai_training_dataset.json
-            ai_dataset_analysis.json
+          name: ai-training-dataset-new
+          path: ai_training_dataset.json
           if-no-files-found: error
           retention-days: 14
