@@ -179,7 +179,12 @@ def get_positive_probabilities(model, X):
 # Model Evaluation
 # =====================
 
-def evaluate_model(model, X_test, y_test):
+def evaluate_model(
+    model,
+    X_test,
+    y_test,
+    baseline_probability
+):
     y_probability = get_positive_probabilities(
         model,
         X_test
@@ -228,11 +233,27 @@ def evaluate_model(model, X_test, y_test):
 
     positive_rate = float(y_test.mean())
 
-    baseline_brier = (
-        positive_rate * (1 - positive_rate)
+    baseline_probability = float(baseline_probability)
+
+    if (
+        not np.isfinite(baseline_probability)
+        or not 0 <= baseline_probability <= 1
+    ):
+        raise ValueError(
+            "قيمة Baseline Probability غير صالحة."
+        )
+
+    baseline_brier = brier_score_loss(
+        y_test,
+        np.full(
+            len(y_test),
+            baseline_probability,
+            dtype=float
+        )
     )
 
     print("\n--- Baseline Comparison ---")
+    print(f"Train positive rate: {baseline_probability:.4f}")
     print(f"Test positive rate: {positive_rate:.4f}")
     print(f"Baseline PR-AUC: {positive_rate:.4f}")
     print(f"Baseline Brier: {baseline_brier:.4f}")
@@ -303,8 +324,13 @@ def evaluate_model(model, X_test, y_test):
             if brier is not None else None
         ),
         "test_positive_rate": round(positive_rate, 4),
+        "baseline_probability": round(
+            baseline_probability, 4
+        ),
         "baseline_pr_auc": round(positive_rate, 4),
-        "baseline_brier_score": round(baseline_brier, 4),
+        "baseline_brier_score": round(
+            float(baseline_brier), 4
+        ),
         "brier_better_than_baseline": (
             bool(brier < baseline_brier)
             if brier is not None else None
@@ -894,7 +920,7 @@ def train_model():
     )
 
     # =====================
-    # NEW: Market Regime Diagnostics
+    # Market Regime Diagnostics
     # =====================
 
     purged_mask = df["date"].isin(
@@ -1016,7 +1042,8 @@ def train_model():
     evaluation = evaluate_model(
         model,
         X_test,
-        y_test
+        y_test,
+        baseline_probability=float(y_train.mean())
     )
 
     y_probability = get_positive_probabilities(
