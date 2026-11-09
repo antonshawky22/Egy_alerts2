@@ -103,12 +103,13 @@ jobs:
             echo "ℹ️ No file changes to commit"
           fi
 
-      # رفع الملفات كـ Artifacts
+       # رفع الملفات كـ Artifacts
       - name: Upload AI Dataset, Model and Results to Artifacts
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: ai-training-analysis-and-trades
+          retention-days: 3
           if-no-files-found: warn
           path: |
             ai_training_dataset.json
