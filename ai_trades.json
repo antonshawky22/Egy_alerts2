@@ -222,5 +222,12 @@
     "entry_date": "2026-11-08",
     "entry_confidence": 81.85,
     "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "AMOC",
+    "entry_price": 13.22,
+    "entry_date": "2026-11-09",
+    "entry_confidence": 72.2,
+    "signal_type": "AI_BUY"
   }
 ]
