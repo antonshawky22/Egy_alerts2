@@ -559,5 +559,11 @@
     "entry_trend": "🔛",
     "entry_price": 47.24,
     "entry_date": "2026-11-09"
+  },
+  {
+    "symbol": "ADIB",
+    "entry_trend": "↗️",
+    "entry_price": 50.44,
+    "entry_date": "2026-11-10"
   }
 ]
