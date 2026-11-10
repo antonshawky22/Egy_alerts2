@@ -3,7 +3,7 @@ name: AI Training Dataset & Alerts Pipeline
 on:
   workflow_dispatch:
   schedule:
-    - cron: '30 15 * * 0-4'
+    - cron: '30 12 * * 0-4'
 
 permissions:
   contents: write
