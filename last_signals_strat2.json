@@ -17,7 +17,7 @@
     "cycle": 1,
     "position": 1.0,
     "avg_price": 122.9598,
-    "peak_profit": 8.978706861917471,
+    "peak_profit": 10.157954063035225,
     "realized_pnl_tracker": []
   },
   "EAST": {
@@ -52,7 +52,7 @@
     "cycle": 1,
     "position": 1.0,
     "avg_price": 112.7685,
-    "peak_profit": 6.829478090069474,
+    "peak_profit": 8.133033604242316,
     "realized_pnl_tracker": []
   },
   "ISPH": {
