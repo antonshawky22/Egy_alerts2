@@ -5,7 +5,7 @@
     "entry_price": null
   },
   "OLFI": {
-    "trend": "🔛",
+    "trend": "🔻",
     "in_position": false,
     "entry_price": null
   },
@@ -55,7 +55,7 @@
     "entry_price": null
   },
   "MTIE": {
-    "trend": "🔛",
+    "trend": "🔻",
     "in_position": false,
     "entry_price": null
   },
@@ -95,7 +95,7 @@
     "entry_price": null
   },
   "RMDA": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": false,
     "entry_price": null
   },
@@ -140,7 +140,7 @@
     "entry_price": null
   },
   "COMI": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": false,
     "entry_price": null
   },
