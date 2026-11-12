@@ -1,0 +1,50 @@
+name: AI Lab - Kronos EGX Test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  kronos-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install CPU PyTorch
+        run: |
+          python -m pip install --upgrade pip
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+
+      - name: Install Kronos dependencies
+        run: |
+          pip install "numpy<2" pandas==2.2.2 einops==0.8.1 huggingface_hub==0.33.1 safetensors==0.6.2 tqdm==4.67.1
+
+      - name: Download official Kronos code
+        run: |
+          git clone --depth 1 https://github.com/shiyu-coder/Kronos.git kronos_src
+
+      - name: Run isolated EGX test
+        env:
+          HF_HUB_DISABLE_TELEMETRY: "1"
+        run: |
+          export PYTHONPATH="$GITHUB_WORKSPACE/kronos_src"
+          python ai_lab_kronos_test.py
+
+      - name: Upload Kronos test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-lab-kronos-results
+          path: ai_lab_kronos_results.csv
+          if-no-files-found: warn
+          retention-days: 14
