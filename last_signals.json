@@ -5,14 +5,14 @@
     "entry_price": null
   },
   "OLFI": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
   "EMFD": {
-    "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 12.69
   },
   "ETEL": {
     "trend": "🔛",
@@ -75,7 +75,7 @@
     "entry_price": null
   },
   "JUFO": {
-    "trend": "🔛",
+    "trend": "🔻",
     "in_position": false,
     "entry_price": null
   },
@@ -96,8 +96,8 @@
   },
   "RMDA": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 5.68
   },
   "RAYA": {
     "trend": "🔛",
@@ -170,12 +170,12 @@
     "entry_price": null
   },
   "NIPH": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": false,
     "entry_price": null
   },
   "MPCI": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": false,
     "entry_price": null
   }

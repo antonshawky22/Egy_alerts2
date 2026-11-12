@@ -565,5 +565,17 @@
     "entry_trend": "↗️",
     "entry_price": 50.44,
     "entry_date": "2026-11-10"
+  },
+  {
+    "symbol": "EMFD",
+    "entry_trend": "↗️",
+    "entry_price": 12.69,
+    "entry_date": "2026-11-12"
+  },
+  {
+    "symbol": "RMDA",
+    "entry_trend": "↗️",
+    "entry_price": 5.68,
+    "entry_date": "2026-11-12"
   }
 ]
