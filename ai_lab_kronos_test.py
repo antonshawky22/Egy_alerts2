@@ -52,6 +52,7 @@ def prepare_symbol(symbol, block):
         raise ValueError(f"{symbol}: only {len(rows)} valid candles; need {LOOKBACK}.")
     df = pd.DataFrame(rows).tail(LOOKBACK).reset_index(drop=True)
     timestamps = pd.Series(pd.to_datetime(valid_dates[-LOOKBACK:]))
+    df.columns = [str(c).lower() for c in df.columns]
     df = df[["open", "high", "low", "close", "volume"]]
     return df, timestamps
 
