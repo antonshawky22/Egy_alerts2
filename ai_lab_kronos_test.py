@@ -13,7 +13,7 @@ MODEL_ID = "Ahmed-elbarbary/kronos-small-egx"
 TOKENIZER_ID = "NeoQuasar/Kronos-Tokenizer-base"
 LOOKBACK = 90
 PRED_LEN = 20
-MAX_SYMBOLS = 5
+MAX_SYMBOLS = 34
 SAMPLE_COUNT = 1
 
 def load_database():
