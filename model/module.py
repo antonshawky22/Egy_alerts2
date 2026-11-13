@@ -595,7 +595,6 @@ class Kronos(nn.Module):
 
     @classmethod
     def from_pretrained(cls, pretrained_model_name_or_path, *args, **kwargs):
-        # تجاوز تداخل مكتبة HubMixin وإنشاء النموذج مباشرة بالقيم الافتراضية
         model = cls()
         safetensors_path = os.path.join(pretrained_model_name_or_path, "model.safetensors")
         if os.path.exists(safetensors_path):
