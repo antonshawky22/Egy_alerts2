@@ -180,34 +180,23 @@ class KronosTokenizer(nn.Module, PyTorchModelHubMixin):
 class Kronos(nn.Module, PyTorchModelHubMixin):
     """
     Kronos Model.
-
-    Args:
-        s1_bits (int): Number of bits for pre tokens.
-        s2_bits (int): Number of bits for post tokens.
-        n_layers (int): Number of Transformer blocks.
-        d_model (int): Dimension of the model's embeddings and hidden states.
-        n_heads (int): Number of attention heads in the MultiheadAttention layers.
-        ff_dim (int): Dimension of the feedforward network in the Transformer blocks.
-        ffn_dropout_p (float): Dropout probability for the feedforward network.
-        attn_dropout_p (float): Dropout probability for the attention layers.
-        resid_dropout_p (float): Dropout probability for residual connections.
-        token_dropout_p (float): Dropout probability for token embeddings.
-        learn_te (bool): Whether to use learnable temporal embeddings.
     """
 
-    def __init__(self, s1_bits, s2_bits, n_layers, d_model, n_heads, ff_dim, ffn_dropout_p, attn_dropout_p, resid_dropout_p, token_dropout_p, learn_te):
+    def __init__(self, *args, **kwargs):
         super().__init__()
-        self.s1_bits = s1_bits
-        self.s2_bits = s2_bits
-        self.n_layers = n_layers
-        self.d_model = d_model
-        self.n_heads = n_heads
-        self.learn_te = learn_te
-        self.ff_dim = ff_dim
-        self.ffn_dropout_p = ffn_dropout_p
-        self.attn_dropout_p = attn_dropout_p
-        self.resid_dropout_p = resid_dropout_p
-        self.token_dropout_p = token_dropout_p
+        
+        # استخلاص المعاملات بأمان تام مع وضع القيم الافتراضية لمنع أي خطأ نقص في الوسائط
+        self.s1_bits = kwargs.get('s1_bits', 8)
+        self.s2_bits = kwargs.get('s2_bits', 8)
+        self.n_layers = kwargs.get('n_layers', 12)
+        self.d_model = kwargs.get('d_model', 256)
+        self.n_heads = kwargs.get('n_heads', 8)
+        self.learn_te = kwargs.get('learn_te', True)
+        self.ff_dim = kwargs.get('ff_dim', 1024)
+        self.ffn_dropout_p = kwargs.get('ffn_dropout_p', 0.0)
+        self.attn_dropout_p = kwargs.get('attn_dropout_p', 0.0)
+        self.resid_dropout_p = kwargs.get('resid_dropout_p', 0.0)
+        self.token_dropout_p = kwargs.get('token_dropout_p', 0.1)
 
         self.s1_vocab_size = 2 ** self.s1_bits
         self.token_drop = nn.Dropout(self.token_dropout_p)
@@ -659,4 +648,3 @@ class KronosPredictor:
             pred_dfs.append(pred_df)
 
         return pred_dfs
-
