@@ -1,4 +1,5 @@
 import math
+import os
 
 from einops import rearrange, reduce
 import torch
@@ -502,8 +503,7 @@ class FixedEmbedding(nn.Module):
         w[:, 1::2] = torch.cos(position * div_term)
 
         self.emb = nn.Embedding(c_in, d_model)
-        self.emb.weight = nn.Parameter(w, requires_send=False if hasattr(w, 'requires_send') else False) # تم تصحيحها لضمان التوافق
-        self.emb.weight.requires_grad = False
+        self.emb.weight = nn.Parameter(w, requires_grad=False)
 
     def forward(self, x):
         return self.emb(x).detach()
@@ -539,10 +539,6 @@ class TemporalEmbedding(nn.Module):
 
 
 class Kronos(nn.Module):
-    """
-    تم إضافة القيم الافتراضية للمعاملات n_layers و token_dropout_p و learn_te 
-    لمنع حدوث أي خطأ TypeError أثناء التحميل التلقائي عبر Hugging Face من ملف الـ config.
-    """
     def __init__(
         self, 
         d_model=256, 
@@ -556,7 +552,8 @@ class Kronos(nn.Module):
         attn_dropout_p=0.0, 
         resid_dropout_p=0.0, 
         learn_te=True,
-        max_seq_len=512
+        max_seq_len=512,
+        **kwargs
     ):
         super().__init__()
         self.d_model = d_model
@@ -599,11 +596,9 @@ class Kronos(nn.Module):
 
     @classmethod
     def from_pretrained(cls, pretrained_model_name_or_path, *model_args, **kwargs):
-        # لدعم تحميل الـ Weights والـ Config بلطف وأمان
         model = cls(*model_args, **kwargs)
-        # إذا كان هناك ملف موازن أوزان محلي أو عبر الـ Hub
-        safetensors_path = f"{pretrained_model_name_or_path}/model.safetensors"
-        if torch.cuda.is_available() and os.path.exists(safetensors_path):
+        safetensors_path = os.path.join(pretrained_model_name_or_path, "model.safetensors")
+        if os.path.exists(safetensors_path):
             from safetensors.torch import load_file
             state_dict = load_file(safetensors_path)
             model.load_state_dict(state_dict, strict=False)
