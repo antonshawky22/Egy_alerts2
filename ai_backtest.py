@@ -25,21 +25,19 @@ print(f"Target Symbol: {target_symbol}")
 device = torch.device("cpu")
 print(f"Using device: {device}")
 
-# 3. دالة محاكاة التنبؤ المتوافقة تماماً مع بنية الـ JSON الحالية
+# 3. دالة محاكاة التنبؤ المصححة
 def run_kronos_backtest(symbol_data, horizon=20):
     prices = []
     dates = []
     
     if isinstance(symbol_data, dict) and "data" in symbol_data:
         data_dict = symbol_data["data"]
-        
-        # ترتيب التواريخ تصاعدياً (من الأقدم إلى الأحدث) ضروري جداً للاختبار التاريخي
+        # ترتيب التواريخ تصاعدياً من الأقدم للأحدث
         sorted_dates = sorted(data_dict.keys())
         
         for d in sorted_dates:
             candle = data_dict[d]
             if isinstance(candle, dict):
-                # استخراج سعر الإغلاق Close بدقة
                 close_val = candle.get("Close", candle.get("close", candle.get("CLOSE", None)))
                 if close_val is not None:
                     prices.append(float(close_val))
@@ -65,14 +63,14 @@ def run_kronos_backtest(symbol_data, horizon=20):
         test_date = dates[i] if i < len(dates) else f"Index_{i}"
         
         try:
-            input_window = historical_slice[-90:] if len(historical_slice) >= 90 else historical_slice
-            
-            if len(input_window) > 1:
-                predicted_return = np.mean(np.diff(input_window[-5:]) / input_window[-6:-1]) * horizon
+            # استخدام حساب آمن ومبسط للاتجاه بدون أخطاء أبعاد المصفوفات
+            if len(historical_slice) >= 10:
+                recent_change = (historical_slice[-1] - historical_slice[-10]) / historical_slice[-10]
+                predicted_return = recent_change * (horizon / 10)
             else:
-                predicted_return = 0
+                predicted_return = 0.0
                 
-            predicted_price = float(current_price) * (1 + float(predicted_return))
+            predicted_price = float(current_price) * (1.0 + float(predicted_return))
             
         except Exception as e:
             print(f"Error during model prediction at index {i}: {e}")
