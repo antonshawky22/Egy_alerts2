@@ -92,6 +92,8 @@ print(f"\n--- Starting Backtest Simulation on: {target_symbol} ---")
 
 simulation_results = run_kronos_backtest(db[target_symbol])
 
+report_filename = "kronos_backtest_report.csv"
+
 if simulation_results:
     df_report = pd.DataFrame(simulation_results)
     win_rate = (df_report["Success"].sum() / len(df_report)) * 100
@@ -101,10 +103,17 @@ if simulation_results:
     print(f"Total Test Checkpoints: {len(df_report)}")
     print(f"Directional Win Rate: {win_rate:.2f}%")
     print("========================================")
-    
-    # حفظ التقرير في ملف CSV للمراجعة
-    report_filename = "kronos_backtest_report.csv"
-    df_report.to_csv(report_filename, index=False)
-    print(f"Detailed report saved successfully to: {report_filename}")
 else:
-    print("No simulation results generated. Please check data length.")
+    print("\n[WARNING] simulation_results is empty! Creating a dummy report so artifact upload doesn't fail.")
+    df_report = pd.DataFrame([{
+        "Date": "N/A",
+        "Entry_Price": 0,
+        "Predicted_Price": 0,
+        "Actual_Final_Price": 0,
+        "Actual_Return_%": 0,
+        "Success": False
+    }])
+
+# حفظ التقرير في كل الأحوال لضمان وجود الملف للأكشن
+df_report.to_csv(report_filename, index=False)
+print(f"Detailed report saved successfully to: {report_filename} (Rows: {len(df_report)})")
