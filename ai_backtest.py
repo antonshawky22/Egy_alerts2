@@ -17,34 +17,38 @@ with open(db_path, "r", encoding="utf-8") as f:
 
 print(f"Available symbols in database: {list(db.keys())}")
 
+# تحديد السهم المستهدف
+target_symbol = "EGX30" if "EGX30" in db else list(db.keys())[0]
+print(f"Target Symbol: {target_symbol}")
+
 # 2. إعداد جهاز التشغيل (CPU)
 device = torch.device("cpu")
 print(f"Using device: {device}")
 
-# 3. دالة محاكاة التنبؤ (مع دعم مرن لكل أشكال هيكلة الـ JSON)
+# 3. دالة محاكاة التنبؤ المتوافقة تماماً مع بنية الـ JSON الحالية
 def run_kronos_backtest(symbol_data, horizon=20):
     prices = []
     dates = []
     
-    # دعم الشكلين المحتملين للبيانات في ملف الـ JSON
-    if isinstance(symbol_data, dict):
-        # الشكل الأول: قاموس يحتوي على مفاتيح للقوائم
-        prices = symbol_data.get("Close", symbol_data.get("close", symbol_data.get("CLOSE", [])))
-        dates = symbol_data.get("Date", symbol_data.get("date", symbol_data.get("DATE", [])))
-    elif isinstance(symbol_data, list):
-        # الشكل الثاني: قائمة من الشموع (كل شمعة عبارة عن قاموس)
-        for candle in symbol_data:
+    if isinstance(symbol_data, dict) and "data" in symbol_data:
+        data_dict = symbol_data["data"]
+        
+        # ترتيب التواريخ تصاعدياً (من الأقدم إلى الأحدث) ضروري جداً للاختبار التاريخي
+        sorted_dates = sorted(data_dict.keys())
+        
+        for d in sorted_dates:
+            candle = data_dict[d]
             if isinstance(candle, dict):
-                p = candle.get("Close", candle.get("close", candle.get("CLOSE", None)))
-                d = candle.get("Date", candle.get("date", candle.get("DATE", "Unknown")))
-                if p is not None:
-                    prices.append(p)
+                # استخراج سعر الإغلاق Close بدقة
+                close_val = candle.get("Close", candle.get("close", candle.get("CLOSE", None)))
+                if close_val is not None:
+                    prices.append(float(close_val))
                     dates.append(d)
     
-    print(f"Debug -> Successfully extracted {len(prices)} price candles and {len(dates)} date entries.")
+    print(f"Debug -> Successfully extracted {len(prices)} chronological price candles.")
     
     if len(prices) < horizon + 20:
-        print(f"Not enough data for this symbol. Total candles: {len(prices)}")
+        print(f"Not enough data extracted. Total candles: {len(prices)}")
         return []
 
     results = []
@@ -53,7 +57,7 @@ def run_kronos_backtest(symbol_data, horizon=20):
     
     print(f"Running simulation across checkpoints...")
     
-    for i in range(start_idx, end_idx, 15):
+    for i in range(start_idx, end_idx, 10):
         historical_slice = prices[:i]
         actual_future_prices = prices[i : i + horizon]
         
@@ -68,7 +72,7 @@ def run_kronos_backtest(symbol_data, horizon=20):
             else:
                 predicted_return = 0
                 
-            predicted_price = current_price * (1 + predicted_return)
+            predicted_price = float(current_price) * (1 + float(predicted_return))
             
         except Exception as e:
             print(f"Error during model prediction at index {i}: {e}")
@@ -76,8 +80,8 @@ def run_kronos_backtest(symbol_data, horizon=20):
         
         actual_final_price = actual_future_prices[-1]
         
-        actual_return = (actual_final_price - current_price) / current_price
-        pred_return_calc = (predicted_price - current_price) / current_price
+        actual_return = (float(actual_final_price) - float(current_price)) / float(current_price)
+        pred_return_calc = (float(predicted_price) - float(current_price)) / float(current_price)
         
         direction_match = (pred_return_calc * actual_return) > 0 or (abs(actual_return) < 0.005)
         
@@ -92,10 +96,8 @@ def run_kronos_backtest(symbol_data, horizon=20):
         
     return results
 
-# 4. تنفيذ الـ Backtest على المؤشر العام أو الأسهم الرئيسية
-target_symbol = "EGX30" if "EGX30" in db else list(db.keys())[0]
+# 4. تنفيذ الـ Backtest وحفظ التقرير
 print(f"\n--- Starting Backtest Simulation on: {target_symbol} ---")
-
 simulation_results = run_kronos_backtest(db[target_symbol])
 
 report_filename = "kronos_backtest_report.csv"
@@ -103,7 +105,6 @@ report_filename = "kronos_backtest_report.csv"
 if simulation_results:
     df_report = pd.DataFrame(simulation_results)
     win_rate = (df_report["Success"].sum() / len(df_report)) * 100
-    
     print("\n========================================")
     print(f"BACKTEST RESULTS SUMMARY FOR {target_symbol}:")
     print(f"Total Test Checkpoints: {len(df_report)}")
