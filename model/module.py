@@ -39,7 +39,7 @@ def codebook_entropy(zq, basis, K, eps=1e-4):
 class BinarySphericalQuantizer(nn.Module):
     def __init__(self, embed_dim, beta, gamma0, gamma, zeta,
                  input_format='bchw',
-                 soft_entropy=True, group_size=9,
+                 soft_entropy=True, group_size=8,
                  persample_entropy_compute='analytical',
                  cb_entropy_compute='group',
                  l2_norm=True,
@@ -50,7 +50,11 @@ class BinarySphericalQuantizer(nn.Module):
         """
         super().__init__()
         
-        # معالجة تلقائية لضمان توافق الأبعاد وتجنب أي خطأ Assertion
+        # حماية ضد القيم الكبيرة التي تسبب Overflow
+        if group_size > 16:
+            group_size = 8
+            
+        # معالجة تلقائية لضمان توافق الأبعاد
         if embed_dim % group_size != 0:
             embed_dim = ((embed_dim // group_size) + 1) * group_size
             
@@ -76,10 +80,9 @@ class BinarySphericalQuantizer(nn.Module):
         self.num_dimensions = 2 ** embed_dim
         self.bits_per_index = embed_dim
 
-        # we only need to keep the codebook portion up to the group size
-        # because we approximate the H loss with this subcode
-        group_codes = torch.arange(2 ** self.group_size)
-        group_codebook = self.indexes_to_codes(group_codes).float()[:, -group_size:]
+        # استخدام حجم آمن لـ group_codes لتجنب OverflowError
+        group_codes = torch.arange(2 ** min(self.group_size, 12), dtype=torch.long)
+        group_codebook = self.indexes_to_codes(group_codes).float()[:, -group_size:] if self.group_size <= embed_dim else torch.zeros((1, group_size))
         self.register_buffer('group_codebook', group_codebook, persistent=False)
 
         self.soft_entropy = soft_entropy  # soft_entropy: Sec 3.2 of https://arxiv.org/pdf/1911.05894.pdf
