@@ -539,21 +539,22 @@ class TemporalEmbedding(nn.Module):
 
 
 class Kronos(nn.Module):
-    def __init__(self, *args, **kwargs):
+    def __init__(
+        self, 
+        n_layers=12, 
+        token_dropout_p=0.1, 
+        learn_te=True,
+        d_model=256, 
+        n_heads=8, 
+        ff_dim=1024, 
+        s1_bits=8, 
+        s2_bits=8, 
+        ffn_dropout_p=0.0, 
+        attn_dropout_p=0.0, 
+        resid_dropout_p=0.0, 
+        max_seq_len=512
+    ):
         super().__init__()
-        
-        n_layers = kwargs.get('n_layers', 12)
-        token_dropout_p = kwargs.get('token_dropout_p', 0.1)
-        learn_te = kwargs.get('learn_te', True)
-        d_model = kwargs.get('d_model', 256)
-        n_heads = kwargs.get('n_heads', 8)
-        ff_dim = kwargs.get('ff_dim', 1024)
-        s1_bits = kwargs.get('s1_bits', 8)
-        s2_bits = kwargs.get('s2_bits', 8)
-        ffn_dropout_p = kwargs.get('ffn_dropout_p', 0.0)
-        attn_dropout_p = kwargs.get('attn_dropout_p', 0.0)
-        resid_dropout_p = kwargs.get('resid_dropout_p', 0.0)
-
         self.d_model = d_model
         self.n_layers = n_layers
         self.token_dropout_p = token_dropout_p
@@ -593,8 +594,9 @@ class Kronos(nn.Module):
         return logits_s1
 
     @classmethod
-    def from_pretrained(cls, pretrained_model_name_or_path, *model_args, **kwargs):
-        model = cls(*model_args, **kwargs)
+    def from_pretrained(cls, pretrained_model_name_or_path, *args, **kwargs):
+        # تجاوز تداخل مكتبة HubMixin وإنشاء النموذج مباشرة بالقيم الافتراضية
+        model = cls()
         safetensors_path = os.path.join(pretrained_model_name_or_path, "model.safetensors")
         if os.path.exists(safetensors_path):
             from safetensors.torch import load_file
