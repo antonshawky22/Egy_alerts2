@@ -1,0 +1,18 @@
+{
+  "d_in": 6,
+  "d_model": 512,
+  "n_heads": 8,
+  "ff_dim": 2048,
+  "n_enc_layers": 4,
+  "n_dec_layers": 4,
+  "ffn_dropout_p": 0.1,
+  "attn_dropout_p": 0.1,
+  "resid_dropout_p": 0.1,
+  "s1_bits": 8,
+  "s2_bits": 8,
+  "beta": 0.25,
+  "gamma0": 1.0,
+  "gamma": 0.1,
+  "zeta": 1.0,
+  "group_size": 64
+}
