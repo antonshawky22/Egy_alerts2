@@ -9,8 +9,8 @@ import pandas as pd
 
 DB_FILE = "egx_history_database_v2.json"
 OUTPUT_FILE = "ai_lab_kronos_results.csv"
-MODEL_ID = "Ahmed-elbarbary/kronos-small-egx"
-TOKENIZER_ID = "NeoQuasar/Kronos-Tokenizer-base"
+MODEL_ID = ".model"
+TOKENIZER_ID = ".model"
 LOOKBACK = 90
 PRED_LEN = 20
 MAX_SYMBOLS = 34
