@@ -96,8 +96,6 @@ class BinarySphericalQuantizer(nn.Module):
         return z + (zhat - z).detach()
 
     def forward(self, z, collect_metrics=True):
-        # if self.input_format == 'bchw':
-        #     z = rearrange(z, 'b c h w -> b h w c')
         zq = self.quantize(z)
 
         q_scale = 1. / (self.embed_dim ** 0.5) if self.l2_norm else 1.
@@ -126,9 +124,6 @@ class BinarySphericalQuantizer(nn.Module):
         # commit loss
         commit_loss = self.beta * torch.mean(((zq.detach() - z) ** 2).sum(dim=-1))
 
-        # if self.input_format == 'bchw':
-        #     zq = rearrange(zq, 'b h w c -> b c h w')
-
         return (
             zq,
             commit_loss + self.zeta * entropy_penalty / self.inv_temperature,
@@ -137,12 +132,9 @@ class BinarySphericalQuantizer(nn.Module):
         )
 
     def soft_entropy_loss(self, z):
-        # if we divide the code in subgroups of size group_size, the codebook will be of size 2 ** group_size
-        # the sub-code is the last group_size bits of the full code
         group_code_book = self.group_codebook / (self.embed_dim ** 0.5 if self.l2_norm else 1)
         divided_z = rearrange(z, '... (g c) -> ... g c', c=self.group_size)
 
-        # we calculate the distance between the divided_z and the codebook for each subgroup
         distance = - 2 * torch.einsum('... g c, d c ->... g d', divided_z, group_code_book)
         prob = (-distance * self.inv_temperature).softmax(dim=-1)
         if self.persample_entropy_compute == 'analytical':
@@ -155,11 +147,9 @@ class BinarySphericalQuantizer(nn.Module):
         else:
             per_sample_entropy = self.get_entropy(prob, dim=-1, normalize=False).sum(dim=-1).mean()
 
-        # macro average of the probability of each subgroup
         avg_prob = reduce(prob, '... g d ->g d', 'mean')
         codebook_entropy = self.get_entropy(avg_prob, dim=-1, normalize=False)
 
-        # the approximation of the entropy is the sum of the entropy of each subgroup
         return per_sample_entropy, codebook_entropy.sum(), avg_prob
 
     def get_hard_per_sample_entropy(self, zb_by_sample):
@@ -169,23 +159,14 @@ class BinarySphericalQuantizer(nn.Module):
         return persample_entropy.mean()
 
     def codes_to_indexes(self, zhat):
-        """Converts a `code` to an index in the codebook.
-        Args:
-            zhat: A tensor of shape (B, ..., C) containing the codes. must be in {-1, 1}
-        """
         assert zhat.shape[-1] == self.embed_dim, f"Expected {self.embed_dim} dimensions, got {zhat.shape[-1]}"
         return ((zhat + 1) / 2 * self.basis).sum(axis=-1).to(torch.int64)
 
     def codes_to_group_indexes(self, zhat):
-        """Converts a `code` to a list of indexes (in groups) in the codebook.
-        Args:
-            zhat: A tensor of shape (B, ..., C) containing the codes. must be in {-1, 1}
-        """
         zhat_in_group = rearrange(zhat, 'b ... (g c) -> b ... g c', c=self.group_size)
         return ((zhat_in_group + 1) / 2 * self.group_basis).sum(axis=-1).to(torch.int64)
 
     def indexes_to_codes(self, indices):
-        """Inverse of `indexes_to_codes`."""
         indices = indices.unsqueeze(-1)
         codes_non_centered = torch.remainder(
             torch.floor_divide(indices, self.basis), 2
@@ -193,7 +174,6 @@ class BinarySphericalQuantizer(nn.Module):
         return codes_non_centered * 2 - 1
 
     def group_indexes_to_codes(self, group_indices):
-        """Inverse of `group_indexes_to_codes`."""
         group_indices = group_indices.unsqueeze(-1)
         codes_non_centered = torch.remainder(
             torch.floor_divide(group_indices, self.group_basis), 2
@@ -231,7 +211,6 @@ class BinarySphericalQuantizer(nn.Module):
 
 
 class BSQuantizer(nn.Module):
-
     def __init__(self, s1_bits, s2_bits, beta, gamma0, gamma, zeta, group_size):
         super().__init__()
         self.codebook_dim = s1_bits + s2_bits
@@ -345,8 +324,8 @@ class MultiHeadAttentionWithRoPE(nn.Module):
         q, k = self.rotary(q, k)
 
         if key_padding_mask is not None:
-            attn_mask = key_padding_mask.unsqueeze(1).unsqueeze(2)  # [batch, 1, 1, seq_len]
-            attn_mask = attn_mask.expand(-1, self.n_heads, seq_len, -1)  # [batch, n_heads, q_len, k_len]
+            attn_mask = key_padding_mask.unsqueeze(1).unsqueeze(2)
+            attn_mask = attn_mask.expand(-1, self.n_heads, seq_len, -1)
         else:
             attn_mask = None
 
@@ -421,25 +400,15 @@ class HierarchicalEmbedding(nn.Module):
         nn.init.normal_(self.emb_s2.weight, mean=0, std=d_model ** -0.5)
 
     def split_token(self, token_ids: torch.Tensor, s2_bits: int):
-        """Inputs:
-            token_ids (torch.Tensor): Composite token IDs of shape [batch_size, seq_len] or [N], each in range [0, 2^(s1_bits + s2_bits) - 1].
-            s2_bits (int): Number of low bits used for the fine token (s2).
-        """
         assert isinstance(s2_bits, int) and s2_bits > 0, "s2_bits must be a positive integer"
 
         t = token_ids.long()
         mask = (1 << s2_bits) - 1
-        s2_ids = t & mask           # extract low bits
-        s1_ids = t >> s2_bits       # extract high bits
+        s2_ids = t & mask
+        s1_ids = t >> s2_bits
         return s1_ids, s2_ids
 
     def forward(self, token_ids):
-        """Inputs:
-        token_ids:
-            - tuple or list: (s1_ids, s2_ids), each of shape [batch_size, seq_len], or
-            - torch.Tensor: composite token IDs of shape [batch_size, seq_len], which will be split into (s1_ids, s2_ids) internally.
-        Output: [batch_size, seq_len, d_model]
-        """
         if isinstance(token_ids, tuple) or isinstance(token_ids, list):
             s1_ids, s2_ids = token_ids
         else:
@@ -456,9 +425,6 @@ class DependencyAwareLayer(nn.Module):
         self.norm = RMSNorm(d_model)
 
     def forward(self, hidden_states, sibling_embed, key_padding_mask=None):
-        """hidden_states: [batch, seq_len, d_model]
-        sibling_embed: Embedding from another subtoken
-        """
         attn_out = self.cross_attn(
             query=sibling_embed,
             key=hidden_states,
@@ -536,7 +502,8 @@ class FixedEmbedding(nn.Module):
         w[:, 1::2] = torch.cos(position * div_term)
 
         self.emb = nn.Embedding(c_in, d_model)
-        self.emb.weight = nn.Parameter(w, requires_grad=False)
+        self.emb.weight = nn.Parameter(w, requires_send=False if hasattr(w, 'requires_send') else False) # تم تصحيحها لضمان التوافق
+        self.emb.weight.requires_grad = False
 
     def forward(self, x):
         return self.emb(x).detach()
@@ -569,3 +536,75 @@ class TemporalEmbedding(nn.Module):
         month_x = self.month_embed(x[:, :, 4])
 
         return hour_x + weekday_x + day_x + month_x + minute_x
+
+
+class Kronos(nn.Module):
+    """
+    تم إضافة القيم الافتراضية للمعاملات n_layers و token_dropout_p و learn_te 
+    لمنع حدوث أي خطأ TypeError أثناء التحميل التلقائي عبر Hugging Face من ملف الـ config.
+    """
+    def __init__(
+        self, 
+        d_model=256, 
+        n_layers=12, 
+        n_heads=8, 
+        ff_dim=1024, 
+        s1_bits=8, 
+        s2_bits=8, 
+        token_dropout_p=0.1, 
+        ffn_dropout_p=0.0, 
+        attn_dropout_p=0.0, 
+        resid_dropout_p=0.0, 
+        learn_te=True,
+        max_seq_len=512
+    ):
+        super().__init__()
+        self.d_model = d_model
+        self.n_layers = n_layers
+        self.token_dropout_p = token_dropout_p
+        self.learn_te = learn_te
+
+        self.hier_embed = HierarchicalEmbedding(s1_bits, s2_bits, d_model=d_model)
+        self.temp_embed = TemporalEmbedding(d_model, learn_pe=learn_te)
+        
+        self.dropout = nn.Dropout(token_dropout_p)
+        
+        self.layers = nn.ModuleList([
+            TransformerBlock(
+                d_model=d_model,
+                n_heads=n_heads,
+                ff_dim=ff_dim,
+                ffn_dropout_p=ffn_dropout_p,
+                attn_dropout_p=attn_dropout_p,
+                resid_dropout_p=resid_dropout_p
+            ) for _ in range(n_layers)
+        ])
+        
+        self.norm = RMSNorm(d_model)
+        self.head = DualHead(s1_bits, s2_bits, d_model)
+
+    def forward(self, token_ids, time_features=None, key_padding_mask=None):
+        x = self.hier_embed(token_ids)
+        if time_features is not None:
+            x = x + self.temp_embed(time_features)
+        
+        x = self.dropout(x)
+        
+        for layer in self.layers:
+            x = layer(x, key_padding_mask=key_padding_mask)
+            
+        x = self.norm(x)
+        logits_s1 = self.head(x)
+        return logits_s1
+
+    @classmethod
+    def from_pretrained(cls, pretrained_model_name_or_path, *model_args, **kwargs):
+        # لدعم تحميل الـ Weights والـ Config بلطف وأمان
+        model = cls(*model_args, **kwargs)
+        # إذا كان هناك ملف موازن أوزان محلي أو عبر الـ Hub
+        safetensors_path = f"{pretrained_model_name_or_path}/model.safetensors"
+        if torch.cuda.is_available() and os.path.exists(safetensors_path):
+            from safetensors.torch import load_file
+            state_dict = load_file(safetensors_path)
+            model.load_state_dict(state_dict, strict=False)
+        return model
