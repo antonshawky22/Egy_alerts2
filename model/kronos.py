@@ -189,13 +189,13 @@ class Kronos(nn.Module, PyTorchModelHubMixin):
         self.s1_bits = kwargs.get('s1_bits', 8)
         self.s2_bits = kwargs.get('s2_bits', 8)
         self.n_layers = kwargs.get('n_layers', 12)
-        self.d_model = kwargs.get('d_model', 256)
+        self.d_model = kwargs.get('d_model', 512)
         self.n_heads = kwargs.get('n_heads', 8)
         self.learn_te = kwargs.get('learn_te', True)
-        self.ff_dim = kwargs.get('ff_dim', 1024)
-        self.ffn_dropout_p = kwargs.get('ffn_dropout_p', 0.0)
-        self.attn_dropout_p = kwargs.get('attn_dropout_p', 0.0)
-        self.resid_dropout_p = kwargs.get('resid_dropout_p', 0.0)
+        self.ff_dim = kwargs.get('ff_dim', 2048)
+        self.ffn_dropout_p = kwargs.get('ffn_dropout_p', 0.1)
+        self.attn_dropout_p = kwargs.get('attn_dropout_p', 0.1)
+        self.resid_dropout_p = kwargs.get('resid_dropout_p', 0.1)
         self.token_dropout_p = kwargs.get('token_dropout_p', 0.1)
 
         self.s1_vocab_size = 2 ** self.s1_bits
