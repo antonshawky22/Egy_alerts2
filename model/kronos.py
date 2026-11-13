@@ -186,8 +186,8 @@ class Kronos(nn.Module, PyTorchModelHubMixin):
         super().__init__()
         
         # استخلاص المعاملات بأمان تام مع وضع القيم الافتراضية لمنع أي خطأ نقص في الوسائط
-        self.s1_bits = kwargs.get('s1_bits', 8)
-        self.s2_bits = kwargs.get('s2_bits', 8)
+        self.s1_bits = kwargs.get('s1_bits', 10)
+        self.s2_bits = kwargs.get('s2_bits', 10)
         self.n_layers = kwargs.get('n_layers', 12)
         self.d_model = kwargs.get('d_model', 512)
         self.n_heads = kwargs.get('n_heads', 8)
