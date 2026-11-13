@@ -66,7 +66,7 @@ def future_egx_dates(last_date, periods):
     return pd.Series(dates)
 
 def main():
-    print("EGX KRONOS LAB - INFERENCE WITH EGX30 SAFETY GATE")
+    print("EGX KRONOS LAB - INFERENCE WITH EGX30 HARD MARKET GATE")
     print(f"Model: {MODEL_ID}")
     print(f"Input: last {LOOKBACK} daily candles | Horizon: {PRED_LEN} sessions")
     db = load_database()
@@ -81,14 +81,16 @@ def main():
     model = Kronos.from_pretrained(MODEL_ID)
     predictor = KronosPredictor(model, tokenizer, device=device, max_context=512)
 
-    # 1. تحليل المؤشر العام EGX30 أولاً ليكون صمام الأمان
-    egx30_return = 0.0
+    # 1. تحليل EGX30 أولاً: المؤشر هو بوابة الدخول الرئيسية
+    egx30_return = np.nan
     egx30_status = "NOT_FOUND"
+
     if "EGX30" in db:
         try:
             print("Analyzing EGX30 Market Safety Gate...")
             df_egx, x_ts_egx = prepare_symbol("EGX30", db["EGX30"])
             y_ts_egx = future_egx_dates(x_ts_egx.iloc[-1], PRED_LEN)
+
             forecast_egx = predictor.predict(
                 df=df_egx,
                 x_timestamp=x_ts_egx,
@@ -98,21 +100,44 @@ def main():
                 top_p=0.9,
                 sample_count=SAMPLE_COUNT
             )
-            pred_close_egx = pd.to_numeric(forecast_egx["close"], errors="coerce").dropna()
+
+            if not isinstance(forecast_egx, pd.DataFrame) or "close" not in forecast_egx.columns:
+                raise ValueError("EGX30 forecast has no close column.")
+
+            pred_close_egx = pd.to_numeric(
+                forecast_egx["close"], errors="coerce"
+            ).dropna()
+
+            if len(pred_close_egx) != PRED_LEN:
+                raise ValueError(
+                    f"Expected {PRED_LEN} EGX30 predicted closes, got {len(pred_close_egx)}."
+                )
+
             last_close_egx = float(df_egx["close"].iloc[-1])
             final_close_egx = float(pred_close_egx.iloc[-1])
+
             egx30_return = (final_close_egx / last_close_egx - 1) * 100
             egx30_status = "BULLISH" if egx30_return >= 0 else "BEARISH"
-            print(f">>> EGX30 Market Gate: {egx30_status} (Expected Return: {egx30_return:.2f}%)")
+
+            print(
+                f">>> EGX30 Market Gate: {egx30_status} "
+                f"(Expected Return: {egx30_return:+.2f}%)"
+            )
+
         except Exception as exc:
+            egx30_status = "ERROR"
+            egx30_return = np.nan
             print(f"WARNING: Could not process EGX30 gate: {exc}")
     else:
-        print("WARNING: EGX30 not found in database! Proceeding without market gate.")
+        print("WARNING: EGX30 not found in database.")
 
+    # 2. تجهيز الأسهم المرشحة
     candidates = []
+
     for symbol, block in db.items():
         if symbol.upper() == "EGX30":
             continue
+
         try:
             df, x_ts = prepare_symbol(symbol, block)
             candidates.append((symbol, df, x_ts))
@@ -124,10 +149,12 @@ def main():
 
     candidates = candidates[:MAX_SYMBOLS]
     results = []
-    
+
+    # 3. توقع الأسهم مع تطبيق بوابة EGX30 الإلزامية
     for symbol, df, x_ts in candidates:
         try:
             y_ts = future_egx_dates(x_ts.iloc[-1], PRED_LEN)
+
             forecast = predictor.predict(
                 df=df,
                 x_timestamp=x_ts,
@@ -137,23 +164,41 @@ def main():
                 top_p=0.9,
                 sample_count=SAMPLE_COUNT
             )
+
             if not isinstance(forecast, pd.DataFrame) or "close" not in forecast.columns:
                 raise ValueError("Kronos output has no close column.")
-            predicted_close = pd.to_numeric(forecast["close"], errors="coerce").dropna()
+
+            predicted_close = pd.to_numeric(
+                forecast["close"], errors="coerce"
+            ).dropna()
+
             if len(predicted_close) != PRED_LEN:
-                raise ValueError(f"Expected {PRED_LEN} predicted closes, got {len(predicted_close)}.")
-            
+                raise ValueError(
+                    f"Expected {PRED_LEN} predicted closes, got {len(predicted_close)}."
+                )
+
             last_close = float(df["close"].iloc[-1])
             final_close = float(predicted_close.iloc[-1])
-            stock_return = (final_close / last_close - 1) * 100
-            
-            max_forecast_high = float(pd.to_numeric(forecast["high"], errors="coerce").max()) if "high" in forecast else np.nan
-            min_forecast_low = float(pd.to_numeric(forecast["low"], errors="coerce").min()) if "low" in forecast else np.nan
 
-            # صمام الأمان: إذا كان السوق هابطاً (BEARISH) والمؤشر سلبي، نقوم بتصفية الإشارات الضعيفة أو إعطاء تنبيه
-            trade_status = "OK"
-            if egx30_status == "BEARISH" and stock_return > 0:
-                trade_status = "FILTERED_BEARISH_MARKET"  # سهم صاعد لكن السوق العام هابط (تصفية حذرة)
+            stock_return = (final_close / last_close - 1) * 100
+
+            max_forecast_high = (
+                float(pd.to_numeric(forecast["high"], errors="coerce").max())
+                if "high" in forecast else np.nan
+            )
+
+            min_forecast_low = (
+                float(pd.to_numeric(forecast["low"], errors="coerce").min())
+                if "low" in forecast else np.nan
+            )
+
+            # EGX30 هو بوابة السوق الرئيسية:
+            # لا توجد أي فرصة دخول إلا إذا كان EGX30 صاعداً.
+            # نستمر في حساب توقعات الأسهم لأغراض البحث والتحليل فقط.
+            if egx30_status == "BULLISH":
+                trade_status = "OK"
+            else:
+                trade_status = "BLOCKED_MARKET_GATE"
 
             results.append({
                 "symbol": symbol,
@@ -161,20 +206,71 @@ def main():
                 "last_close": last_close,
                 "forecast_close_20": final_close,
                 "forecast_return_20_pct": stock_return,
-                "forecast_max_high_pct": (max_forecast_high / last_close - 1) * 100 if np.isfinite(max_forecast_high) else np.nan,
-                "forecast_min_low_pct": (min_forecast_low / last_close - 1) * 100 if np.isfinite(min_forecast_low) else np.nan,
+                "forecast_max_high_pct": (
+                    (max_forecast_high / last_close - 1) * 100
+                    if np.isfinite(max_forecast_high) else np.nan
+                ),
+                "forecast_min_low_pct": (
+                    (min_forecast_low / last_close - 1) * 100
+                    if np.isfinite(min_forecast_low) else np.nan
+                ),
                 "market_gate": egx30_status,
+                "egx30_forecast_return_pct": egx30_return,
                 "status": trade_status
             })
-            print(f"{trade_status} {symbol}: close {last_close:.4f} -> forecast {final_close:.4f} ({stock_return:+.2f}%)")
+
+            print(
+                f"{trade_status} {symbol}: "
+                f"close {last_close:.4f} -> forecast {final_close:.4f} "
+                f"({stock_return:+.2f}%)"
+            )
+
         except Exception as exc:
             print(f"ERROR {symbol}: {exc}")
-            results.append({"symbol": symbol, "status": f"ERROR: {exc}"})
 
-    pd.DataFrame(results).to_csv(OUTPUT_FILE, index=False, encoding="utf-8-sig")
-    success = sum(1 for row in results if "OK" in str(row.get("status")))
-    print(f"Finished: {success}/{len(results)} symbols succeeded.")
+            results.append({
+                "symbol": symbol,
+                "market_gate": egx30_status,
+                "egx30_forecast_return_pct": egx30_return,
+                "status": f"ERROR: {exc}"
+            })
+
+    # 4. حفظ النتائج
+    pd.DataFrame(results).to_csv(
+        OUTPUT_FILE,
+        index=False,
+        encoding="utf-8-sig"
+    )
+
+    # عدد توقعات الأسهم التي نجحت فعلياً
+    success = sum(
+        1 for row in results
+        if "forecast_close_20" in row
+        and pd.notna(row["forecast_close_20"])
+    )
+
+    # عدد الأسهم المحجوبة بسبب حالة السوق
+    blocked = sum(
+        1 for row in results
+        if row.get("status") == "BLOCKED_MARKET_GATE"
+    )
+
+    errors = sum(
+        1 for row in results
+        if str(row.get("status", "")).startswith("ERROR:")
+    )
+
+    print("----------------------------------------")
+    print(f"Forecasts succeeded: {success}/{len(results)}")
+    print(f"Blocked by EGX30 Market Gate: {blocked}")
+    print(f"Errors: {errors}")
+    print(f"EGX30 Market Status: {egx30_status}")
+
+    if np.isfinite(egx30_return):
+        print(f"EGX30 Expected Return: {egx30_return:+.2f}%")
+
     print(f"Output: {OUTPUT_FILE}")
+    print("----------------------------------------")
 
 if __name__ == "__main__":
     try:
