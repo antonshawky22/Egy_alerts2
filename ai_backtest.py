@@ -4,7 +4,6 @@ import torch
 import numpy as np
 import pandas as pd
 
-# استيراد الأجزاء الخاصة بالنموذج (تأكد من مطابقتها لأسماء المكتبات أو الملفات عندك)
 print("Initializing Kronos Backtest Engine...")
 
 # 1. تحميل قاعدة بيانات الأسعار التاريخية
@@ -22,23 +21,34 @@ print(f"Available symbols in database: {list(db.keys())}")
 device = torch.device("cpu")
 print(f"Using device: {device}")
 
-# 3. دالة محاكاة التنبؤ باستخدام النموذج الحقيقي (مع مرونة في قراءة الأعمدة)
+# 3. دالة محاكاة التنبؤ (مع دعم مرن لكل أشكال هيكلة الـ JSON)
 def run_kronos_backtest(symbol_data, horizon=20):
-    # مرونة في جلب المفاتيح (سواء كانت Capital أو small)
-    prices = symbol_data.get("Close", symbol_data.get("close", []))
-    dates = symbol_data.get("Date", symbol_data.get("date", symbol_data.get("Dates", [])))
+    prices = []
+    dates = []
     
-    print(f"Debug -> Found {len(prices)} price candles and {len(dates)} date entries.")
+    # دعم الشكلين المحتملين للبيانات في ملف الـ JSON
+    if isinstance(symbol_data, dict):
+        # الشكل الأول: قاموس يحتوي على مفاتيح للقوائم
+        prices = symbol_data.get("Close", symbol_data.get("close", symbol_data.get("CLOSE", [])))
+        dates = symbol_data.get("Date", symbol_data.get("date", symbol_data.get("DATE", [])))
+    elif isinstance(symbol_data, list):
+        # الشكل الثاني: قائمة من الشموع (كل شمعة عبارة عن قاموس)
+        for candle in symbol_data:
+            if isinstance(candle, dict):
+                p = candle.get("Close", candle.get("close", candle.get("CLOSE", None)))
+                d = candle.get("Date", candle.get("date", candle.get("DATE", "Unknown")))
+                if p is not None:
+                    prices.append(p)
+                    dates.append(d)
     
-    # تقليل الحد الأدنى للشموع مؤقتاً للتأكد من عمل المحاكاة
-    if len(prices) < horizon + 50:
+    print(f"Debug -> Successfully extracted {len(prices)} price candles and {len(dates)} date entries.")
+    
+    if len(prices) < horizon + 20:
         print(f"Not enough data for this symbol. Total candles: {len(prices)}")
         return []
 
     results = []
-    
-    # نافذة متحركة للاختبار (Rolling Backtest)
-    start_idx = 50
+    start_idx = 20
     end_idx = len(prices) - horizon
     
     print(f"Running simulation across checkpoints...")
@@ -50,7 +60,6 @@ def run_kronos_backtest(symbol_data, horizon=20):
         current_price = historical_slice[-1]
         test_date = dates[i] if i < len(dates) else f"Index_{i}"
         
-        # --- هنا يتم استدعاء نموذج Kronos الحقيقي للتنبؤ ---
         try:
             input_window = historical_slice[-90:] if len(historical_slice) >= 90 else historical_slice
             
@@ -70,11 +79,10 @@ def run_kronos_backtest(symbol_data, horizon=20):
         actual_return = (actual_final_price - current_price) / current_price
         pred_return_calc = (predicted_price - current_price) / current_price
         
-        # التحقق من نجاح توقع اتجاه الحركة (صعود صحيح أو هبوط صحيح)
         direction_match = (pred_return_calc * actual_return) > 0 or (abs(actual_return) < 0.005)
         
         results.append({
-            "Date": test_date,
+            "Date": str(test_date),
             "Entry_Price": round(float(current_price), 2),
             "Predicted_Price": round(float(predicted_price), 2),
             "Actual_Final_Price": round(float(actual_final_price), 2),
@@ -112,6 +120,5 @@ else:
         "Success": False
     }])
 
-# حفظ التقرير في كل الأحوال لضمان وجود الملف للأكشن
 df_report.to_csv(report_filename, index=False)
 print(f"Detailed report saved successfully to: {report_filename} (Rows: {len(df_report)})")
