@@ -1,4 +1,4 @@
-name: AI Lab - Kronos EGX Test
+Name: AI Lab - Kronos EGX Test
 
 on:
   workflow_dispatch:
@@ -29,15 +29,11 @@ jobs:
         run: |
           pip install "numpy<2" pandas==2.2.2 einops==0.8.1 huggingface_hub==0.33.1 safetensors==0.6.2 tqdm==4.67.1
 
-      - name: Download official Kronos code
-        run: |
-          git clone --depth 1 https://github.com/shiyu-coder/Kronos.git kronos_src
-
       - name: Run isolated EGX test
         env:
           HF_HUB_DISABLE_TELEMETRY: "1"
         run: |
-          export PYTHONPATH="$GITHUB_WORKSPACE/kronos_src"
+          export PYTHONPATH="$GITHUB_WORKSPACE"
           python ai_lab_kronos_test.py
 
       - name: Upload Kronos test results
