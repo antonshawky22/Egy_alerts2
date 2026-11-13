@@ -1,65 +1,65 @@
 name: AI Lab - Kronos EGX Test
 
-On:
-  Workflow_dispatch:
+on:
+  workflow_dispatch:
 
-Permissions:
-  Contents: read
+permissions:
+  contents: read
 
-Jobs:
-  Kronos-test:
-    Runs-on: ubuntu-latest
-    Timeout-minutes: 45
-    Steps:
+jobs:
+  kronos-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
       - name: Checkout repository
-        Uses: actions/checkout@v4
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        Uses: actions/setup-python@v5
-        With:
-          Python-version: "3.11"
-          Cache: "pip"
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
 
       - name: Cache model weights
-        Uses: actions/cache@v4
-        With:
-          Path: model/model.safetensors
-          Key: ${{ runner.os }}-kronos-weights-v1
+        uses: actions/cache@v4
+        with:
+          path: model/model.safetensors
+          key: ${{ runner.os }}-kronos-weights-v1
 
       - name: Download Model Weights automatically
-        Run: |
-          Python -c "
-          From huggingface_hub import hf_hub_download
+        run: |
+          python -c "
+          from huggingface_hub import hf_hub_download
           import os
-          If not os.path.exists('model/model.safetensors'):
-              Print('Downloading model weights...')
-              Os.makedirs('model', exist_ok=True)
-              Hf_hub_download(repo_id='NeoQuasar/Kronos-small', filename='model.safetensors', local_dir='model')
-          Else:
-              Print('Model weights found in cache.')
+          if not os.path.exists('model/model.safetensors'):
+              print('Downloading model weights...')
+              os.makedirs('model', exist_ok=True)
+              hf_hub_download(repo_id='NeoQuasar/Kronos-small', filename='model.safetensors', local_dir='model')
+          else:
+              print('Model weights found in cache.')
           "
 
       - name: Install CPU PyTorch
-        Run: |
-          Python -m pip install --upgrade pip
-          Pip install torch --index-url https://download.pytorch.org/whl/cpu
+        run: |
+          python -m pip install --upgrade pip
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
 
       - name: Install Kronos dependencies
-        Run: |
-          Pip install "numpy<2" pandas==2.2.2 einops==0.8.1 huggingface_hub==0.33.1 safetensors==0.6.2 tqdm==4.67.1
+        run: |
+          pip install "numpy<2" pandas==2.2.2 einops==0.8.1 huggingface_hub==0.33.1 safetensors==0.6.2 tqdm==4.67.1
 
       - name: Run isolated EGX test
-        Env:
+        env:
           HF_HUB_DISABLE_TELEMETRY: "1"
-        Run: |
-          Export PYTHONPATH="$GITHUB_WORKSPACE"
-          Python ai_lab_kronos_test.py
+        run: |
+          export PYTHONPATH="$GITHUB_WORKSPACE"
+          python ai_lab_kronos_test.py
 
       - name: Upload Kronos test results
-        If: always()
-        Uses: actions/upload-artifact@v4
-        With:
-          Name: ai-lab-kronos-results
-          Path: ai_lab_kronos_results.csv
-          If-no-files-found: warn
-          Retention-days: 14
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-lab-kronos-results
+          path: ai_lab_kronos_results.csv
+          if-no-files-found: warn
+          retention-days: 14
