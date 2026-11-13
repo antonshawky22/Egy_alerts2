@@ -192,7 +192,7 @@ class Kronos(nn.Module, PyTorchModelHubMixin):
         self.d_model = kwargs.get('d_model', 512)
         self.n_heads = kwargs.get('n_heads', 8)
         self.learn_te = kwargs.get('learn_te', True)
-        self.ff_dim = kwargs.get('ff_dim', 2048)
+        self.ff_dim = kwargs.get('ff_dim', 1024)
         self.ffn_dropout_p = kwargs.get('ffn_dropout_p', 0.1)
         self.attn_dropout_p = kwargs.get('attn_dropout_p', 0.1)
         self.resid_dropout_p = kwargs.get('resid_dropout_p', 0.1)
