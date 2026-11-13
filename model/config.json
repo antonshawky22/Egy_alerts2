@@ -9,7 +9,7 @@
   "attn_dropout_p": 0.1,
   "resid_dropout_p": 0.1,
   "s1_bits": 8,
-  "s2_bits": 8,
+  "s2_bits": 10,
   "beta": 0.25,
   "gamma0": 1.0,
   "gamma": 0.1,
