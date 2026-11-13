@@ -1,4 +1,4 @@
-Name: AI Lab - Kronos EGX Test
+name: AI Lab - Kronos EGX Test
 
 on:
   workflow_dispatch:
