@@ -49,14 +49,18 @@ class BinarySphericalQuantizer(nn.Module):
         Here we use the official implementation of the BinarySphericalQuantizer.
         """
         super().__init__()
+        
+        # معالجة تلقائية لضمان توافق الأبعاد وتجنب أي خطأ Assertion
+        if embed_dim % group_size != 0:
+            embed_dim = ((embed_dim // group_size) + 1) * group_size
+            
         self.embed_dim = embed_dim
         self.beta = beta  # loss weight for commit loss
         self.gamma0 = gamma0  # loss weight for entropy penalty
         self.gamma = gamma  # loss weight for entropy penalty
         self.zeta = zeta  # loss weight for entire entropy penalty
         self.input_format = input_format
-        if self.embed_dim % group_size != 0:
-        self.embed_dim = ((self.embed_dim // group_size) + 1) * group_size
+        
         self.num_groups = self.embed_dim // group_size
         self.group_size = group_size
         assert persample_entropy_compute in ['group', 'analytical'], "persample_entropy_compute must be either 'group' or 'analytical'"
