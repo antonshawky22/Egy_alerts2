@@ -384,13 +384,11 @@ class MultiHeadCrossAttentionWithRoPE(nn.Module):
         else:
             attn_mask = None
 
-        is_causal_flag = self.training
-
         attn_output = F.scaled_dot_product_attention(
             q, k, v,
             attn_mask=attn_mask,
             dropout_p=self.attn_dropout_p if self.training else 0.0,
-            is_causal=is_causal_flag
+            is_causal=False
         )
 
         attn_output = attn_output.transpose(1, 2).contiguous().view(batch_size, q_len, self.d_model)
@@ -494,15 +492,18 @@ class DualHead(nn.Module):
     def compute_loss(self, s1_logits, s2_logits, s1_targets, s2_targets, padding_mask=None):
         if padding_mask is not None:
             valid_mask = (padding_mask == 0)
-            s1_logits = s1_logits[valid_mask]
-            s2_logits = s2_logits[valid_mask]
-            s1_targets = s1_targets[valid_mask]
-            s2_targets = s2_targets[valid_mask]
-            ce_s1 = F.cross_entropy(s1_logits, s1_targets)
-            ce_s2 = F.cross_entropy(s2_logits, s2_targets)
+            s1_logits = s1_logits[valid_mask].reshape(-1, self.vocab_s1)
+            s2_logits = s2_logits[valid_mask].reshape(-1, self.vocab_s2)
+            s1_targets = s1_targets[valid_mask].reshape(-1)
+            s2_targets = s2_targets[valid_mask].reshape(-1)
         else:
-            ce_s1 = F.cross_entropy(s1_logits.reshape(-1, self.vocab_s1), s1_targets.reshape(-1))
-            ce_s2 = F.cross_entropy(s2_logits.reshape(-1, self.vocab_s2), s2_targets.reshape(-1))
+            s1_logits = s1_logits.reshape(-1, self.vocab_s1)
+            s2_logits = s2_logits.reshape(-1, self.vocab_s2)
+            s1_targets = s1_targets.reshape(-1)
+            s2_targets = s2_targets.reshape(-1)
+            
+        ce_s1 = F.cross_entropy(s1_logits, s1_targets)
+        ce_s2 = F.cross_entropy(s2_logits, s2_targets)
         ce_loss = (ce_s1 + ce_s2) / 2
         return ce_loss, ce_s1, ce_s2
 
@@ -560,11 +561,3 @@ class TemporalEmbedding(nn.Module):
         month_x = self.month_embed(x[:, :, 4])
 
         return hour_x + weekday_x + day_x + month_x + minute_x
-
-
-
-
-
-
-
-
