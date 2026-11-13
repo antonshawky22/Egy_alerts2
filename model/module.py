@@ -55,7 +55,8 @@ class BinarySphericalQuantizer(nn.Module):
         self.gamma = gamma  # loss weight for entropy penalty
         self.zeta = zeta  # loss weight for entire entropy penalty
         self.input_format = input_format
-        assert self.embed_dim % group_size == 0, "embed_dim must be divisible by group_size"
+        if self.embed_dim % group_size != 0:
+        self.embed_dim = ((self.embed_dim // group_size) + 1) * group_size
         self.num_groups = self.embed_dim // group_size
         self.group_size = group_size
         assert persample_entropy_compute in ['group', 'analytical'], "persample_entropy_compute must be either 'group' or 'analytical'"
