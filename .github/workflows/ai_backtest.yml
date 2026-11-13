@@ -1,0 +1,46 @@
+name: AI Lab - Kronos EGX Backtest
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 18 * * 0' # يُمكِن جدولته للعمل أسبوعياً أو يدوياً
+
+jobs:
+  kronos-backtest:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: Upgrade pip
+      run: python -m pip install --upgrade pip
+
+    - name: Install dependencies
+      run: |
+        pip install "numpy<2" pandas==2.2.2 einops==0.8.1 huggingface_hub==0.33.1 safetensors==0.6.2 tqdm==4.67.1
+        pip install --index-url https://download.pytorch.org/whl/cpu torch
+
+    - name: Restore Model Weights Cache
+      uses: actions/cache@v4
+      with:
+        path: model/
+        key: Linux-kronos-weights-v1
+
+    - name: Run AI Backtest Simulation
+      env:
+        PYTHONPATH: ${{ github.workspace }}
+      run: |
+        python ai_backtest.py
+
+    - name: Upload Backtest Report Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: kronos-backtest-report
+        path: kronos_backtest_report.csv
