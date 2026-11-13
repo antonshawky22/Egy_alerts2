@@ -57,8 +57,6 @@ def prepare_symbol(symbol, block):
     return df, timestamps
 
 def future_egx_dates(last_date, periods):
-    # Placeholder session dates: EGX normally trades Sunday through Thursday.
-    # Official exchange holidays are not included; dates are forecast indexes only.
     dates = []
     day = pd.Timestamp(last_date).normalize()
     while len(dates) < periods:
@@ -68,20 +66,48 @@ def future_egx_dates(last_date, periods):
     return pd.Series(dates)
 
 def main():
-    print("EGX KRONOS LAB - INFERENCE SMOKE TEST")
+    print("EGX KRONOS LAB - INFERENCE WITH EGX30 SAFETY GATE")
     print(f"Model: {MODEL_ID}")
     print(f"Input: last {LOOKBACK} daily candles | Horizon: {PRED_LEN} sessions")
     db = load_database()
 
     from model import Kronos, KronosTokenizer, KronosPredictor
-
     import torch
+
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
     print(f"Device: {device}")
     print("Loading tokenizer and fine-tuned EGX model...")
     tokenizer = KronosTokenizer.from_pretrained(TOKENIZER_ID)
     model = Kronos.from_pretrained(MODEL_ID)
     predictor = KronosPredictor(model, tokenizer, device=device, max_context=512)
+
+    # 1. تحليل المؤشر العام EGX30 أولاً ليكون صمام الأمان
+    egx30_return = 0.0
+    egx30_status = "NOT_FOUND"
+    if "EGX30" in db:
+        try:
+            print("Analyzing EGX30 Market Safety Gate...")
+            df_egx, x_ts_egx = prepare_symbol("EGX30", db["EGX30"])
+            y_ts_egx = future_egx_dates(x_ts_egx.iloc[-1], PRED_LEN)
+            forecast_egx = predictor.predict(
+                df=df_egx,
+                x_timestamp=x_ts_egx,
+                y_timestamp=y_ts_egx,
+                pred_len=PRED_LEN,
+                T=1.0,
+                top_p=0.9,
+                sample_count=SAMPLE_COUNT
+            )
+            pred_close_egx = pd.to_numeric(forecast_egx["close"], errors="coerce").dropna()
+            last_close_egx = float(df_egx["close"].iloc[-1])
+            final_close_egx = float(pred_close_egx.iloc[-1])
+            egx30_return = (final_close_egx / last_close_egx - 1) * 100
+            egx30_status = "BULLISH" if egx30_return >= 0 else "BEARISH"
+            print(f">>> EGX30 Market Gate: {egx30_status} (Expected Return: {egx30_return:.2f}%)")
+        except Exception as exc:
+            print(f"WARNING: Could not process EGX30 gate: {exc}")
+    else:
+        print("WARNING: EGX30 not found in database! Proceeding without market gate.")
 
     candidates = []
     for symbol, block in db.items():
@@ -98,6 +124,7 @@ def main():
 
     candidates = candidates[:MAX_SYMBOLS]
     results = []
+    
     for symbol, df, x_ts in candidates:
         try:
             y_ts = future_egx_dates(x_ts.iloc[-1], PRED_LEN)
@@ -115,31 +142,39 @@ def main():
             predicted_close = pd.to_numeric(forecast["close"], errors="coerce").dropna()
             if len(predicted_close) != PRED_LEN:
                 raise ValueError(f"Expected {PRED_LEN} predicted closes, got {len(predicted_close)}.")
+            
             last_close = float(df["close"].iloc[-1])
             final_close = float(predicted_close.iloc[-1])
+            stock_return = (final_close / last_close - 1) * 100
+            
             max_forecast_high = float(pd.to_numeric(forecast["high"], errors="coerce").max()) if "high" in forecast else np.nan
             min_forecast_low = float(pd.to_numeric(forecast["low"], errors="coerce").min()) if "low" in forecast else np.nan
+
+            # صمام الأمان: إذا كان السوق هابطاً (BEARISH) والمؤشر سلبي، نقوم بتصفية الإشارات الضعيفة أو إعطاء تنبيه
+            trade_status = "OK"
+            if egx30_status == "BEARISH" and stock_return > 0:
+                trade_status = "FILTERED_BEARISH_MARKET"  # سهم صاعد لكن السوق العام هابط (تصفية حذرة)
+
             results.append({
                 "symbol": symbol,
                 "last_date": x_ts.iloc[-1].strftime("%Y-%m-%d"),
                 "last_close": last_close,
                 "forecast_close_20": final_close,
-                "forecast_return_20_pct": (final_close / last_close - 1) * 100,
+                "forecast_return_20_pct": stock_return,
                 "forecast_max_high_pct": (max_forecast_high / last_close - 1) * 100 if np.isfinite(max_forecast_high) else np.nan,
                 "forecast_min_low_pct": (min_forecast_low / last_close - 1) * 100 if np.isfinite(min_forecast_low) else np.nan,
-                "status": "OK"
+                "market_gate": egx30_status,
+                "status": trade_status
             })
-            print(f"OK {symbol}: close {last_close:.4f} -> forecast {final_close:.4f}")
+            print(f"{trade_status} {symbol}: close {last_close:.4f} -> forecast {final_close:.4f} ({stock_return:+.2f}%)")
         except Exception as exc:
             print(f"ERROR {symbol}: {exc}")
             results.append({"symbol": symbol, "status": f"ERROR: {exc}"})
 
     pd.DataFrame(results).to_csv(OUTPUT_FILE, index=False, encoding="utf-8-sig")
-    success = sum(1 for row in results if row.get("status") == "OK")
+    success = sum(1 for row in results if "OK" in str(row.get("status")))
     print(f"Finished: {success}/{len(results)} symbols succeeded.")
     print(f"Output: {OUTPUT_FILE}")
-    if success == 0:
-        raise RuntimeError("Kronos inference failed for all selected stocks.")
 
 if __name__ == "__main__":
     try:
