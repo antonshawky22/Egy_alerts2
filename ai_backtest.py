@@ -4,7 +4,7 @@ import torch
 import numpy as np
 import pandas as pd
 
-print("Initializing Kronos Multi-Stock Backtest Engine...")
+print("Initializing Kronos Advanced Backtest Engine with Trend Filter...")
 
 # 1. تحميل قاعدة بيانات الأسعار التاريخية
 db_path = "egx_history_database_v2.json"
@@ -22,8 +22,8 @@ print(f"Available symbols in database to test: {symbols}")
 device = torch.device("cpu")
 print(f"Using device: {device}")
 
-# 3. دالة محاكاة التنبؤ لأي سهم
-def run_kronos_backtest(symbol_name, symbol_data, horizon=20):
+# 3. دالة محاكاة التنبؤ مع إضافة فلتر الاتجاه (Trend Filter)
+def run_kronos_backtest_with_filter(symbol_name, symbol_data, horizon=20):
     prices = []
     dates = []
     
@@ -42,15 +42,15 @@ def run_kronos_backtest(symbol_name, symbol_data, horizon=20):
     
     print(f"[{symbol_name}] Extracted {len(prices)} chronological price candles.")
     
-    if len(prices) < horizon + 20:
-        print(f"[{symbol_name}] Not enough data extracted. Skipping.")
+    if len(prices) < horizon + 50:
+        print(f"[{symbol_name}] Not enough data for trend filter. Skipping.")
         return []
 
     results = []
-    start_idx = 20
+    start_idx = 50  # نحتاج على الأقل 50 شمعة لحساب المتوسط المتحرك للاتجاه
     end_idx = len(prices) - horizon
     
-    for i in range(start_idx, end_idx, 15):  # عينة كل 15 جلسة لتوفير الوقت وسرعة الحساب
+    for i in range(start_idx, end_idx, 15):  # عينة كل 15 جلسة
         historical_slice = prices[:i]
         actual_future_prices = prices[i : i + horizon]
         
@@ -58,14 +58,24 @@ def run_kronos_backtest(symbol_name, symbol_data, horizon=20):
         test_date = dates[i] if i < len(dates) else f"Index_{i}"
         
         try:
-            if len(historical_slice) >= 10:
-                recent_change = (historical_slice[-1] - historical_slice[-10]) / historical_slice[-10]
-                predicted_return = recent_change * (horizon / 10)
-            else:
-                predicted_return = 0.0
-                
+            # 1. حساب المتوسط المتحرك للاتجاة (مثلاً آخر 50 شمعة)
+            sma_50 = np.mean(historical_slice[-50:])
+            
+            # 2. حساب التوقع الذكي
+            recent_change = (historical_slice[-1] - historical_slice[-10]) / historical_slice[-10]
+            predicted_return = recent_change * (horizon / 10)
             predicted_price = float(current_price) * (1.0 + float(predicted_return))
             
+            # 3. تطبيق فلتر الاتجاه (Trend Filter)
+            # إذا كان النموذج يتوقع صعوداً، لكن السعر تحت المتوسط المتحرك (تريند هابط)، نتحفظ ونعدل التوقع أو نتجنبه
+            is_predicted_up = predicted_price > current_price
+            is_above_trend = current_price >= sma_50
+            
+            # إذا كانت الإشارة صعودية ولكن السهم تحت المتوسط العام، نخفض التوقع لتجنب الصفقات الخاطئة
+            if is_predicted_up and not is_above_trend:
+                # فلتر الاتجاه: إلغاء إشارة الشراء الخاطئة في التريند الهابط
+                predicted_price = current_price * 0.99  # تعديل طفيف ليعكس الحذر
+                
         except Exception as e:
             continue
         
@@ -88,12 +98,12 @@ def run_kronos_backtest(symbol_name, symbol_data, horizon=20):
         
     return results
 
-# 4. تشغيل الـ Backtest لكل الأسهم المتاحة في قاعدة البيانات وتجميع النتائج
+# 4. تشغيل الـ Backtest المطور لكل الأسهم
 all_simulation_results = []
 
 for symbol in symbols:
-    print(f"\n--- Starting Backtest Simulation on: {symbol} ---")
-    sym_results = run_kronos_backtest(symbol, db[symbol])
+    print(f"\n--- Running Filtered Backtest on: {symbol} ---")
+    sym_results = run_kronos_backtest_with_filter(symbol, db[symbol])
     all_simulation_results.extend(sym_results)
 
 report_filename = "kronos_backtest_report.csv"
@@ -103,12 +113,12 @@ if all_simulation_results:
     overall_win_rate = (df_report["Success"].sum() / len(df_report)) * 100
     
     print("\n========================================")
-    print(f"GLOBAL BACKTEST SUMMARY ACROSS ALL STOCKS:")
+    print(f"FILTERED GLOBAL BACKTEST SUMMARY:")
     print(f"Total Test Checkpoints: {len(df_report)}")
-    print(f"Overall Directional Win Rate: {overall_win_rate:.2f}%")
+    print(f"Overall Directional Win Rate (With Trend Filter): {overall_win_rate:.2f}%")
     print("========================================")
 else:
-    print("\n[WARNING] No simulation results generated for any symbol.")
+    print("\n[WARNING] No simulation results generated.")
     df_report = pd.DataFrame([{
         "Symbol": "N/A",
         "Date": "N/A",
@@ -119,6 +129,5 @@ else:
         "Success": False
     }])
 
-# حفظ التقرير الشامل
 df_report.to_csv(report_filename, index=False)
-print(f"Comprehensive report saved successfully to: {report_filename} (Rows: {len(df_report)})")
+print(f"Enhanced report saved successfully to: {report_filename} (Rows: {len(df_report)})")
