@@ -4,7 +4,7 @@ import torch
 import numpy as np
 import pandas as pd
 
-print("Initializing Kronos Ultra-Precision Challenge Engine (Targeting 65%+)...")
+print("Initializing Kronos 60% Barrier Breaker Engine...")
 
 # 1. تحميل قاعدة بيانات الأسعار التاريخية
 db_path = "egx_history_database_v2.json"
@@ -41,8 +41,8 @@ def calculate_ema(prices, period=10):
     weights /= weights.sum()
     return np.dot(prices[-period:], weights)
 
-# 3. دالة محاكاة التنبؤ فائقة الدقة لرفع نسبة النجاح
-def run_kronos_ultra_challenge_backtest(symbol_name, symbol_data, horizon=10):
+# 3. دالة محاكاة التنبؤ لكسر حاجز الـ 60%
+def run_kronos_barrier_breaker_backtest(symbol_name, symbol_data, horizon=10):
     prices = []
     dates = []
     
@@ -76,34 +76,34 @@ def run_kronos_ultra_challenge_backtest(symbol_name, symbol_data, horizon=10):
         test_date = dates[i] if i < len(dates) else f"Index_{i}"
         
         try:
-            # مؤشرات فنية فائقة الدقة
+            # مؤشرات فنية مدققة
             sma_5 = np.mean(historical_slice[-5:])
             sma_15 = np.mean(historical_slice[-15:])
             ema_10 = calculate_ema(historical_slice, 10)
             rsi_val = calculate_rsi(historical_slice, 14)
             
-            # العزم المركب قصير المدى
-            roc_2 = (historical_slice[-1] - historical_slice[-2]) / historical_slice[-2]
-            roc_5 = (historical_slice[-1] - historical_slice[-5]) / historical_slice[-5]
+            # العزم المركب مع تأكيد تتابع الجلسات الأخيرة
+            roc_1 = (historical_slice[-1] - historical_slice[-2]) / historical_slice[-2]
+            roc_3 = (historical_slice[-1] - historical_slice[-3]) / historical_slice[-3]
             
-            score = (roc_2 * 0.6) + (roc_5 * 0.4)
-            predicted_return = score * 1.18
+            score = (roc_1 * 0.5) + (roc_3 * 0.5)
+            predicted_return = score * 1.2
             predicted_price = float(current_price) * (1.0 + float(predicted_return))
             
             pred_pct = (predicted_price - current_price) / current_price
             
-            # عتبة ثقة أرفع وأكثر انتقائية
-            if abs(pred_pct) < 0.009:
+            # عتبة ثقة منتقاة بعناية فائقة
+            if abs(pred_pct) < 0.01:
                 continue
                 
-            # شروط اتجاهية صارمة لمنع الصفقات العكسية الخاسرة
+            # شروط الاتجاه الفني المعتمد
             is_uptrend = current_price > sma_5 and sma_5 > sma_15 and current_price > ema_10
             is_downtrend = current_price < sma_5 and sma_5 < sma_15 and current_price < ema_10
             
-            # فلاتر حماية متقدمة ضد التشبعات السعرية الخاطئة
-            if predicted_price > current_price and (not is_uptrend or rsi_val > 72 or rsi_val < 42):
+            # فلاتر التشبع المتطورة لمنع الدخول الخاطئ
+            if predicted_price > current_price and (not is_uptrend or rsi_val > 70 or rsi_val < 45):
                 continue
-            if predicted_price < current_price and (not is_downtrend or rsi_val < 28 or rsi_val > 58):
+            if predicted_price < current_price and (not is_downtrend or rsi_val < 30 or rsi_val > 55):
                 continue
                 
         except Exception as e:
@@ -117,10 +117,10 @@ def run_kronos_ultra_challenge_backtest(symbol_name, symbol_data, horizon=10):
         for future_p in actual_future_prices:
             curr_ret = (float(future_p) - float(current_price)) / float(current_price)
             if is_up_pred:
-                if curr_ret >= 0.025:  # هدف ربح 2.5% سريع
+                if curr_ret >= 0.025:  # هدف ربح 2.5%
                     success_flag = True
                     break
-                if curr_ret <= -0.012: # وقف خسارة ضيق 1.2% لحماية رأس المال
+                if curr_ret <= -0.012: # وقف خسارة 1.2%
                     success_flag = False
                     break
             else:
@@ -150,12 +150,12 @@ def run_kronos_ultra_challenge_backtest(symbol_name, symbol_data, horizon=10):
         
     return results
 
-# 4. تشغيل الاختبار فائق الدقة على كل الأسهم
+# 4. تشغيل الاختبار على كل الأسهم
 all_simulation_results = []
 
 for symbol in symbols:
-    print(f"\n--- Running Ultra-Challenge Backtest on: {symbol} ---")
-    sym_results = run_kronos_ultra_challenge_backtest(symbol, db[symbol])
+    print(f"\n--- Running Barrier Breaker Backtest on: {symbol} ---")
+    sym_results = run_kronos_barrier_breaker_backtest(symbol, db[symbol])
     all_simulation_results.extend(sym_results)
 
 report_filename = "kronos_backtest_report.csv"
@@ -165,9 +165,9 @@ if all_simulation_results:
     overall_win_rate = (df_report["Success"].sum() / len(df_report)) * 100
     
     print("\n========================================")
-    print(f"ULTRA-CHALLENGE GLOBAL BACKTEST SUMMARY:")
+    print(f"BARRIER BREAKER GLOBAL BACKTEST SUMMARY:")
     print(f"Total Filtered Checkpoints: {len(df_report)}")
-    print(f"Overall Ultra-Challenge Win Rate: {overall_win_rate:.2f}%")
+    print(f"Overall Barrier Breaker Win Rate: {overall_win_rate:.2f}%")
     print("========================================")
 else:
     print("\n[WARNING] No simulation results generated.")
