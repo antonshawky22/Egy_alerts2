@@ -65,11 +65,11 @@ def run_weekly_breakout_backtest(symbol_name, symbol_data, horizon=10):
         return []
 
     results = []
-    start_idx = 20  # نحتاج بيانات كافية لحساب القمة السابقة
+    start_idx = 20
     end_idx = len(prices) - horizon
     
     # فحص أسبوعي خطوة بخطوة
-    for i in range(start_idx, end_idx, 4):  # خطوة 4 شمعات أسبوعية (تقريباً شهرياً لكل سهم) لتقليل عدد الصفقات وجعلها نخبوية
+    for i in range(start_idx, end_idx, 4):
         historical_slice = prices[:i]
         actual_future_prices = prices[i : i + horizon]
         
@@ -78,39 +78,33 @@ def run_weekly_breakout_backtest(symbol_name, symbol_data, horizon=10):
         
         try:
             # استراتيجية الاختراق (Breakout):
-            # 1. تحديد أعلى قمة خلال الـ 12 شمعة الأسبوعية السابقة (المقاومة الرئيسية)
             lookback_period = min(12, len(historical_slice) - 1)
             recent_resistance = max(historical_slice[-lookback_period - 1 : -1])
             
-            # 2. شرط الاختراق: السعر الحالي اخترق أعلى مقاومة سابقة بنسبة طفيفة (اختراق حقيقي)
             is_breakout = current_price >= recent_resistance * 1.005
             
             if not is_breakout:
-                continue  # تجاهل أي شمعة لا تحقق اختراقاً حقيقياً
+                continue
             
-            # مؤشرات تأكيد إضافية لضمان قوة الاختراق وعدم كونه "اختراق وهمي" (False Breakout)
             rsi_val = calculate_rsi(historical_slice, 14)
             ema_10 = calculate_ema(historical_slice, 10)
             
-            # شروط صحية للاختراق
             if current_price < ema_10 or rsi_val > 78 or rsi_val < 45:
                 continue
                 
-            # السعر المستهدف المتوقع بعد الاختراق
-            predicted_return = 0.05  -اختراق أسبوعي مستهدف مبدئي
+            predicted_return = 0.05
             predicted_price = current_price * (1.0 + predicted_return)
             
         except Exception as e:
             continue
         
-        # محاكاة الحركة المستقبلية للاختراق بنظام وقف الخسارة المتحرك والتخارج بالموجة
         actual_final_price = actual_future_prices[-1]
         
         success_flag = False
         achieved_exit_return = 0.0
         
-        initial_stop_loss = 0.02   # وقف خسارة 2% تحت سعر الدخول (لحماية الاختراقات)
-        trailing_drop_pct = 0.015  # تراجع متحرك 1.5% من قمة الموجة لجني الأرباح
+        initial_stop_loss = 0.02
+        trailing_drop_pct = 0.015
         
         peak_price = float(current_price)
         
@@ -118,17 +112,14 @@ def run_weekly_breakout_backtest(symbol_name, symbol_data, horizon=10):
             f_price = float(future_p)
             curr_ret = (f_price - float(current_price)) / float(current_price)
             
-            # تحديث أعلى قمة وصل لها السعر أثناء موجة الاختراق الصاعدة
             if f_price > peak_price:
                 peak_price = f_price
             
-            # التحقق من ضرب وقف الخسارة الأولي
             if curr_ret <= -initial_stop_loss:
                 achieved_exit_return = curr_ret
                 success_flag = False
                 break
             
-            # التخارج المتحرك (Trailing Exit): جني الأرباح إذا تراجع السعر عن أعلى قمة وصل لها بعد الصعود
             current_drop_from_peak = (peak_price - f_price) / peak_price
             peak_gain_from_entry = (peak_price - float(current_price)) / float(current_price)
             
@@ -137,7 +128,6 @@ def run_weekly_breakout_backtest(symbol_name, symbol_data, horizon=10):
                 success_flag = True
                 break
             
-            # بنهاية المدى الزمني
             achieved_exit_return = curr_ret
             success_flag = curr_ret > 0.01
 
@@ -155,7 +145,6 @@ def run_weekly_breakout_backtest(symbol_name, symbol_data, horizon=10):
         
     return results
 
-# 4. تشغيل باك تست الاختراقات على كل الأسهم
 all_simulation_results = []
 
 for symbol in symbols:
@@ -163,7 +152,7 @@ for symbol in symbols:
     sym_results = run_weekly_breakout_backtest(symbol, db[symbol])
     all_simulation_results.extend(sym_results)
 
-report_filename = "kronos_breaktest_report.csv"
+report_filename = "kronos_backtest_report.csv"
 
 if all_simulation_results:
     df_report = pd.DataFrame(all_simulation_results)
