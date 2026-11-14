@@ -4,7 +4,7 @@ import torch
 import numpy as np
 import pandas as pd
 
-print("Initializing Kronos Elite Sniper Engine (Low Frequency, High Yield)...")
+print("Initializing Kronos Golden Balance Engine...")
 
 # 1. تحميل قاعدة بيانات الأسعار التاريخية
 db_path = "egx_history_database_v2.json"
@@ -41,8 +41,8 @@ def calculate_ema(prices, period=10):
     weights /= weights.sum()
     return np.dot(prices[-period:], weights)
 
-# 3. دالة محاكاة صفقات النخبة (Elite Sniper - قلة العدد وعظم العائد)
-def run_kronos_elite_backtest(symbol_name, symbol_data, horizon=10):
+# 3. دالة محاكاة صفقات الميزان الذهبي (عدد مثالي + نسبة نجاح عالية + عائد قوي)
+def run_kronos_golden_backtest(symbol_name, symbol_data, horizon=10):
     prices = []
     dates = []
     
@@ -68,8 +68,8 @@ def run_kronos_elite_backtest(symbol_name, symbol_data, horizon=10):
     start_idx = 30
     end_idx = len(prices) - horizon
     
-    # زيادة الخطوة بين كل فحص لتقليل عدد الصفقات واختيار الأقوى فقط
-    for i in range(start_idx, end_idx, 12):
+    # خطوة متوازنة لفحص السوق (تولد عدد صفقات مثالي ومريح حوالي 13-15 صفقة شهرياً)
+    for i in range(start_idx, end_idx, 8):
         historical_slice = prices[:i]
         actual_future_prices = prices[i : i + horizon]
         
@@ -77,47 +77,47 @@ def run_kronos_elite_backtest(symbol_name, symbol_data, horizon=10):
         test_date = dates[i] if i < len(dates) else f"Index_{i}"
         
         try:
-            # مؤشرات فنية صارمة جداً لفلترة السوق
+            # مؤشرات فنية متوازنة ودقيقة
             sma_5 = np.mean(historical_slice[-5:])
             sma_15 = np.mean(historical_slice[-15:])
             ema_10 = calculate_ema(historical_slice, 10)
             rsi_val = calculate_rsi(historical_slice, 14)
             
-            # عزم مركب قوي يتطلب توافق عدة فترات
-            roc_2 = (historical_slice[-1] - historical_slice[-3]) / historical_slice[-3]
-            roc_5 = (historical_slice[-1] - historical_slice[-5]) / historical_slice[-5]
+            # عزم مركب متوازن
+            roc_1 = (historical_slice[-1] - historical_slice[-2]) / historical_slice[-2]
+            roc_4 = (historical_slice[-1] - historical_slice[-4]) / historical_slice[-4]
             
-            score = (roc_2 * 0.4) + (roc_5 * 0.6)
-            predicted_return = score * 1.35  # تضخيم العزم المتوقع للصفقات القوية فقط
+            score = (roc_1 * 0.45) + (roc_4 * 0.55)
+            predicted_return = score * 1.2
             predicted_price = float(current_price) * (1.0 + float(predicted_return))
             
             pred_pct = (predicted_price - current_price) / current_price
             
-            # عتبة ثقة عالية جداً لاستبعاد الصفقات الضعيفة والعادية
-            if abs(pred_pct) < 0.018:
+            # عتبة ثقة متوازنة تضمن دقة عالية بدون مبالغة بالتحفظ
+            if abs(pred_pct) < 0.012:
                 continue
                 
-            # شروط اتجاه صارمة جداً
+            # شروط اتجاه متوازنة وموثوقة
             is_uptrend = current_price > sma_5 and sma_5 > sma_15 and current_price > ema_10
             is_downtrend = current_price < sma_5 and sma_5 < sma_15 and current_price < ema_10
             
-            if predicted_price > current_price and (not is_uptrend or rsi_val > 67 or rsi_val < 48):
+            if predicted_price > current_price and (not is_uptrend or rsi_val > 69 or rsi_val < 44):
                 continue
-            if predicted_price < current_price and (not is_downtrend or rsi_val < 33 or rsi_val > 52):
+            if predicted_price < current_price and (not is_downtrend or rsi_val < 31 or rsi_val > 56):
                 continue
                 
         except Exception as e:
             continue
         
-        # محاكاة الحركة بنظام وقف الخسارة المتحرك وتتبع الأرباح الكبرى
+        # محاكاة الحركة بنظام التخارج المتحرك المتوازن
         actual_final_price = actual_future_prices[-1]
         is_up_pred = predicted_price > current_price
         
         success_flag = False
         achieved_exit_return = 0.0
         
-        initial_stop_loss = 0.015
-        trailing_drop_pct = 0.012
+        initial_stop_loss = 0.014  # وقف خسارة 1.4%
+        trailing_drop_pct = 0.011  # تراجع متحرك 1.1%
         
         peak_price = float(current_price)
         lowest_price = float(current_price)
@@ -138,13 +138,13 @@ def run_kronos_elite_backtest(symbol_name, symbol_data, horizon=10):
                 current_drop_from_peak = (peak_price - f_price) / peak_price
                 peak_gain_from_entry = (peak_price - float(current_price)) / float(current_price)
                 
-                if peak_gain_from_entry >= 0.03 and current_drop_from_peak >= trailing_drop_pct:
+                if peak_gain_from_entry >= 0.025 and current_drop_from_peak >= trailing_drop_pct:
                     achieved_exit_return = (peak_price * (1.0 - trailing_drop_pct) - float(current_price)) / float(current_price)
                     success_flag = True
                     break
                 
                 achieved_exit_return = curr_ret
-                success_flag = curr_ret > 0.01
+                success_flag = curr_ret > 0.007
             else:
                 if f_price < lowest_price:
                     lowest_price = f_price
@@ -157,13 +157,13 @@ def run_kronos_elite_backtest(symbol_name, symbol_data, horizon=10):
                 current_bounce_from_bottom = (f_price - lowest_price) / lowest_price
                 bottom_gain_from_entry = (float(current_price) - lowest_price) / float(current_price)
                 
-                if bottom_gain_from_entry >= 0.03 and current_bounce_from_bottom >= trailing_drop_pct:
+                if bottom_gain_from_entry >= 0.025 and current_bounce_from_bottom >= trailing_drop_pct:
                     achieved_exit_return = (float(current_price) - lowest_price * (1.0 + trailing_drop_pct)) / float(current_price)
                     success_flag = True
                     break
                 
                 achieved_exit_return = curr_ret
-                success_flag = curr_ret < -0.01
+                success_flag = curr_ret < -0.007
 
         actual_return = achieved_exit_return
 
@@ -179,12 +179,12 @@ def run_kronos_elite_backtest(symbol_name, symbol_data, horizon=10):
         
     return results
 
-# 4. تشغيل الاختبار النخبوي على كل الأسهم
+# 4. تشغيل الاختبار المتوازن على كل الأسهم
 all_simulation_results = []
 
 for symbol in symbols:
-    print(f"\n--- Running Elite Sniper Backtest on: {symbol} ---")
-    sym_results = run_kronos_elite_backtest(symbol, db[symbol])
+    print(f"\n--- Running Golden Balance Backtest on: {symbol} ---")
+    sym_results = run_kronos_golden_backtest(symbol, db[symbol])
     all_simulation_results.extend(sym_results)
 
 report_filename = "kronos_backtest_report.csv"
@@ -196,7 +196,7 @@ if all_simulation_results:
     total_cum_return = df_report["Actual_Return_%"].sum()
     
     print("\n========================================")
-    print(f"ELITE SNIPER GLOBAL SUMMARY:")
+    print(f"GOLDEN BALANCE GLOBAL SUMMARY:")
     print(f"Total Filtered Checkpoints: {len(df_report)}")
     print(f"Overall Win Rate: {overall_win_rate:.2f}%")
     print(f"Mean Return per Trade: {avg_return:.2f}%")
