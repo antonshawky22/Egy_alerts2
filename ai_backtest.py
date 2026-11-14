@@ -7,7 +7,7 @@ import pandas as pd
 print("Initializing Kronos Weekly Breakout Backtest Engine...")
 
 # 1. تحميل قاعدة بيانات الأسعار التاريخية (الفريم الأسبوعي)
-db_path = "egx_history_database_v2.json"
+db_path = "egx_weekly_database_v2.json"
 if not os.path.exists(db_path):
     raise FileNotFoundError(f"Database file {db_path} not found in root directory!")
 
