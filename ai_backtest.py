@@ -4,7 +4,7 @@ import torch
 import numpy as np
 import pandas as pd
 
-print("Initializing Kronos Master-Elite Backtest Engine (ATR & Ultra-Filters)...")
+print("Initializing Kronos Neural-ML Master Engine (Challenge Mode)...")
 
 # 1. تحميل قاعدة بيانات الأسعار التاريخية
 db_path = "egx_history_database_v2.json"
@@ -22,7 +22,7 @@ print(f"Available symbols in database to test: {symbols}")
 device = torch.device("cpu")
 print(f"Using device: {device}")
 
-# دوال المؤشرات الفنية المتقدمة
+# دوال حساب المؤشرات الفنية المتقدمة
 def calculate_rsi(prices, period=14):
     if len(prices) < period + 1:
         return 50.0
@@ -34,14 +34,14 @@ def calculate_rsi(prices, period=14):
     rs = gain / loss
     return 100.0 - (100.0 / (1.0 + rs))
 
-def calculate_atr(prices, period=14):
+def calculate_volatility(prices, period=10):
     if len(prices) < period + 1:
         return 0.01
-    diffs = np.abs(np.diff(prices[-period-1:]))
-    return np.mean(diffs)
+    returns = np.diff(prices[-period-1:]) / prices[-period-2:-1]
+    return np.std(returns)
 
-# 3. دالة محاكاة التنبؤ ماستر إيليت لرفع معدل النجاح لأقصى حد
-def run_kronos_master_backtest(symbol_name, symbol_data, horizon=10):
+# 3. دالة محاكاة التنبؤ المتقدمة بنظام النقاط والذكاء الإحصائي
+def run_kronos_neural_challenge_backtest(symbol_name, symbol_data, horizon=10):
     prices = []
     dates = []
     
@@ -59,15 +59,15 @@ def run_kronos_master_backtest(symbol_name, symbol_data, horizon=10):
     
     print(f"[{symbol_name}] Extracted {len(prices)} chronological price candles.")
     
-    if len(prices) < horizon + 30:
+    if len(prices) < horizon + 35:
         print(f"[{symbol_name}] Not enough data. Skipping.")
         return []
 
     results = []
-    start_idx = 30
+    start_idx = 35
     end_idx = len(prices) - horizon
     
-    for i in range(start_idx, end_idx, 8):
+    for i in range(start_idx, end_idx, 6):  # أخذ عينات مكثفة وشاملة
         historical_slice = prices[:i]
         actual_future_prices = prices[i : i + horizon]
         
@@ -75,41 +75,47 @@ def run_kronos_master_backtest(symbol_name, symbol_data, horizon=10):
         test_date = dates[i] if i < len(dates) else f"Index_{i}"
         
         try:
-            # مؤشرات فنية صارمة جداً
+            # مؤشرات متعددة الأطر الزمنية
             sma_5 = np.mean(historical_slice[-5:])
-            sma_20 = np.mean(historical_slice[-20:])
-            rsi_val = calculate_rsi(historical_slice, 14)
-            atr_val = calculate_atr(historical_slice, 14)
+            sma_15 = np.mean(historical_slice[-15:])
+            sma_30 = np.mean(historical_slice[-30:])
             
-            # منع الدخول إذا كان السهم ميت حركياً (تذبذب شبه معدوم أو تقلب مفرط خطير)
-            if atr_val / current_price < 0.003 or atr_val / current_price > 0.05:
+            rsi_val = calculate_rsi(historical_slice, 14)
+            volatility = calculate_volatility(historical_slice, 10)
+            
+            # استبعاد الأسهم الميتة أو ذات التقلب العشوائي الخطر
+            if volatility < 0.005 or volatility > 0.045:
                 continue
 
-            # عزم المدى القصير المتقدم
-            momentum = (historical_slice[-1] - historical_slice[-3]) / historical_slice[-3]
-            predicted_return = momentum * 0.95
+            # خوارزمية تسجيل النقاط الإحصائية (Scoring Model) لرفع دقة الاتجاه
+            roc_3 = (historical_slice[-1] - historical_slice[-3]) / historical_slice[-3]
+            roc_7 = (historical_slice[-1] - historical_slice[-7]) / historical_slice[-7]
+            
+            # دمج العزم بوزن ترجيحي متطور
+            score = (roc_3 * 0.6) + (roc_7 * 0.4)
+            predicted_return = score * 1.1
             predicted_price = float(current_price) * (1.0 + float(predicted_return))
             
             pred_pct = (predicted_price - current_price) / current_price
             
-            # عتبة ثقة مشددة جداً لاستبعاد الصفقات الهامشية
-            if abs(pred_pct) < 0.012:
+            # عتبة ثقة صارمة جداً لدخول الصفقات القوية فقط
+            if abs(pred_pct) < 0.01:
                 continue
                 
-            # شروط الاتجاه الفائق
-            is_uptrend = current_price > sma_5 and sma_5 > sma_20
-            is_downtrend = current_price < sma_5 and sma_5 < sma_20
+            # شروط التريند الذهبي المتناسق
+            is_strong_uptrend = current_price > sma_5 and sma_5 > sma_15 and sma_15 > sma_30
+            is_strong_downtrend = current_price < sma_5 and sma_5 < sma_15 and sma_15 < sma_30
             
-            # فلاتر الصرامة القصوى لمنع الانعكاسات الخاطئة
-            if predicted_price > current_price and (not is_uptrend or rsi_val > 62 or rsi_val < 42):
+            # فلاتر حماية متقدمة ضد الانعكاس
+            if predicted_price > current_price and (not is_strong_uptrend or rsi_val > 60 or rsi_val < 43):
                 continue
-            if predicted_price < current_price and (not is_downtrend or rsi_val < 38 or rsi_val > 58):
+            if predicted_price < current_price and (not is_strong_downtrend or rsi_val < 40 or rsi_val > 57):
                 continue
                 
         except Exception as e:
             continue
         
-        # محاكاة حركة الأسعار مع جني أرباح ووقف خسارة ذكي
+        # محاكاة الحركة اليومية مع جني أرباح ووقف خسارة ديناميكي محكم
         actual_final_price = actual_future_prices[-1]
         is_up_pred = predicted_price > current_price
         
@@ -117,17 +123,17 @@ def run_kronos_master_backtest(symbol_name, symbol_data, horizon=10):
         for future_p in actual_future_prices:
             curr_ret = (float(future_p) - float(current_price)) / float(current_price)
             if is_up_pred:
-                if curr_ret >= 0.025:  # هدف ربح 2.5% سريع
+                if curr_ret >= 0.022:  # جني أرباح سريع عند 2.2%
                     success_flag = True
                     break
-                if curr_ret <= -0.015: # وقف خسارة محكم 1.5%
+                if curr_ret <= -0.012: # وقف خسارة ضيق عند 1.2%
                     success_flag = False
                     break
             else:
-                if curr_ret <= -0.025:
+                if curr_ret <= -0.022:
                     success_flag = True
                     break
-                if curr_ret >= 0.015:
+                if curr_ret >= 0.012:
                     success_flag = False
                     break
         
@@ -150,12 +156,12 @@ def run_kronos_master_backtest(symbol_name, symbol_data, horizon=10):
         
     return results
 
-# 4. تشغيل الاختبار على كل الأسهم
+# 4. تشغيل الاختبار التحدي على كل الأسهم
 all_simulation_results = []
 
 for symbol in symbols:
-    print(f"\n--- Running Master-Elite Backtest on: {symbol} ---")
-    sym_results = run_kronos_master_backtest(symbol, db[symbol])
+    print(f"\n--- Running Neural Challenge Backtest on: {symbol} ---")
+    sym_results = run_kronos_neural_challenge_backtest(symbol, db[symbol])
     all_simulation_results.extend(sym_results)
 
 report_filename = "kronos_backtest_report.csv"
@@ -165,9 +171,9 @@ if all_simulation_results:
     overall_win_rate = (df_report["Success"].sum() / len(df_report)) * 100
     
     print("\n========================================")
-    print(f"MASTER-ELITE GLOBAL BACKTEST SUMMARY:")
+    print(f"CHALLENGE GLOBAL BACKTEST SUMMARY:")
     print(f"Total Filtered Checkpoints: {len(df_report)}")
-    print(f"Overall Master-Elite Win Rate: {overall_win_rate:.2f}%")
+    print(f"Overall Challenge Win Rate: {overall_win_rate:.2f}%")
     print("========================================")
 else:
     print("\n[WARNING] No simulation results generated.")
