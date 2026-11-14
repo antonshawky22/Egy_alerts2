@@ -4,7 +4,7 @@ import torch
 import numpy as np
 import pandas as pd
 
-print("Initializing Kronos Trailing Wave Exit Engine...")
+print("Initializing Kronos Elite Sniper Engine (Low Frequency, High Yield)...")
 
 # 1. تحميل قاعدة بيانات الأسعار التاريخية
 db_path = "egx_history_database_v2.json"
@@ -41,8 +41,8 @@ def calculate_ema(prices, period=10):
     weights /= weights.sum()
     return np.dot(prices[-period:], weights)
 
-# 3. دالة محاكاة التنبؤ بنظام التخارج بالموجة ووقف الخسارة المتحرك (Trailing Stop)
-def run_kronos_trailing_wave_backtest(symbol_name, symbol_data, horizon=10):
+# 3. دالة محاكاة صفقات النخبة (Elite Sniper - قلة العدد وعظم العائد)
+def run_kronos_elite_backtest(symbol_name, symbol_data, horizon=10):
     prices = []
     dates = []
     
@@ -68,7 +68,8 @@ def run_kronos_trailing_wave_backtest(symbol_name, symbol_data, horizon=10):
     start_idx = 30
     end_idx = len(prices) - horizon
     
-    for i in range(start_idx, end_idx, 6):
+    # زيادة الخطوة بين كل فحص لتقليل عدد الصفقات واختيار الأقوى فقط
+    for i in range(start_idx, end_idx, 12):
         historical_slice = prices[:i]
         actual_future_prices = prices[i : i + horizon]
         
@@ -76,48 +77,47 @@ def run_kronos_trailing_wave_backtest(symbol_name, symbol_data, horizon=10):
         test_date = dates[i] if i < len(dates) else f"Index_{i}"
         
         try:
-            # مؤشرات فنية مدققة لضمان دقة الاتجاه
+            # مؤشرات فنية صارمة جداً لفلترة السوق
             sma_5 = np.mean(historical_slice[-5:])
             sma_15 = np.mean(historical_slice[-15:])
             ema_10 = calculate_ema(historical_slice, 10)
             rsi_val = calculate_rsi(historical_slice, 14)
             
-            # عزم مركب قوي ومنتقى
-            roc_1 = (historical_slice[-1] - historical_slice[-2]) / historical_slice[-2]
-            roc_3 = (historical_slice[-1] - historical_slice[-3]) / historical_slice[-3]
+            # عزم مركب قوي يتطلب توافق عدة فترات
+            roc_2 = (historical_slice[-1] - historical_slice[-3]) / historical_slice[-3]
+            roc_5 = (historical_slice[-1] - historical_slice[-5]) / historical_slice[-5]
             
-            score = (roc_1 * 0.5) + (roc_3 * 0.5)
-            predicted_return = score * 1.2
+            score = (roc_2 * 0.4) + (roc_5 * 0.6)
+            predicted_return = score * 1.35  # تضخيم العزم المتوقع للصفقات القوية فقط
             predicted_price = float(current_price) * (1.0 + float(predicted_return))
             
             pred_pct = (predicted_price - current_price) / current_price
             
-            # عتبة ثقة صارمة لضمان صفقات ذات جودة عالية جداً
-            if abs(pred_pct) < 0.01:
+            # عتبة ثقة عالية جداً لاستبعاد الصفقات الضعيفة والعادية
+            if abs(pred_pct) < 0.018:
                 continue
                 
-            # شروط الاتجاه الفني المعتمد
+            # شروط اتجاه صارمة جداً
             is_uptrend = current_price > sma_5 and sma_5 > sma_15 and current_price > ema_10
             is_downtrend = current_price < sma_5 and sma_5 < sma_15 and current_price < ema_10
             
-            if predicted_price > current_price and (not is_uptrend or rsi_val > 70 or rsi_val < 43):
+            if predicted_price > current_price and (not is_uptrend or rsi_val > 67 or rsi_val < 48):
                 continue
-            if predicted_price < current_price and (not is_downtrend or rsi_val < 30 or rsi_val > 57):
+            if predicted_price < current_price and (not is_downtrend or rsi_val < 33 or rsi_val > 52):
                 continue
                 
         except Exception as e:
             continue
         
-        # محاكاة الحركة بنظام وقف الخسارة المتحرك (Trailing Stop & Wave Exit)
+        # محاكاة الحركة بنظام وقف الخسارة المتحرك وتتبع الأرباح الكبرى
         actual_final_price = actual_future_prices[-1]
         is_up_pred = predicted_price > current_price
         
         success_flag = False
         achieved_exit_return = 0.0
         
-        # إعداد مستويات التتبع المتحرك
-        initial_stop_loss = 0.015  # وقف خسارة أولي 1.5%
-        trailing_drop_pct = 0.012  # التراجع المسموح به من القمة لجني الأرباح (1.2%)
+        initial_stop_loss = 0.015
+        trailing_drop_pct = 0.012
         
         peak_price = float(current_price)
         lowest_price = float(current_price)
@@ -127,30 +127,25 @@ def run_kronos_trailing_wave_backtest(symbol_name, symbol_data, horizon=10):
             curr_ret = (f_price - float(current_price)) / float(current_price)
             
             if is_up_pred:
-                # تحديث أعلى قمة وصل لها السعر أثناء الموجة الصاعدة
                 if f_price > peak_price:
                     peak_price = f_price
                 
-                # التحقق من وقف الخسارة الأولي
                 if curr_ret <= -initial_stop_loss:
                     achieved_exit_return = curr_ret
                     success_flag = False
                     break
                 
-                # التخارج المتحرك (Trailing Exit): إذا هبط السعر عن القمة بنسبة معينة بعد تحقيق أرباح
                 current_drop_from_peak = (peak_price - f_price) / peak_price
                 peak_gain_from_entry = (peak_price - float(current_price)) / float(current_price)
                 
-                if peak_gain_from_entry >= 0.02 and current_drop_from_peak >= trailing_drop_pct:
+                if peak_gain_from_entry >= 0.03 and current_drop_from_peak >= trailing_drop_pct:
                     achieved_exit_return = (peak_price * (1.0 - trailing_drop_pct) - float(current_price)) / float(current_price)
                     success_flag = True
                     break
                 
-                # إذا انتهت الفترة ولم يتم ضرب الوقف أو التتبع، نحسب العائد عند آخر شمعة
                 achieved_exit_return = curr_ret
-                success_flag = curr_ret > 0.005
+                success_flag = curr_ret > 0.01
             else:
-                # مسار التوقع الهبوطي (Short)
                 if f_price < lowest_price:
                     lowest_price = f_price
                 
@@ -162,13 +157,13 @@ def run_kronos_trailing_wave_backtest(symbol_name, symbol_data, horizon=10):
                 current_bounce_from_bottom = (f_price - lowest_price) / lowest_price
                 bottom_gain_from_entry = (float(current_price) - lowest_price) / float(current_price)
                 
-                if bottom_gain_from_entry >= 0.02 and current_bounce_from_bottom >= trailing_drop_pct:
+                if bottom_gain_from_entry >= 0.03 and current_bounce_from_bottom >= trailing_drop_pct:
                     achieved_exit_return = (float(current_price) - lowest_price * (1.0 + trailing_drop_pct)) / float(current_price)
                     success_flag = True
                     break
                 
                 achieved_exit_return = curr_ret
-                success_flag = curr_ret < -0.005
+                success_flag = curr_ret < -0.01
 
         actual_return = achieved_exit_return
 
@@ -184,12 +179,12 @@ def run_kronos_trailing_wave_backtest(symbol_name, symbol_data, horizon=10):
         
     return results
 
-# 4. تشغيل الاختبار بنظام التخارج المتحرك على كل الأسهم
+# 4. تشغيل الاختبار النخبوي على كل الأسهم
 all_simulation_results = []
 
 for symbol in symbols:
-    print(f"\n--- Running Trailing Wave Backtest on: {symbol} ---")
-    sym_results = run_kronos_trailing_wave_backtest(symbol, db[symbol])
+    print(f"\n--- Running Elite Sniper Backtest on: {symbol} ---")
+    sym_results = run_kronos_elite_backtest(symbol, db[symbol])
     all_simulation_results.extend(sym_results)
 
 report_filename = "kronos_backtest_report.csv"
@@ -201,7 +196,7 @@ if all_simulation_results:
     total_cum_return = df_report["Actual_Return_%"].sum()
     
     print("\n========================================")
-    print(f"TRAILING WAVE GLOBAL SUMMARY:")
+    print(f"ELITE SNIPER GLOBAL SUMMARY:")
     print(f"Total Filtered Checkpoints: {len(df_report)}")
     print(f"Overall Win Rate: {overall_win_rate:.2f}%")
     print(f"Mean Return per Trade: {avg_return:.2f}%")
