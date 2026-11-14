@@ -4,7 +4,7 @@ import torch
 import numpy as np
 import pandas as pd
 
-print("Initializing Kronos Neural-ML Stable Challenge Engine...")
+print("Initializing Kronos Neural-ML Robust Engine...")
 
 # 1. تحميل قاعدة بيانات الأسعار التاريخية
 db_path = "egx_history_database_v2.json"
@@ -22,7 +22,7 @@ print(f"Available symbols in database to test: {symbols}")
 device = torch.device("cpu")
 print(f"Using device: {device}")
 
-# دوال حساب المؤشرات الفنية المتقدمة
+# دوال حساب المؤشرات الفنية
 def calculate_rsi(prices, period=14):
     if len(prices) < period + 1:
         return 50.0
@@ -34,14 +34,8 @@ def calculate_rsi(prices, period=14):
     rs = gain / loss
     return 100.0 - (100.0 / (1.0 + rs))
 
-def calculate_volatility(prices, period=10):
-    if len(prices) < period + 1:
-        return 0.01
-    returns = np.diff(prices[-period-1:]) / prices[-period-2:-1]
-    return np.std(returns)
-
-# 3. دالة محاكاة التنبؤ المتقدمة (مستقرة وعالية الدقة)
-def run_kronos_stable_challenge_backtest(symbol_name, symbol_data, horizon=10):
+# 3. دالة محاكاة التنبؤ المرنة وعالية الإنتاجية
+def run_kronos_robust_backtest(symbol_name, symbol_data, horizon=10):
     prices = []
     dates = []
     
@@ -59,15 +53,15 @@ def run_kronos_stable_challenge_backtest(symbol_name, symbol_data, horizon=10):
     
     print(f"[{symbol_name}] Extracted {len(prices)} chronological price candles.")
     
-    if len(prices) < horizon + 30:
+    if len(prices) < horizon + 20:
         print(f"[{symbol_name}] Not enough data. Skipping.")
         return []
 
     results = []
-    start_idx = 30
+    start_idx = 20
     end_idx = len(prices) - horizon
     
-    for i in range(start_idx, end_idx, 6):
+    for i in range(start_idx, end_idx, 5):  # أخذ عينات منتظمة لضمان وفرة الصفقات
         historical_slice = prices[:i]
         actual_future_prices = prices[i : i + horizon]
         
@@ -75,45 +69,31 @@ def run_kronos_stable_challenge_backtest(symbol_name, symbol_data, horizon=10):
         test_date = dates[i] if i < len(dates) else f"Index_{i}"
         
         try:
-            # مؤشرات فنية مرنة ودقيقة
-            sma_5 = np.mean(historical_slice[-5:])
-            sma_20 = np.mean(historical_slice[-20:])
-            
+            # مؤشرات الزخم المتقدمة
+            sma_10 = np.mean(historical_slice[-10:])
             rsi_val = calculate_rsi(historical_slice, 14)
-            volatility = calculate_volatility(historical_slice, 10)
             
-            # استبعاد التقلب العشوائي المفرط فقط
-            if volatility > 0.06:
-                continue
-
-            # خوارزمية تسجيل النقاط الإحصائية
+            # خوارزمية حساب العزم والتوقع
             roc_3 = (historical_slice[-1] - historical_slice[-3]) / historical_slice[-3]
-            roc_7 = (historical_slice[-1] - historical_slice[-7]) / historical_slice[-7]
-            
-            score = (roc_3 * 0.7) + (roc_7 * 0.3)
-            predicted_return = score * 1.15
+            predicted_return = roc_3 * 1.2
             predicted_price = float(current_price) * (1.0 + float(predicted_return))
             
             pred_pct = (predicted_price - current_price) / current_price
             
-            # عتبة ثقة متوازنة لضمان وجود صفقات نقية عالية الجودة
-            if abs(pred_pct) < 0.008:
+            # عتبة ثقة مرنة لضمان توليد صفقات صحيحة بدون حظر تام
+            if abs(pred_pct) < 0.005:
                 continue
                 
-            # شروط الاتجاه الذكية
-            is_uptrend = current_price > sma_5 and sma_5 > sma_20
-            is_downtrend = current_price < sma_5 and sma_5 < sma_20
-            
-            # تصفية التشبعات الخخطرة
-            if predicted_price > current_price and (not is_uptrend or rsi_val > 75):
+            # تصفية التشبعات الحادة فقط
+            if predicted_price > current_price and rsi_val > 80:
                 continue
-            if predicted_price < current_price and (not is_downtrend or rsi_val < 25):
+            if predicted_price < current_price and rsi_val < 20:
                 continue
                 
         except Exception as e:
             continue
         
-        # محاكاة الحركة مع جني أرباح ووقف خسارة
+        # محاكاة الحركة مع جني أرباح ووقف خسارة ذكي
         actual_final_price = actual_future_prices[-1]
         is_up_pred = predicted_price > current_price
         
@@ -154,12 +134,12 @@ def run_kronos_stable_challenge_backtest(symbol_name, symbol_data, horizon=10):
         
     return results
 
-# 4. تشغيل الاختبار المستقر على كل الأسهم
+# 4. تشغيل الاختبار على كل الأسهم
 all_simulation_results = []
 
 for symbol in symbols:
-    print(f"\n--- Running Stable Challenge Backtest on: {symbol} ---")
-    sym_results = run_kronos_stable_challenge_backtest(symbol, db[symbol])
+    print(f"\n--- Running Robust Backtest on: {symbol} ---")
+    sym_results = run_kronos_robust_backtest(symbol, db[symbol])
     all_simulation_results.extend(sym_results)
 
 report_filename = "kronos_backtest_report.csv"
@@ -169,9 +149,9 @@ if all_simulation_results:
     overall_win_rate = (df_report["Success"].sum() / len(df_report)) * 100
     
     print("\n========================================")
-    print(f"STABLE CHALLENGE GLOBAL BACKTEST SUMMARY:")
+    print(f"ROBUST GLOBAL BACKTEST SUMMARY:")
     print(f"Total Filtered Checkpoints: {len(df_report)}")
-    print(f"Overall Stable Challenge Win Rate: {overall_win_rate:.2f}%")
+    print(f"Overall Robust Win Rate: {overall_win_rate:.2f}%")
     print("========================================")
 else:
     print("\n[WARNING] No simulation results generated.")
