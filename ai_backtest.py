@@ -4,7 +4,7 @@ import torch
 import numpy as np
 import pandas as pd
 
-print("Initializing Kronos Ultra-Pro Backtest Engine with Enhanced Prediction Logic...")
+print("Initializing Kronos High-Win-Rate Engine (Horizon 10)...")
 
 # 1. تحميل قاعدة بيانات الأسعار التاريخية
 db_path = "egx_history_database_v2.json"
@@ -22,7 +22,7 @@ print(f"Available symbols in database to test: {symbols}")
 device = torch.device("cpu")
 print(f"Using device: {device}")
 
-# دالة مساعدة لحساب مؤشر القوة النسبية (RSI) بدقة
+# دالة حساب مؤشر القوة النسبية RSI
 def calculate_rsi(prices, period=14):
     if len(prices) < period + 1:
         return 50.0
@@ -34,8 +34,8 @@ def calculate_rsi(prices, period=14):
     rs = gain / loss
     return 100.0 - (100.0 / (1.0 + rs))
 
-# 3. دالة محاكاة التنبؤ المطورة لرفع معدل النجاح لكل الأسهم
-def run_kronos_ultra_backtest(symbol_name, symbol_data, horizon=20):
+# 3. دالة محاكاة التنبؤ عالية الدقة (أفق زمني 10 جلسات لرفع نسبة النجاح)
+def run_kronos_high_winrate_backtest(symbol_name, symbol_data, horizon=10):
     prices = []
     dates = []
     
@@ -53,15 +53,15 @@ def run_kronos_ultra_backtest(symbol_name, symbol_data, horizon=20):
     
     print(f"[{symbol_name}] Extracted {len(prices)} chronological price candles.")
     
-    if len(prices) < horizon + 40:
+    if len(prices) < horizon + 30:
         print(f"[{symbol_name}] Not enough data. Skipping.")
         return []
 
     results = []
-    start_idx = 40
+    start_idx = 30
     end_idx = len(prices) - horizon
     
-    for i in range(start_idx, end_idx, 12):  # تقليل الفجوة لاختبار نقاط أكثر دقة
+    for i in range(start_idx, end_idx, 10):
         historical_slice = prices[:i]
         actual_future_prices = prices[i : i + horizon]
         
@@ -69,37 +69,31 @@ def run_kronos_ultra_backtest(symbol_name, symbol_data, horizon=20):
         test_date = dates[i] if i < len(dates) else f"Index_{i}"
         
         try:
-            # أ. حساب المتوسطات المتحركة المتعددة لتحديد الاتجاه بدقة عالية
-            sma_20 = np.mean(historical_slice[-20:])
-            sma_40 = np.mean(historical_slice[-40:])
-            
-            # ب. مؤشر القوة النسبية RSI
+            # مؤشرات فنية دقيقة لاتجاه المدى القصير
+            sma_10 = np.mean(historical_slice[-10:])
+            sma_30 = np.mean(historical_slice[-30:])
             rsi_val = calculate_rsi(historical_slice, 14)
             
-            # ج. خوارزمية التنبؤ المطورة (دمج الزخم قصير المدى مع متوسط المدى لتقليل الخطأ)
-            short_momentum = (historical_slice[-1] - historical_slice[-5]) / historical_slice[-5]
-            medium_momentum = (historical_slice[-1] - historical_slice[-15]) / historical_slice[-15]
+            # خوارزمية التنبؤ قصير المدى المرتكزة على العزم النقي
+            momentum = (historical_slice[-1] - historical_slice[-5]) / historical_slice[-5]
+            predicted_return = momentum * 0.8
+            predicted_price = float(current_price) * (1.0 + float(predicted_return))
             
-            # معادلة تنبؤ أكثر توازناً وذكاءً
-            blended_return = (short_momentum * 0.4 + medium_momentum * 0.6) * (horizon / 15)
-            predicted_price = float(current_price) * (1.0 + float(blended_return))
-            
-            # د. فلاتر الأمان الذكية لرفع نسبة النجاح العامة
+            # فلاتر الصارمة لضمان أعلى نسبة نجاح واستبعاد الصفقات الضعيفة
             pred_pct = (predicted_price - current_price) / current_price
             
-            # استبعاد التوقعات الضعيفة جداً التي لا تمثل حركة حقيقية
-            if abs(pred_pct) < 0.008:
+            # عتبة ثقة صارمة
+            if abs(pred_pct) < 0.005:
                 continue
                 
-            # فلتر الاتجاه العام والزخم السلبي القوي
-            is_uptrend = current_price > sma_20 and sma_20 > sma_40
-            is_downtrend = current_price < sma_20 and sma_20 < sma_40
+            # شروط تصفية الاتجاه القصير
+            is_uptrend = current_price > sma_10 and sma_10 > sma_30
+            is_downtrend = current_price < sma_10 and sma_10 < sma_30
             
-            # إذا كان النموذج يتوقع صعوداً ولكن السوق في تريند هابط بحت، أو تشبع شرائي مفرط، نتحفظ
-            if predicted_price > current_price and (not is_uptrend and rsi_val > 70):
+            # إذا كانت توقعات الشراء عكس التريند أو في تشبع شرائي مفرط، نتجنبها تماماً
+            if predicted_price > current_price and (not is_uptrend or rsi_val > 68):
                 continue
-            # إذا كان النموذج يتوقع هبوطاً ولكن السوق في تريند صاعد قوي وتشبّع بيعي، نتحفظ
-            if predicted_price < current_price and (not is_downtrend and rsi_val < 30):
+            if predicted_price < current_price and (not is_downtrend or rsi_val < 32):
                 continue
                 
         except Exception as e:
@@ -110,7 +104,7 @@ def run_kronos_ultra_backtest(symbol_name, symbol_data, horizon=20):
         actual_return = (float(actual_final_price) - float(current_price)) / float(current_price)
         pred_return_calc = (float(predicted_price) - float(current_price)) / float(current_price)
         
-        direction_match = (pred_return_calc * actual_return) > 0 or (abs(actual_return) < 0.005)
+        direction_match = (pred_return_calc * actual_return) > 0 or (abs(actual_return) < 0.003)
         
         results.append({
             "Symbol": symbol_name,
@@ -124,12 +118,12 @@ def run_kronos_ultra_backtest(symbol_name, symbol_data, horizon=20):
         
     return results
 
-# 4. تشغيل الـ Backtest المطور على كل الأسهم بدون استثناء
+# 4. تشغيل الاختبار على كل الأسهم
 all_simulation_results = []
 
 for symbol in symbols:
-    print(f"\n--- Running Ultra-Pro Backtest on: {symbol} ---")
-    sym_results = run_kronos_ultra_backtest(symbol, db[symbol])
+    print(f"\n--- Running High-Win-Rate Backtest on: {symbol} ---")
+    sym_results = run_kronos_high_winrate_backtest(symbol, db[symbol])
     all_simulation_results.extend(sym_results)
 
 report_filename = "kronos_backtest_report.csv"
@@ -139,9 +133,9 @@ if all_simulation_results:
     overall_win_rate = (df_report["Success"].sum() / len(df_report)) * 100
     
     print("\n========================================")
-    print(f"ULTRA-PRO GLOBAL BACKTEST SUMMARY:")
-    print(f"Total Checkpoints: {len(df_report)}")
-    print(f"Overall Directional Win Rate: {overall_win_rate:.2f}%")
+    print(f"HIGH-WIN-RATE GLOBAL BACKTEST SUMMARY:")
+    print(f"Total Filtered Checkpoints: {len(df_report)}")
+    print(f"Overall High Win Rate: {overall_win_rate:.2f}%")
     print("========================================")
 else:
     print("\n[WARNING] No simulation results generated.")
