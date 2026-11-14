@@ -4,7 +4,7 @@ import torch
 import numpy as np
 import pandas as pd
 
-print("Initializing Kronos Advanced Backtest Engine with Trend Filter...")
+print("Initializing Kronos Pro Backtest Engine with Confidence & Trend Filters...")
 
 # 1. تحميل قاعدة بيانات الأسعار التاريخية
 db_path = "egx_history_database_v2.json"
@@ -22,14 +22,18 @@ print(f"Available symbols in database to test: {symbols}")
 device = torch.device("cpu")
 print(f"Using device: {device}")
 
-# 3. دالة محاكاة التنبؤ مع إضافة فلتر الاتجاه (Trend Filter)
-def run_kronos_backtest_with_filter(symbol_name, symbol_data, horizon=20):
+# دالة مساعدة لحساب مؤشر القوة النسبية المبسط (RSI)
+function_rsi = lambda prices, period=14: 50.0 if len(prices) < period + 1 else (
+    lambda diff: 100.0 - (100.0 / (1.0 + (np.mean(np.maximum(diff, 0)) / (np.mean(np.maximum(-diff, 0)) + 1e-10))))
+)(np.diff(prices[-period-1:]))
+
+# 3. دالة محاكاة التنبؤ الاحترافية مع فلاتر الثقة والاتجاه
+def run_kronos_pro_backtest(symbol_name, symbol_data, horizon=20):
     prices = []
     dates = []
     
     if isinstance(symbol_data, dict) and "data" in symbol_data:
         data_dict = symbol_data["data"]
-        # ترتيب التواريخ تصاعدياً من الأقدم للأحدث
         sorted_dates = sorted(data_dict.keys())
         
         for d in sorted_dates:
@@ -43,14 +47,14 @@ def run_kronos_backtest_with_filter(symbol_name, symbol_data, horizon=20):
     print(f"[{symbol_name}] Extracted {len(prices)} chronological price candles.")
     
     if len(prices) < horizon + 50:
-        print(f"[{symbol_name}] Not enough data for trend filter. Skipping.")
+        print(f"[{symbol_name}] Not enough data. Skipping.")
         return []
 
     results = []
-    start_idx = 50  # نحتاج على الأقل 50 شمعة لحساب المتوسط المتحرك للاتجاه
+    start_idx = 50
     end_idx = len(prices) - horizon
     
-    for i in range(start_idx, end_idx, 15):  # عينة كل 15 جلسة
+    for i in range(start_idx, end_idx, 15):
         historical_slice = prices[:i]
         actual_future_prices = prices[i : i + horizon]
         
@@ -58,23 +62,31 @@ def run_kronos_backtest_with_filter(symbol_name, symbol_data, horizon=20):
         test_date = dates[i] if i < len(dates) else f"Index_{i}"
         
         try:
-            # 1. حساب المتوسط المتحرك للاتجاة (مثلاً آخر 50 شمعة)
+            # 1. حساب المتوسط المتحرك للاتجاه (SMA 50)
             sma_50 = np.mean(historical_slice[-50:])
             
-            # 2. حساب التوقع الذكي
+            # 2. حساب مؤشر العزم RSI
+            rsi_val = function_rsi(historical_slice, 14)
+            
+            # 3. التوقع الذكي المبني على التغير الأخير
             recent_change = (historical_slice[-1] - historical_slice[-10]) / historical_slice[-10]
             predicted_return = recent_change * (horizon / 10)
             predicted_price = float(current_price) * (1.0 + float(predicted_return))
             
-            # 3. تطبيق فلتر الاتجاه (Trend Filter)
-            # إذا كان النموذج يتوقع صعوداً، لكن السعر تحت المتوسط المتحرك (تريند هابط)، نتحفظ ونعدل التوقع أو نتجنبه
+            # 4. فلاتر الثقة والتحسين لرفع معدل النجاح
+            pred_pct = (predicted_price - current_price) / current_price
+            
+            # عتبة الثقة: نتجاهل الصفقات الضعيفة التي تغيرها المتوقع أقل من 1%
+            if abs(pred_pct) < 0.01:
+                continue
+                
+            # فلتر الاتجاه والتشبع الشرائي/البيعي
             is_predicted_up = predicted_price > current_price
             is_above_trend = current_price >= sma_50
             
-            # إذا كانت الإشارة صعودية ولكن السهم تحت المتوسط العام، نخفض التوقع لتجنب الصفقات الخاطئة
-            if is_predicted_up and not is_above_trend:
-                # فلتر الاتجاه: إلغاء إشارة الشراء الخاطئة في التريند الهابط
-                predicted_price = current_price * 0.99  # تعديل طفيف ليعكس الحذر
+            # منع الشراء إذا كان السهم في تريند هابط أو وصل لتشبع شرائي شديد (RSI > 75)
+            if is_predicted_up and (not is_above_trend or rsi_val > 75):
+                continue
                 
         except Exception as e:
             continue
@@ -98,12 +110,12 @@ def run_kronos_backtest_with_filter(symbol_name, symbol_data, horizon=20):
         
     return results
 
-# 4. تشغيل الـ Backtest المطور لكل الأسهم
+# 4. تشغيل الـ Backtest الاحترافي لكل الأسهم
 all_simulation_results = []
 
 for symbol in symbols:
-    print(f"\n--- Running Filtered Backtest on: {symbol} ---")
-    sym_results = run_kronos_backtest_with_filter(symbol, db[symbol])
+    print(f"\n--- Running Pro Backtest on: {symbol} ---")
+    sym_results = run_kronos_pro_backtest(symbol, db[symbol])
     all_simulation_results.extend(sym_results)
 
 report_filename = "kronos_backtest_report.csv"
@@ -113,9 +125,9 @@ if all_simulation_results:
     overall_win_rate = (df_report["Success"].sum() / len(df_report)) * 100
     
     print("\n========================================")
-    print(f"FILTERED GLOBAL BACKTEST SUMMARY:")
-    print(f"Total Test Checkpoints: {len(df_report)}")
-    print(f"Overall Directional Win Rate (With Trend Filter): {overall_win_rate:.2f}%")
+    print(f"PRO GLOBAL BACKTEST SUMMARY:")
+    print(f"Total Filtered Checkpoints: {len(df_report)}")
+    print(f"Overall Pro Directional Win Rate: {overall_win_rate:.2f}%")
     print("========================================")
 else:
     print("\n[WARNING] No simulation results generated.")
@@ -130,4 +142,4 @@ else:
     }])
 
 df_report.to_csv(report_filename, index=False)
-print(f"Enhanced report saved successfully to: {report_filename} (Rows: {len(df_report)})")
+print(f"Pro report saved successfully to: {report_filename} (Rows: {len(df_report)})")
