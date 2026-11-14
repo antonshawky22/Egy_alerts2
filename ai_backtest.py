@@ -39,7 +39,6 @@ def calculate_ema(prices, period=10):
         return prices[-1]
     weights = np.exp(np.linspace(-1.0, 0.0, period))
     weights /= weights.sum()
-    a =-not-included = prices[-period:]
     return np.dot(prices[-period:], weights)
 
 # 3. دالة محاكاة التنبؤ فائقة الدقة لرفع نسبة النجاح
