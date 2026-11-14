@@ -4,19 +4,25 @@ import torch
 import numpy as np
 import pandas as pd
 
-print("Initializing Kronos Weekly Breakout Backtest Engine...")
+print("Initializing Kronos Multi-Timeframe (Daily + Weekly) Engine...")
 
-# 1. تحميل قاعدة بيانات الأسعار التاريخية (الفريم الأسبوعي)
-db_path = "egx_weekly_database_v2.json"
-if not os.path.exists(db_path):
-    raise FileNotFoundError(f"Database file {db_path} not found in root directory!")
+# 1. تحميل قاعدتي البيانات (اليومي والأسبوعي)
+daily_db_path = "egx_history_database_v2.json"
+weekly_db_path = "egx_weekly_database_v2.json"
 
-print(f"Loading database from {db_path}...")
-with open(db_path, "r", encoding="utf-8") as f:
-    db = json.load(f)
+if not os.path.exists(daily_db_path) or not os.path.exists(weekly_db_path):
+    raise FileNotFoundError("One or both database files (Daily/Weekly) are missing in root directory!")
 
-symbols = list(db.keys())
-print(f"Available symbols in database to test: {symbols}")
+print(f"Loading Daily database from {daily_db_path}...")
+with open(daily_db_path, "r", encoding="utf-8") as f:
+    daily_db = json.load(f)
+
+print(f"Loading Weekly database from {weekly_db_path}...")
+with open(weekly_db_path, "r", encoding="utf-8") as f:
+    weekly_db = json.load(f)
+
+symbols = list(weekly_db.keys())
+print(f"Available symbols to analyze across dual timeframes: {symbols}")
 
 # 2. إعداد جهاز التشغيل (CPU)
 device = torch.device("cpu")
@@ -41,64 +47,84 @@ def calculate_ema(prices, period=10):
     weights /= weights.sum()
     return np.dot(prices[-period:], weights)
 
-# 3. دالة محاكاة صفقات الاختراق (Weekly Breakout Engine)
-def run_weekly_breakout_backtest(symbol_name, symbol_data, horizon=10):
-    prices = []
-    dates = []
+# 3. دالة المحاكاة المدمجة (متعددة الأطر الزمنية)
+def run_multi_timeframe_backtest(symbol_name, w_data, d_data, horizon=10):
+    w_prices = []
+    w_dates = []
     
-    if isinstance(symbol_data, dict) and "data" in symbol_data:
-        data_dict = symbol_data["data"]
-        sorted_dates = sorted(data_dict.keys())
-        
-        for d in sorted_dates:
-            candle = data_dict[d]
-            if isinstance(candle, dict):
-                close_val = candle.get("Close", candle.get("close", candle.get("CLOSE", None)))
-                if close_val is not None:
-                    prices.append(float(close_val))
-                    dates.append(d)
+    if isinstance(w_data, dict) and "data" in w_data:
+        w_dict = w_data["data"]
+        for d in sorted(w_dict.keys()):
+            c_val = w_dict[d].get("Close", w_dict[d].get("close", w_dict[d].get("CLOSE", None)))
+            if c_val is not None:
+                w_prices.append(float(c_val))
+                w_dates.append(d)
+                
+    d_prices = []
+    d_dates = []
+    d_lookup = {}
     
-    print(f"[{symbol_name}] Extracted {len(prices)} chronological price candles.")
+    if isinstance(d_data, dict) and "data" in d_data:
+        d_dict = d_data["data"]
+        for d in sorted(d_dict.keys()):
+            c_val = d_dict[d].get("Close", d_dict[d].get("close", d_dict[d].get("CLOSE", None)))
+            if c_val is not None:
+                val = float(c_val)
+                d_prices.append(val)
+                d_dates.append(d)
+                d_lookup[d] = val
+
+    print(f"[{symbol_name}] Loaded {len(w_prices)} weekly candles and {len(d_prices)} daily candles.")
     
-    if len(prices) < horizon + 25:
-        print(f"[{symbol_name}] Not enough data. Skipping.")
+    if len(w_prices) < 20 or len(d_prices) < 50:
         return []
 
     results = []
-    start_idx = 20
-    end_idx = len(prices) - horizon
+    start_idx = 15
+    end_idx = len(w_prices) - horizon
     
-    # فحص أسبوعي خطوة بخطوة
     for i in range(start_idx, end_idx, 4):
-        historical_slice = prices[:i]
-        actual_future_prices = prices[i : i + horizon]
+        w_slice = w_prices[:i]
+        actual_future_w = w_prices[i : i + horizon]
         
-        current_price = historical_slice[-1]
-        test_date = dates[i] if i < len(dates) else f"Index_{i}"
+        current_w_price = w_slice[-1]
+        test_date = w_dates[i] if i < len(w_dates) else f"Index_{i}"
         
         try:
-            # استراتيجية الاختراق (Breakout):
-            lookback_period = min(12, len(historical_slice) - 1)
-            recent_resistance = max(historical_slice[-lookback_period - 1 : -1])
+            # 1. فلتر الأسبوعي (البحث عن الاختراق والاتجاه الصاعد القوي)
+            lookback = min(12, len(w_slice) - 1)
+            recent_resistance = max(w_slice[-lookback - 1 : -1])
+            is_weekly_breakout = current_w_price >= recent_resistance * 1.005
             
-            is_breakout = current_price >= recent_resistance * 1.005
-            
-            if not is_breakout:
-                continue
-            
-            rsi_val = calculate_rsi(historical_slice, 14)
-            ema_10 = calculate_ema(historical_slice, 10)
-            
-            if current_price < ema_10 or rsi_val > 78 or rsi_val < 45:
+            if not is_weekly_breakout:
                 continue
                 
-            predicted_return = 0.05
-            predicted_price = current_price * (1.0 + predicted_return)
+            w_ema = calculate_ema(w_slice, 10)
+            if current_w_price < w_ema:
+                continue
+                
+            # 2. فلتر اليومي (التأكد من أن السعر اليومي غير متضخم أو في تصحيح سيء)
+            # سنبحث في الأسعار اليومية المتاحة حتى تاريخ الأسبوع الحالي
+            valid_daily_prices = [d_lookup[d] for d in sorted(d_lookup.keys()) if d <= test_date]
+            if len(valid_daily_prices) < 20:
+                continue
+                
+            daily_rsi = calculate_rsi(valid_daily_prices, 14)
+            daily_ema = calculate_ema(valid_daily_prices, 10)
+            current_daily_price = valid_daily_prices[-1]
+            
+            # شروط يومية إضافية للدقة
+            if current_daily_price < daily_ema or daily_rsi > 78 or daily_rsi < 45:
+                continue
+                
+            predicted_return = 0.055
+            predicted_price = current_w_price * (1.0 + predicted_return)
             
         except Exception as e:
             continue
         
-        actual_final_price = actual_future_prices[-1]
+        # محاكاة الحركة باستخدام الأسعار المستقبلية الأسبوعية بنظام التخارج بالموجة
+        actual_final_price = actual_future_w[-1]
         
         success_flag = False
         achieved_exit_return = 0.0
@@ -106,11 +132,11 @@ def run_weekly_breakout_backtest(symbol_name, symbol_data, horizon=10):
         initial_stop_loss = 0.02
         trailing_drop_pct = 0.015
         
-        peak_price = float(current_price)
+        peak_price = float(current_w_price)
         
-        for future_p in actual_future_prices:
+        for future_p in actual_future_w:
             f_price = float(future_p)
-            curr_ret = (f_price - float(current_price)) / float(current_price)
+            curr_ret = (f_price - float(current_w_price)) / float(current_w_price)
             
             if f_price > peak_price:
                 peak_price = f_price
@@ -121,10 +147,10 @@ def run_weekly_breakout_backtest(symbol_name, symbol_data, horizon=10):
                 break
             
             current_drop_from_peak = (peak_price - f_price) / peak_price
-            peak_gain_from_entry = (peak_price - float(current_price)) / float(current_price)
+            peak_gain_from_entry = (peak_price - float(current_w_price)) / float(current_w_price)
             
             if peak_gain_from_entry >= 0.03 and current_drop_from_peak >= trailing_drop_pct:
-                achieved_exit_return = (peak_price * (1.0 - trailing_drop_pct) - float(current_price)) / float(current_price)
+                achieved_exit_return = (peak_price * (1.0 - trailing_drop_pct) - float(current_w_price)) / float(current_w_price)
                 success_flag = True
                 break
             
@@ -136,7 +162,7 @@ def run_weekly_breakout_backtest(symbol_name, symbol_data, horizon=10):
         results.append({
             "Symbol": symbol_name,
             "Date": str(test_date),
-            "Entry_Price": round(float(current_price), 2),
+            "Entry_Price": round(float(current_w_price), 2),
             "Predicted_Price": round(float(predicted_price), 2),
             "Actual_Final_Price": round(float(actual_final_price), 2),
             "Actual_Return_%": round(float(actual_return * 100), 2),
@@ -145,12 +171,14 @@ def run_weekly_breakout_backtest(symbol_name, symbol_data, horizon=10):
         
     return results
 
+# 4. تشغيل التحليل المدمج على كل الأسهم
 all_simulation_results = []
 
 for symbol in symbols:
-    print(f"\n--- Running Weekly Breakout Backtest on: {symbol} ---")
-    sym_results = run_weekly_breakout_backtest(symbol, db[symbol])
-    all_simulation_results.extend(sym_results)
+    if symbol in daily_db and symbol in weekly_db:
+        print(f"\n--- Running Multi-Timeframe Analysis on: {symbol} ---")
+        sym_results = run_multi_timeframe_backtest(symbol, weekly_db[symbol], daily_db[symbol])
+        all_simulation_results.extend(sym_results)
 
 report_filename = "kronos_backtest_report.csv"
 
@@ -161,7 +189,7 @@ if all_simulation_results:
     total_cum_return = df_report["Actual_Return_%"].sum()
     
     print("\n========================================")
-    print(f"WEEKLY BREAKOUT GLOBAL SUMMARY:")
+    print(f"MULTI-TIMEFRAME (DAILY + WEEKLY) SUMMARY:")
     print(f"Total Filtered Checkpoints: {len(df_report)}")
     print(f"Overall Win Rate: {overall_win_rate:.2f}%")
     print(f"Mean Return per Trade: {avg_return:.2f}%")
