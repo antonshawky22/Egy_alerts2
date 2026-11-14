@@ -4,7 +4,7 @@ import torch
 import numpy as np
 import pandas as pd
 
-print("Initializing Kronos High-Yield Return Maximizer Engine...")
+print("Initializing Kronos Balanced Master Engine (Targeting 60%+ & Optimized Yield)...")
 
 # 1. تحميل قاعدة بيانات الأسعار التاريخية
 db_path = "egx_history_database_v2.json"
@@ -41,8 +41,8 @@ def calculate_ema(prices, period=10):
     weights /= weights.sum()
     return np.dot(prices[-period:], weights)
 
-# 3. دالة محاكاة التنبؤ مع نظام تعظيم العائد الديناميكي
-def run_kronos_high_yield_backtest(symbol_name, symbol_data, horizon=10):
+# 3. دالة محاكاة التنبؤ بنظام التوازن الذكي
+def run_kronos_balanced_backtest(symbol_name, symbol_data, horizon=10):
     prices = []
     dates = []
     
@@ -82,33 +82,33 @@ def run_kronos_high_yield_backtest(symbol_name, symbol_data, horizon=10):
             ema_10 = calculate_ema(historical_slice, 10)
             rsi_val = calculate_rsi(historical_slice, 14)
             
-            # عزم مركب قوي لتعظيم الربح المتوقع
+            # عزم مركب متوازن
             roc_1 = (historical_slice[-1] - historical_slice[-2]) / historical_slice[-2]
             roc_3 = (historical_slice[-1] - historical_slice[-3]) / historical_slice[-3]
             
-            score = (roc_1 * 0.4) + (roc_3 * 0.6)
-            predicted_return = score * 1.3  # تضخيم العزم المستهدف لتعظيم العائد
+            score = (roc_1 * 0.45) + (roc_3 * 0.55)
+            predicted_return = score * 1.15
             predicted_price = float(current_price) * (1.0 + float(predicted_return))
             
             pred_pct = (predicted_price - current_price) / current_price
             
-            # عتبة ثقة صارمة لضمان جودة عالية للصفقات
-            if abs(pred_pct) < 0.012:
+            # عتبة ثقة منتقاة لضمان جودة عالية ودخول صفقات مضمونة نسبياً
+            if abs(pred_pct) < 0.01:
                 continue
                 
             # شروط الاتجاه الفني المعتمد
             is_uptrend = current_price > sma_5 and sma_5 > sma_15 and current_price > ema_10
             is_downtrend = current_price < sma_5 and sma_5 < sma_15 and current_price < ema_10
             
-            if predicted_price > current_price and (not is_uptrend or rsi_val > 68 or rsi_val < 45):
+            if predicted_price > current_price and (not is_uptrend or rsi_val > 70 or rsi_val < 43):
                 continue
-            if predicted_price < current_price and (not is_downtrend or rsi_val < 32 or rsi_val > 55):
+            if predicted_price < current_price and (not is_downtrend or rsi_val < 30 or rsi_val > 57):
                 continue
                 
         except Exception as e:
             continue
         
-        # محاكاة الحركة مع أهداف ربح ديناميكية واسعة لتعظيم العائد لكل صفقة
+        # محاكاة الحركة بأهداف ربح متوازنة وواقعية (3.0% ربح / 1.2% وقف خسارة)
         actual_final_price = actual_future_prices[-1]
         is_up_pred = predicted_price > current_price
         
@@ -118,20 +118,20 @@ def run_kronos_high_yield_backtest(symbol_name, symbol_data, horizon=10):
         for future_p in actual_future_prices:
             curr_ret = (float(future_p) - float(current_price)) / float(current_price)
             if is_up_pred:
-                if curr_ret >= 0.045:  # هدف ربح واسع ومتميز عند 4.5% لتعظيم العائد
+                if curr_ret >= 0.03:  # هدف ربح واقعي وممتاز عند 3.0%
                     success_flag = True
                     achieved_exit_return = curr_ret
                     break
-                if curr_ret <= -0.015: # وقف خسارة محكم عند 1.5%
+                if curr_ret <= -0.012: # وقف خسارة محكم عند 1.2%
                     success_flag = False
                     achieved_exit_return = curr_ret
                     break
             else:
-                if curr_ret <= -0.045:
+                if curr_ret <= -0.03:
                     success_flag = True
                     achieved_exit_return = curr_ret
                     break
-                if curr_ret >= 0.015:
+                if curr_ret >= 0.012:
                     success_flag = False
                     achieved_exit_return = curr_ret
                     break
@@ -155,12 +155,12 @@ def run_kronos_high_yield_backtest(symbol_name, symbol_data, horizon=10):
         
     return results
 
-# 4. تشغيل الاختبار لتعظيم العائد على كل الأسهم
+# 4. تشغيل الاختبار المتوازن على كل الأسهم
 all_simulation_results = []
 
 for symbol in symbols:
-    print(f"\n--- Running High-Yield Maximizer Backtest on: {symbol} ---")
-    sym_results = run_kronos_high_yield_backtest(symbol, db[symbol])
+    print(f"\n--- Running Balanced Master Backtest on: {symbol} ---")
+    sym_results = run_kronos_balanced_backtest(symbol, db[symbol])
     all_simulation_results.extend(sym_results)
 
 report_filename = "kronos_backtest_report.csv"
@@ -171,7 +171,7 @@ if all_simulation_results:
     avg_return = df_report["Actual_Return_%"].mean()
     
     print("\n========================================")
-    print(f"HIGH-YIELD MAXIMIZER GLOBAL SUMMARY:")
+    print(f"BALANCED MASTER GLOBAL SUMMARY:")
     print(f"Total Filtered Checkpoints: {len(df_report)}")
     print(f"Overall Win Rate: {overall_win_rate:.2f}%")
     print(f"Mean Return per Trade: {avg_return:.2f}%")
