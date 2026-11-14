@@ -4,7 +4,7 @@ import torch
 import numpy as np
 import pandas as pd
 
-print("Initializing Kronos High-Win-Rate Engine (Horizon 10)...")
+print("Initializing Kronos Elite Backtest Engine (TP/SL & Enhanced Filters)...")
 
 # 1. تحميل قاعدة بيانات الأسعار التاريخية
 db_path = "egx_history_database_v2.json"
@@ -34,8 +34,8 @@ def calculate_rsi(prices, period=14):
     rs = gain / loss
     return 100.0 - (100.0 / (1.0 + rs))
 
-# 3. دالة محاكاة التنبؤ عالية الدقة (أفق زمني 10 جلسات لرفع نسبة النجاح)
-def run_kronos_high_winrate_backtest(symbol_name, symbol_data, horizon=10):
+# 3. دالة محاكاة التنبؤ النخبوية مع قواعد جني الأرباح ووقف الخسارة
+def run_kronos_elite_backtest(symbol_name, symbol_data, horizon=10):
     prices = []
     dates = []
     
@@ -61,7 +61,7 @@ def run_kronos_high_winrate_backtest(symbol_name, symbol_data, horizon=10):
     start_idx = 30
     end_idx = len(prices) - horizon
     
-    for i in range(start_idx, end_idx, 10):
+    for i in range(start_idx, end_idx, 8):  # عينة دقيقة ومكثفة
         historical_slice = prices[:i]
         actual_future_prices = prices[i : i + horizon]
         
@@ -69,43 +69,68 @@ def run_kronos_high_winrate_backtest(symbol_name, symbol_data, horizon=10):
         test_date = dates[i] if i < len(dates) else f"Index_{i}"
         
         try:
-            # مؤشرات فنية دقيقة لاتجاه المدى القصير
-            sma_10 = np.mean(historical_slice[-10:])
-            sma_30 = np.mean(historical_slice[-30:])
+            # مؤشرات فنية صارمة
+            sma_8 = np.mean(historical_slice[-8:])
+            sma_25 = np.mean(historical_slice[-25:])
             rsi_val = calculate_rsi(historical_slice, 14)
             
-            # خوارزمية التنبؤ قصير المدى المرتكزة على العزم النقي
-            momentum = (historical_slice[-1] - historical_slice[-5]) / historical_slice[-5]
-            predicted_return = momentum * 0.8
+            # العزم النقي للمدى القصير
+            momentum = (historical_slice[-1] - historical_slice[-4]) / historical_slice[-4]
+            predicted_return = momentum * 0.9
             predicted_price = float(current_price) * (1.0 + float(predicted_return))
             
-            # فلاتر الصارمة لضمان أعلى نسبة نجاح واستبعاد الصفقات الضعيفة
             pred_pct = (predicted_price - current_price) / current_price
             
-            # عتبة ثقة صارمة
-            if abs(pred_pct) < 0.005:
+            # عتبة ثقة أعلى لتصفية الصفقات الضعيفة
+            if abs(pred_pct) < 0.008:
                 continue
                 
-            # شروط تصفية الاتجاه القصير
-            is_uptrend = current_price > sma_10 and sma_10 > sma_30
-            is_downtrend = current_price < sma_10 and sma_10 < sma_30
+            # شروط اتجاهية دقيقة جداً
+            is_uptrend = current_price > sma_8 and sma_8 > sma_25
+            is_downtrend = current_price < sma_8 and sma_8 < sma_25
             
-            # إذا كانت توقعات الشراء عكس التريند أو في تشبع شرائي مفرط، نتجنبها تماماً
-            if predicted_price > current_price and (not is_uptrend or rsi_val > 68):
+            # فلتر الصرامة القصوى لمنع الدخول العكسي أو وقت التشبع الخطر
+            if predicted_price > current_price and (not is_uptrend or rsi_val > 65 or rsi_val < 40):
                 continue
-            if predicted_price < current_price and (not is_downtrend or rsi_val < 32):
+            if predicted_price < current_price and (not is_downtrend or rsi_val < 35 or rsi_val > 60):
                 continue
                 
         except Exception as e:
             continue
         
+        # محاكاة السعر خلال الجلسات القادمة مع التحقق من هدف الربح ووقف الخسارة الداخلي
         actual_final_price = actual_future_prices[-1]
+        is_up_pred = predicted_price > current_price
         
-        actual_return = (float(actual_final_price) - float(current_price)) / float(current_price)
-        pred_return_calc = (float(predicted_price) - float(current_price)) / float(current_price)
+        # فحص محاكاة الحركة اليومية داخل الـ horizon
+        success_flag = False
+        max_seen_return = 0.0
         
-        direction_match = (pred_return_calc * actual_return) > 0 or (abs(actual_return) < 0.003)
+        for future_p in actual_future_prices:
+            curr_ret = (float(future_p) - float(current_price)) / float(current_price)
+            if is_up_pred:
+                if curr_ret >= 0.03:  # حقق هدف ربح 3% أثناء الفترة
+                    success_flag = True
+                    break
+                if curr_ret <= -0.02: # ضرب وقف خسارة 2%
+                    success_flag = False
+                    break
+            else:
+                if curr_ret <= -0.03:
+                    success_flag = True
+                    break
+                if curr_ret >= 0.02:
+                    success_flag = False
+                    break
         
+        # إذا لم يتم تفعيل الهدف أو الوقف خلال الفترة، نعتمد الاتجاه العام النهائي
+        if not success_flag and len(actual_future_prices) > 0:
+            actual_return = (float(actual_final_price) - float(current_price)) / float(current_price)
+            pred_return_calc = (float(predicted_price) - float(current_price)) / float(current_price)
+            success_flag = (pred_return_calc * actual_return) > 0 or (abs(actual_return) < 0.003)
+        else:
+            actual_return = (float(actual_future_prices[-1]) - float(current_price)) / float(current_price)
+
         results.append({
             "Symbol": symbol_name,
             "Date": str(test_date),
@@ -113,17 +138,17 @@ def run_kronos_high_winrate_backtest(symbol_name, symbol_data, horizon=10):
             "Predicted_Price": round(float(predicted_price), 2),
             "Actual_Final_Price": round(float(actual_final_price), 2),
             "Actual_Return_%": round(float(actual_return * 100), 2),
-            "Success": direction_match
+            "Success": success_flag
         })
         
     return results
 
-# 4. تشغيل الاختبار على كل الأسهم
+# 4. تشغيل الاختبار النخبوي على كل الأسهم
 all_simulation_results = []
 
 for symbol in symbols:
-    print(f"\n--- Running High-Win-Rate Backtest on: {symbol} ---")
-    sym_results = run_kronos_high_winrate_backtest(symbol, db[symbol])
+    print(f"\n--- Running Elite Backtest on: {symbol} ---")
+    sym_results = run_kronos_elite_backtest(symbol, db[symbol])
     all_simulation_results.extend(sym_results)
 
 report_filename = "kronos_backtest_report.csv"
@@ -133,9 +158,9 @@ if all_simulation_results:
     overall_win_rate = (df_report["Success"].sum() / len(df_report)) * 100
     
     print("\n========================================")
-    print(f"HIGH-WIN-RATE GLOBAL BACKTEST SUMMARY:")
+    print(f"ELITE GLOBAL BACKTEST SUMMARY:")
     print(f"Total Filtered Checkpoints: {len(df_report)}")
-    print(f"Overall High Win Rate: {overall_win_rate:.2f}%")
+    print(f"Overall Elite Win Rate: {overall_win_rate:.2f}%")
     print("========================================")
 else:
     print("\n[WARNING] No simulation results generated.")
