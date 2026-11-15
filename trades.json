@@ -540,7 +540,10 @@
     "symbol": "GBCO",
     "entry_trend": "🔛",
     "entry_price": 22.08,
-    "entry_date": "2026-11-04"
+    "entry_date": "2026-11-04",
+    "exit_price": 23.42,
+    "exit_date": "2026-11-15",
+    "profit_pct": 6.07
   },
   {
     "symbol": "ABUK",
@@ -577,5 +580,11 @@
     "entry_trend": "↗️",
     "entry_price": 5.68,
     "entry_date": "2026-11-12"
+  },
+  {
+    "symbol": "ETEL",
+    "entry_trend": "↗️",
+    "entry_price": 135.01,
+    "entry_date": "2026-11-15"
   }
 ]

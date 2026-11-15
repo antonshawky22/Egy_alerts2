@@ -15,9 +15,9 @@
     "entry_price": 12.69
   },
   "ETEL": {
-    "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 135.01
   },
   "EAST": {
     "trend": "↗️",
@@ -50,7 +50,7 @@
     "entry_price": null
   },
   "ATQA": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -80,7 +80,7 @@
     "entry_price": null
   },
   "DSCW": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -115,9 +115,9 @@
     "entry_price": null
   },
   "GBCO": {
-    "trend": "🔛",
-    "in_position": true,
-    "entry_price": 22.08
+    "trend": "🔻",
+    "in_position": false,
+    "entry_price": null
   },
   "TMGH": {
     "trend": "🔻",
