@@ -95,7 +95,7 @@
     "entry_price": null
   },
   "RMDA": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 5.68
   },
@@ -141,11 +141,11 @@
   },
   "COMI": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 128.82
   },
   "ADIB": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": true,
     "entry_price": 50.44
   },
