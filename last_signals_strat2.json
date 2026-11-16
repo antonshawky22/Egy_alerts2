@@ -15,10 +15,15 @@
   },
   "ETEL": {
     "cycle": 1,
-    "position": 1.0,
+    "position": 0.67,
     "avg_price": 122.9598,
-    "peak_profit": 10.556458289619856,
-    "realized_pnl_tracker": []
+    "peak_profit": 16.29817224816566,
+    "realized_pnl_tracker": [
+      [
+        0.33,
+        16.29817224816566
+      ]
+    ]
   },
   "EAST": {
     "cycle": 1,
