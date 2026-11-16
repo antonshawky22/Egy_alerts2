@@ -18,21 +18,33 @@
     "entry_price": 129.7,
     "entry_date": "2026-11-08",
     "entry_confidence": 72.31,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 143.0,
+    "exit_date": "2026-11-16",
+    "exit_reason": "AI_Model_Inversion (انعكاس النموذج)",
+    "profit_pct": 10.25
   },
   {
     "symbol": "EAST",
     "entry_price": 32.66,
     "entry_date": "2026-11-08",
     "entry_confidence": 77.17,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 34.8,
+    "exit_date": "2026-11-16",
+    "exit_reason": "AI_Model_Inversion (انعكاس النموذج)",
+    "profit_pct": 6.55
   },
   {
     "symbol": "EFIH",
     "entry_price": 23.5,
     "entry_date": "2026-11-08",
     "entry_confidence": 81.64,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 24.9,
+    "exit_date": "2026-11-16",
+    "exit_reason": "AI_Model_Inversion (انعكاس النموذج)",
+    "profit_pct": 5.96
   },
   {
     "symbol": "ABUK",
@@ -46,14 +58,22 @@
     "entry_price": 1.78,
     "entry_date": "2026-11-08",
     "entry_confidence": 81.09,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 1.7,
+    "exit_date": "2026-11-16",
+    "exit_reason": "Trailing_Stop (حماية الأرباح بتراجع 5.6%)",
+    "profit_pct": -4.49
   },
   {
     "symbol": "SWDY",
     "entry_price": 117.9,
     "entry_date": "2026-11-08",
     "entry_confidence": 75.5,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 121.9,
+    "exit_date": "2026-11-16",
+    "exit_reason": "AI_Model_Inversion (انعكاس النموذج)",
+    "profit_pct": 3.39
   },
   {
     "symbol": "ISPH",
@@ -67,7 +87,11 @@
     "entry_price": 9.9,
     "entry_date": "2026-11-08",
     "entry_confidence": 92.2,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 10.33,
+    "exit_date": "2026-11-16",
+    "exit_reason": "Trailing_Stop (حماية الأرباح بتراجع 6.2%)",
+    "profit_pct": 4.34
   },
   {
     "symbol": "MTIE",
@@ -85,7 +109,11 @@
     "entry_price": 23.5,
     "entry_date": "2026-11-08",
     "entry_confidence": 86.12,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 24.1,
+    "exit_date": "2026-11-16",
+    "exit_reason": "Trailing_Stop (حماية الأرباح بتراجع 7.3%)",
+    "profit_pct": 2.55
   },
   {
     "symbol": "ORWE",
@@ -99,7 +127,11 @@
     "entry_price": 23.59,
     "entry_date": "2026-11-08",
     "entry_confidence": 91.14,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 23.9,
+    "exit_date": "2026-11-16",
+    "exit_reason": "Trailing_Stop (حماية الأرباح بتراجع 6.3%)",
+    "profit_pct": 1.31
   },
   {
     "symbol": "DSCW",
@@ -113,28 +145,44 @@
     "entry_price": 47.5,
     "entry_date": "2026-11-08",
     "entry_confidence": 94.09,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 51.6,
+    "exit_date": "2026-11-16",
+    "exit_reason": "Trailing_Stop (حماية الأرباح بتراجع 8.7%)",
+    "profit_pct": 8.63
   },
   {
     "symbol": "ELSH",
     "entry_price": 11.42,
     "entry_date": "2026-11-08",
     "entry_confidence": 73.68,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 11.19,
+    "exit_date": "2026-11-16",
+    "exit_reason": "Trailing_Stop (حماية الأرباح بتراجع 5.6%)",
+    "profit_pct": -2.01
   },
   {
     "symbol": "RMDA",
     "entry_price": 5.54,
     "entry_date": "2026-11-08",
     "entry_confidence": 82.26,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 5.41,
+    "exit_date": "2026-11-16",
+    "exit_reason": "Trailing_Stop (حماية الأرباح بتراجع 5.3%)",
+    "profit_pct": -2.35
   },
   {
     "symbol": "RAYA",
     "entry_price": 5.56,
     "entry_date": "2026-11-08",
     "entry_confidence": 96.52,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 5.85,
+    "exit_date": "2026-11-16",
+    "exit_reason": "Trailing_Stop (حماية الأرباح بتراجع 7.6%)",
+    "profit_pct": 5.22
   },
   {
     "symbol": "EEII",
@@ -152,7 +200,11 @@
     "entry_price": 1.89,
     "entry_date": "2026-11-08",
     "entry_confidence": 92.86,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 2.01,
+    "exit_date": "2026-11-16",
+    "exit_reason": "Trailing_Stop (حماية الأرباح بتراجع 11.1%)",
+    "profit_pct": 6.35
   },
   {
     "symbol": "GBCO",
@@ -194,14 +246,22 @@
     "entry_price": 12.01,
     "entry_date": "2026-11-08",
     "entry_confidence": 90.36,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 11.85,
+    "exit_date": "2026-11-16",
+    "exit_reason": "Trailing_Stop (حماية الأرباح بتراجع 7.4%)",
+    "profit_pct": -1.33
   },
   {
     "symbol": "MCQE",
     "entry_price": 171.91,
     "entry_date": "2026-11-08",
     "entry_confidence": 95.68,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 187.12,
+    "exit_date": "2026-11-16",
+    "exit_reason": "Trailing_Stop (حماية الأرباح بتراجع 8.7%)",
+    "profit_pct": 8.85
   },
   {
     "symbol": "SKPC",
@@ -222,14 +282,22 @@
     "entry_price": 288.01,
     "entry_date": "2026-11-08",
     "entry_confidence": 84.08,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 325.0,
+    "exit_date": "2026-11-16",
+    "exit_reason": "Trailing_Stop (حماية الأرباح بتراجع 11.1%)",
+    "profit_pct": 12.84
   },
   {
     "symbol": "MPCI",
     "entry_price": 326.9,
     "entry_date": "2026-11-08",
     "entry_confidence": 81.85,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 350.0,
+    "exit_date": "2026-11-16",
+    "exit_reason": "Trailing_Stop (حماية الأرباح بتراجع 8.8%)",
+    "profit_pct": 7.07
   },
   {
     "symbol": "AMOC",
@@ -243,13 +311,21 @@
     "entry_price": 7.19,
     "entry_date": "2026-11-15",
     "entry_confidence": 86.54,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 6.88,
+    "exit_date": "2026-11-16",
+    "exit_reason": "Trailing_Stop (حماية الأرباح بتراجع 6.4%)",
+    "profit_pct": -4.31
   },
   {
     "symbol": "EEII",
     "entry_price": 2.16,
     "entry_date": "2026-11-15",
     "entry_confidence": 77.52,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 2.03,
+    "exit_date": "2026-11-16",
+    "exit_reason": "Trailing_Stop (حماية الأرباح بتراجع 7.7%)",
+    "profit_pct": -6.02
   }
 ]
