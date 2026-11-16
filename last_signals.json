@@ -75,12 +75,12 @@
     "entry_price": null
   },
   "JUFO": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
   "DSCW": {
-    "trend": "🔛",
+    "trend": "🔻",
     "in_position": false,
     "entry_price": null
   },
@@ -100,7 +100,7 @@
     "entry_price": 5.68
   },
   "RAYA": {
-    "trend": "🔛",
+    "trend": "🔻",
     "in_position": false,
     "entry_price": null
   },
@@ -110,7 +110,7 @@
     "entry_price": null
   },
   "MPCO": {
-    "trend": "🔛",
+    "trend": "🔻",
     "in_position": false,
     "entry_price": null
   },
@@ -145,7 +145,7 @@
     "entry_price": null
   },
   "ADIB": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 50.44
   },
@@ -165,7 +165,7 @@
     "entry_price": null
   },
   "EGAL": {
-    "trend": "🔛",
+    "trend": "↗️",
     "in_position": false,
     "entry_price": null
   },
