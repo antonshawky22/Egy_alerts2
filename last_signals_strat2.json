@@ -15,13 +15,17 @@
   },
   "ETEL": {
     "cycle": 1,
-    "position": 0.67,
+    "position": 0.34,
     "avg_price": 122.9598,
     "peak_profit": 16.29817224816566,
     "realized_pnl_tracker": [
       [
         0.33,
         16.29817224816566
+      ],
+      [
+        0.33,
+        16.20871211566706
       ]
     ]
   },
@@ -125,8 +129,8 @@
   },
   "RMDA": {
     "cycle": 2,
-    "position": 0.0,
-    "avg_price": 0.0,
+    "position": 0.33,
+    "avg_price": 5.22,
     "peak_profit": 0.0,
     "realized_pnl_tracker": []
   },

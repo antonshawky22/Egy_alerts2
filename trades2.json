@@ -54,7 +54,8 @@
       "third_entry": "2026-10-26 with price 117.00",
       "last_totally_average_price": 122.96,
       "exits": [
-        "2026-11-16: Sold 33% at price 143.00 (Profit: +16.30%)"
+        "2026-11-16: Sold 33% at price 143.00 (Profit: +16.30%)",
+        "2026-11-17: Sold 33% at price 142.89 (Profit: +16.21%)"
       ],
       "exit_price": null,
       "exit_date": null,
@@ -297,6 +298,19 @@
       "exit_price": 4.91,
       "exit_date": "2026-10-18",
       "profit_pct": -14.36
+    },
+    {
+      "symbol": "RMDA",
+      "cycle": 2,
+      "status": "OPEN",
+      "first_entry": "2026-11-17 with price 5.22",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 5.22,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
     }
   ],
   "RAYA": [
