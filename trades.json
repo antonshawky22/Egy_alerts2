@@ -579,7 +579,10 @@
     "symbol": "RMDA",
     "entry_trend": "↗️",
     "entry_price": 5.68,
-    "entry_date": "2026-11-12"
+    "entry_date": "2026-11-12",
+    "exit_price": 5.23,
+    "exit_date": "2026-11-17",
+    "profit_pct": -7.92
   },
   {
     "symbol": "ETEL",

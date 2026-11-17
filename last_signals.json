@@ -90,14 +90,14 @@
     "entry_price": 47.24
   },
   "ELSH": {
-    "trend": "🔛",
+    "trend": "🔻",
     "in_position": false,
     "entry_price": null
   },
   "RMDA": {
     "trend": "🔛",
-    "in_position": true,
-    "entry_price": 5.68
+    "in_position": false,
+    "entry_price": null
   },
   "RAYA": {
     "trend": "🔻",
@@ -145,7 +145,7 @@
     "entry_price": 128.82
   },
   "ADIB": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": true,
     "entry_price": 50.44
   },
@@ -155,7 +155,7 @@
     "entry_price": null
   },
   "MCQE": {
-    "trend": "🔛",
+    "trend": "🔻",
     "in_position": false,
     "entry_price": null
   },
@@ -165,7 +165,7 @@
     "entry_price": null
   },
   "EGAL": {
-    "trend": "↗️",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
