@@ -138,7 +138,11 @@
     "entry_price": 1.54,
     "entry_date": "2026-11-08",
     "entry_confidence": 90.86,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 1.53,
+    "exit_date": "2026-11-17",
+    "exit_reason": "Trailing_Stop (حماية الأرباح بتراجع 7.8%)",
+    "profit_pct": -0.65
   },
   {
     "symbol": "SUGR",
@@ -232,14 +236,22 @@
     "entry_price": 17.21,
     "entry_date": "2026-11-08",
     "entry_confidence": 86.94,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 16.95,
+    "exit_date": "2026-11-17",
+    "exit_reason": "Trailing_Stop (حماية الأرباح بتراجع 7.3%)",
+    "profit_pct": -1.51
   },
   {
     "symbol": "ADIB",
     "entry_price": 48.6,
     "entry_date": "2026-11-08",
     "entry_confidence": 85.91,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 47.41,
+    "exit_date": "2026-11-17",
+    "exit_reason": "Trailing_Stop (حماية الأرباح بتراجع 6.0%)",
+    "profit_pct": -2.45
   },
   {
     "symbol": "PHDC",
@@ -275,7 +287,11 @@
     "entry_price": 317.0,
     "entry_date": "2026-11-08",
     "entry_confidence": 84.94,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 310.07,
+    "exit_date": "2026-11-17",
+    "exit_reason": "Trailing_Stop (حماية الأرباح بتراجع 7.2%)",
+    "profit_pct": -2.19
   },
   {
     "symbol": "NIPH",
@@ -327,5 +343,82 @@
     "exit_date": "2026-11-16",
     "exit_reason": "Trailing_Stop (حماية الأرباح بتراجع 7.7%)",
     "profit_pct": -6.02
+  },
+  {
+    "symbol": "ATQA",
+    "entry_price": 10.09,
+    "entry_date": "2026-11-17",
+    "entry_confidence": 72.98,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "MTIE",
+    "entry_price": 6.59,
+    "entry_date": "2026-11-17",
+    "entry_confidence": 88.73,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "JUFO",
+    "entry_price": 23.56,
+    "entry_date": "2026-11-17",
+    "entry_confidence": 71.4,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "SUGR",
+    "entry_price": 51.2,
+    "entry_date": "2026-11-17",
+    "entry_confidence": 78.45,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "ELSH",
+    "entry_price": 10.97,
+    "entry_date": "2026-11-17",
+    "entry_confidence": 71.56,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "RMDA",
+    "entry_price": 5.21,
+    "entry_date": "2026-11-17",
+    "entry_confidence": 75.49,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "RAYA",
+    "entry_price": 5.91,
+    "entry_date": "2026-11-17",
+    "entry_confidence": 77.81,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "EEII",
+    "entry_price": 1.92,
+    "entry_date": "2026-11-17",
+    "entry_confidence": 75.22,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "MPCO",
+    "entry_price": 1.96,
+    "entry_date": "2026-11-17",
+    "entry_confidence": 70.53,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "PHDC",
+    "entry_price": 11.44,
+    "entry_date": "2026-11-17",
+    "entry_confidence": 95.56,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "MCQE",
+    "entry_price": 179.31,
+    "entry_date": "2026-11-17",
+    "entry_confidence": 74.88,
+    "signal_type": "AI_BUY"
   }
 ]
