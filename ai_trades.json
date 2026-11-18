@@ -120,7 +120,11 @@
     "entry_price": 24.97,
     "entry_date": "2026-11-08",
     "entry_confidence": 83.58,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 25.08,
+    "exit_date": "2026-11-18",
+    "exit_reason": "Trailing_Stop",
+    "profit_pct": 0.44
   },
   {
     "symbol": "JUFO",
@@ -215,7 +219,11 @@
     "entry_price": 22.89,
     "entry_date": "2026-11-08",
     "entry_confidence": 96.43,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 22.32,
+    "exit_date": "2026-11-18",
+    "exit_reason": "Trailing_Stop",
+    "profit_pct": -2.49
   },
   {
     "symbol": "TMGH",
@@ -419,6 +427,41 @@
     "entry_price": 179.31,
     "entry_date": "2026-11-17",
     "entry_confidence": 74.88,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "OIH",
+    "entry_price": 1.61,
+    "entry_date": "2026-11-18",
+    "entry_confidence": 83.86,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "HRHO",
+    "entry_price": 25.3,
+    "entry_date": "2026-11-18",
+    "entry_confidence": 72.07,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "DSCW",
+    "entry_price": 1.52,
+    "entry_date": "2026-11-18",
+    "entry_confidence": 76.71,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "FWRY",
+    "entry_price": 16.91,
+    "entry_date": "2026-11-18",
+    "entry_confidence": 72.99,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "EGAL",
+    "entry_price": 307.25,
+    "entry_date": "2026-11-18",
+    "entry_confidence": 82.52,
     "signal_type": "AI_BUY"
   }
 ]
