@@ -90,7 +90,7 @@
     "entry_price": 47.24
   },
   "ELSH": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -105,9 +105,9 @@
     "entry_price": null
   },
   "EEII": {
-    "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 2.0
   },
   "MPCO": {
     "trend": "🔻",
@@ -146,8 +146,8 @@
   },
   "ADIB": {
     "trend": "🔛",
-    "in_position": true,
-    "entry_price": 50.44
+    "in_position": false,
+    "entry_price": null
   },
   "PHDC": {
     "trend": "🔻",
@@ -171,12 +171,12 @@
   },
   "NIPH": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 311.09
   },
   "MPCI": {
     "trend": "↗️",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 349.4
   }
 }

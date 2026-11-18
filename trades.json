@@ -567,7 +567,10 @@
     "symbol": "ADIB",
     "entry_trend": "↗️",
     "entry_price": 50.44,
-    "entry_date": "2026-11-10"
+    "entry_date": "2026-11-10",
+    "exit_price": 46.7,
+    "exit_date": "2026-11-18",
+    "profit_pct": -7.41
   },
   {
     "symbol": "EMFD",
@@ -595,5 +598,23 @@
     "entry_trend": "↗️",
     "entry_price": 128.82,
     "entry_date": "2026-11-16"
+  },
+  {
+    "symbol": "EEII",
+    "entry_trend": "↗️",
+    "entry_price": 2.0,
+    "entry_date": "2026-11-18"
+  },
+  {
+    "symbol": "NIPH",
+    "entry_trend": "↗️",
+    "entry_price": 311.09,
+    "entry_date": "2026-11-18"
+  },
+  {
+    "symbol": "MPCI",
+    "entry_trend": "↗️",
+    "entry_price": 349.4,
+    "entry_date": "2026-11-18"
   }
 ]
