@@ -288,21 +288,7 @@
       "profit_pct": null
     }
   ],
-  "ORHD": [
-    {
-      "symbol": "ORHD",
-      "cycle": 1,
-      "status": "CLOSED",
-      "first_entry": "2026-08-20 with price 40.90",
-      "second_entry": null,
-      "third_entry": null,
-      "last_totally_average_price": 40.9,
-      "exits": [],
-      "exit_price": 10.25,
-      "exit_date": "2026-11-17",
-      "profit_pct": -74.94
-    }
-  ],
+  "ORHD": [],
   "AMOC": [],
   "FWRY": [
     {
