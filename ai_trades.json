@@ -288,7 +288,11 @@
     "entry_price": 14.87,
     "entry_date": "2026-11-08",
     "entry_confidence": 89.92,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 14.61,
+    "exit_date": "2026-11-19",
+    "exit_reason": "Trailing_Stop",
+    "profit_pct": -1.75
   },
   {
     "symbol": "EGAL",
@@ -462,6 +466,20 @@
     "entry_price": 307.25,
     "entry_date": "2026-11-18",
     "entry_confidence": 82.52,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "ORWE",
+    "entry_price": 25.09,
+    "entry_date": "2026-11-19",
+    "entry_confidence": 72.23,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "GBCO",
+    "entry_price": 22.4,
+    "entry_date": "2026-11-19",
+    "entry_confidence": 97.08,
     "signal_type": "AI_BUY"
   }
 ]
