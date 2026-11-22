@@ -609,7 +609,10 @@
     "symbol": "NIPH",
     "entry_trend": "↗️",
     "entry_price": 311.09,
-    "entry_date": "2026-11-18"
+    "entry_date": "2026-11-18",
+    "exit_price": 284.0,
+    "exit_date": "2026-11-22",
+    "profit_pct": -8.71
   },
   {
     "symbol": "MPCI",
