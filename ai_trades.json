@@ -4,14 +4,22 @@
     "entry_price": 20.19,
     "entry_date": "2026-11-08",
     "entry_confidence": 84.21,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 19.83,
+    "exit_date": "2026-11-22",
+    "exit_reason": "Trailing_Stop",
+    "profit_pct": -1.78
   },
   {
     "symbol": "EMFD",
     "entry_price": 12.3,
     "entry_date": "2026-11-08",
     "entry_confidence": 83.41,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 11.99,
+    "exit_date": "2026-11-22",
+    "exit_reason": "Trailing_Stop",
+    "profit_pct": -2.52
   },
   {
     "symbol": "ETEL",
@@ -51,7 +59,11 @@
     "entry_price": 76.3,
     "entry_date": "2026-11-08",
     "entry_confidence": 71.51,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 74.0,
+    "exit_date": "2026-11-22",
+    "exit_reason": "Trailing_Stop",
+    "profit_pct": -3.01
   },
   {
     "symbol": "OIH",
@@ -80,7 +92,11 @@
     "entry_price": 10.36,
     "entry_date": "2026-11-08",
     "entry_confidence": 94.36,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 9.99,
+    "exit_date": "2026-11-22",
+    "exit_reason": "Trailing_Stop",
+    "profit_pct": -3.57
   },
   {
     "symbol": "ATQA",
@@ -230,14 +246,22 @@
     "entry_price": 82.95,
     "entry_date": "2026-11-08",
     "entry_confidence": 86.66,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 79.0,
+    "exit_date": "2026-11-22",
+    "exit_reason": "Trailing_Stop",
+    "profit_pct": -4.76
   },
   {
     "symbol": "ORHD",
     "entry_price": 10.5,
     "entry_date": "2026-11-08",
     "entry_confidence": 89.58,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 9.81,
+    "exit_date": "2026-11-22",
+    "exit_reason": "Trailing_Stop",
+    "profit_pct": -6.57
   },
   {
     "symbol": "FWRY",
@@ -332,7 +356,11 @@
     "entry_price": 13.22,
     "entry_date": "2026-11-09",
     "entry_confidence": 72.2,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 12.5,
+    "exit_date": "2026-11-22",
+    "exit_reason": "Trailing_Stop",
+    "profit_pct": -5.45
   },
   {
     "symbol": "MTIE",
@@ -361,84 +389,132 @@
     "entry_price": 10.09,
     "entry_date": "2026-11-17",
     "entry_confidence": 72.98,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 10.02,
+    "exit_date": "2026-11-22",
+    "exit_reason": "Trailing_Stop",
+    "profit_pct": -0.69
   },
   {
     "symbol": "MTIE",
     "entry_price": 6.59,
     "entry_date": "2026-11-17",
     "entry_confidence": 88.73,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 6.26,
+    "exit_date": "2026-11-22",
+    "exit_reason": "Trailing_Stop",
+    "profit_pct": -5.01
   },
   {
     "symbol": "JUFO",
     "entry_price": 23.56,
     "entry_date": "2026-11-17",
     "entry_confidence": 71.4,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 21.77,
+    "exit_date": "2026-11-22",
+    "exit_reason": "Trailing_Stop",
+    "profit_pct": -7.6
   },
   {
     "symbol": "SUGR",
     "entry_price": 51.2,
     "entry_date": "2026-11-17",
     "entry_confidence": 78.45,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 49.73,
+    "exit_date": "2026-11-22",
+    "exit_reason": "Trailing_Stop",
+    "profit_pct": -2.87
   },
   {
     "symbol": "ELSH",
     "entry_price": 10.97,
     "entry_date": "2026-11-17",
     "entry_confidence": 71.56,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 10.27,
+    "exit_date": "2026-11-22",
+    "exit_reason": "Trailing_Stop",
+    "profit_pct": -6.38
   },
   {
     "symbol": "RMDA",
     "entry_price": 5.21,
     "entry_date": "2026-11-17",
     "entry_confidence": 75.49,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 4.93,
+    "exit_date": "2026-11-22",
+    "exit_reason": "Trailing_Stop",
+    "profit_pct": -5.37
   },
   {
     "symbol": "RAYA",
     "entry_price": 5.91,
     "entry_date": "2026-11-17",
     "entry_confidence": 77.81,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 5.67,
+    "exit_date": "2026-11-22",
+    "exit_reason": "Trailing_Stop",
+    "profit_pct": -4.06
   },
   {
     "symbol": "EEII",
     "entry_price": 1.92,
     "entry_date": "2026-11-17",
     "entry_confidence": 75.22,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 1.89,
+    "exit_date": "2026-11-22",
+    "exit_reason": "Trailing_Stop",
+    "profit_pct": -1.56
   },
   {
     "symbol": "MPCO",
     "entry_price": 1.96,
     "entry_date": "2026-11-17",
     "entry_confidence": 70.53,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 1.85,
+    "exit_date": "2026-11-22",
+    "exit_reason": "Trailing_Stop",
+    "profit_pct": -5.61
   },
   {
     "symbol": "PHDC",
     "entry_price": 11.44,
     "entry_date": "2026-11-17",
     "entry_confidence": 95.56,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 11.03,
+    "exit_date": "2026-11-22",
+    "exit_reason": "Trailing_Stop",
+    "profit_pct": -3.58
   },
   {
     "symbol": "MCQE",
     "entry_price": 179.31,
     "entry_date": "2026-11-17",
     "entry_confidence": 74.88,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 168.21,
+    "exit_date": "2026-11-22",
+    "exit_reason": "Trailing_Stop",
+    "profit_pct": -6.19
   },
   {
     "symbol": "OIH",
     "entry_price": 1.61,
     "entry_date": "2026-11-18",
     "entry_confidence": 83.86,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 1.48,
+    "exit_date": "2026-11-22",
+    "exit_reason": "Trailing_Stop",
+    "profit_pct": -8.07
   },
   {
     "symbol": "HRHO",
@@ -452,7 +528,11 @@
     "entry_price": 1.52,
     "entry_date": "2026-11-18",
     "entry_confidence": 76.71,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 1.39,
+    "exit_date": "2026-11-22",
+    "exit_reason": "Trailing_Stop",
+    "profit_pct": -8.55
   },
   {
     "symbol": "FWRY",
@@ -480,6 +560,20 @@
     "entry_price": 22.4,
     "entry_date": "2026-11-19",
     "entry_confidence": 97.08,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "SKPC",
+    "entry_price": 14.12,
+    "entry_date": "2026-11-22",
+    "entry_confidence": 82.34,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "NIPH",
+    "entry_price": 284.0,
+    "entry_date": "2026-11-22",
+    "entry_confidence": 70.02,
     "signal_type": "AI_BUY"
   }
 ]
