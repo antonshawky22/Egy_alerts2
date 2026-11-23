@@ -25,21 +25,21 @@ except ImportError:
 
 
 # =====================
-# Model Settings
+# Model Settings (40 Days / 12% Target)
 # =====================
 
-TARGET_HORIZON = 20
-TARGET_THRESHOLD = 8.0
-TARGET_COLUMN = "Target_Reach_8Pct"
+TARGET_HORIZON = 40
+TARGET_THRESHOLD = 12.0
+TARGET_COLUMN = "Target_Reach_12Pct"
 TRAIN_RATIO = 0.80
 
 CONFIDENCE_LEVELS = (0.50, 0.60, 0.70, 0.80)
 
 FEATURES_FILE = "ai_features_database.json"
 
-TEST_RESULTS_FILE = "ai_test_results.csv"
-FEATURE_IMPORTANCE_FILE = "ai_feature_importance_20d.csv"
-WALK_FORWARD_RESULTS_FILE = "ai_walk_forward_results.csv"
+TEST_RESULTS_FILE = "ai_test_results_40d.csv"
+FEATURE_IMPORTANCE_FILE = "ai_feature_importance_40d.csv"
+WALK_FORWARD_RESULTS_FILE = "ai_walk_forward_results_40d.csv"
 
 WALK_FORWARD_FOLDS = 3
 MIN_TRAIN_SESSIONS = 100
@@ -54,7 +54,7 @@ EXPECTED_TARGET_DEFINITION = {
     "horizon": TARGET_HORIZON,
     "threshold_pct": TARGET_THRESHOLD,
     "target_column": TARGET_COLUMN,
-    "condition": "Max_Gain_Pct > 8.0"
+    "condition": f"Max_Gain_Pct > {TARGET_THRESHOLD}"
 }
 
 
@@ -1396,7 +1396,7 @@ def train_model():
         df[TARGET_COLUMN]
     ):
         raise ValueError(
-            "عدم تطابق Target_Reach_8Pct مع Max_Gain_Pct. "
+            f"عدم تطابق {TARGET_COLUMN} مع Max_Gain_Pct. "
             "يجب مراجعة بناء Dataset."
         )
 
