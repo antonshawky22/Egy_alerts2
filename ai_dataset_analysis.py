@@ -6,9 +6,9 @@ from datetime import datetime, timezone
 INPUT_FILE = "ai_training_dataset.json"
 OUTPUT_FILE = "ai_dataset_analysis_report.json"
 
-TARGET_HORIZON = 20
-TARGET_THRESHOLD = 8.0
-TARGET_COLUMN = "Target_Reach_8Pct"
+TARGET_HORIZON = 40
+TARGET_THRESHOLD = 12.0
+TARGET_COLUMN = "Target_Reach_12Pct"
 MIN_STOCK_SAMPLES = 20
 
 EXPECTED_TARGET_DEFINITION = {
@@ -16,7 +16,7 @@ EXPECTED_TARGET_DEFINITION = {
     "horizon": TARGET_HORIZON,
     "threshold_pct": TARGET_THRESHOLD,
     "target_column": TARGET_COLUMN,
-    "condition": "Max_Gain_Pct > 8.0"
+    "condition": f"Max_Gain_Pct > {TARGET_THRESHOLD}"
 }
 
 
@@ -258,7 +258,7 @@ def main():
 
     if not samples:
         raise ValueError(
-            "No valid samples found for the 20-session target."
+            f"No valid samples found for the {TARGET_HORIZON}-session target."
         )
 
     overall_target = target_stats(samples)
