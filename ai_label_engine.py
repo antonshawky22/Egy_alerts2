@@ -5,8 +5,8 @@ from datetime import datetime, timezone
 DB_FILE = "egx_history_database_v2.json"
 OUT_FILE = "ai_labels_database.json"
 
-TARGET_HORIZON = 20
-TARGET_THRESHOLD = 8.0
+TARGET_HORIZON = 40
+TARGET_THRESHOLD = 12.0
 HORIZONS = (TARGET_HORIZON,)
 
 def round_value(x):
@@ -83,7 +83,7 @@ def main():
             "type": "max_gain_anytime",
             "horizon": TARGET_HORIZON,
             "threshold_pct": TARGET_THRESHOLD,
-            "condition": "Max_Gain_Pct > 8.0"
+            "condition": f"Max_Gain_Pct > {TARGET_THRESHOLD}"
         },
         "horizons": list(HORIZONS),
         "total_symbols": len(db),
