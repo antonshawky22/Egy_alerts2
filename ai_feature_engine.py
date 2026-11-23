@@ -1,5 +1,6 @@
 import json, math
 from datetime import datetime
+import pandas as pd
 
 DB_FILE = "egx_history_database_v2.json"
 OUT_FILE = "ai_features_database.json"
@@ -64,6 +65,37 @@ def safe_round(value):
         return None
     return round(value, 6)
 
+def compute_weekly_features(dates, cl):
+    df_temp = pd.DataFrame({"Date": pd.to_datetime(dates), "Close": cl})
+    df_temp.set_index("Date", inplace=True)
+    weekly = df_temp["Close"].resample("W-FRI").last().dropna()
+    w_dates = weekly.index
+    w_closes = weekly.values
+    w_e10 = ema(list(w_closes), 10)
+    w_e30 = ema(list(w_closes), 30)
+    w_rsi = rsi(list(w_closes), 14)
+    
+    weekly_info = {}
+    for wd, c, e10, e30, r in zip(w_dates, w_closes, w_e10, w_e30, w_rsi):
+        trend = int(e10 > e30) if (e10 is not None and e30 is not None) else 0
+        dist = ((c / e10) - 1) * 100 if (e10 is not None and e10 != 0) else None
+        weekly_info[wd.normalize()] = {
+            "Weekly_Trend": trend,
+            "Weekly_RSI14": safe_round(r),
+            "Weekly_Distance_EMA10_Pct": safe_round(dist)
+        }
+    
+    sorted_w_dates = sorted(weekly_info.keys())
+    weekly_result = []
+    for d_str in dates:
+        dt = pd.to_datetime(d_str).normalize()
+        past_w = [w for w in sorted_w_dates if w <= dt]
+        if past_w:
+            weekly_result.append(weekly_info[past_w[-1]])
+        else:
+            weekly_result.append({"Weekly_Trend": 0, "Weekly_RSI14": None, "Weekly_Distance_EMA10_Pct": None})
+    return weekly_result
+
 def calculate(symbol, block):
     data = block.get("data", {})
     dates = sorted(data.keys())
@@ -101,6 +133,8 @@ def calculate(symbol, block):
         levels[f"High_{p}"] = rolling_level(hi, p, "max")
         levels[f"Low_{p}"] = rolling_level(lo, p, "min")
 
+    weekly_feats = compute_weekly_features(dates, cl)
+
     columns = [
         "Open", "High", "Low", "Close", "Volume",
         "EMA20", "EMA50", "EMA100",
@@ -111,7 +145,8 @@ def calculate(symbol, block):
         "High_20", "Low_20", "High_50", "Low_50", "High_100", "Low_100",
         "Distance_EMA20_Pct", "Distance_EMA50_Pct", "Distance_EMA100_Pct",
         "Distance_Resistance20_Pct", "Distance_Support20_Pct",
-        "Trend_20_50", "Trend_50_100"
+        "Trend_20_50", "Trend_50_100",
+        "Weekly_Trend", "Weekly_RSI14", "Weekly_Distance_EMA10_Pct"
     ]
 
     output = {}
@@ -129,6 +164,8 @@ def calculate(symbol, block):
             if level is None or level == 0:
                 return None
             return (c / level - 1) * 100
+
+        wf = weekly_feats[i]
 
         row = {
             "Open": op[i], "High": hi[i], "Low": lo[i],
@@ -161,7 +198,10 @@ def calculate(symbol, block):
             "Distance_Resistance20_Pct": safe_round(distance(levels["High_20"][i])),
             "Distance_Support20_Pct": safe_round(distance(levels["Low_20"][i])),
             "Trend_20_50": int(e20[i] > e50[i]),
-            "Trend_50_100": int(e50[i] > e100[i])
+            "Trend_50_100": int(e50[i] > e100[i]),
+            "Weekly_Trend": wf["Weekly_Trend"],
+            "Weekly_RSI14": wf["Weekly_RSI14"],
+            "Weekly_Distance_EMA10_Pct": wf["Weekly_Distance_EMA10_Pct"]
         }
 
         output[date] = row
