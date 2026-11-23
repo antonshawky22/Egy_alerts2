@@ -232,16 +232,22 @@ def create_model():
     if HAS_XGBOOST:
 
         return xgb.XGBClassifier(
-            n_estimators=100,
-            learning_rate=0.05,
-            max_depth=5,
+            n_estimators=120,
+            learning_rate=0.03,
+            max_depth=3,
+            min_child_weight=10,
+            subsample=0.8,
+            colsample_bytree=0.8,
+            reg_alpha=0.5,
+            reg_lambda=2.0,
             random_state=42,
             eval_metric="logloss"
         )
 
     return RandomForestClassifier(
-        n_estimators=100,
-        max_depth=10,
+        n_estimators=150,
+        max_depth=6,
+        min_samples_leaf=10,
         random_state=42,
         n_jobs=-1
     )
