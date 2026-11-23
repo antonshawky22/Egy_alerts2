@@ -66,7 +66,21 @@
     }
   ],
   "OIH": [],
-  "SWDY": [],
+  "SWDY": [
+    {
+      "symbol": "SWDY",
+      "cycle": 1,
+      "status": "OPEN",
+      "first_entry": "2026-11-23 with price 115.35",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 115.35,
+      "exits": [],
+      "exit_price": null,
+      "exit_date": null,
+      "profit_pct": null
+    }
+  ],
   "ISPH": [
     {
       "symbol": "ISPH",
@@ -277,19 +291,33 @@
     {
       "symbol": "TMGH",
       "cycle": 1,
-      "status": "OPEN",
+      "status": "CLOSED",
       "first_entry": "2026-08-13 with price 97.80",
       "second_entry": null,
       "third_entry": null,
       "last_totally_average_price": 97.8,
+      "exits": [],
+      "exit_price": 80.0,
+      "exit_date": "2026-11-23",
+      "profit_pct": -18.2
+    }
+  ],
+  "ORHD": [],
+  "AMOC": [
+    {
+      "symbol": "AMOC",
+      "cycle": 1,
+      "status": "OPEN",
+      "first_entry": "2026-11-23 with price 12.56",
+      "second_entry": null,
+      "third_entry": null,
+      "last_totally_average_price": 12.56,
       "exits": [],
       "exit_price": null,
       "exit_date": null,
       "profit_pct": null
     }
   ],
-  "ORHD": [],
-  "AMOC": [],
   "FWRY": [
     {
       "symbol": "FWRY",
@@ -354,15 +382,15 @@
     {
       "symbol": "MCQE",
       "cycle": 1,
-      "status": "OPEN",
+      "status": "CLOSED",
       "first_entry": "2026-09-15 with price 215.78",
       "second_entry": "2026-09-21 with price 209.00",
       "third_entry": null,
       "last_totally_average_price": 212.39,
       "exits": [],
-      "exit_price": null,
-      "exit_date": null,
-      "profit_pct": null
+      "exit_price": 174.18,
+      "exit_date": "2026-11-23",
+      "profit_pct": -17.99
     }
   ],
   "SKPC": [
