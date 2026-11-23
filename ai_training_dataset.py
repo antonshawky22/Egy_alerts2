@@ -7,10 +7,11 @@ LABELS_FILE = "ai_labels_database.json"
 MARKET_FILE = "ai_market_regime_database.json"
 OUT_FILE = "ai_training_dataset.json"
 
-TARGET_HORIZON = 20
-TARGET_THRESHOLD = 8.0
+TARGET_HORIZON = 40
+TARGET_THRESHOLD = 12.0
 HORIZONS = (TARGET_HORIZON,)
-TARGET_COLUMN = "Target_Reach_8Pct"
+TARGET_COLUMN = "Target_Reach_12Pct"
+HORIZON_KEY = str(TARGET_HORIZON)
 
 STOCK_FEATURES = [
     "RSI14",
@@ -27,7 +28,10 @@ STOCK_FEATURES = [
     "Distance_Resistance20_Pct",
     "Distance_Support20_Pct",
     "Trend_20_50",
-    "Trend_50_100"
+    "Trend_50_100",
+    "Weekly_Trend",
+    "Weekly_RSI14",
+    "Weekly_Distance_EMA10_Pct"
 ]
 
 RAW_TARGET_COLUMNS = [
@@ -107,10 +111,10 @@ def main():
         "invalid_feature_values": 0,
         "invalid_features_by_name": {},
         "missing_market_values": 0,
-        "incomplete_labels": {"20": 0},
-        "complete_labels": {"20": 0},
-        "invalid_targets": {"20": 0},
-        "samples_by_horizon": {"20": 0},
+        "incomplete_labels": {HORIZON_KEY: 0},
+        "complete_labels": {HORIZON_KEY: 0},
+        "invalid_targets": {HORIZON_KEY: 0},
+        "samples_by_horizon": {HORIZON_KEY: 0},
         "missing_symbols_labels": [],
         "excluded_invalid_features": 0,
         "excluded_invalid_market": 0,
@@ -189,7 +193,7 @@ def main():
                 if market_invalid:
                     stats["invalid_market_dates"] += 1
 
-            # 3. Validate labels for 20 sessions only
+            # 3. Validate labels for target horizon only
             valid_labels = None
             label = {}
 
@@ -199,7 +203,7 @@ def main():
                 )
 
                 if not label.get("complete"):
-                    stats["incomplete_labels"]["20"] += 1
+                    stats["incomplete_labels"][HORIZON_KEY] += 1
                 else:
                     targets = {
                         name: safe_num(label.get(source))
@@ -213,10 +217,10 @@ def main():
                     }
 
                     if any(v is None for v in targets.values()):
-                        stats["invalid_targets"]["20"] += 1
+                        stats["invalid_targets"][HORIZON_KEY] += 1
                     else:
                         valid_labels = targets
-                        stats["complete_labels"]["20"] += 1
+                        stats["complete_labels"][HORIZON_KEY] += 1
 
             # 4. Exclude invalid samples
             if invalid_names:
@@ -250,7 +254,7 @@ def main():
             samples.append(sample)
 
             stats["processed"] += 1
-            stats["samples_by_horizon"]["20"] += 1
+            stats["samples_by_horizon"][HORIZON_KEY] += 1
             stats["target_counts"][str(target_value)] += 1
 
     # 7. Calculate target distribution
@@ -273,7 +277,7 @@ def main():
         "horizon": TARGET_HORIZON,
         "threshold_pct": TARGET_THRESHOLD,
         "target_column": TARGET_COLUMN,
-        "condition": "Max_Gain_Pct > 8.0"
+        "condition": f"Max_Gain_Pct > {TARGET_THRESHOLD}"
     }
 
     report = {
@@ -351,10 +355,10 @@ def main():
 
     print("\n--- Labels ---")
     print(
-        f"20 sessions: "
-        f"Complete={stats['complete_labels']['20']} | "
-        f"Incomplete={stats['incomplete_labels']['20']} | "
-        f"Invalid targets={stats['invalid_targets']['20']}"
+        f"{TARGET_HORIZON} sessions: "
+        f"Complete={stats['complete_labels'][HORIZON_KEY]} | "
+        f"Incomplete={stats['incomplete_labels'][HORIZON_KEY]} | "
+        f"Invalid targets={stats['invalid_targets'][HORIZON_KEY]}"
     )
 
     print(f"\nOutput: {OUT_FILE}")
