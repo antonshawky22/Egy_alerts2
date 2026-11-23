@@ -1,1 +1,163 @@
-[]
+[
+  {
+    "symbol": "EMFD",
+    "entry_price": 11.95,
+    "entry_date": "2026-11-23",
+    "entry_confidence": 76.3,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "ABUK",
+    "entry_price": 74.7,
+    "entry_date": "2026-11-23",
+    "entry_confidence": 81.55,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "OIH",
+    "entry_price": 1.5,
+    "entry_date": "2026-11-23",
+    "entry_confidence": 80.21,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "ISPH",
+    "entry_price": 10.05,
+    "entry_date": "2026-11-23",
+    "entry_confidence": 73.89,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "ATQA",
+    "entry_price": 10.15,
+    "entry_date": "2026-11-23",
+    "entry_confidence": 74.01,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "MTIE",
+    "entry_price": 6.31,
+    "entry_date": "2026-11-23",
+    "entry_confidence": 76.75,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "ORWE",
+    "entry_price": 24.76,
+    "entry_date": "2026-11-23",
+    "entry_confidence": 75.37,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "JUFO",
+    "entry_price": 22.31,
+    "entry_date": "2026-11-23",
+    "entry_confidence": 77.5,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "DSCW",
+    "entry_price": 1.43,
+    "entry_date": "2026-11-23",
+    "entry_confidence": 82.71,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "SUGR",
+    "entry_price": 50.59,
+    "entry_date": "2026-11-23",
+    "entry_confidence": 76.92,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "ELSH",
+    "entry_price": 10.5,
+    "entry_date": "2026-11-23",
+    "entry_confidence": 73.98,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "RMDA",
+    "entry_price": 5.05,
+    "entry_date": "2026-11-23",
+    "entry_confidence": 75.82,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "RAYA",
+    "entry_price": 5.73,
+    "entry_date": "2026-11-23",
+    "entry_confidence": 79.91,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "EEII",
+    "entry_price": 1.98,
+    "entry_date": "2026-11-23",
+    "entry_confidence": 76.04,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "MPCO",
+    "entry_price": 1.89,
+    "entry_date": "2026-11-23",
+    "entry_confidence": 81.78,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "GBCO",
+    "entry_price": 21.6,
+    "entry_date": "2026-11-23",
+    "entry_confidence": 81.8,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "ORHD",
+    "entry_price": 10.0,
+    "entry_date": "2026-11-23",
+    "entry_confidence": 77.39,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "ADIB",
+    "entry_price": 46.5,
+    "entry_date": "2026-11-23",
+    "entry_confidence": 75.45,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "PHDC",
+    "entry_price": 11.47,
+    "entry_date": "2026-11-23",
+    "entry_confidence": 81.43,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "MCQE",
+    "entry_price": 174.18,
+    "entry_date": "2026-11-23",
+    "entry_confidence": 76.58,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "SKPC",
+    "entry_price": 14.18,
+    "entry_date": "2026-11-23",
+    "entry_confidence": 75.4,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "EGAL",
+    "entry_price": 301.97,
+    "entry_date": "2026-11-23",
+    "entry_confidence": 71.35,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "NIPH",
+    "entry_price": 294.61,
+    "entry_date": "2026-11-23",
+    "entry_confidence": 74.19,
+    "signal_type": "AI_BUY"
+  }
+]
