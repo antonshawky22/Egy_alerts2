@@ -25,18 +25,18 @@ def send_telegram(text):
         print(f"❌ Telegram send exception: {e}")
 
 # =====================
-# Files & Model Configuration
+# Files & Model Configuration (40 Days / 12% Target)
 # =====================
-TARGET_HORIZON = 20
-TARGET_THRESHOLD = 8.0
-TARGET_COLUMN = "Target_Reach_8Pct"
+TARGET_HORIZON = 40
+TARGET_THRESHOLD = 12.0
+TARGET_COLUMN = "Target_Reach_12Pct"
 
 TARGET_DEFINITION = {
     "type": "max_gain_anytime",
     "horizon": TARGET_HORIZON,
     "threshold_pct": TARGET_THRESHOLD,
     "target_column": TARGET_COLUMN,
-    "condition": "Max_Gain_Pct > 8.0"
+    "condition": f"Max_Gain_Pct > {TARGET_THRESHOLD}"
 }
 
 DB_FILE = "egx_history_database_v2.json"
@@ -426,13 +426,12 @@ for symbol, stock_content in raw_database.items():
         elif drawdown_from_peak >= TRAILING_STOP_PCT:
             sell_signal = True
             in_position = False
-            exit_reason = f"Trailing_Stop"
+            exit_reason = "Trailing_Stop"
 
         if sell_signal:
             profit_calc = ((last_close - entry_price) / entry_price) * 100
             emoji = "🟢" if profit_calc >= 0 else "🔴"
-            
-            # اختصار السبب ليصبح التقرير سطر واحد لكل سهم
+
             if "Inversion" in exit_reason:
                 reason_short = "AI"
             else:
