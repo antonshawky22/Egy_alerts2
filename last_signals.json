@@ -100,7 +100,7 @@
     "entry_price": null
   },
   "RAYA": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },
@@ -131,11 +131,11 @@
   },
   "AMOC": {
     "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "in_position": true,
+    "entry_price": 12.32
   },
   "FWRY": {
-    "trend": "🔻",
+    "trend": "🔛",
     "in_position": false,
     "entry_price": null
   },

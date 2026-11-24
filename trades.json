@@ -619,5 +619,11 @@
     "entry_trend": "↗️",
     "entry_price": 349.4,
     "entry_date": "2026-11-18"
+  },
+  {
+    "symbol": "AMOC",
+    "entry_trend": "🔛",
+    "entry_price": 12.32,
+    "entry_date": "2026-11-24"
   }
 ]
