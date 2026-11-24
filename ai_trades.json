@@ -67,7 +67,11 @@
     "entry_price": 50.59,
     "entry_date": "2026-11-23",
     "entry_confidence": 76.92,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 50.04,
+    "exit_date": "2026-11-24",
+    "exit_reason": "Trailing_Stop",
+    "profit_pct": -1.09
   },
   {
     "symbol": "ELSH",
@@ -95,7 +99,11 @@
     "entry_price": 1.98,
     "entry_date": "2026-11-23",
     "entry_confidence": 76.04,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 2.01,
+    "exit_date": "2026-11-24",
+    "exit_reason": "Trailing_Stop",
+    "profit_pct": 1.52
   },
   {
     "symbol": "MPCO",
@@ -158,6 +166,13 @@
     "entry_price": 294.61,
     "entry_date": "2026-11-23",
     "entry_confidence": 74.19,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "TMGH",
+    "entry_price": 78.06,
+    "entry_date": "2026-11-24",
+    "entry_confidence": 80.2,
     "signal_type": "AI_BUY"
   }
 ]
