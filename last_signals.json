@@ -100,9 +100,9 @@
     "entry_price": null
   },
   "RAYA": {
-    "trend": "🔛",
-    "in_position": false,
-    "entry_price": null
+    "trend": "↗️",
+    "in_position": true,
+    "entry_price": 6.01
   },
   "EEII": {
     "trend": "🔛",
