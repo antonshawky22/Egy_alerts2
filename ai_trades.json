@@ -4,7 +4,11 @@
     "entry_price": 11.95,
     "entry_date": "2026-11-23",
     "entry_confidence": 76.3,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 12.03,
+    "exit_date": "2026-11-25",
+    "exit_reason": "Trailing_Stop",
+    "profit_pct": 0.67
   },
   {
     "symbol": "ABUK",
@@ -46,7 +50,11 @@
     "entry_price": 24.76,
     "entry_date": "2026-11-23",
     "entry_confidence": 75.37,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 24.0,
+    "exit_date": "2026-11-25",
+    "exit_reason": "Trailing_Stop",
+    "profit_pct": -3.07
   },
   {
     "symbol": "JUFO",
@@ -85,14 +93,22 @@
     "entry_price": 5.05,
     "entry_date": "2026-11-23",
     "entry_confidence": 75.82,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 5.05,
+    "exit_date": "2026-11-25",
+    "exit_reason": "Trailing_Stop",
+    "profit_pct": 0.0
   },
   {
     "symbol": "RAYA",
     "entry_price": 5.73,
     "entry_date": "2026-11-23",
     "entry_confidence": 79.91,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 5.76,
+    "exit_date": "2026-11-25",
+    "exit_reason": "Trailing_Stop",
+    "profit_pct": 0.52
   },
   {
     "symbol": "EEII",
@@ -110,7 +126,11 @@
     "entry_price": 1.89,
     "entry_date": "2026-11-23",
     "entry_confidence": 81.78,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 1.88,
+    "exit_date": "2026-11-25",
+    "exit_reason": "Trailing_Stop",
+    "profit_pct": -0.53
   },
   {
     "symbol": "GBCO",
@@ -166,13 +186,45 @@
     "entry_price": 294.61,
     "entry_date": "2026-11-23",
     "entry_confidence": 74.19,
-    "signal_type": "AI_BUY"
+    "signal_type": "AI_BUY",
+    "exit_price": 277.03,
+    "exit_date": "2026-11-25",
+    "exit_reason": "Trailing_Stop",
+    "profit_pct": -5.97
   },
   {
     "symbol": "TMGH",
     "entry_price": 78.06,
     "entry_date": "2026-11-24",
     "entry_confidence": 80.2,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "EAST",
+    "entry_price": 33.03,
+    "entry_date": "2026-11-25",
+    "entry_confidence": 72.04,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "SUGR",
+    "entry_price": 49.68,
+    "entry_date": "2026-11-25",
+    "entry_confidence": 76.49,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "EEII",
+    "entry_price": 1.97,
+    "entry_date": "2026-11-25",
+    "entry_confidence": 76.73,
+    "signal_type": "AI_BUY"
+  },
+  {
+    "symbol": "AMOC",
+    "entry_price": 11.9,
+    "entry_date": "2026-11-25",
+    "entry_confidence": 73.8,
     "signal_type": "AI_BUY"
   }
 ]
