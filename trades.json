@@ -549,7 +549,10 @@
     "symbol": "ABUK",
     "entry_trend": "🔛",
     "entry_price": 77.5,
-    "entry_date": "2026-11-08"
+    "entry_date": "2026-11-08",
+    "exit_price": 73.31,
+    "exit_date": "2026-11-26",
+    "profit_pct": -5.41
   },
   {
     "symbol": "SWDY",
@@ -618,7 +621,10 @@
     "symbol": "MPCI",
     "entry_trend": "↗️",
     "entry_price": 349.4,
-    "entry_date": "2026-11-18"
+    "entry_date": "2026-11-18",
+    "exit_price": 312.88,
+    "exit_date": "2026-11-26",
+    "profit_pct": -10.45
   },
   {
     "symbol": "AMOC",
